@@ -10,7 +10,28 @@
             --secondary-color: #1e3a8a;
             --light-bg: #f8fafc;
             --border-color: #cbd5e1;
+            --yellow:#ffff00; --pink:#fde2e2; --blue:#dbeafe; --red:#dc2626;
         }
+
+        /* --- Leave Account (Register) section --- */
+        .panel{background:#f1f5f9;border:1px solid var(--border-color);border-radius:6px;padding:14px 16px;margin-bottom:16px;}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
+        .fg{display:flex;flex-direction:column;}
+        .fg label{font-weight:600;font-size:.78rem;color:#475569;margin-bottom:4px;}
+        .fg input,.fg select{padding:6px 8px;border:1px solid var(--border-color);border-radius:5px;font-size:.85rem;}
+        .btn-add{padding:9px 18px;font-size:.88rem;font-weight:600;border:none;border-radius:6px;cursor:pointer;color:#fff;background:#1e3a8a;}
+        .btn-del{padding:4px 10px;font-size:.75rem;font-weight:600;border:none;border-radius:6px;cursor:pointer;color:#fff;background:#dc2626;}
+        .btn-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+        #mainTable{border-collapse:collapse;width:100%;margin-top:8px;font-size:.72rem;table-layout:fixed;}
+        #mainTable th,#mainTable td{border:1px solid var(--border-color);padding:4px 3px;text-align:center;vertical-align:middle;word-wrap:break-word;}
+        #mainTable thead th{background:#1e293b;color:#fff;font-weight:600;}
+        #mainTable .code-row td{background:#e2e8f0;font-weight:700;font-size:.68rem;}
+        .credit-cell{background:var(--yellow);}
+        .taken-cell{background:var(--pink);}
+        .vacdet-cell{background:var(--blue);}
+        .balance-num{color:var(--red);font-weight:700;}
+        .ml-note{display:block;font-size:.66rem;color:#334155;text-align:left;margin-top:2px;font-style:italic;}
+        .table-wrap{overflow-x:auto;}
 
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
@@ -142,17 +163,27 @@
                 font-family: 'Times New Roman', Times, serif;
                 color: #000;
             }
-            @page { size: A4 portrait; margin: 12mm 10mm; }
+            @page { size: A4 landscape; margin: 8mm; }
             .sb-header { text-align: center; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 4px; }
             .sb-header h1 { font-size: 1.4rem; margin: 0; font-weight: bold; }
             .sb-meta-table { width: 100%; margin-bottom: 12px; border-collapse: collapse; }
             .sb-meta-table td { padding: 3px 0; font-size: 0.9rem; border: none; }
-            .sb-section-title { font-size: 1.05rem; border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 16px; }
+            .sb-section-title { font-size: 1.05rem; border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 16px; page-break-before: always; }
+            .sb-section-title.sb-first { page-break-before: auto; }
             .sb-main-table { width: 100%; border-collapse: collapse; }
             .sb-main-table th { background-color: #eaeaea !important; border: 1px solid #000 !important; font-size: 0.85rem; padding: 6px; text-align: center; }
             .sb-main-table td { border: 1px solid #000 !important; font-size: 0.85rem; padding: 6px; }
             .slip-box { border: 1px solid #000 !important; background: none !important; }
             .no-print { display: none !important; }
+
+            /* --- Leave Account print styles --- */
+            #sbLeaveBlock table { font-size: 0.6rem; table-layout: fixed; }
+            #sbLeaveBlock th, #sbLeaveBlock td { border: 1px solid #000 !important; padding: 3px 2px; text-align: center; word-wrap: break-word; }
+            #sbLeaveBlock thead th { background-color: #eaeaea !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            #sbLeaveBlock .credit-cell { background: var(--yellow) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            #sbLeaveBlock .taken-cell { background: var(--pink) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            #sbLeaveBlock .code-row td { background: #e2e8f0 !important; font-weight: 700; font-size: 0.58rem; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            #sbLeaveBlock .balance-num { color: #000 !important; font-weight: 700; }
         }
     </style>
 </head>
@@ -222,7 +253,7 @@
         </div>
     </div>
     <div class="output-box" style="background-color:#eff6ff;border-left-color:#1d4ed8;">
-        <strong>Fixation Rule Settings:</strong> Functional post promotions grant an extra increment before matching the target scale. Higher scale movements for qualification/upgradations bypass the promotional increment step, dropping the current basic pay directly into the new matrix row or old scale ladder structure. If multiple events land on the same date, they are applied in this order: Normal Annual Increment first, then the 10/18/20-Year Milestone, then Promotion / Higher Scale.
+        <strong>Fixation Rule Settings:</strong> Functional post promotions grant an extra increment before matching the target scale. Higher scale movements for qualification/upgradations bypass the promotional increment step. Upon promotion, post-promotion annual increment dates are strictly governed with respect to the Date of Promotion (as per ROPA rules): in ROPA-1998, the increment month shifts to the promotion month; in ROPA-2009/2019, if service in the promoted post as on 1st July is less than 6 months (promotion date between 2nd Jan and 30th Jun), the 1st July increment of that year is skipped and granted on 1st July of the next year.
     </div>
 
     <h3>2. ROPA-1998 Pre-2006 Fixation (Always Frozen on 31-03-2009)</h3>
@@ -254,14 +285,6 @@
         <div class="form-group">
             <label>Initial Basic Pay (ROPA-1998 scale)</label>
             <input type="number" id="ropa98BasicPay" value="6000">
-        </div>
-        <div class="form-group">
-            <label>LWP (Leave Without Pay) Days &mdash; Non-Qualifying</label>
-            <input type="number" id="ropa98LwpDays" value="0" min="0">
-        </div>
-        <div class="form-group">
-            <label>LWP Taken From Date (shifts all subsequent increment/CAS dates)</label>
-            <input type="date" id="ropa98LwpFromDate">
         </div>
     </div>
 
@@ -296,22 +319,6 @@
             <label>Initial Band Pay (Excluding GP)</label>
             <input type="number" id="ropa09BandPay" value="13400">
         </div>
-        <div class="form-group">
-            <label>LWP Type (ROPA-2009 phase)</label>
-            <select id="ropa09LwpType">
-                <option value="none" selected>No LWP</option>
-                <option value="medical">Medical Ground (E.O.L.) &mdash; no effect on increment</option>
-                <option value="other">Other / Personal Reason</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>LWP Start Date</label>
-            <input type="date" id="ropa09LwpStart">
-        </div>
-        <div class="form-group">
-            <label>LWP End Date</label>
-            <input type="date" id="ropa09LwpEnd">
-        </div>
     </div>
 
     <h3>4. ROPA-2019 Matrix Fixation (From Option Date)</h3>
@@ -338,22 +345,6 @@
         <div class="form-group" id="ropa19ManualBasicGroup" style="display:none;">
             <label>Basic Pay (manual)</label>
             <input type="number" id="ropa19BasicPayManual" value="66000">
-        </div>
-        <div class="form-group">
-            <label>LWP Type (ROPA-2019 phase)</label>
-            <select id="ropa19LwpType">
-                <option value="none" selected>No LWP</option>
-                <option value="medical">Medical Ground (E.O.L.) &mdash; no effect on increment</option>
-                <option value="other">Other / Personal Reason</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>LWP Start Date</label>
-            <input type="date" id="ropa19LwpStart">
-        </div>
-        <div class="form-group">
-            <label>LWP End Date</label>
-            <input type="date" id="ropa19LwpEnd">
         </div>
     </div>
 
@@ -416,6 +407,127 @@
             </tbody>
         </table>
     </div>
+
+    <h3 style="margin-top:40px;border-top:3px solid var(--secondary-color);padding-top:20px;">5. Leave Account (Register)</h3>
+    <div id="errorBanner" style="display:none;background:#fee2e2;border:1px solid #dc2626;color:#991b1b;padding:10px 14px;border-radius:6px;margin-bottom:14px;font-size:.85rem;font-weight:600;"></div>
+    <p style="font-size:.8rem;color:#555;">Uses the Name, Designation and Date of Joining entered in Section 1 above. Set a retirement / generate-up-to date below (defaults to the DOR already calculated in Section 1).</p>
+
+    <h4>5.1 Auto-Generate Period of Duty Rows</h4>
+    <div class="panel">
+        <p style="font-size:.8rem;color:#555;margin:0 0 8px;">
+            Generates annual (365/366-day) spans anchored to the 1st DOJ anniversary, right up to the date below.
+            Earned Leave (avg pay) and HPL (half avg pay) are each credited at 15 days per full 365-day span, prorated for part-spans. EL is capped at 365 days lifetime; HPL credit caps at 60 days (earning pauses while at cap, and resumes — up to the cap — after leave is taken).
+        </p>
+        <div class="grid">
+            <div class="fg"><label>Generate rows up to</label><input type="date" id="leaveUpToDate"></div>
+            <div class="fg">
+                <label>Was the staff transferred to another school at any point?</label>
+                <select id="hasTransfer" onchange="toggleTransferUI()">
+                    <option value="no">No — continuous service, same school throughout</option>
+                    <option value="yes">Yes — transferred at least once</option>
+                </select>
+            </div>
+        </div>
+        <div id="transferInputSection" style="display:none;margin-top:10px;">
+            <p style="font-size:.78rem;color:#555;margin:0 0 8px;">Enter each new-school joining date. The old-school row will automatically end the day before it; the underlying annual anniversary cycle keeps counting from the original 1st DOJ regardless.</p>
+            <div class="grid">
+                <div class="fg"><label>New School Joining Date (on transfer)</label><input type="date" id="transferDate"></div>
+            </div>
+            <div class="btn-row">
+                <button class="btn-add" onclick="addTransferEvent()">+ Add Transfer Event</button>
+            </div>
+            <div id="transferList" style="margin-top:10px;font-size:.78rem;"></div>
+        </div>
+        <div class="grid" style="margin-top:10px;">
+            <div class="fg"><label>Opening Balance — Average pay on MC (at 1st DOJ)</label><input type="number" id="openingAvg" value="0" step="1"></div>
+            <div class="fg"><label>Opening Balance — Half Average pay on MC (at 1st DOJ)</label><input type="number" id="openingHalf" value="0" step="1"></div>
+        </div>
+        <div class="btn-row">
+            <button class="btn-print" onclick="autoGenerateRows()">Auto-Generate Period of Duty Rows</button>
+        </div>
+        <div id="statusMsg" style="margin-top:10px;font-size:.82rem;font-weight:600;"></div>
+    </div>
+
+    <h4>5.2 Period of Duty Rows</h4>
+    <div class="panel">
+        <p style="font-size:.8rem;color:#555;margin:0 0 8px;">Add or edit each duty-period row manually if needed. "Leave earned on" adds to the running credit at the start of that period; "Leave at Credit on" for Row 1 can be entered manually (opening balance), every later row carries forward automatically.</p>
+        <div id="periodRows"></div>
+        <div class="btn-row">
+            <button class="btn-add" onclick="addPeriodRow()">+ Add Period of Duty Row</button>
+        </div>
+        <div id="rowManageList" style="margin-top:10px;font-size:.78rem;"></div>
+    </div>
+
+    <h4>5.3 Add Leave Entry (ML / HPL / LWP) — feeds Leave A/c and all ROPA tables</h4>
+    <div class="panel">
+        <div class="grid">
+            <div class="fg"><label>Leave Type</label>
+                <select id="mlType">
+                    <option value="lwp_effect">1. LWP — WITH effect on 10/18/20Y increment (shifts CAS/increment date)</option>
+                    <option value="lwp_noeffect">2. LWP — NO effect on 10/18/20Y increment</option>
+                    <option value="avg">3. ML with Full Average Pay (commuted / EL on medical grounds)</option>
+                    <option value="half">4. HPL (Half Average Pay on M.C.)</option>
+                </select>
+            </div>
+            <div class="fg"><label>Leave Enjoyed From</label><input type="date" id="mlFrom"></div>
+            <div class="fg"><label>Leave Enjoyed To</label><input type="date" id="mlTo"></div>
+        </div>
+        <p style="font-size:.75rem;color:#555;margin:8px 0 0;">
+            Posted into the Leave Account (split across period rows if it crosses a year-end) and noted in the "Event / Reason" column of every ROPA-1998/2009/2019 row whose Effective Date&ndash;Date of Termination window overlaps these dates.
+            For option 1 ("LWP — WITH effect on 10/18/20Y increment"), every ROPA-1998/2009/2019 increment and 10/18/20-Year milestone date falling on or after this entry's start date is automatically shifted to account for it — multiple LWP spells across the whole career are all added up, there's no need to enter anything separately in Sections 2&ndash;4.
+        </p>
+        <div class="btn-row">
+            <button class="btn-add" onclick="addMlEntry()">+ Add Leave Entry</button>
+        </div>
+    </div>
+    <div id="leaveEntriesList" style="margin-top:6px;font-size:.78rem;"></div>
+
+    <h4>5.4 Leave Account Table</h4>
+    <div class="table-wrap">
+        <table id="mainTable">
+            <thead>
+                <tr>
+                    <th colspan="2">Period of Duty</th>
+                    <th colspan="2">Vacation</th>
+                    <th colspan="3">Leave earned on</th>
+                    <th colspan="3">Leave at Credit on</th>
+                    <th colspan="3">Leave taken (debited)</th>
+                    <th colspan="2">Leave Enjoyed (Physical Days)</th>
+                    <th colspan="2">Maternity Leave</th>
+                    <th>LWP</th>
+                    <th colspan="2">Special Leave</th>
+                    <th colspan="3">Balance</th>
+                </tr>
+                <tr>
+                    <th>From</th><th>To</th>
+                    <th>From</th><th>To</th>
+                    <th>Average pay on MC</th><th>Half Average pay on MC</th><th>Vacation Detention</th>
+                    <th>Average pay on MC</th><th>Half Average pay on MC</th><th>Vacation Detention</th>
+                    <th>Average pay on MC</th><th>Half Average pay on MC</th><th>Vacation Detention</th>
+                    <th>Average pay on MC</th><th>Half Average pay on MC</th>
+                    <th>Full</th><th>Half</th>
+                    <th>Extra Ordinary</th>
+                    <th>Full</th><th>Half</th>
+                    <th>Average pay on MC</th><th>Half Average pay on MC</th><th>Vacation Detention</th>
+                </tr>
+                <tr class="code-row">
+                    <td>2a</td><td>2b</td><td>3a</td><td>3b</td><td>4a</td><td>4b</td><td>4c</td>
+                    <td>5a</td><td>5b</td><td>6</td><td>7</td><td>8</td><td>9</td>
+                    <td>9a</td><td>9b</td>
+                    <td>10a</td><td>10b</td><td>11</td><td>12a</td><td>12b</td><td>13</td><td>14</td><td>15</td>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+            <tfoot id="leaveTotalsFoot"></tfoot>
+        </table>
+    </div>
+
+    <h4>5.5 Leave Taken — ML / HPL Synopsis (per Period Row)</h4>
+    <div class="panel" id="synopsisPanel" style="font-size:.8rem;"></div>
+
+    <div class="btn-group">
+        <button class="btn-print" onclick="doPrint()">Print / Generate Leave A/c Page</button>
+    </div>
 </div>
 
 <div id="printArea">
@@ -470,6 +582,19 @@
         </thead>
         <tbody id="sbPrintTableBody19"></tbody>
     </table>
+
+    <div id="sbLeaveBlock">
+        <h2 class="sb-section-title">Leave Account (Register)</h2>
+        <table class="sb-meta-table">
+            <tr>
+                <td style="width:25%;"><strong>Name:</strong> <span id="pName"></span></td>
+                <td style="width:25%;"><strong>Designation:</strong> <span id="pDesig"></span></td>
+                <td style="width:25%;"><strong>DOJ:</strong> <span id="pDoj"></span></td>
+                <td style="width:25%;"><strong>DOR:</strong> <span id="pDor"></span></td>
+            </tr>
+        </table>
+        <div id="printTableHolder"></div>
+    </div>
 </div>
 
 <script>
@@ -567,6 +692,7 @@
     function calculateDOR() {
         const dor = getDOR();
         if (dor) document.getElementById('dorOutput').innerHTML = `<strong>Date of Retirement (DOR):</strong> ${formatDate(dor)}`;
+        syncLeaveUpToDate();
     }
 
     function formatDate(d) {
@@ -595,43 +721,69 @@
         return (milestoneDate >= startWinA && milestoneDate <= endWinA) ? 'A' : 'B';
     }
 
-    function wholeMonthsBetween(start, end) {
-        let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-        if (end.getDate() < start.getDate()) months -= 1;
-        return Math.max(0, months);
+    function getLwpEffectEntries() {
+        if (typeof masterMlEntries === 'undefined') return [];
+        return masterMlEntries
+            .filter(e => e.type === 'lwp_effect')
+            .map(e => ({ from: new Date(e.from + 'T00:00:00'), to: new Date(e.to + 'T00:00:00'), days: daysBetween(e.from, e.to) }))
+            .sort((a, b) => a.from - b.from);
     }
 
-    function computeLwpEffect(lwpType, lwpStart, lwpEnd) {
-        if (lwpType !== 'other' || !(lwpStart instanceof Date) || !(lwpEnd instanceof Date) || isNaN(lwpStart) || isNaN(lwpEnd) || lwpEnd < lwpStart) {
-            return null;
-        }
-        const months = wholeMonthsBetween(lwpStart, lwpEnd);
-        if (months < 1) return null;
-
-        let cyc = new Date(lwpStart.getFullYear(), 6, 1);
-        if (cyc <= lwpStart) cyc = new Date(lwpStart.getFullYear() + 1, 6, 1);
-        const spansCycleDate = (lwpStart <= cyc && cyc <= lwpEnd);
-
-        if (months >= 12 && spansCycleDate) {
-            return { affectedYear: cyc.getFullYear(), skip: true, deferred: false, financialDate: cyc };
-        }
-        if (spansCycleDate) {
-            let rejoinMonthStart = new Date(lwpEnd.getFullYear(), lwpEnd.getMonth() + 1, 1);
-            let financialDate = new Date(rejoinMonthStart.getFullYear(), rejoinMonthStart.getMonth() + months, 1);
-            return { affectedYear: cyc.getFullYear(), skip: false, deferred: true, financialDate };
-        }
-        let financialDate = new Date(cyc.getFullYear(), cyc.getMonth() + months, cyc.getDate());
-        return { affectedYear: cyc.getFullYear(), skip: false, deferred: true, financialDate };
+    function lwpDaysAppliedBy(entries, date) {
+        return entries.filter(e => e.from <= date).reduce((sum, e) => sum + e.days, 0);
     }
 
-    function computePromotionSixMonthGap(promotionDate) {
-        let candidateYear = promotionDate.getFullYear();
-        let candidateJuly = new Date(candidateYear, 6, 1);
-        if (candidateJuly <= promotionDate) candidateYear += 1;
-        let normalJuly = new Date(candidateYear, 6, 1);
-        let gapDays = Math.round((normalJuly - promotionDate) / 86400000);
-        let deferred = gapDays < 182;
-        return { skipYear: deferred ? candidateYear : null };
+    function addDays(date, days) {
+        const d = new Date(date);
+        d.setDate(d.getDate() + days);
+        return d;
+    }
+
+    function resolveDateNoWindow(originalDate, entries) {
+        const lwpDays = lwpDaysAppliedBy(entries, originalDate);
+        return lwpDays > 0 ? addDays(originalDate, lwpDays) : new Date(originalDate);
+    }
+
+    function resolveDateWithLwp(originalDate, entries) {
+        const win = checkWindow(originalDate);
+        const lwpDays = lwpDaysAppliedBy(entries, originalDate);
+        if (win === 'A') {
+            const jul1 = new Date(originalDate.getFullYear(), 6, 1);
+            if (lwpDays === 0) return { date: jul1, win: 'A', lwpShifted: false };
+            const jun30 = new Date(originalDate.getFullYear(), 5, 30);
+            const gapDays = Math.round((jun30 - originalDate) / 86400000);
+            if (lwpDays <= gapDays) {
+                return { date: jul1, win: 'A', lwpShifted: false };
+            }
+            return { date: addDays(originalDate, lwpDays), win: 'A', lwpShifted: true };
+        }
+        if (lwpDays > 0) {
+            return { date: addDays(originalDate, lwpDays), win: 'B', lwpShifted: true };
+        }
+        return { date: new Date(originalDate), win: 'B', lwpShifted: false };
+    }
+
+    function resolveRopa98MilestoneDate(originalDate, entries) {
+        const win = checkWindow(originalDate);
+        const lwpDays = lwpDaysAppliedBy(entries, originalDate);
+        if (win === 'A') {
+            const jun30 = new Date(originalDate.getFullYear(), 5, 30);
+            if (lwpDays === 0) return jun30;
+            const gapDays = Math.round((jun30 - originalDate) / 86400000);
+            if (lwpDays <= gapDays) return jun30;
+            return addDays(originalDate, lwpDays);
+        }
+        return lwpDays > 0 ? addDays(originalDate, lwpDays) : new Date(originalDate);
+    }
+
+    function resolveAnnualIncrementWithLwp(julDate, cumulativeLwp, alreadyConsumed) {
+        const newLwpDays = Math.max(0, cumulativeLwp - alreadyConsumed);
+        if (newLwpDays <= 30) {
+            return { date: new Date(julDate), win: 'B', lwpShifted: false };
+        }
+        const extraMonths = Math.floor((newLwpDays - 1) / 30);
+        const shifted = new Date(julDate.getFullYear(), julDate.getMonth() + extraMonths, 1);
+        return { date: shifted, win: 'B', lwpShifted: true };
     }
 
     function finalizeDot(compiledRows, endDate) {
@@ -679,26 +831,18 @@
             if (mA !== mB) return mA - mB;
             if (dA !== dB) return dA - dB;
             
-            // Same-date stacking order: Normal annual increment FIRST, then 10/18/20Y milestone, then Promotion/Higher Scale
             return eventPriority(a) - eventPriority(b);
         });
     }
 
-    function computeRopa98Timeline(doj, optionDate, scaleKey, initialBasicPay, endDate, lwpDays, lwpFromDate, promotionDate, promotionTargetGp, evType) {
+    /* --- ROPA-1998 TIMELINE COMPUTATION --- */
+    function computeRopa98Timeline(doj, optionDate, scaleKey, initialBasicPay, endDate, promotionDate, promotionTargetGp, evType) {
         let ladder = matrixData98[scaleKey] || [];
         let currentScaleKey = scaleKey;
         let events = [];
         function pushEvent(dateObj, data) { events.push({ date: new Date(dateObj), ...data }); }
 
-        const hasLwp = lwpDays > 0 && lwpFromDate instanceof Date && !isNaN(lwpFromDate);
-        function applyLwpShift(d) {
-            if (hasLwp && d >= lwpFromDate) {
-                let shifted = new Date(d);
-                shifted.setDate(shifted.getDate() + lwpDays);
-                return shifted;
-            }
-            return d;
-        }
+        const lwpEntries98 = getLwpEffectEntries();
 
         pushEvent(optionDate, { label: "DOA / PAY FIXATION", isInitial: true });
 
@@ -716,7 +860,7 @@
             { d: new Date(doj.getFullYear() + 20, doj.getMonth(), doj.getDate()), name: "20 YEARS - ADDL. INCREMENT", type: "20Y" }
         ];
         if (!isEligible18Y) milestoneDefs = milestoneDefs.filter(m => m.type !== "18Y");
-        milestoneDefs = milestoneDefs.map(m => ({ ...m, d: applyLwpShift(m.d) }))
+        milestoneDefs = milestoneDefs.map(m => ({ ...m, d: resolveRopa98MilestoneDate(m.d, lwpEntries98) }))
                                       .filter(m => m.d >= optionDate && m.d <= endDate);
         milestoneDefs.forEach(m => pushEvent(m.d, { label: m.name, isMilestone: true, milestoneType: m.type }));
 
@@ -729,22 +873,69 @@
             return next;
         }
 
-        let loopYear = optionDate.getFullYear() + 1;
-        while (loopYear <= endDate.getFullYear() + 1) {
-            let normalCycleDate = new Date(loopYear, optionMonth, 1);
-            let priorCycleDate = new Date(loopYear - 1, optionMonth, 1);
-            let interveningMilestone = milestoneDefs.find(m => m.d >= priorCycleDate && m.d < normalCycleDate);
-            let incrementDate;
-            if (interveningMilestone) {
-                incrementDate = vestingExtendedNextDate(interveningMilestone.d);
-                if (incrementDate < normalCycleDate) incrementDate = applyLwpShift(normalCycleDate);
-            } else {
-                incrementDate = applyLwpShift(normalCycleDate);
+        let lwpConsumedSoFar98 = 0;
+
+        if (promotionActive98) {
+            // 1. Pre-promotion annual increments (based on optionMonth)
+            let loopYear = optionDate.getFullYear() + 1;
+            while (loopYear <= promotionDate.getFullYear()) {
+                let normalCycleDate = new Date(loopYear, optionMonth, 1);
+                if (normalCycleDate < promotionDate) {
+                    let cumulativeLwp98 = lwpDaysAppliedBy(lwpEntries98, normalCycleDate);
+                    let newLwpThisCycle98 = Math.max(0, cumulativeLwp98 - lwpConsumedSoFar98);
+                    let incrementDate = newLwpThisCycle98 > 0 ? addDays(normalCycleDate, newLwpThisCycle98) : new Date(normalCycleDate);
+                    lwpConsumedSoFar98 = cumulativeLwp98;
+                    if (incrementDate >= optionDate && incrementDate < promotionDate) {
+                        pushEvent(incrementDate, { label: "INCREMENT", isAnnual: true });
+                    }
+                }
+                loopYear++;
             }
-            if (incrementDate >= optionDate && incrementDate <= endDate) {
-                pushEvent(incrementDate, { label: "INCREMENT", isAnnual: true });
+
+            // 2. Post-promotion annual increments (based on promotionDate month as per ROPA-98 Rule)
+            let promoMonth = promotionDate.getMonth();
+            let postLoopYear = promotionDate.getFullYear() + 1;
+            while (postLoopYear <= endDate.getFullYear() + 1) {
+                let normalCycleDate = new Date(postLoopYear, promoMonth, 1);
+                let priorCycleDate = new Date(postLoopYear - 1, promoMonth, 1);
+                let interveningMilestone = milestoneDefs.find(m => m.d >= priorCycleDate && m.d < normalCycleDate);
+                let cumulativeLwp98 = lwpDaysAppliedBy(lwpEntries98, normalCycleDate);
+                let newLwpThisCycle98 = Math.max(0, cumulativeLwp98 - lwpConsumedSoFar98);
+                let incrementDate;
+                if (interveningMilestone) {
+                    incrementDate = vestingExtendedNextDate(interveningMilestone.d);
+                    if (incrementDate < normalCycleDate) incrementDate = newLwpThisCycle98 > 0 ? addDays(normalCycleDate, newLwpThisCycle98) : new Date(normalCycleDate);
+                } else {
+                    incrementDate = newLwpThisCycle98 > 0 ? addDays(normalCycleDate, newLwpThisCycle98) : new Date(normalCycleDate);
+                }
+                lwpConsumedSoFar98 = cumulativeLwp98;
+                if (incrementDate > promotionDate && incrementDate <= endDate) {
+                    pushEvent(incrementDate, { label: "INCREMENT", isAnnual: true });
+                }
+                postLoopYear++;
             }
-            loopYear++;
+        } else {
+            // No promotion: standard annual increments based on optionMonth
+            let loopYear = optionDate.getFullYear() + 1;
+            while (loopYear <= endDate.getFullYear() + 1) {
+                let normalCycleDate = new Date(loopYear, optionMonth, 1);
+                let priorCycleDate = new Date(loopYear - 1, optionMonth, 1);
+                let interveningMilestone = milestoneDefs.find(m => m.d >= priorCycleDate && m.d < normalCycleDate);
+                let cumulativeLwp98 = lwpDaysAppliedBy(lwpEntries98, normalCycleDate);
+                let newLwpThisCycle98 = Math.max(0, cumulativeLwp98 - lwpConsumedSoFar98);
+                let incrementDate;
+                if (interveningMilestone) {
+                    incrementDate = vestingExtendedNextDate(interveningMilestone.d);
+                    if (incrementDate < normalCycleDate) incrementDate = newLwpThisCycle98 > 0 ? addDays(normalCycleDate, newLwpThisCycle98) : new Date(normalCycleDate);
+                } else {
+                    incrementDate = newLwpThisCycle98 > 0 ? addDays(normalCycleDate, newLwpThisCycle98) : new Date(normalCycleDate);
+                }
+                lwpConsumedSoFar98 = cumulativeLwp98;
+                if (incrementDate >= optionDate && incrementDate <= endDate) {
+                    pushEvent(incrementDate, { label: "INCREMENT", isAnnual: true });
+                }
+                loopYear++;
+            }
         }
 
         sortTimelineEvents(events);
@@ -811,61 +1002,106 @@
         return { rows: compiledRows, finalScaleKey: currentScaleKey };
     }
 
-    function computeRopa09Timeline(doj, optionDate, gpInput, initialBandPay, endDate, lwpType, lwpStart, lwpEnd, promotionDate, promotionTargetGp, evType) {
+    /* --- ROPA-2009 TIMELINE COMPUTATION --- */
+    function computeRopa09Timeline(doj, optionDate, gpInput, initialBandPay, endDate, promotionDate, promotionTargetGp, evType) {
         let events = [];
         function pushEvent(dateObj, data) { events.push({ date: new Date(dateObj), ...data }); }
 
         pushEvent(optionDate, { label: "DOA / PAY REVISION", isInitial: true, exactMilestoneDate: optionDate });
 
-        const lwpEffect = computeLwpEffect(lwpType, lwpStart, lwpEnd);
+        const lwpEntries09 = getLwpEffectEntries();
 
         const promotionActive = (promotionDate instanceof Date && !isNaN(promotionDate) && promotionDate >= optionDate && promotionDate <= endDate);
-        const promoWin = promotionActive ? checkWindow(promotionDate) : null;
-        const effectivePromotionDate = (promotionActive && promoWin === 'A') ? new Date(promotionDate.getFullYear(), 6, 1) : promotionDate;
         if (promotionActive) {
-            pushEvent(effectivePromotionDate, { label: evType === 'promo' ? "PROMOTION" : "HIGHER SCALE", isPromotion: true, targetGp: promotionTargetGp, exactPromotionDate: promotionDate });
-        }
-        let firstIncrementYear = optionDate.getFullYear();
-        let optionDay = optionDate.getDate();
-        let optionMonth = optionDate.getMonth();
-        if ((optionMonth === 0 && optionDay >= 2) || (optionMonth > 0 && optionMonth < 5) || (optionMonth === 5 && optionDay <= 30)) {
-            firstIncrementYear += 1;
-        }
-        let loopYear = firstIncrementYear;
-        while (loopYear <= endDate.getFullYear()) {
-            let julDate = new Date(loopYear, 6, 1);
-            if (lwpEffect && lwpEffect.affectedYear === loopYear) {
-                if (lwpEffect.skip) {
-                    loopYear++;
-                    continue;
-                }
-                if (julDate >= optionDate && julDate <= endDate) {
-                    pushEvent(lwpEffect.financialDate, { label: "INCREMENT", isAnnual: true, isLwpDeferred: true, notionalDate: julDate });
-                }
-            } else if (julDate >= optionDate && julDate <= endDate) {
-                pushEvent(julDate, { label: "INCREMENT", isAnnual: true });
-            }
-            loopYear++;
+            pushEvent(promotionDate, { label: evType === 'promo' ? "PROMOTION" : "HIGHER SCALE", isPromotion: true, targetGp: promotionTargetGp, exactPromotionDate: promotionDate });
         }
 
         const isExcludedFrom18Y = [4700, 4800, 5400].includes(gpInput);
         const eligibleFor18YScaleChange = [1700, 2600, 3900, 4100].includes(gpInput);
 
-        [ {d: new Date(doj.getFullYear() + 10, doj.getMonth(), doj.getDate()), name: "10 YEARS"},
-          {d: new Date(doj.getFullYear() + 18, doj.getMonth(), doj.getDate()), name: "18 YEARS"},
-          {d: new Date(doj.getFullYear() + 20, doj.getMonth(), doj.getDate()), name: "20 YEARS"} ].forEach(milestone => {
-            if (milestone.name === "18 YEARS" && isExcludedFrom18Y) return;
-            if (milestone.d >= optionDate && milestone.d <= endDate) {
-                let win = checkWindow(milestone.d);
-                if (win === 'A') {
-                    let targetJul = new Date(milestone.d.getFullYear(), 6, 1);
-                    if (lwpEffect && lwpEffect.affectedYear === targetJul.getFullYear() && !lwpEffect.skip) {
-                        pushEvent(lwpEffect.financialDate, { label: milestone.name, isMilestone: true, exactMilestoneDate: milestone.d, win: 'A', isLwpDeferred: true, notionalDate: targetJul });
-                    } else {
-                        pushEvent(targetJul, { label: milestone.name, isMilestone: true, exactMilestoneDate: milestone.d, win: 'A' });
+        let milestoneDefs09 = [
+            { d: new Date(doj.getFullYear() + 10, doj.getMonth(), doj.getDate()), name: "10 YEARS" },
+            { d: new Date(doj.getFullYear() + 18, doj.getMonth(), doj.getDate()), name: "18 YEARS" },
+            { d: new Date(doj.getFullYear() + 20, doj.getMonth(), doj.getDate()), name: "20 YEARS" }
+        ];
+        if (isExcludedFrom18Y) milestoneDefs09 = milestoneDefs09.filter(m => m.name !== "18 YEARS");
+
+        let lwpConsumedSoFar09 = 0;
+        let prevCycleBoundary09 = optionDate;
+
+        if (promotionActive) {
+            // 1. Pre-promotion annual increments (01-July prior to promotionDate)
+            let firstIncrementYear = optionDate.getFullYear();
+            let optionDay = optionDate.getDate();
+            let optionMonth = optionDate.getMonth();
+            if ((optionMonth === 0 && optionDay >= 2) || (optionMonth > 0 && optionMonth < 5) || (optionMonth === 5 && optionDay <= 30)) {
+                firstIncrementYear += 1;
+            }
+
+            let loopYear = firstIncrementYear;
+            while (loopYear <= promotionDate.getFullYear()) {
+                let julDate = new Date(loopYear, 6, 1);
+                if (julDate < promotionDate) {
+                    let interveningMilestone09 = milestoneDefs09.find(m => m.d >= prevCycleBoundary09 && m.d < julDate);
+                    let cumulativeLwp09 = lwpDaysAppliedBy(lwpEntries09, julDate);
+                    let resolved = interveningMilestone09 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp09, lwpConsumedSoFar09);
+                    lwpConsumedSoFar09 = cumulativeLwp09;
+                    if (resolved.date >= optionDate && resolved.date < promotionDate) {
+                        pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
                     }
-                } else {
-                    pushEvent(milestone.d, { label: milestone.name, isMilestone: true, exactMilestoneDate: milestone.d, win: 'B' });
+                    prevCycleBoundary09 = julDate;
+                }
+                loopYear++;
+            }
+
+            // 2. Post-promotion annual increments (01-July calculated WRT promotionDate as per ROPA Rules)
+            // If promotion is on Jan 1: service on July 1st is 6 months -> next increment is July 1st of promotion year.
+            // If promotion is between Jan 2 and Dec 31: service on July 1st is < 6 months (or after July 1st) -> next increment is July 1st of NEXT year.
+            let postPromoStartYear = (promotionDate.getMonth() === 0 && promotionDate.getDate() === 1) ? promotionDate.getFullYear() : promotionDate.getFullYear() + 1;
+            let postLoopYear = postPromoStartYear;
+            prevCycleBoundary09 = promotionDate;
+
+            while (postLoopYear <= endDate.getFullYear()) {
+                let julDate = new Date(postLoopYear, 6, 1);
+                let interveningMilestone09 = milestoneDefs09.find(m => m.d >= prevCycleBoundary09 && m.d < julDate);
+                let cumulativeLwp09 = lwpDaysAppliedBy(lwpEntries09, julDate);
+                let resolved = interveningMilestone09 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp09, lwpConsumedSoFar09);
+                lwpConsumedSoFar09 = cumulativeLwp09;
+                if (resolved.date > promotionDate && resolved.date <= endDate) {
+                    pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
+                }
+                prevCycleBoundary09 = julDate;
+                postLoopYear++;
+            }
+        } else {
+            // No promotion: standard annual increments
+            let firstIncrementYear = optionDate.getFullYear();
+            let optionDay = optionDate.getDate();
+            let optionMonth = optionDate.getMonth();
+            if ((optionMonth === 0 && optionDay >= 2) || (optionMonth > 0 && optionMonth < 5) || (optionMonth === 5 && optionDay <= 30)) {
+                firstIncrementYear += 1;
+            }
+
+            let loopYear = firstIncrementYear;
+            while (loopYear <= endDate.getFullYear()) {
+                let julDate = new Date(loopYear, 6, 1);
+                let interveningMilestone09 = milestoneDefs09.find(m => m.d >= prevCycleBoundary09 && m.d < julDate);
+                let cumulativeLwp09 = lwpDaysAppliedBy(lwpEntries09, julDate);
+                let resolved = interveningMilestone09 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp09, lwpConsumedSoFar09);
+                lwpConsumedSoFar09 = cumulativeLwp09;
+                if (resolved.date >= optionDate && resolved.date <= endDate) {
+                    pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
+                }
+                prevCycleBoundary09 = julDate;
+                loopYear++;
+            }
+        }
+
+        milestoneDefs09.forEach(milestone => {
+            if (milestone.d >= optionDate) {
+                let resolved = resolveDateWithLwp(milestone.d, lwpEntries09);
+                if (resolved.date <= endDate) {
+                    pushEvent(resolved.date, { label: milestone.name, isMilestone: true, exactMilestoneDate: milestone.d, win: resolved.win, isLwpDeferred: resolved.lwpShifted, notionalDate: resolved.win === 'A' ? new Date(milestone.d.getFullYear(), 6, 1) : milestone.d });
                 }
             }
         });
@@ -884,7 +1120,6 @@
             let existingGp = runningGp;
             let incAmt = 0;
             let lwpNote = ev.isLwpDeferred ? `<div class="slip-row" style="color:#c2410c;"><span>LWP (non-medical, G.O. 181-SE(B) Dt. 8.10.2009)</span><span>Notional date ${formatDate(ev.notionalDate)}; financial benefit deferred to ${formatDate(ev.date)}</span></div>` : '';
-            let promoWindowNote = (ev.isPromotion && ev.exactPromotionDate && ev.exactPromotionDate.getTime() !== ev.date.getTime()) ? `<div class="slip-row" style="color:#c2410c;"><span>Order Date ${formatDate(ev.exactPromotionDate)} falls in 02-Jan to 30-Jun window</span><span>Effective date forced to common increment date ${formatDate(ev.date)}</span></div>` : '';
 
             if (ev.isInitial) {
                 // Staging index row
@@ -898,11 +1133,10 @@
                     runningBasicPay = runningBandPay + runningGp;
                     slipBlockHTML = `
                         <div class="slip-box">
-                            <div class="slip-row"><span class="slip-bold">1. Existing Pay on ${formatDate(ev.exactPromotionDate || ev.date)}</span><span>BP: Rs. ${existingBandPay.toLocaleString('en-IN')}, GP: Rs. ${oldGp.toLocaleString('en-IN')}</span></div>
+                            <div class="slip-row"><span class="slip-bold">1. Existing Pay on ${formatDate(ev.date)}</span><span>BP: Rs. ${existingBandPay.toLocaleString('en-IN')}, GP: Rs. ${oldGp.toLocaleString('en-IN')}</span></div>
                             <div class="slip-row"><span>2.a) One Additional Increment in Existing Scale</span><span>Rs. ${incAmt.toLocaleString('en-IN')}</span></div>
                             <div class="slip-row"><span>&nbsp;&nbsp;&nbsp;b) Grade Pay changed to promoted post</span><span>Rs. ${oldGp.toLocaleString('en-IN')} &rarr; Rs. ${runningGp.toLocaleString('en-IN')}</span></div>
                             <div class="slip-row"><span class="slip-bold">&nbsp;&nbsp;&nbsp;c) Pay Fixed on Promotion w.e.f ${formatDate(ev.date)}</span><span class="slip-bold">Rs. ${runningBasicPay.toLocaleString('en-IN')}</span></div>
-                            ${promoWindowNote}
                         </div>`;
                 } else {
                     const floorBand = minEntryPayBand09[runningGp] || 0;
@@ -912,10 +1146,9 @@
                     runningBasicPay = runningBandPay + runningGp;
                     slipBlockHTML = `
                         <div class="slip-box">
-                            <div class="slip-row"><span class="slip-bold">1. Existing Pay on ${formatDate(ev.exactPromotionDate || ev.date)}</span><span>BP: Rs. ${existingBandPay.toLocaleString('en-IN')}, GP: Rs. ${oldGp.toLocaleString('en-IN')}</span></div>
+                            <div class="slip-row"><span class="slip-bold">1. Existing Pay on ${formatDate(ev.date)}</span><span>BP: Rs. ${existingBandPay.toLocaleString('en-IN')}, GP: Rs. ${oldGp.toLocaleString('en-IN')}</span></div>
                             <div class="slip-row"><span>2. Fitted directly into Higher Scale GP ${runningGp.toLocaleString('en-IN')} (No promotional increment)</span><span>&mdash;</span></div>
                             <div class="slip-row"><span class="slip-bold">3. Fixed Basic Pay w.e.f ${formatDate(ev.date)}</span><span class="slip-bold">Rs. ${runningBasicPay.toLocaleString('en-IN')}</span></div>
-                            ${promoWindowNote}
                         </div>`;
                 }
             } else if (ev.isAnnual) {
@@ -960,62 +1193,104 @@
         return { rows: compiledRows };
     }
 
-    function computeRopa19Timeline(doj, startDate, gpInput, levelInput, basicInput, dor, lwpType, lwpStart, lwpEnd, promotionDate, promotionTargetGp, evType) {
+    /* --- ROPA-2019 TIMELINE COMPUTATION --- */
+    function computeRopa19Timeline(doj, startDate, gpInput, levelInput, basicInput, dor, promotionDate, promotionTargetGp, evType) {
         let events = [];
         function pushEvent(dateObj, data) { events.push({ date: new Date(dateObj), ...data }); }
 
         pushEvent(startDate, { label: "ROPA-19 OPTION / FITMENT", isInitial: true, exactMilestoneDate: startDate });
 
-        const lwpEffect = computeLwpEffect(lwpType, lwpStart, lwpEnd);
+        const lwpEntries19 = getLwpEffectEntries();
 
         const promotionActive = (promotionDate instanceof Date && !isNaN(promotionDate) && promotionDate >= startDate && promotionDate <= dor);
-        const promoWin = promotionActive ? checkWindow(promotionDate) : null;
-        const effectivePromotionDate = (promotionActive && promoWin === 'A') ? new Date(promotionDate.getFullYear(), 6, 1) : promotionDate;
         if (promotionActive) {
-            pushEvent(effectivePromotionDate, { label: evType === 'promo' ? "PROMOTION" : "HIGHER SCALE", isPromotion: true, targetGp: promotionTargetGp, exactPromotionDate: promotionDate });
-        }
-
-        let firstIncrementYear = startDate.getFullYear();
-        let optionDay = startDate.getDate();
-        let optionMonth = startDate.getMonth();
-        if ((optionMonth === 0 && optionDay >= 2) || (optionMonth > 0 && optionMonth < 5) || (optionMonth === 5 && optionDay <= 30)) {
-            firstIncrementYear += 1;
-        }
-        let loopYear = firstIncrementYear;
-        while (loopYear <= dor.getFullYear()) {
-            let julDate = new Date(loopYear, 6, 1);
-            if (lwpEffect && lwpEffect.affectedYear === loopYear) {
-                if (lwpEffect.skip) {
-                    loopYear++;
-                    continue;
-                }
-                if (julDate >= startDate && julDate <= dor) {
-                    pushEvent(lwpEffect.financialDate, { label: "INCREMENT", isAnnual: true, isLwpDeferred: true, notionalDate: julDate });
-                }
-            } else if (julDate >= startDate && julDate <= dor) {
-                pushEvent(julDate, { label: "INCREMENT", isAnnual: true });
-            }
-            loopYear++;
+            pushEvent(promotionDate, { label: evType === 'promo' ? "PROMOTION" : "HIGHER SCALE", isPromotion: true, targetGp: promotionTargetGp, exactPromotionDate: promotionDate });
         }
 
         const isExcludedFrom18Y = [4700, 4800, 5400].includes(gpInput);
         const eligibleFor18YScaleChange = [1700, 2600, 3900, 4100].includes(gpInput);
 
-        [ {d: new Date(doj.getFullYear() + 10, doj.getMonth(), doj.getDate()), name: "10 YEARS"},
-          {d: new Date(doj.getFullYear() + 18, doj.getMonth(), doj.getDate()), name: "18 YEARS"},
-          {d: new Date(doj.getFullYear() + 20, doj.getMonth(), doj.getDate()), name: "20 YEARS"} ].forEach(milestone => {
-            if (milestone.name === "18 YEARS" && isExcludedFrom18Y) return;
-            if (milestone.d >= startDate && milestone.d <= dor) {
-                let win = checkWindow(milestone.d);
-                if (win === 'A') {
-                    let targetJul = new Date(milestone.d.getFullYear(), 6, 1);
-                    if (lwpEffect && lwpEffect.affectedYear === targetJul.getFullYear() && !lwpEffect.skip) {
-                        pushEvent(lwpEffect.financialDate, { label: milestone.name, isMilestone: true, exactMilestoneDate: milestone.d, win: 'A', isLwpDeferred: true, notionalDate: targetJul });
-                    } else {
-                        pushEvent(targetJul, { label: milestone.name, isMilestone: true, exactMilestoneDate: milestone.d, win: 'A' });
+        let milestoneDefs19 = [
+            { d: new Date(doj.getFullYear() + 10, doj.getMonth(), doj.getDate()), name: "10 YEARS" },
+            { d: new Date(doj.getFullYear() + 18, doj.getMonth(), doj.getDate()), name: "18 YEARS" },
+            { d: new Date(doj.getFullYear() + 20, doj.getMonth(), doj.getDate()), name: "20 YEARS" }
+        ];
+        if (isExcludedFrom18Y) milestoneDefs19 = milestoneDefs19.filter(m => m.name !== "18 YEARS");
+
+        let lwpConsumedSoFar19 = 0;
+        let prevCycleBoundary19 = startDate;
+
+        if (promotionActive) {
+            // 1. Pre-promotion annual increments (01-July prior to promotionDate)
+            let firstIncrementYear = startDate.getFullYear();
+            let optionDay = startDate.getDate();
+            let optionMonth = startDate.getMonth();
+            if ((optionMonth === 0 && optionDay >= 2) || (optionMonth > 0 && optionMonth < 5) || (optionMonth === 5 && optionDay <= 30)) {
+                firstIncrementYear += 1;
+            }
+
+            let loopYear = firstIncrementYear;
+            while (loopYear <= promotionDate.getFullYear()) {
+                let julDate = new Date(loopYear, 6, 1);
+                if (julDate < promotionDate) {
+                    let interveningMilestone19 = milestoneDefs19.find(m => m.d >= prevCycleBoundary19 && m.d < julDate);
+                    let cumulativeLwp19 = lwpDaysAppliedBy(lwpEntries19, julDate);
+                    let resolved = interveningMilestone19 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp19, lwpConsumedSoFar19);
+                    lwpConsumedSoFar19 = cumulativeLwp19;
+                    if (resolved.date >= startDate && resolved.date < promotionDate) {
+                        pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
                     }
-                } else {
-                    pushEvent(milestone.d, { label: milestone.name, isMilestone: true, exactMilestoneDate: milestone.d, win: 'B' });
+                    prevCycleBoundary19 = julDate;
+                }
+                loopYear++;
+            }
+
+            // 2. Post-promotion annual increments (01-July calculated WRT promotionDate as per ROPA Rules)
+            let postPromoStartYear = (promotionDate.getMonth() === 0 && promotionDate.getDate() === 1) ? promotionDate.getFullYear() : promotionDate.getFullYear() + 1;
+            let postLoopYear = postPromoStartYear;
+            prevCycleBoundary19 = promotionDate;
+
+            while (postLoopYear <= dor.getFullYear()) {
+                let julDate = new Date(postLoopYear, 6, 1);
+                let interveningMilestone19 = milestoneDefs19.find(m => m.d >= prevCycleBoundary19 && m.d < julDate);
+                let cumulativeLwp19 = lwpDaysAppliedBy(lwpEntries19, julDate);
+                let resolved = interveningMilestone19 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp19, lwpConsumedSoFar19);
+                lwpConsumedSoFar19 = cumulativeLwp19;
+                if (resolved.date > promotionDate && resolved.date <= dor) {
+                    pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
+                }
+                prevCycleBoundary19 = julDate;
+                postLoopYear++;
+            }
+        } else {
+            // No promotion: standard annual increments
+            let firstIncrementYear = startDate.getFullYear();
+            let optionDay = startDate.getDate();
+            let optionMonth = startDate.getMonth();
+            if ((optionMonth === 0 && optionDay >= 2) || (optionMonth > 0 && optionMonth < 5) || (optionMonth === 5 && optionDay <= 30)) {
+                firstIncrementYear += 1;
+            }
+
+            let loopYear = firstIncrementYear;
+            while (loopYear <= dor.getFullYear()) {
+                let julDate = new Date(loopYear, 6, 1);
+                let interveningMilestone19 = milestoneDefs19.find(m => m.d >= prevCycleBoundary19 && m.d < julDate);
+                let cumulativeLwp19 = lwpDaysAppliedBy(lwpEntries19, julDate);
+                let resolved = interveningMilestone19 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp19, lwpConsumedSoFar19);
+                lwpConsumedSoFar19 = cumulativeLwp19;
+                if (resolved.date >= startDate && resolved.date <= dor) {
+                    pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
+                }
+                prevCycleBoundary19 = julDate;
+                loopYear++;
+            }
+        }
+
+        milestoneDefs19.forEach(milestone => {
+            if (milestone.d >= startDate) {
+                let resolved = resolveDateWithLwp(milestone.d, lwpEntries19);
+                if (resolved.date <= dor) {
+                    pushEvent(resolved.date, { label: milestone.name, isMilestone: true, exactMilestoneDate: milestone.d, win: resolved.win, isLwpDeferred: resolved.lwpShifted, notionalDate: resolved.win === 'A' ? new Date(milestone.d.getFullYear(), 6, 1) : milestone.d });
                 }
             }
         });
@@ -1035,7 +1310,6 @@
             let existingBasic = runningBasicPay;
             let existingLevel = runningLevel;
             let lwpNote = ev.isLwpDeferred ? `<div class="slip-row" style="color:#c2410c;"><span>LWP (non-medical, G.O. 181-SE(B) Dt. 8.10.2009)</span><span>Notional date ${formatDate(ev.notionalDate)}; financial benefit deferred to ${formatDate(ev.date)}</span></div>` : '';
-            let promoWindowNote = (ev.isPromotion && ev.exactPromotionDate && ev.exactPromotionDate.getTime() !== ev.date.getTime()) ? `<div class="slip-row" style="color:#c2410c;"><span>Order Date ${formatDate(ev.exactPromotionDate)} falls in 02-Jan to 30-Jun window</span><span>Effective date forced to common increment date ${formatDate(ev.date)}</span></div>` : '';
 
             if (ev.isInitial) {
                 colTrackingInfo = cellData.cell;
@@ -1053,11 +1327,10 @@
                     colTrackingInfo = fitted.cell;
                     slipBlockHTML = `
                         <div class="slip-box">
-                            <div class="slip-row"><span class="slip-bold">1. Existing Pay Matrix Cell on ${formatDate(ev.exactPromotionDate || ev.date)}</span><span>Rs. ${existingBasic.toLocaleString('en-IN')} (L-${oldLevel}, GP ${oldGp.toLocaleString('en-IN')})</span></div>
+                            <div class="slip-row"><span class="slip-bold">1. Existing Pay Matrix Cell on ${formatDate(ev.date)}</span><span>Rs. ${existingBasic.toLocaleString('en-IN')} (L-${oldLevel}, GP ${oldGp.toLocaleString('en-IN')})</span></div>
                             <div class="slip-row"><span>2.a) One Increment within Existing Level ${oldLevel}</span><span>Rs. ${oneStepValue.toLocaleString('en-IN')}</span></div>
                             <div class="slip-row"><span>&nbsp;&nbsp;&nbsp;b) Fitted into Target Level ${targetLevel} (equal/next-higher cell)</span><span>&mdash;</span></div>
                             <div class="slip-row"><span class="slip-bold">&nbsp;&nbsp;&nbsp;c) Pay Fixed on Promotion w.e.f ${formatDate(ev.date)}</span><span class="slip-bold">Rs. ${runningBasicPay.toLocaleString('en-IN')} (${fitted.cell})</span></div>
-                            ${promoWindowNote}
                         </div>`;
                 } else {
                     let fitted = findCell19(targetLevel, runningBasicPay);
@@ -1067,10 +1340,9 @@
                     colTrackingInfo = fitted.cell;
                     slipBlockHTML = `
                         <div class="slip-box">
-                            <div class="slip-row"><span class="slip-bold">1. Existing Pay Matrix Cell on ${formatDate(ev.exactPromotionDate || ev.date)}</span><span>Rs. ${existingBasic.toLocaleString('en-IN')} (L-${oldLevel}, GP ${oldGp.toLocaleString('en-IN')})</span></div>
+                            <div class="slip-row"><span class="slip-bold">1. Existing Pay Matrix Cell on ${formatDate(ev.date)}</span><span>Rs. ${existingBasic.toLocaleString('en-IN')} (L-${oldLevel}, GP ${oldGp.toLocaleString('en-IN')})</span></div>
                             <div class="slip-row"><span>2. Fitted directly into Target Level ${targetLevel} (equal/next-higher cell - No promo increment)</span><span>&mdash;</span></div>
                             <div class="slip-row"><span class="slip-bold">3. Pay Fixed w.e.f ${formatDate(ev.date)}</span><span class="slip-bold">Rs. ${runningBasicPay.toLocaleString('en-IN')} (${fitted.cell})</span></div>
-                            ${promoWindowNote}
                         </div>`;
                 }
             } else if (ev.isAnnual) {
@@ -1119,8 +1391,6 @@
         return { rows: compiledRows };
     }
 
-    // --- Snapshot helpers: find the running pay/scale state as of a given cut-off date ---
-    // (These are needed to carry forward the notional pay from one ROPA phase into the next.)
     function getRopa98SnapshotAsOf(rows, initialBasicPay, initialScaleKey, asOfDate) {
         let basic = initialBasicPay;
         let scaleKey = initialScaleKey;
@@ -1230,16 +1500,11 @@
             const ropa98OptionDate = new Date(ropa98OptionInput);
             const ropa98EndDate = dor < ROPA98_CUTOFF ? dor : ROPA98_CUTOFF;
 
-            const ropa98LwpDaysInput = parseInt(document.getElementById('ropa98LwpDays').value, 10);
-            const ropa98LwpDays = isNaN(ropa98LwpDaysInput) ? 0 : ropa98LwpDaysInput;
-            const ropa98LwpFromInput = document.getElementById('ropa98LwpFromDate').value;
-            const ropa98LwpFromDate = ropa98LwpFromInput ? new Date(ropa98LwpFromInput) : null;
-
             const promotionDateInput98 = document.getElementById('promotionDate').value;
             const promotionDate98 = (enableRPromotion && promotionDateInput98) ? new Date(promotionDateInput98) : null;
             const promotionTargetGp98 = parseInt(document.getElementById('promotionTargetGp').value, 10);
 
-            const result98 = computeRopa98Timeline(doj, ropa98OptionDate, ropa98Scale, ropa98BasicPay, ropa98EndDate, ropa98LwpDays, ropa98LwpFromDate, promotionDate98, promotionTargetGp98, evType);
+            const result98 = computeRopa98Timeline(doj, ropa98OptionDate, ropa98Scale, ropa98BasicPay, ropa98EndDate, promotionDate98, promotionTargetGp98, evType);
             ropa98Rows = result98.rows;
 
             const ropa09OptionInputForSnap = document.getElementById('ropa09OptionDate').value;
@@ -1268,17 +1533,11 @@
             const ropa09OptionDate = new Date(ropa09OptionInput);
             const ropa09EndDate = dor < ROPA09_CUTOFF ? dor : ROPA09_CUTOFF;
 
-            const ropa09LwpType = document.getElementById('ropa09LwpType').value;
-            const ropa09LwpStartInput = document.getElementById('ropa09LwpStart').value;
-            const ropa09LwpEndInput = document.getElementById('ropa09LwpEnd').value;
-            const ropa09LwpStart = ropa09LwpStartInput ? new Date(ropa09LwpStartInput) : null;
-            const ropa09LwpEnd = ropa09LwpEndInput ? new Date(ropa09LwpEndInput) : null;
-
             const promotionDateInput = document.getElementById('promotionDate').value;
             const promotionDate = (enableRPromotion && promotionDateInput) ? new Date(promotionDateInput) : null;
             const promotionTargetGp = parseInt(document.getElementById('promotionTargetGp').value, 10);
 
-            const result09 = computeRopa09Timeline(doj, ropa09OptionDate, ropa09Gp, ropa09BandPay, ropa09EndDate, ropa09LwpType, ropa09LwpStart, ropa09LwpEnd, promotionDate, promotionTargetGp, evType);
+            const result09 = computeRopa09Timeline(doj, ropa09OptionDate, ropa09Gp, ropa09BandPay, ropa09EndDate, promotionDate, promotionTargetGp, evType);
             ropa09Rows = result09.rows;
 
             const snap = getRopa09SnapshotAsOf(ropa09Rows, ropa09Gp, ropa09BandPay, ropa19OptionDate);
@@ -1299,17 +1558,11 @@
             carryNote = `<strong>Manual Entry:</strong> ROPA-2019 fixation starts at Rs. ${carryBasic.toLocaleString('en-IN')} (GP Rs. ${carryGp.toLocaleString('en-IN')}, Level-${carryLevel}) as on ${formatDate(ropa19OptionDate)}.`;
         }
 
-        const ropa19LwpType = document.getElementById('ropa19LwpType').value;
-        const ropa19LwpStartInput = document.getElementById('ropa19LwpStart').value;
-        const ropa19LwpEndInput = document.getElementById('ropa19LwpEnd').value;
-        const ropa19LwpStart = ropa19LwpStartInput ? new Date(ropa19LwpStartInput) : null;
-        const ropa19LwpEnd = ropa19LwpEndInput ? new Date(ropa19LwpEndInput) : null;
-
         const promotionDateInput19 = document.getElementById('promotionDate').value;
         const promotionDate19 = (enableRPromotion && promotionDateInput19) ? new Date(promotionDateInput19) : null;
         const promotionTargetGp19 = parseInt(document.getElementById('promotionTargetGp').value, 10);
 
-        const result19 = computeRopa19Timeline(doj, ropa19OptionDate, carryGp, carryLevel, carryBasic, dor, ropa19LwpType, ropa19LwpStart, ropa19LwpEnd, promotionDate19, promotionTargetGp19, evType);
+        const result19 = computeRopa19Timeline(doj, ropa19OptionDate, carryGp, carryLevel, carryBasic, dor, promotionDate19, promotionTargetGp19, evType);
 
         document.getElementById('carryForwardOutput98').style.display = enableRopa98 ? '' : 'none';
         document.getElementById('carryForwardOutput98').innerHTML = carryNote98;
@@ -1324,6 +1577,12 @@
         document.getElementById('sbDoj').innerText = formatDate(doj);
         document.getElementById('sbDor').innerText = formatDate(dor);
 
+        annotateAllTablesWithLeave([
+          {key:'ROPA-98', rows: ropa98Rows},
+          {key:'ROPA-09', rows: ropa09Rows},
+          {key:'ROPA-19', rows: result19.rows}
+        ]);
+
         renderRows98('payTableBody98', 'sbPrintTableBody98', ropa98Rows);
         renderRows('payTableBody09', 'sbPrintTableBody09', ropa09Rows);
         renderRows('payTableBody19', 'sbPrintTableBody19', result19.rows);
@@ -1334,6 +1593,453 @@
         toggleRopa09Section();
         togglePromotionSection();
     });
+</script>
+
+<script>
+/* =========================================================================
+   LEAVE ACCOUNT (REGISTER) ENGINE
+   ========================================================================= */
+window.onerror = function(msg, url, line, col, err){
+  const el = document.getElementById('errorBanner');
+  if(el){
+    el.style.display = '';
+    el.textContent = 'Something went wrong and the page could not update: ' + msg + ' (line ' + line + '). Please refresh the page; if this keeps happening, try opening the file in Chrome or Edge.';
+  }
+  return false;
+};
+
+function showStatus(msg, isError){
+  const el = document.getElementById('statusMsg');
+  if(el){
+    el.style.color = isError ? '#dc2626' : '#059669';
+    el.textContent = msg;
+    try{ el.scrollIntoView({block:'nearest'}); }catch(e){ /* ignore */ }
+  } else {
+    console.log(msg);
+  }
+}
+
+function fmt(d){
+  if(!d) return '-';
+  const dt = new Date(d+'T00:00:00');
+  const dd = String(dt.getDate()).padStart(2,'0');
+  const mm = String(dt.getMonth()+1).padStart(2,'0');
+  return `${dd}-${mm}-${dt.getFullYear()}`;
+}
+function daysBetween(from,to){
+  const f = new Date(from+'T00:00:00');
+  const t = new Date(to+'T00:00:00');
+  return Math.round((t-f)/86400000)+1;
+}
+
+let periods = [];
+let masterMlEntries = [];
+let transferEvents = [];
+let idCounter = 1;
+
+const EL_ANNUAL_RATE = 15;
+const HPL_ANNUAL_RATE = 15;
+const EL_CAP = 365;
+const HPL_CAP = 60;
+
+function syncLeaveUpToDate(){
+  const el = document.getElementById('leaveUpToDate');
+  if(!el) return;
+  if(el.dataset.userSet==='1') return;
+  const dor = getDOR();
+  if(dor) el.value = toISO(dor);
+}
+
+function addPeriodRow(){
+  const last = periods[periods.length-1];
+  const nextFrom = last ? toISO(new Date(new Date(last.to+'T00:00:00').getTime()+86400000)) : '';
+  periods.push({from:nextFrom, to:'', vacFrom:'', vacTo:'', earnedAvg:0, earnedHalf:0, vacDetEarn:0,
+    creditAvgManual:null, creditHalfManual:null, vacDetCredit:0,
+    maternityFull:0, maternityHalf:0, lwp:0, specialFull:0, specialHalf:0, mlEntries:[]});
+  assignMlEntries();
+  renderAll();
+}
+function deletePeriodRow(i){
+  periods.splice(i,1);
+  assignMlEntries();
+  renderAll();
+}
+function updatePeriodField(i, field, value){
+  periods[i][field] = value;
+  assignMlEntries();
+  renderAll();
+}
+
+function toggleTransferUI(){
+  const val = document.getElementById('hasTransfer').value;
+  document.getElementById('transferInputSection').style.display = (val==='yes') ? '' : 'none';
+}
+function addTransferEvent(){
+  const date = document.getElementById('transferDate').value;
+  if(!date){ showStatus('Please pick the new school joining date.', true); return; }
+  transferEvents.push({id:idCounter++, date});
+  transferEvents.sort((a,b)=> new Date(a.date)-new Date(b.date));
+  document.getElementById('transferDate').value='';
+  renderAll();
+}
+function deleteTransferEvent(id){
+  transferEvents = transferEvents.filter(t=>t.id!==id);
+  renderAll();
+}
+
+function addYears(date, years){
+  const d = new Date(date.getTime());
+  d.setFullYear(d.getFullYear()+years);
+  return d;
+}
+function toISO(d){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+function autoGenerateRows(){
+  const dojVal = document.getElementById('doj').value;
+  const dorVal = document.getElementById('leaveUpToDate').value;
+  if(!dojVal || !dorVal){ showStatus('Please set Date of Joining in Section 1, and a "Generate rows up to" date above.', true); return; }
+  const dojDate = new Date(dojVal+'T00:00:00');
+  const dorDate = new Date(dorVal+'T00:00:00');
+  if(dorDate <= dojDate){ showStatus('The "Generate rows up to" date must be after DOJ.', true); return; }
+
+  const hasTransfer = document.getElementById('hasTransfer').value === 'yes';
+  if(hasTransfer && transferEvents.length===0){
+    showStatus('You selected "Yes - transferred" but haven\'t added a transfer date yet. Please add one, or switch back to "No" if there was none.', true);
+    return;
+  }
+
+  let breakpoints = [];
+  let k = 1;
+  while(true){
+    const anniv = addYears(dojDate, k);
+    if(anniv > dorDate) break;
+    breakpoints.push(anniv.getTime());
+    k++;
+  }
+  if(hasTransfer){
+    transferEvents.forEach(t=>{
+      const td = new Date(t.date+'T00:00:00');
+      if(td > dojDate && td < dorDate) breakpoints.push(td.getTime());
+    });
+  }
+
+  breakpoints = [...new Set(breakpoints)].sort((a,b)=>a-b).map(t=>new Date(t));
+
+  const rowStarts = [dojDate, ...breakpoints];
+  const openingAvg = Math.round(parseFloat(document.getElementById('openingAvg').value)) || 0;
+  const openingHalf = Math.round(parseFloat(document.getElementById('openingHalf').value)) || 0;
+
+  const newPeriods = rowStarts.map((start,i)=>{
+    const end = (i+1<rowStarts.length) ? new Date(rowStarts[i+1].getTime()-86400000) : dorDate;
+    const days = daysBetween(toISO(start), toISO(end));
+    const earnedAvg = Math.round( (days/365)*EL_ANNUAL_RATE );
+    const earnedHalf = Math.round( (days/365)*HPL_ANNUAL_RATE );
+    return {
+      from: toISO(start), to: toISO(end), vacFrom:'', vacTo:'',
+      earnedAvg, earnedHalf, vacDetEarn:0,
+      creditAvgManual: i===0 ? openingAvg : null,
+      creditHalfManual: i===0 ? openingHalf : null,
+      vacDetCredit:0,
+      maternityFull:0, maternityHalf:0, lwp:0, specialFull:0, specialHalf:0,
+      mlEntries:[]
+    };
+  });
+
+  periods = newPeriods;
+  assignMlEntries();
+  renderAll();
+  showStatus(`Generated ${newPeriods.length} Period of Duty rows from ${fmt(toISO(dojDate))} to ${fmt(toISO(dorDate))}.`, false);
+}
+
+function addMlEntry(){
+  const type = document.getElementById('mlType').value;
+  const from = document.getElementById('mlFrom').value;
+  const to = document.getElementById('mlTo').value;
+  if(!from || !to){ showStatus('Please enter both From and To dates.', true); return; }
+  if(new Date(to) < new Date(from)){ showStatus('"To" date must not be before "From" date.', true); return; }
+
+  masterMlEntries.push({id:idCounter++, from, to, type});
+  const assigned = assignMlEntries();
+
+  if(!assigned.has(masterMlEntries[masterMlEntries.length-1].id)){
+    masterMlEntries.pop();
+    showStatus('These dates do not fall within any existing Period of Duty row. Please add/extend a period row (or Auto-Generate rows) to cover this date range first.', true);
+    return;
+  }
+
+  document.getElementById('mlFrom').value='';
+  document.getElementById('mlTo').value='';
+  renderAll();
+  const typeLabel = {avg:'ML (Full Avg Pay)', half:'HPL', lwp_effect:'LWP (with CAS effect)', lwp_noeffect:'LWP (no CAS effect)'}[type] || type;
+  showStatus(`${typeLabel} entry added: ${fmt(from)} to ${fmt(to)}.`, false);
+}
+
+function annotateAllTablesWithLeave(tables){
+  if(!tables || !Array.isArray(tables)) return;
+  const typeLabel = {avg:'ML (Full Avg Pay)', half:'HPL', lwp_effect:'LWP (affects CAS)', lwp_noeffect:'LWP (no CAS effect)'};
+
+  tables.forEach(t=>{
+    (t.rows||[]).forEach((row,idx)=>{ row._lineNum = idx+1; row._leaveNotes = []; });
+  });
+
+  const firstSeen = {};
+  masterMlEntries.forEach(entry=>{
+    const eFrom = new Date(entry.from+'T00:00:00');
+    const eTo = new Date(entry.to+'T00:00:00');
+    tables.forEach(t=>{
+      (t.rows||[]).forEach(row=>{
+        if(!row.date || !row.dot) return;
+        const overlapStart = eFrom > row.date ? eFrom : row.date;
+        const overlapEnd = eTo < row.dot ? eTo : row.dot;
+        if(overlapStart <= overlapEnd){
+          if(!firstSeen[entry.id]){
+            const segDays = daysBetween(toISO(overlapStart), toISO(overlapEnd));
+            const label = typeLabel[entry.type] || entry.type;
+            const dateStr = overlapStart.getTime()===overlapEnd.getTime()
+              ? fmt(toISO(overlapStart))
+              : `${fmt(toISO(overlapStart))} to ${fmt(toISO(overlapEnd))}`;
+            row._leaveNotes.push(`${label} ${dateStr} [${segDays}d]`);
+            firstSeen[entry.id] = {table:t.key, line: row._lineNum};
+          } else {
+            const first = firstSeen[entry.id];
+            const ref = (first.table===t.key)
+              ? `ALREADY NOTED IN LINE ${first.line}`
+              : `ALREADY NOTED IN ${first.table} LINE ${first.line}`;
+            row._leaveNotes.push(ref);
+          }
+        }
+      });
+    });
+  });
+
+  tables.forEach(t=>{
+    (t.rows||[]).forEach(row=>{
+      const notes = row._leaveNotes.length ? [...new Set(row._leaveNotes)] : ['NO LEAVE'];
+      row.label = (row.label ? row.label + '<br>' : '')
+        + '<span style="font-weight:400;font-size:.78em;color:#334155;">' + notes.join('; ') + '</span>';
+    });
+  });
+}
+
+function deleteMlEntry(masterId){
+  masterMlEntries = masterMlEntries.filter(e=>e.id!==masterId);
+  assignMlEntries();
+  renderAll();
+}
+
+function assignMlEntries(){
+  periods.forEach(p=> { p.mlEntries = []; p.lwp = 0; });
+  const matchedIds = new Set();
+  masterMlEntries.forEach(entry=>{
+    const leaveFrom = new Date(entry.from+'T00:00:00');
+    const leaveTo = new Date(entry.to+'T00:00:00');
+    const totalDays = daysBetween(entry.from, entry.to);
+    const totalDebit = (entry.type==='half') ? Math.ceil(totalDays/2) : (entry.type==='avg' ? totalDays : 0);
+    periods.forEach(p=>{
+      if(!p.from || !p.to) return;
+      const pFrom = new Date(p.from+'T00:00:00');
+      const pTo = new Date(p.to+'T00:00:00');
+      const overlapStart = leaveFrom > pFrom ? leaveFrom : pFrom;
+      const overlapEnd = leaveTo < pTo ? leaveTo : pTo;
+      if(overlapStart <= overlapEnd){
+        matchedIds.add(entry.id);
+        const segFrom = toISO(overlapStart);
+        const segTo = toISO(overlapEnd);
+        const segDays = daysBetween(segFrom, segTo);
+        const segDebit = (segDays===totalDays) ? totalDebit : Math.round(totalDebit * segDays/totalDays);
+        p.mlEntries.push({id:entry.id, from:segFrom, to:segTo, type:entry.type, days:segDays, debitDays:segDebit});
+        if(entry.type==='lwp_effect' || entry.type==='lwp_noeffect'){
+          p.lwp = (p.lwp||0) + segDays;
+        }
+      }
+    });
+  });
+  return matchedIds;
+}
+
+function computeDerived(){
+  let runningAvg = 0, runningHalf = 0;
+  let cumulativeEarnedAvg = null;
+
+  return periods.map((p, i) => {
+    const takenAvg = p.mlEntries.filter(e=>e.type==='avg').reduce((s,e)=>s+e.debitDays,0);
+    const takenHalf = p.mlEntries.filter(e=>e.type==='half').reduce((s,e)=>s+e.debitDays,0);
+    const enjoyedAvg = p.mlEntries.filter(e=>e.type==='avg').reduce((s,e)=>s+e.days,0);
+    const enjoyedHalf = p.mlEntries.filter(e=>e.type==='half').reduce((s,e)=>s+e.days,0);
+
+    const priorAvg = (i===0) ? (p.creditAvgManual!==null ? p.creditAvgManual : 0) : runningAvg;
+    const priorHalf = (i===0) ? (p.creditHalfManual!==null ? p.creditHalfManual : 0) : runningHalf;
+
+    if(cumulativeEarnedAvg===null){
+      cumulativeEarnedAvg = priorAvg;
+    }
+
+    const effectiveEarnedAvg = Math.max(0, Math.min(Number(p.earnedAvg)||0, EL_CAP - cumulativeEarnedAvg));
+    cumulativeEarnedAvg += effectiveEarnedAvg;
+
+    const effectiveEarnedHalf = (priorHalf >= HPL_CAP) ? 0 : Math.max(0, Math.min(Number(p.earnedHalf)||0, HPL_CAP - priorHalf));
+
+    let creditAvg = Math.min(EL_CAP, priorAvg + effectiveEarnedAvg);
+    let creditHalf = Math.min(HPL_CAP, priorHalf + effectiveEarnedHalf);
+
+    const balanceAvg = Math.max(0, creditAvg - takenAvg);
+    const balanceHalf = Math.max(0, creditHalf - takenHalf);
+
+    runningAvg = balanceAvg;
+    runningHalf = balanceHalf;
+
+    return {...p, takenAvg, takenHalf, enjoyedAvg, enjoyedHalf, creditAvg, creditHalf, balanceAvg, balanceHalf,
+            effectiveEarnedAvg, effectiveEarnedHalf};
+  });
+}
+
+function mlNotes(entries, type){
+  const seen = new Set();
+  const list = entries.filter(e=>{
+    if(e.type!==type) return false;
+    if(seen.has(e.id)) return false;
+    seen.add(e.id);
+    return true;
+  });
+  if(list.length===0) return '-';
+  const verb = (type==='lwp_effect'||type==='lwp_noeffect') ? 'LWP enjoyed for' : 'ML enjoyed for';
+  return list.map(e=>{
+    let label = (e.from===e.to)
+      ? `${verb} ${fmt(e.from)} [${e.days} day]`
+      : `${verb} ${fmt(e.from)}, ${fmt(e.to)} [${e.days} days]`;
+    if(e.debitDays!==e.days && e.debitDays>0){
+      label += ` — ${e.debitDays} day${e.debitDays===1?'':'s'} debited from HPL a/c`;
+    }
+    return `${label} <button class="btn-del" style="padding:1px 5px;font-size:.6rem;margin-left:4px;" onclick="deleteMlEntry(${e.id})">remove</button>`;
+  }).join('<br>');
+}
+
+function buildTableRows(derived, forPrint){
+  return derived.map((p, i) => {
+    return `<tr>
+      <td>${forPrint?'':'<input type="date" value="'+p.from+'" onchange="updatePeriodField('+i+',\'from\',this.value)" style="width:100%;font-size:.65rem;">'}${forPrint?fmt(p.from):''}</td>
+      <td>${forPrint?fmt(p.to):'<input type="date" value="'+p.to+'" onchange="updatePeriodField('+i+',\'to\',this.value)" style="width:100%;font-size:.65rem;">'}</td>
+      <td>${forPrint?fmt(p.vacFrom):'<input type="date" value="'+(p.vacFrom||'')+'" onchange="updatePeriodField('+i+',\'vacFrom\',this.value)" style="width:100%;font-size:.65rem;">'}</td>
+      <td>${forPrint?fmt(p.vacTo):'<input type="date" value="'+(p.vacTo||'')+'" onchange="updatePeriodField('+i+',\'vacTo\',this.value)" style="width:100%;font-size:.65rem;">'}</td>
+      <td>${forPrint?(p.effectiveEarnedAvg||'-'):'<input type="number" step="1" value="'+p.effectiveEarnedAvg+'" onchange="updatePeriodField('+i+',\'earnedAvg\',Math.round(parseFloat(this.value))||0)" style="width:100%;font-size:.65rem;">'}</td>
+      <td>${forPrint?(p.effectiveEarnedHalf||'-'):'<input type="number" step="1" value="'+p.effectiveEarnedHalf+'" onchange="updatePeriodField('+i+',\'earnedHalf\',Math.round(parseFloat(this.value))||0)" style="width:100%;font-size:.65rem;">'}</td>
+      <td>${p.vacDetEarn||'-'}</td>
+      <td class="credit-cell">${i===0 && !forPrint ? '<input type="number" value="'+(p.creditAvgManual!=null?p.creditAvgManual:0)+'" onchange="updatePeriodField(0,\'creditAvgManual\',Math.round(parseFloat(this.value))||0)" style="width:100%;font-size:.65rem;">' : p.creditAvg}</td>
+      <td class="credit-cell">${i===0 && !forPrint ? '<input type="number" value="'+(p.creditHalfManual!=null?p.creditHalfManual:0)+'" onchange="updatePeriodField(0,\'creditHalfManual\',Math.round(parseFloat(this.value))||0)" style="width:100%;font-size:.65rem;">' : p.creditHalf}</td>
+      <td>${p.vacDetCredit||'-'}</td>
+      <td class="taken-cell">${p.takenAvg||0}</td>
+      <td class="taken-cell">${p.takenHalf||0}</td>
+      <td class="vacdet-cell">-</td>
+      <td>${p.enjoyedAvg||0}</td>
+      <td>${p.enjoyedHalf||0}</td>
+      <td>${p.maternityFull||'-'}</td>
+      <td>${p.maternityHalf||'-'}</td>
+      <td>${p.lwp||'-'}</td>
+      <td>${p.specialFull||'-'}</td>
+      <td>${p.specialHalf||'-'}</td>
+      <td class="balance-num">${p.balanceAvg}</td>
+      <td class="balance-num">${p.balanceHalf}</td>
+      <td>-</td>
+    </tr>`;
+  }).join('');
+}
+
+function buildTotalsRowHtml(){
+  const totalMlDays = masterMlEntries.filter(e=>e.type==='avg').reduce((s,e)=>s+daysBetween(e.from,e.to),0);
+  const totalHplDays = masterMlEntries.filter(e=>e.type==='half').reduce((s,e)=>s+daysBetween(e.from,e.to),0);
+  return `<tr style="background:#dbeafe;font-weight:700;">
+      <td colspan="13" style="text-align:right;padding-right:8px;">TOTAL DAYS ENJOYED (ENTIRE SERVICE) &rarr;</td>
+      <td>${totalMlDays}</td>
+      <td>${totalHplDays}</td>
+      <td colspan="8">Total ML (Avg Pay) Enjoyed: ${totalMlDays} day${totalMlDays===1?'':'s'} &nbsp;|&nbsp; Total HPL (Half Pay) Enjoyed: ${totalHplDays} day${totalHplDays===1?'':'s'}</td>
+    </tr>`;
+}
+
+function renderAll(){
+  const derived = computeDerived();
+
+  const tableBodyEl = document.getElementById('tableBody');
+  if(!tableBodyEl) return;
+  tableBodyEl.innerHTML = buildTableRows(derived,false);
+  const totalsHtml = buildTotalsRowHtml();
+  document.getElementById('leaveTotalsFoot').innerHTML = totalsHtml;
+  document.getElementById('printTableHolder').innerHTML =
+    '<div class="table-wrap"><table>'+document.getElementById('mainTable').querySelector('thead').outerHTML+
+    '<tbody>'+buildTableRows(derived,true)+'</tbody><tfoot>'+totalsHtml+'</tfoot></table></div>';
+
+  const leaveTypeLabel = {avg:'ML (Full Avg Pay)', half:'HPL', lwp_effect:'LWP (with CAS effect)', lwp_noeffect:'LWP (no CAS effect)'};
+  const entriesListEl = document.getElementById('leaveEntriesList');
+  if(entriesListEl){
+    entriesListEl.innerHTML = masterMlEntries.length===0 ? '' : masterMlEntries.map(e=>
+      `<span style="display:inline-flex;align-items:center;gap:6px;background:#e2e8f0;border-radius:4px;padding:3px 8px;margin:2px;">
+         ${leaveTypeLabel[e.type]||e.type}: ${fmt(e.from)} to ${fmt(e.to)}
+         <button class="btn-del" onclick="deleteMlEntry(${e.id})">Delete</button>
+       </span>`).join('');
+  }
+
+  document.getElementById('rowManageList').innerHTML = periods.map((p,i)=>
+    `<span style="display:inline-flex;align-items:center;gap:6px;background:#e2e8f0;border-radius:4px;padding:3px 8px;margin:2px;">
+       Row ${i+1}: ${fmt(p.from)} to ${fmt(p.to)}
+       <button class="btn-del" onclick="deletePeriodRow(${i})">Delete</button>
+     </span>`).join('');
+
+  document.getElementById('transferList').innerHTML = transferEvents.length===0
+    ? '<span style="color:#64748b;">No transfer events added.</span>'
+    : transferEvents.map(t=>
+      `<span style="display:inline-flex;align-items:center;gap:6px;background:#e2e8f0;border-radius:4px;padding:3px 8px;margin:2px;">
+         New school joined: ${fmt(t.date)}
+         <button class="btn-del" onclick="deleteTransferEvent(${t.id})">Delete</button>
+       </span>`).join('');
+
+  document.getElementById('synopsisPanel').innerHTML = (periods.map((p,i)=>{
+    const avgList = mlNotes(p.mlEntries,'avg');
+    const halfList = mlNotes(p.mlEntries,'half');
+    const lwpEffList = mlNotes(p.mlEntries,'lwp_effect');
+    const lwpNoEffList = mlNotes(p.mlEntries,'lwp_noeffect');
+    if(avgList==='-' && halfList==='-' && lwpEffList==='-' && lwpNoEffList==='-') return '';
+    return `<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed #cbd5e1;">
+      <b>Row ${i+1}: ${fmt(p.from)} to ${fmt(p.to)}</b><br>
+      <span style="color:#334155;">Full Pay (Avg): </span>${avgList}<br>
+      <span style="color:#334155;">Half Pay (HPL): </span>${halfList}<br>
+      <span style="color:#334155;">LWP (with CAS effect): </span>${lwpEffList}<br>
+      <span style="color:#334155;">LWP (no CAS effect): </span>${lwpNoEffList}
+    </div>`;
+  }).join('') || '<span style="color:#64748b;">No leave entries recorded yet.</span>') +
+  (()=>{
+    const totalMlDays = masterMlEntries.filter(e=>e.type==='avg').reduce((s,e)=>s+daysBetween(e.from,e.to),0);
+    const totalHplDays = masterMlEntries.filter(e=>e.type==='half').reduce((s,e)=>s+daysBetween(e.from,e.to),0);
+    return `<div style="margin-top:6px;padding-top:8px;border-top:2px solid #1e3a8a;font-weight:700;color:#1e3a8a;">
+      Grand Total — ML (Avg Pay) Days Enjoyed: ${totalMlDays} &nbsp;|&nbsp; HPL (Half Pay) Days Enjoyed: ${totalHplDays}
+    </div>`;
+  })();
+
+  document.getElementById('pName').innerText = document.getElementById('staffName').value;
+  document.getElementById('pDesig').innerText = document.getElementById('designation').value;
+  document.getElementById('pDoj').innerText = fmt(document.getElementById('doj').value);
+  document.getElementById('pDor').innerText = fmt(document.getElementById('leaveUpToDate').value);
+}
+
+function doPrint(){
+  window.print();
+}
+
+document.getElementById('leaveUpToDate') && document.getElementById('leaveUpToDate').addEventListener('input', function(){
+  this.dataset.userSet = '1';
+});
+
+window.addEventListener('DOMContentLoaded', function(){
+  try{
+    syncLeaveUpToDate();
+    renderAll();
+  }catch(e){
+    window.onerror(e.message, '', (e.lineNumber||''), '', e);
+  }
+});
 </script>
 
 </body>
