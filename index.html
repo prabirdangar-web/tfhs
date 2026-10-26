@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TFHS Portal - Official School Web Application</title>
+    <title>TFHS Portal - Taldangra Fulmati High School</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome for professional icons -->
@@ -65,9 +65,10 @@
     <div class="bg-amber-500 text-slate-900 px-4 py-2 text-xs md:text-sm font-medium flex items-center justify-between shadow-inner">
         <div class="max-w-7xl mx-auto flex items-center space-x-2 truncate">
             <span class="bg-slate-900 text-white text-[10px] uppercase px-2 py-0.5 rounded-full font-bold tracking-wider animate-pulse">Notice</span>
-            <span class="truncate">📢 Examination Form Fill-ups & III Sem HS-27 Circulars are now live. Check the Digital Notice Board below.</span>
+            <span class="truncate">📢 Admission Portal and Examination 2027 links are live under Notices and Web Apps.</span>
         </div>
         <div class="hidden md:flex items-center space-x-4 text-xs font-semibold">
+            <a href="#apps" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-grip"></i> Web Apps</a>
             <a href="#notices" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-bell"></i> Circulars</a>
             <a href="#calculator" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-calculator"></i> Calculator</a>
         </div>
@@ -83,7 +84,7 @@
                 </div>
                 <div>
                     <h1 class="text-lg md:text-xl font-bold text-slate-900 tracking-tight leading-tight">TFHS PORTAL</h1>
-                    <p class="text-xs text-slate-500 font-medium">Official Staff & Student Resource Hub</p>
+                    <p class="text-xs text-slate-500 font-medium">Taldangra Fulmati High School (H.S.) · Estd. 1956</p>
                 </div>
             </div>
 
@@ -91,7 +92,7 @@
             <nav class="hidden lg:flex items-center space-x-1">
                 <a href="#" onclick="showSection('home')" class="nav-link active px-3.5 py-2 rounded-lg text-sm font-semibold text-blue-700 bg-blue-50 transition-colors">Home</a>
                 <a href="#notices" onclick="showSection('notices')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Notices & Exams</a>
-                <a href="#staff" onclick="showSection('staff')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Staff & Leave</a>
+                <a href="#apps" onclick="showSection('apps')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Web Apps</a>
                 <a href="#media" onclick="showSection('media')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Anthems & Media</a>
                 <a href="#calculator" onclick="showSection('calculator')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Calculator</a>
                 <a href="#retirement" onclick="showSection('retirement')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Retirement Hub</a>
@@ -113,8 +114,8 @@
         <!-- Mobile Dropdown Menu -->
         <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-1 shadow-lg">
             <a href="#" onclick="toggleMobileMenu(); showSection('home');" class="block px-3 py-2 rounded-md text-base font-medium text-blue-700 bg-blue-50">Home</a>
+            <a href="#apps" onclick="toggleMobileMenu(); showSection('apps');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Web Apps</a>
             <a href="#notices" onclick="toggleMobileMenu(); showSection('notices');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Notices & Exams</a>
-            <a href="#staff" onclick="toggleMobileMenu(); showSection('staff');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Staff & Leave</a>
             <a href="#media" onclick="toggleMobileMenu(); showSection('media');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Anthems & Media</a>
             <a href="#calculator" onclick="toggleMobileMenu(); showSection('calculator');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Calculator</a>
             <a href="#retirement" onclick="toggleMobileMenu(); showSection('retirement');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Retirement Celebration</a>
@@ -147,9 +148,7 @@
                             <a href="#notices" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-6 py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 flex items-center gap-2">
                                 <i class="fa-solid fa-bullhorn"></i> View Notice Board
                             </a>
-                            <a href="#staff" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur transition flex items-center gap-2">
-                                <i class="fa-solid fa-id-card-clip"></i> Staff Applications
-                            </a>
+                            <a href="#apps" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur transition flex items-center gap-2"><i class="fa-solid fa-grip"></i> Web Apps</a>
                         </div>
                     </div>
 
@@ -168,16 +167,16 @@
                                         <i class="fa-solid fa-file-pen text-sm"></i>
                                     </div>
                                     <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Exam Forms</h4>
-                                    <p class="text-xs text-slate-500">III Sem, MP-2027</p>
+                                    <p class="text-xs text-slate-500">MP HS 2027</p>
                                 </a>
-                                <a href="#notices" onclick="filterNotices('reg')" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
+                                <a href="#notices" onclick="filterNotices('admission')" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
                                     <div class="w-9 h-9 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center mb-2 group-hover:scale-110 transition">
                                         <i class="fa-solid fa-user-plus text-sm"></i>
                                     </div>
-                                    <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Registrations</h4>
-                                    <p class="text-xs text-slate-500">Class IX & XI</p>
+                                    <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Admission</h4>
+                                    <p class="text-xs text-slate-500">Portal & forms</p>
                                 </a>
-                                <a href="#staff" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
+                                <a href="https://prabirdangar-web.github.io/e-leave-application/" target="_blank" rel="noopener" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
                                     <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center mb-2 group-hover:scale-110 transition">
                                         <i class="fa-solid fa-calendar-days text-sm"></i>
                                     </div>
@@ -204,257 +203,99 @@
             </div>
         </section>
 
-        <!-- Main Notice Board Section -->
-        <section id="notices" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-                <div>
-                    <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Digital Notice Board</span>
-                    <h2 class="text-3xl font-bold text-slate-900 mt-2">Circulars, Notices & Official Updates</h2>
-                    <p class="text-slate-600 text-sm mt-1">Browse categorized announcements or use the search filter below.</p>
-                </div>
-                <!-- Search bar & Filter tabs -->
-                <div class="flex flex-col sm:flex-row items-center gap-3">
-                    <div class="relative w-full sm:w-64">
-                        <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
-                        <input type="text" id="noticeSearch" onkeyup="searchNotices()" placeholder="Search notices..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-sm">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Filter Buttons -->
-            <div class="flex flex-wrap items-center gap-2 mb-8" id="filterTabs">
-                <button onclick="filterNotices('all')" class="filter-btn active px-4 py-2 rounded-xl text-sm font-semibold bg-blue-700 text-white shadow transition">All Notices</button>
-                <button onclick="filterNotices('exam')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Examinations</button>
-                <button onclick="filterNotices('reg')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Registrations</button>
-                <button onclick="filterNotices('govt')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Govt Orders</button>
-                <button onclick="filterNotices('staff')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Staff Updates</button>
-            </div>
-
-            <!-- Notice Cards Grid -->
-            <div id="noticeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                <!-- Notice Card 1 -->
-                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="exam">
+        <!-- Web Applications Section -->
+        <section id="apps" class="py-16 bg-white border-y border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
                     <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
-                                <i class="fa-solid fa-file-pen"></i> Examination
-                            </span>
-                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> 2 days ago</span>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">III Sem HS-27 Examination & Form Fill-up Schedule</h3>
-                        <p class="text-slate-600 text-sm mb-4">Detailed schedule and guidelines for Higher Secondary 3rd Semester examination form submission and fee clearance.</p>
+                        <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Digital Services</span>
+                        <h2 class="text-3xl font-bold text-slate-900 mt-2">TFHS Web Applications</h2>
+                        <p class="text-slate-600 text-sm mt-1">All published school tools in one place. Each opens in a new tab.</p>
                     </div>
-                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-paperclip"></i> PDF Document</span>
-                        <button onclick="openDocModal('III Sem HS-27 Examination & Form Fill-up Schedule', 'Official notice regarding III Semester HS-27 examinations. All eligible candidates must complete their form fill-ups before the deadline. Ensure verification of registration details with the school office.')" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
-                            <span>View Notice</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </button>
-                    </div>
+                    <div class="flex flex-wrap gap-2" id="appFilters"></div>
                 </div>
-
-                <!-- Notice Card 2 -->
-                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="exam">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
-                                <i class="fa-solid fa-award"></i> Board Exams
-                            </span>
-                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> 5 days ago</span>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div id="appGrid" class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4 content-start"></div>
+                    <aside class="lg:col-span-4">
+                        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                            <h3 class="font-bold text-slate-900 flex items-center gap-2 mb-4"><i class="fa-solid fa-circle-up text-amber-500"></i> What's New</h3>
+                            <ul class="space-y-4 text-sm">
+                                <li class="flex gap-3"><span class="mt-1.5 w-2 h-2 rounded-full bg-blue-600 shrink-0"></span><div><p class="font-semibold text-slate-800">Certificate System</p><p class="text-slate-500 text-xs">New-session promotion and roll allocation with draft, finalize and lock.</p></div></li>
+                                <li class="flex gap-3"><span class="mt-1.5 w-2 h-2 rounded-full bg-blue-600 shrink-0"></span><div><p class="font-semibold text-slate-800">MDM Manager</p><p class="text-slate-500 text-xs">Data entry with MDCF, Form-C and Form-K generation.</p></div></li>
+                                <li class="flex gap-3"><span class="mt-1.5 w-2 h-2 rounded-full bg-blue-600 shrink-0"></span><div><p class="font-semibold text-slate-800">Examination Command Center</p><p class="text-slate-500 text-xs">Invigilator requisition letters and fee receipts.</p></div></li>
+                                <li class="flex gap-3"><span class="mt-1.5 w-2 h-2 rounded-full bg-blue-600 shrink-0"></span><div><p class="font-semibold text-slate-800">Class XI Dashboard</p><p class="text-slate-500 text-xs">Semester marks, attendance and combined result.</p></div></li>
+                            </ul>
+                            <p class="text-[11px] text-slate-400 mt-5 pt-4 border-t border-slate-200"><i class="fa-solid fa-lock mr-1"></i> Tools marked Staff Access hold service records; use only on authorised devices.</p>
                         </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">MP-2027 Programme & Test Timetable Announcement</h3>
-                        <p class="text-slate-600 text-sm mb-4">Madhyamik Programme 2027 tentative dates and preliminary preparation guidelines for students and teachers.</p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-paperclip"></i> Schedule File</span>
-                        <button onclick="openDocModal('MP-2027 Programme & Test Timetable', 'Madhyamik Programme 2027 examination timetable and syllabus breakdown. Review the schedule for comprehensive test preparation.')" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
-                            <span>View Notice</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </button>
-                    </div>
+                    </aside>
                 </div>
-
-                <!-- Notice Card 3 -->
-                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="reg">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
-                                <i class="fa-solid fa-user-plus"></i> Registration
-                            </span>
-                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> 1 week ago</span>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">Class IX & XI Registration Verification Notice</h3>
-                        <p class="text-slate-600 text-sm mb-4">Check student names, guardian details, and subject combinations for newly admitted Class IX and XI registration rolls.</p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-table"></i> Spreadsheet Link</span>
-                        <button onclick="openDocModal('Class IX & XI Registration Verification', 'Registration lists for Class IX and XI have been uploaded. Please verify student spellings and details immediately to avoid board discrepancies.')" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
-                            <span>View Drive File</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Notice Card 4 -->
-                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="govt">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
-                                <i class="fa-solid fa-landmark"></i> Govt Order
-                            </span>
-                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> 2 weeks ago</span>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">Official Government Circulars & Holiday Guidelines</h3>
-                        <p class="text-slate-600 text-sm mb-4">State education department directives regarding academic calendar updates, holidays, and standard operating procedures.</p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-file-pdf"></i> PDF Circular</span>
-                        <button onclick="openDocModal('Official Government Circulars & Holiday Guidelines', 'Latest state government education department orders. Compliance with specified guidelines is mandatory for all teaching and non-teaching staff.')" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
-                            <span>View Circular</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Notice Card 5 -->
-                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="staff">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
-                                <i class="fa-solid fa-id-card-clip"></i> Staff Portal
-                            </span>
-                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> Ongoing</span>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">STAFF_LEAVE_APPLICATION & Service Records</h3>
-                        <p class="text-slate-600 text-sm mb-4">Submit casual leave, medical leave, or duty leave applications digitally through the staff portal integrated form.</p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-file-lines"></i> Application Form</span>
-                        <a href="#staff" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
-                            <span>Open Form</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Notice Card 6 -->
-                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="staff">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-rose-100 text-rose-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
-                                <i class="fa-solid fa-bullhorn"></i> General
-                            </span>
-                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> Active</span>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">General Resources & Digital Notice Board Drive Links</h3>
-                        <p class="text-slate-600 text-sm mb-4">Access cloud repositories for question banks, syllabus outlines, student handbooks, and photography archives.</p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-500"><i class="fa-brands fa-google-drive text-blue-600"></i> Google Drive</span>
-                        <button onclick="openDocModal('General Resources & Google Drive Hub', 'Central Google Drive folder containing high-resolution school photos, anthem audio files, lesson plans, and administrative templates.')" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
-                            <span>Open Drive</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </button>
-                    </div>
-                </div>
-
             </div>
         </section>
 
-        <!-- Staff Applications & Leave Section -->
-        <section id="staff" class="py-16 bg-white border-y border-slate-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-12">
-                    <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Staff Portal</span>
-                    <h2 class="text-3xl font-bold text-slate-900 mt-2">Staff Leave Application & Service Desk</h2>
-                    <p class="text-slate-600 text-sm mt-2">Submit official leave requests directly to the administration. Please fill in all required details accurately.</p>
+        <!-- Main Notice Board Section -->
+        <section id="notices" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div>
+                    <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Notice Board</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-2">Admission, Examination & Certificates</h2>
+                    <p class="text-slate-600 text-sm mt-1">Current notices link directly to the live school portals.</p>
                 </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    <!-- Form Container -->
-                    <div class="lg:col-span-7 bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
-                        <h3 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-                            <i class="fa-solid fa-id-card text-blue-700"></i> Leave Application Form (STAFF_LEAVE_APPLICATION)
-                        </h3>
-                        <form id="leaveForm" onsubmit="handleLeaveSubmit(event)" class="space-y-4">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Staff Member Name *</label>
-                                    <input type="text" id="staffName" required placeholder="e.g. Subrata Mukherjee" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Employee ID / Designation *</label>
-                                    <input type="text" id="staffId" required placeholder="e.g. TFHS/EMP/104" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Leave Type *</label>
-                                    <select id="leaveType" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
-                                        <option value="Casual Leave (CL)">Casual Leave (CL)</option>
-                                        <option value="Medical Leave (ML)">Medical Leave (ML)</option>
-                                        <option value="Earned Leave (EL)">Earned Leave (EL)</option>
-                                        <option value="Duty Leave (DL)">Duty Leave (DL)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Number of Days *</label>
-                                    <input type="number" id="leaveDays" min="1" max="30" required value="1" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Start Date *</label>
-                                    <input type="date" id="startDate" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">End Date *</label>
-                                    <input type="date" id="endDate" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Reason for Leave *</label>
-                                <textarea id="leaveReason" rows="3" required placeholder="Provide brief reason for leave application..." class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-paper-plane"></i> Submit Leave Application
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Information & Guidelines Card -->
-                    <div class="lg:col-span-5 space-y-6">
-                        <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl">
-                            <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2">
-                                <i class="fa-solid fa-circle-info text-blue-700"></i> Guidelines for Staff Leave
-                            </h4>
-                            <ul class="space-y-2 text-xs text-blue-900 leading-relaxed list-disc list-inside">
-                                <li>Casual Leave applications must be submitted at least 24 hours in advance where possible.</li>
-                                <li>Medical Leave exceeding 3 days requires a valid registered medical practitioner certificate.</li>
-                                <li>Ensure alternative class arrangements are communicated with the academic coordinator.</li>
-                                <li>Check approval status through the institutional desk register.</li>
-                            </ul>
-                        </div>
-
-                        <!-- Recent Status Box -->
-                        <div class="bg-slate-50 border border-slate-200 p-6 rounded-2xl">
-                            <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
-                                <i class="fa-solid fa-list-check text-emerald-600"></i> Recent Submissions Log
-                            </h4>
-                            <div id="submissionLog" class="space-y-2 text-xs text-slate-600">
-                                <div class="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
-                                    <div>
-                                        <p class="font-semibold text-slate-800">A. Banerjee (Mathematics)</p>
-                                        <p class="text-[11px] text-slate-400">Casual Leave • 2 Days</p>
-                                    </div>
-                                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full">Approved</span>
-                                </div>
-                                <div class="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
-                                    <div>
-                                        <p class="font-semibold text-slate-800">P. Chatterjee (English)</p>
-                                        <p class="text-[11px] text-slate-400">Medical Leave • 1 Day</p>
-                                    </div>
-                                    <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded-full">Pending</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="relative w-full md:w-64">
+                    <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+                    <input type="text" id="noticeSearch" onkeyup="searchNotices()" placeholder="Search notices..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-sm">
                 </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 mb-8" id="filterTabs">
+                <button onclick="filterNotices('all')" class="px-4 py-2 rounded-xl text-sm font-semibold bg-blue-700 text-white shadow transition">All</button>
+                <button onclick="filterNotices('admission')" class="px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Admission</button>
+                <button onclick="filterNotices('exam')" class="px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Examination</button>
+                <button onclick="filterNotices('cert')" class="px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Certificates</button>
+            </div>
+            <div id="noticeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="https://prabirdangar-web.github.io/certificate/" target="_blank" rel="noopener" data-category="admission" class="notice-card group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-user-plus"></i> Admission</span>
+                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Live</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-blue-700">Admission Portal</h3>
+                        <p class="text-slate-600 text-sm">Admission notice, forms, bonafide, character and other student certificates.</p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-slate-100 text-sm font-semibold text-blue-700 flex items-center justify-between">Open link <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></div>
+                </a>
+                <a href="https://prabirdangar-web.github.io/centre_exam/" target="_blank" rel="noopener" data-category="exam" class="notice-card group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-file-pen"></i> Examination 2027</span>
+                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Live</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-blue-700">MP HS Examination 2027</h3>
+                        <p class="text-slate-600 text-sm">H.S. and Madhyamik examination records, results and related documents.</p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-slate-100 text-sm font-semibold text-blue-700 flex items-center justify-between">Open link <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></div>
+                </a>
+                <a href="https://prabirdangar-web.github.io/xi_mp_test/" target="_blank" rel="noopener" data-category="exam" class="notice-card group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-clipboard-check"></i> Examination</span>
+                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Live</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-blue-700">XI MP Test</h3>
+                        <p class="text-slate-600 text-sm">Class XI test records and marks.</p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-slate-100 text-sm font-semibold text-blue-700 flex items-center justify-between">Open link <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></div>
+                </a>
+                <a href="https://prabirdangar-web.github.io/hs_leaving/" target="_blank" rel="noopener" data-category="cert" class="notice-card group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-file-signature"></i> Certificates</span>
+                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Live</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-blue-700">H.S. Leaving Certificate</h3>
+                        <p class="text-slate-600 text-sm">Leaving certificate for H.S. students.</p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-slate-100 text-sm font-semibold text-blue-700 flex items-center justify-between">Open link <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></div>
+                </a>
             </div>
         </section>
 
@@ -587,16 +428,16 @@
                         <div class="w-10 h-10 rounded-xl hero-gradient flex items-center justify-center text-white shadow">
                             <i class="fa-solid fa-graduation-cap text-xl text-amber-400"></i>
                         </div>
-                        <span class="text-white font-bold text-lg tracking-tight">TFHS PORTAL</span>
+                        <div><span class="text-white font-bold text-lg tracking-tight block leading-tight">TALDANGRA FULMATI HIGH SCHOOL (H.S.)</span><span class="text-slate-400 text-sm">তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:) · স্থাপিত ১৯৫৬</span></div>
                     </div>
                     <p class="text-sm text-slate-400 max-w-sm leading-relaxed">
                         Providing a secure, professional, and accessible digital ecosystem for students, teachers, and staff members of the institution.
                     </p>
-                    <div class="flex items-center space-x-3 text-lg">
-                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-blue-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-facebook-f text-sm"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-blue-400 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-twitter text-sm"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-red-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-youtube text-sm"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-blue-700 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-linkedin-in text-sm"></i></a>
+                    <div class="flex flex-wrap gap-2 text-[11px] font-semibold">
+                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full">Index No: U1-083</span>
+                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full">UDISE: 19132104401</span>
+                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full">H.S. Code: 114071</span>
+                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full">VTC Code: 5006</span>
                     </div>
                 </div>
 
@@ -606,7 +447,7 @@
                     <ul class="space-y-2 text-sm">
                         <li><a href="#" onclick="showSection('home')" class="hover:text-white transition">Home Page</a></li>
                         <li><a href="#notices" onclick="showSection('notices')" class="hover:text-white transition">Digital Notice Board</a></li>
-                        <li><a href="#staff" onclick="showSection('staff')" class="hover:text-white transition">Staff Applications</a></li>
+                        <li><a href="#apps" onclick="showSection('apps')" class="hover:text-white transition">Web Applications</a></li>
                         <li><a href="#media" onclick="showSection('media')" class="hover:text-white transition">Anthems & Media</a></li>
                     </ul>
                 </div>
@@ -615,10 +456,10 @@
                 <div>
                     <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Resources</h4>
                     <ul class="space-y-2 text-sm">
+                        <li><a href="https://prabirdangar-web.github.io/certificate/" target="_blank" rel="noopener" class="hover:text-white transition">Admission Portal</a></li>
+                        <li><a href="https://prabirdangar-web.github.io/centre_exam/" target="_blank" rel="noopener" class="hover:text-white transition">MP HS Examination</a></li>
                         <li><a href="#calculator" class="hover:text-white transition">Academic Calculator</a></li>
                         <li><a href="#retirement" class="hover:text-white transition">Retirement Hub</a></li>
-                        <li><a href="#" onclick="openDocModal('Google Drive Repository', 'Direct link to institutional Google Drive repository.')" class="hover:text-white transition">Google Drive Cloud</a></li>
-                        <li><a href="#" onclick="openDocModal('Government Circulars Archive', 'State board and education ministry official directives.')" class="hover:text-white transition">Govt. Orders</a></li>
                     </ul>
                 </div>
 
@@ -626,15 +467,16 @@
                 <div>
                     <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Contact Info</h4>
                     <ul class="space-y-2 text-sm">
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-amber-500"></i> <span>Official School Campus, West Bengal, India</span></li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-envelope text-amber-500"></i> <span>portal@tfhs.edu.in</span></li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-phone text-amber-500"></i> <span>+91 (033) 2345-6789</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-amber-500"></i> <span>P.O. &amp; Block – Taldangra, Sub-Div – Khatra, Dist – Bankura, West Bengal, PIN – 722152</span></li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-envelope text-amber-500"></i> <a href="mailto:highschooltaldangrafulmati@gmail.com" class="hover:text-white break-all">highschooltaldangrafulmati@gmail.com</a></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-phone mt-1 text-amber-500"></i> <span>Landline: <a href="tel:+913243265114" class="hover:text-white">03243-265114</a></span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-mobile-screen mt-1 text-amber-500"></i> <span>H.M.: <a href="tel:+919434654678" class="hover:text-white">9434654678</a>, <a href="tel:+919933035811" class="hover:text-white">9933035811</a></span></li>
                     </ul>
                 </div>
             </div>
 
             <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
-                <p>&copy; 2026 TFHS Portal. All rights reserved. Designed for professional academic excellence.</p>
+                <p>&copy; 2026 Taldangra Fulmati High School (H.S.). All rights reserved.</p>
                 <div class="flex space-x-6 mt-4 sm:mt-0">
                     <a href="#" onclick="openDocModal('Privacy Policy', 'Standard privacy and data protection policy for portal users.')" class="hover:underline">Privacy Policy</a>
                     <a href="#" onclick="openDocModal('Terms of Use', 'Terms and conditions for utilizing the institutional portal resources.')" class="hover:underline">Terms of Use</a>
@@ -763,29 +605,6 @@
             closeDocModal();
         }
 
-        // Staff Leave Form Handling
-        function handleLeaveSubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('staffName').value;
-            const type = document.getElementById('leaveType').value;
-            const days = document.getElementById('leaveDays').value;
-
-            const log = document.getElementById('submissionLog');
-            const newItem = document.createElement('div');
-            newItem.className = 'p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between animate-pulse';
-            newItem.innerHTML = `
-                <div>
-                    <p class="font-semibold text-slate-800">${name}</p>
-                    <p class="text-[11px] text-slate-400">${type} • ${days} Day(s) (Just now)</p>
-                </div>
-                <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded-full">Pending</span>
-            `;
-            log.prepend(newItem);
-
-            alert(`Leave application submitted successfully for ${name}. Status: Pending Admin Approval.`);
-            document.getElementById('leaveForm').reset();
-        }
-
         // Grade Calculator
         function calculateGrade() {
             const obtained = parseFloat(document.getElementById('marksObtained').value) || 0;
@@ -829,6 +648,67 @@
             }
         });
 
+        const BASE = 'https://prabirdangar-web.github.io/';
+        const CATS = {
+            'Certificates & Students': ['fa-certificate','bg-blue-600',false],
+            'Examination': ['fa-clipboard-check','bg-purple-600',false],
+            'Accounts & Audit': ['fa-scale-balanced','bg-teal-600',true],
+            'SALARY ,ITAX,GPF': ['fa-money-check-dollar','bg-emerald-600',true],
+            'Service, Leave & Pension': ['fa-book','bg-indigo-600',true]
+        };
+        const TOOLS = [
+            ['certificate','ADMISSION PORTAL','Certificates & Students','Bonafide, character and other certificates'],
+            ['hs_leaving','H.S. Leaving Certificate','Certificates & Students','Leaving certificate for H.S. students'],
+            ['letter_head','Letter Head','Certificates & Students','Official school letter head'],
+            ['file_cover','File Cover','Certificates & Students','Printable file covers'],
+            ['outside-pad','Outside Pad','Certificates & Students','Outside pad printing'],
+            ['para_teacher','Para Teacher','Certificates & Students','Para teacher records'],
+            ['xi_mp_test','XI MP Test','Examination','Class XI test records'],
+            ['centre_exam','MP HS EXAMINATION','Examination','H.S. and Madhyamik examination records'],
+            ['payment','Payment','Accounts & Audit','Payment vouchers and records'],
+            ['MDM','MDM','Accounts & Audit','Mid-day meal accounts'],
+            ['cash_auditable','Cash Book (Auditable)','Accounts & Audit','Cash book for audit'],
+            ['non_auditable','Cash Book (Non-auditable)','Accounts & Audit','Cash book outside audit'],
+            ['voucher','Voucher','Accounts & Audit','Shop vouchers and bills'],
+            ['salary','STAFF SALARY','SALARY ,ITAX,GPF','Monthly salary statement'],
+            ['itax_staff','INCOME TAX','SALARY ,ITAX,GPF','Staff income tax statements'],
+            ['pf_interest','GPF 2025-26 & Onwards','SALARY ,ITAX,GPF','Provident fund interest'],
+            ['GPF','GPF Final Payment Documents','SALARY ,ITAX,GPF','GPF final payment documents'],
+            ['NEW-APPROVAL','New Approval','Service, Leave & Pension','Approval records'],
+            ['sb_arrear_od_da','SB Arrear OD DA','Service, Leave & Pension','Service book arrear and DA'],
+            ['SB','Service Book Generation','Service, Leave & Pension','Employee service book'],
+            ['staff_sb','Individual Service Book','Service, Leave & Pension','Verification of service records'],
+            ['service_continuation','Service Continuation Documents','Service, Leave & Pension','Service continuation records'],
+            ['staff_pattern_noc_exp','Staff Pattern, NOC, Experience','Service, Leave & Pension','Staff pattern, NOC and experience certificates'],
+            ['e-leave-application','E-Leave Application','Service, Leave & Pension','Staff leave applications'],
+            ['all_leave','All Leave','Service, Leave & Pension','Leave account of all staff'],
+            ['pension_data_collection','Pension Data Collection','Service, Leave & Pension','Collect staff pension data'],
+            ['pension_rop19_da_hike','Pension Calculator','Service, Leave & Pension','Pension with ROP-19 DA increase'],
+            ['wb_pen','Pension Paper Generation','Service, Leave & Pension','Pension calculation']
+        ];
+        const urlOf = r => BASE + r + '/';
+        const APPS = TOOLS.map(t => ({ name:t[1], cat:t[2], desc:t[3], url:urlOf(t[0]) }));
+
+        function renderApps(cat, btn) {
+            cat = cat || 'All';
+            const box = document.getElementById('appFilters');
+            box.innerHTML = ['All', ...Object.keys(CATS)].map(c => `<button onclick="renderApps('${c}')" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm ${c === cat ? 'font-semibold bg-blue-700 text-white shadow' : 'font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'}">${c === 'All' ? 'All (' + APPS.length + ')' : c.replace(' ,', ', ')}</button>`).join('');
+            document.getElementById('appGrid').innerHTML = APPS.filter(a => cat === 'All' || a.cat === cat).map(a => {
+                const [icon, color, staff] = CATS[a.cat];
+                return `<a href="${a.url}" target="_blank" rel="noopener" class="group bg-white rounded-2xl p-5 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition flex gap-4">
+                    <div class="w-12 h-12 rounded-xl ${color} text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition"><i class="fa-solid ${icon}"></i></div>
+                    <div class="min-w-0">
+                        <h3 class="font-bold text-slate-900 group-hover:text-blue-700 leading-snug">${a.name}</h3>
+                        <p class="text-xs text-slate-500 mt-1">${a.desc}</p>
+                        <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold">
+                            <span class="text-blue-700">Open <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></span>
+                            ${staff ? '<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full"><i class="fa-solid fa-lock text-[9px]"></i> Staff Access</span>' : ''}
+                        </div>
+                    </div>
+                </a>`; }).join('');
+        }
+        renderApps();
+
         function globalSearch() {
             const q = document.getElementById('modalSearchInput').value.toLowerCase();
             const results = document.getElementById('searchResults');
@@ -838,12 +718,8 @@
             }
 
             const items = [
-                { title: 'III Sem HS-27 Examination Circular', cat: 'Notices', link: '#notices' },
-                { title: 'MP-2027 Programme Schedule', cat: 'Notices', link: '#notices' },
-                { title: 'Class IX & XI Registration Rolls', cat: 'Registrations', link: '#notices' },
-                { title: 'STAFF_LEAVE_APPLICATION Form', cat: 'Staff Portal', link: '#staff' },
-                { title: 'Government Circulars & Orders', cat: 'Govt. Orders', link: '#notices' },
-                { title: 'Vande Mataram & Jana Gana Mana Audio', cat: 'Media', link: '#media' },
+                ...APPS.map(a => ({ title: a.name, cat: 'Web App', link: a.url })),
+                                { title: 'Vande Mataram & Jana Gana Mana Audio', cat: 'Media', link: '#media' },
                 { title: 'Percentage & Grade Calculator', cat: 'Utilities', link: '#calculator' },
                 { title: 'Retirement Celebration & Farewells', cat: 'Events', link: '#retirement' }
             ];
@@ -855,7 +731,7 @@
             }
 
             results.innerHTML = filtered.map(f => `
-                <a href="${f.link}" onclick="closeSearchModal()" class="block p-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition">
+                <a href="${f.link}" ${f.link.startsWith('http') ? 'target="_blank" rel="noopener"' : ''} onclick="closeSearchModal()" class="block p-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition">
                     <div class="flex items-center justify-between">
                         <span class="font-semibold text-slate-800">${f.title}</span>
                         <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">${f.cat}</span>
