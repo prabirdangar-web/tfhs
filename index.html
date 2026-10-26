@@ -3,2044 +3,866 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unified ROPA Pay Fixation System</title>
-    <style>
-        :root {
-            --primary-color: #0f172a;
-            --secondary-color: #1e3a8a;
-            --light-bg: #f8fafc;
-            --border-color: #cbd5e1;
-            --yellow:#ffff00; --pink:#fde2e2; --blue:#dbeafe; --red:#dc2626;
-        }
-
-        /* --- Leave Account (Register) section --- */
-        .panel{background:#f1f5f9;border:1px solid var(--border-color);border-radius:6px;padding:14px 16px;margin-bottom:16px;}
-        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
-        .fg{display:flex;flex-direction:column;}
-        .fg label{font-weight:600;font-size:.78rem;color:#475569;margin-bottom:4px;}
-        .fg input,.fg select{padding:6px 8px;border:1px solid var(--border-color);border-radius:5px;font-size:.85rem;}
-        .btn-add{padding:9px 18px;font-size:.88rem;font-weight:600;border:none;border-radius:6px;cursor:pointer;color:#fff;background:#1e3a8a;}
-        .btn-del{padding:4px 10px;font-size:.75rem;font-weight:600;border:none;border-radius:6px;cursor:pointer;color:#fff;background:#dc2626;}
-        .btn-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
-        #mainTable{border-collapse:collapse;width:100%;margin-top:8px;font-size:.72rem;table-layout:fixed;}
-        #mainTable th,#mainTable td{border:1px solid var(--border-color);padding:4px 3px;text-align:center;vertical-align:middle;word-wrap:break-word;}
-        #mainTable thead th{background:#1e293b;color:#fff;font-weight:600;}
-        #mainTable .code-row td{background:#e2e8f0;font-weight:700;font-size:.68rem;}
-        .credit-cell{background:var(--yellow);}
-        .taken-cell{background:var(--pink);}
-        .vacdet-cell{background:var(--blue);}
-        .balance-num{color:var(--red);font-weight:700;}
-        .ml-note{display:block;font-size:.66rem;color:#334155;text-align:left;margin-top:2px;font-style:italic;}
-        .table-wrap{overflow-x:auto;}
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--light-bg);
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        h2 {
-            color: var(--secondary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 8px;
-            margin-top: 0;
-        }
-
-        .grid-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #475569;
-            font-size: 0.85rem;
-        }
-
-        input, select {
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            outline: none;
-        }
-
-        .btn-group {
-            margin: 20px 0;
-            display: flex;
-            gap: 12px;
-        }
-
-        button {
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-generate { background-color: var(--secondary-color); color: white; }
-        .btn-print { background-color: #059669; color: white; }
-
-        .output-box {
-            background-color: #f1f5f9;
-            padding: 12px;
-            border-left: 4px solid var(--secondary-color);
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            margin-top: 10px;
-        }
-
-        th {
-            background-color: #1e293b;
-            color: white;
-            padding: 8px 10px;
-            font-weight: 600;
-        }
-
-        td {
-            padding: 8px 10px;
-            border: 1px solid var(--border-color);
-            vertical-align: middle;
-        }
-
-        tr:nth-child(even) { background-color: #f8fafc; }
-
-        .slip-box {
-            background-color: #fdfdfd;
-            border: 1px solid #a1a1aa;
-            padding: 6px 10px;
-            margin-top: 4px;
-            border-radius: 4px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.8rem;
-            color: #000;
-        }
-        .slip-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #e4e4e7; padding: 1px 0; }
-        .slip-bold { font-weight: bold; }
-
-        .inline-check { font-weight: 400; display: flex; align-items: center; gap: 6px; }
-
-        #printArea { display: none; }
-
-        @media print {
-            body * { visibility: hidden; }
-            #printArea, #printArea * { visibility: visible; }
-            #printArea {
-                display: block !important;
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                font-family: 'Times New Roman', Times, serif;
-                color: #000;
+    <title>TFHS Portal - Official School Web Application</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for professional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f6ff',
+                            100: '#e0effe',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        gold: {
+                            500: '#d97706',
+                            600: '#b45309',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
             }
-            @page { size: A4 landscape; margin: 8mm; }
-            .sb-header { text-align: center; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 4px; }
-            .sb-header h1 { font-size: 1.4rem; margin: 0; font-weight: bold; }
-            .sb-meta-table { width: 100%; margin-bottom: 12px; border-collapse: collapse; }
-            .sb-meta-table td { padding: 3px 0; font-size: 0.9rem; border: none; }
-            .sb-section-title { font-size: 1.05rem; border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 16px; page-break-before: always; }
-            .sb-section-title.sb-first { page-break-before: auto; }
-            .sb-main-table { width: 100%; border-collapse: collapse; }
-            .sb-main-table th { background-color: #eaeaea !important; border: 1px solid #000 !important; font-size: 0.85rem; padding: 6px; text-align: center; }
-            .sb-main-table td { border: 1px solid #000 !important; font-size: 0.85rem; padding: 6px; }
-            .slip-box { border: 1px solid #000 !important; background: none !important; }
-            .no-print { display: none !important; }
-
-            /* --- Leave Account print styles --- */
-            #sbLeaveBlock table { font-size: 0.6rem; table-layout: fixed; }
-            #sbLeaveBlock th, #sbLeaveBlock td { border: 1px solid #000 !important; padding: 3px 2px; text-align: center; word-wrap: break-word; }
-            #sbLeaveBlock thead th { background-color: #eaeaea !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            #sbLeaveBlock .credit-cell { background: var(--yellow) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            #sbLeaveBlock .taken-cell { background: var(--pink) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            #sbLeaveBlock .code-row td { background: #e2e8f0 !important; font-weight: 700; font-size: 0.58rem; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            #sbLeaveBlock .balance-num { color: #000 !important; font-weight: 700; }
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #0f172a 100%);
+        }
+        /* Custom scrollbar for cleanliness */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-<div class="container">
-    <h2>Unified ROPA Pay Fixation Matrix Dashboard</h2>
-
-    <h3>1. Staff & Service Details</h3>
-    <div class="grid-inputs">
-        <div class="form-group">
-            <label>Name of the School</label>
-            <input type="text" id="schoolName" value="TALDANGRA FULMATI HIGH SCHOOL [H.S.]">
+    <!-- Top Announcement Bar -->
+    <div class="bg-amber-500 text-slate-900 px-4 py-2 text-xs md:text-sm font-medium flex items-center justify-between shadow-inner">
+        <div class="max-w-7xl mx-auto flex items-center space-x-2 truncate">
+            <span class="bg-slate-900 text-white text-[10px] uppercase px-2 py-0.5 rounded-full font-bold tracking-wider animate-pulse">Notice</span>
+            <span class="truncate">📢 Examination Form Fill-ups & III Sem HS-27 Circulars are now live. Check the Digital Notice Board below.</span>
         </div>
-        <div class="form-group">
-            <label>Name of the Staff</label>
-            <input type="text" id="staffName" value="PRABIR KUMAR DANGAR">
-        </div>
-        <div class="form-group">
-            <label>Designation</label>
-            <input type="text" id="designation" value="Assistant Teacher">
-        </div>
-        <div class="form-group">
-            <label>Date of Birth</label>
-            <input type="date" id="dob" value="1969-04-10" onchange="calculateDOR()">
-        </div>
-        <div class="form-group">
-            <label>Date of Joining (1st Service)</label>
-            <input type="date" id="doj" value="1997-10-06" onchange="calculateDOR()">
+        <div class="hidden md:flex items-center space-x-4 text-xs font-semibold">
+            <a href="#notices" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-bell"></i> Circulars</a>
+            <a href="#calculator" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-calculator"></i> Calculator</a>
         </div>
     </div>
 
-    <div class="output-box" id="dorOutput">
-        <strong>Date of Retirement (DOR):</strong> Loading...
-    </div>
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Title -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="w-12 h-12 rounded-xl hero-gradient flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-graduation-cap text-2xl text-amber-400"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold text-slate-900 tracking-tight leading-tight">TFHS PORTAL</h1>
+                    <p class="text-xs text-slate-500 font-medium">Official Staff & Student Resource Hub</p>
+                </div>
+            </div>
 
-    <h3>1a. Promotion / Career Advancement / Higher Scale Movement</h3>
-    <div class="grid-inputs">
-        <div class="form-group">
-            <label>&nbsp;</label>
-            <label class="inline-check"><input type="checkbox" id="enablePromotion" checked onchange="togglePromotionSection()"> Applicable (staff was promoted or moved to a higher scale during service)</label>
-        </div>
-    </div>
-    <div class="grid-inputs" id="promotionFields">
-        <div class="form-group">
-            <label>Event Type</label>
-            <select id="promotionType">
-                <option value="promo" selected>Promotion to Higher Post (e.g. AT &rarr; HM with Promo Increment)</option>
-                <option value="highscale">Higher Scale / Upgradation Only (Direct Fitment - No Extra Increment)</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Date of Event (Promotion / Higher Scale)</label>
-            <input type="date" id="promotionDate" value="2007-10-06">
-        </div>
-        <div class="form-group">
-            <label>Target Grade Pay</label>
-            <select id="promotionTargetGp">
-                <option value="1800">GP 1800</option>
-                <option value="2900">GP 2900</option>
-                <option value="4100">GP 4100</option>
-                <option value="4400">GP 4400</option>
-                <option value="4700">GP 4700</option>
-                <option value="4800">GP 4800</option>
-                <option value="5400" selected>GP 5400 (Level 16, e.g. Headmaster/Headmistress)</option>
-            </select>
-        </div>
-    </div>
-    <div class="output-box" style="background-color:#eff6ff;border-left-color:#1d4ed8;">
-        <strong>Fixation Rule Settings:</strong> Functional post promotions grant an extra increment before matching the target scale. Higher scale movements for qualification/upgradations bypass the promotional increment step. Upon promotion, post-promotion annual increment dates are strictly governed with respect to the Date of Promotion (as per ROPA rules): in ROPA-1998, the increment month shifts to the promotion month; in ROPA-2009/2019, if service in the promoted post as on 1st July is less than 6 months (promotion date between 2nd Jan and 30th Jun), the 1st July increment of that year is skipped and granted on 1st July of the next year.
-    </div>
+            <!-- Desktop Menu -->
+            <nav class="hidden lg:flex items-center space-x-1">
+                <a href="#" onclick="showSection('home')" class="nav-link active px-3.5 py-2 rounded-lg text-sm font-semibold text-blue-700 bg-blue-50 transition-colors">Home</a>
+                <a href="#notices" onclick="showSection('notices')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Notices & Exams</a>
+                <a href="#staff" onclick="showSection('staff')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Staff & Leave</a>
+                <a href="#media" onclick="showSection('media')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Anthems & Media</a>
+                <a href="#calculator" onclick="showSection('calculator')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Calculator</a>
+                <a href="#retirement" onclick="showSection('retirement')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Retirement Hub</a>
+            </nav>
 
-    <h3>2. ROPA-1998 Pre-2006 Fixation (Always Frozen on 31-03-2009)</h3>
-    <div class="grid-inputs">
-        <div class="form-group">
-            <label>&nbsp;</label>
-            <label class="inline-check"><input type="checkbox" id="enableRopa98" checked onchange="toggleRopa98Section()"> Applicable (staff joined 1st service before 01.01.2006, drew pay under ROPA-1998)</label>
-        </div>
-    </div>
-    <div class="grid-inputs" id="ropa98Fields">
-        <div class="form-group">
-            <label>Old Scale (maps to ROPA-2009 Grade Pay)</label>
-            <select id="ropa98Scale">
-                <option value="1700">GP 1700 (2600-4175)</option>
-                <option value="1800">GP 1800 (2700-4400)</option>
-                <option value="2600">GP 2600 (3350-6325)</option>
-                <option value="2900">GP 2900 (3800-7775)</option>
-                <option value="4100">GP 4100 (4650-10175)</option>
-                <option value="4400">GP 4400 (4800-10925)</option>
-                <option value="4700">GP 4700 (5500-11075)</option>
-                <option value="4800" selected>GP 4800 (6000-12000)</option>
-                <option value="5400">GP 5400 (8000-13500)</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Date of Option / DOA (ROPA-1998)</label>
-            <input type="date" id="ropa98OptionDate" value="1997-10-06">
-        </div>
-        <div class="form-group">
-            <label>Initial Basic Pay (ROPA-1998 scale)</label>
-            <input type="number" id="ropa98BasicPay" value="6000">
-        </div>
-    </div>
-
-    <h3>3. ROPA-2009 Notional Fixation (Always Frozen on 31-12-2019)</h3>
-    <div class="grid-inputs">
-        <div class="form-group">
-            <label>&nbsp;</label>
-            <label class="inline-check"><input type="checkbox" id="enableRopa09" checked onchange="toggleRopa09Section()"> Applicable (staff drew pay under ROPA-2009 before switching)</label>
-        </div>
-    </div>
-    <div class="grid-inputs" id="ropa09Fields">
-        <div class="form-group" id="ropa09ManualGpGroup">
-            <label>Grade Pay (ROPA-2009)</label>
-            <select id="ropa09GradePay">
-                <option value="1700">GP 1700</option>
-                <option value="1800">GP 1800</option>
-                <option value="2600">GP 2600</option>
-                <option value="2900">GP 2900</option>
-                <option value="3900">GP 3900</option>
-                <option value="4100">GP 4100</option>
-                <option value="4400">GP 4400</option>
-                <option value="4700" selected>GP 4700</option>
-                <option value="4800">GP 4800</option>
-                <option value="5400">GP 5400</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Date of Option / DOA (ROPA-2009)</label>
-            <input type="date" id="ropa09OptionDate" value="2006-01-01">
-        </div>
-        <div class="form-group" id="ropa09ManualBandGroup">
-            <label>Initial Band Pay (Excluding GP)</label>
-            <input type="number" id="ropa09BandPay" value="13400">
-        </div>
-    </div>
-
-    <h3>4. ROPA-2019 Matrix Fixation (From Option Date)</h3>
-    <div class="grid-inputs">
-        <div class="form-group">
-            <label>Date of Option (ROPA-2019)</label>
-            <input type="date" id="ropa19OptionDate" value="2016-01-01">
-        </div>
-        <div class="form-group" id="ropa19ManualGpGroup" style="display:none;">
-            <label>Grade Pay (manual - no ROPA-2009 phase)</label>
-            <select id="ropa19GradePayManual">
-                <option value="1700">GP 1700</option>
-                <option value="1800">GP 1800</option>
-                <option value="2600">GP 2600</option>
-                <option value="2900">GP 2900</option>
-                <option value="3900">GP 3900</option>
-                <option value="4100">GP 4100</option>
-                <option value="4400">GP 4400</option>
-                <option value="4700" selected>GP 4700</option>
-                <option value="4800">GP 4800</option>
-                <option value="5400">GP 5400</option>
-            </select>
-        </div>
-        <div class="form-group" id="ropa19ManualBasicGroup" style="display:none;">
-            <label>Basic Pay (manual)</label>
-            <input type="number" id="ropa19BasicPayManual" value="66000">
-        </div>
-    </div>
-
-    <div class="btn-group">
-        <button type="button" class="btn-generate" onclick="processFixationTimeline()">Generate Pay Tables</button>
-        <button type="button" class="btn-print" onclick="window.print()">Print Service Book Sheet</button>
-    </div>
-
-    <div class="output-box" id="carryForwardOutput" style="display:none;"></div>
-    <div class="output-box" id="carryForwardOutput98" style="display:none;"></div>
-
-    <div id="ropa98Section" style="display:none;">
-        <h3>Generated ROPA-1998 Notional Fixation Timeline (Up to 31-03-2009)</h3>
-        <div class="table-responsive">
-            <table id="dashboardTable98">
-                <thead>
-                    <tr>
-                        <th>Effective Date</th><th>Date of Termination</th><th>Scale (&rarr; GP)</th><th>Basic Pay</th><th>Event / Reason</th>
-                    </tr>
-                </thead>
-                <tbody id="payTableBody98">
-                    <tr>
-                        <td colspan="5" style="text-align: center; color: #64748b; padding: 20px;">Click "Generate Pay Tables" to populate calculation values.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="ropa09Section">
-        <h3>Generated ROPA-2009 Notional Fixation Timeline (Up to 31-12-2019)</h3>
-        <div class="table-responsive">
-            <table id="dashboardTable09">
-                <thead>
-                    <tr>
-                        <th>Effective Date</th><th>Date of Termination</th><th>Scale of Pay / Pay Band</th><th>Band Pay</th><th>Grade Pay</th><th>Basic Pay</th><th>Event / Reason / Steps</th>
-                    </tr>
-                </thead>
-                <tbody id="payTableBody09">
-                    <tr>
-                        <td colspan="7" style="text-align: center; color: #64748b; padding: 20px;">Click "Generate Pay Tables" to populate calculation values.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <h3>Generated ROPA-2019 Matrix Fixation Timeline (From Option Date to DOR)</h3>
-    <div class="table-responsive">
-        <table id="dashboardTable19">
-            <thead>
-                <tr>
-                    <th>Effective Date</th><th>Date of Termination</th><th>Scale of Pay / Level Matrix</th><th>Cell</th><th>Grade Pay</th><th>Basic Pay</th><th>Event / Reason / Steps</th>
-                </tr>
-            </thead>
-            <tbody id="payTableBody19">
-                <tr>
-                    <td colspan="7" style="text-align: center; color: #64748b; padding: 20px;">Click "Generate Pay Tables" to populate calculation values.</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <h3 style="margin-top:40px;border-top:3px solid var(--secondary-color);padding-top:20px;">5. Leave Account (Register)</h3>
-    <div id="errorBanner" style="display:none;background:#fee2e2;border:1px solid #dc2626;color:#991b1b;padding:10px 14px;border-radius:6px;margin-bottom:14px;font-size:.85rem;font-weight:600;"></div>
-    <p style="font-size:.8rem;color:#555;">Uses the Name, Designation and Date of Joining entered in Section 1 above. Set a retirement / generate-up-to date below (defaults to the DOR already calculated in Section 1).</p>
-
-    <h4>5.1 Auto-Generate Period of Duty Rows</h4>
-    <div class="panel">
-        <p style="font-size:.8rem;color:#555;margin:0 0 8px;">
-            Generates annual (365/366-day) spans anchored to the 1st DOJ anniversary, right up to the date below.
-            Earned Leave (avg pay) and HPL (half avg pay) are each credited at 15 days per full 365-day span, prorated for part-spans. EL is capped at 365 days lifetime; HPL credit caps at 60 days (earning pauses while at cap, and resumes — up to the cap — after leave is taken).
-        </p>
-        <div class="grid">
-            <div class="fg"><label>Generate rows up to</label><input type="date" id="leaveUpToDate"></div>
-            <div class="fg">
-                <label>Was the staff transferred to another school at any point?</label>
-                <select id="hasTransfer" onchange="toggleTransferUI()">
-                    <option value="no">No — continuous service, same school throughout</option>
-                    <option value="yes">Yes — transferred at least once</option>
-                </select>
+            <!-- Quick Action & Mobile Toggle -->
+            <div class="flex items-center space-x-3">
+                <button onclick="openSearchModal()" class="hidden sm:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2 rounded-lg text-sm transition">
+                    <i class="fa-solid fa-search text-xs"></i>
+                    <span>Quick Search...</span>
+                    <kbd class="bg-white px-1.5 py-0.5 text-[10px] rounded border border-slate-300 text-slate-400">Ctrl+K</kbd>
+                </button>
+                <button id="mobileMenuBtn" class="lg:hidden text-slate-700 hover:text-blue-700 focus:outline-none p-2 rounded-lg hover:bg-slate-100">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
             </div>
         </div>
-        <div id="transferInputSection" style="display:none;margin-top:10px;">
-            <p style="font-size:.78rem;color:#555;margin:0 0 8px;">Enter each new-school joining date. The old-school row will automatically end the day before it; the underlying annual anniversary cycle keeps counting from the original 1st DOJ regardless.</p>
-            <div class="grid">
-                <div class="fg"><label>New School Joining Date (on transfer)</label><input type="date" id="transferDate"></div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-1 shadow-lg">
+            <a href="#" onclick="toggleMobileMenu(); showSection('home');" class="block px-3 py-2 rounded-md text-base font-medium text-blue-700 bg-blue-50">Home</a>
+            <a href="#notices" onclick="toggleMobileMenu(); showSection('notices');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Notices & Exams</a>
+            <a href="#staff" onclick="toggleMobileMenu(); showSection('staff');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Staff & Leave</a>
+            <a href="#media" onclick="toggleMobileMenu(); showSection('media');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Anthems & Media</a>
+            <a href="#calculator" onclick="toggleMobileMenu(); showSection('calculator');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Calculator</a>
+            <a href="#retirement" onclick="toggleMobileMenu(); showSection('retirement');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Retirement Celebration</a>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow">
+
+        <!-- Hero Banner Section -->
+        <section class="hero-gradient text-white py-16 md:py-24 relative overflow-hidden">
+            <!-- Background Decorative Elements -->
+            <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute left-10 top-10 w-72 h-72 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 bg-blue-900/80 border border-blue-400/30 px-3 py-1.5 rounded-full text-xs font-medium text-amber-300">
+                            <i class="fa-solid fa-star text-amber-400"></i>
+                            <span>Welcome to the Official Digital Gateway</span>
+                        </div>
+                        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                            Empowering Education & <span class="text-amber-400">Administrative Excellence</span>
+                        </h1>
+                        <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                            Access examination notices, staff leave applications, government circulars, calculation tools, and multimedia archives instantly from one unified hub.
+                        </p>
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                            <a href="#notices" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-6 py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                                <i class="fa-solid fa-bullhorn"></i> View Notice Board
+                            </a>
+                            <a href="#staff" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur transition flex items-center gap-2">
+                                <i class="fa-solid fa-id-card-clip"></i> Staff Applications
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats / Quick Links Widget Card -->
+                    <div class="lg:col-span-5">
+                        <div class="glass-card rounded-2xl p-6 md:p-8 text-slate-900 shadow-2xl space-y-6">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                                <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-bolt text-amber-500"></i> Quick Access
+                                </h3>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-semibold">Active Hub</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <a href="#notices" onclick="filterNotices('exam')" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
+                                    <div class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                                        <i class="fa-solid fa-file-pen text-sm"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Exam Forms</h4>
+                                    <p class="text-xs text-slate-500">III Sem, MP-2027</p>
+                                </a>
+                                <a href="#notices" onclick="filterNotices('reg')" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
+                                    <div class="w-9 h-9 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                                        <i class="fa-solid fa-user-plus text-sm"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Registrations</h4>
+                                    <p class="text-xs text-slate-500">Class IX & XI</p>
+                                </a>
+                                <a href="#staff" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
+                                    <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                                        <i class="fa-solid fa-calendar-days text-sm"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Staff Leave</h4>
+                                    <p class="text-xs text-slate-500">Apply & Status</p>
+                                </a>
+                                <a href="#calculator" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
+                                    <div class="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                                        <i class="fa-solid fa-calculator text-sm"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Calculator</h4>
+                                    <p class="text-xs text-slate-500">Tools & Utilities</p>
+                                </a>
+                            </div>
+                            <div class="pt-2">
+                                <a href="#retirement" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium py-3 px-4 rounded-xl flex items-center justify-between transition shadow">
+                                    <span class="flex items-center gap-2"><i class="fa-solid fa-award text-amber-400"></i> Retirement Celebration Gallery</span>
+                                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="btn-row">
-                <button class="btn-add" onclick="addTransferEvent()">+ Add Transfer Event</button>
+        </section>
+
+        <!-- Main Notice Board Section -->
+        <section id="notices" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Digital Notice Board</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-2">Circulars, Notices & Official Updates</h2>
+                    <p class="text-slate-600 text-sm mt-1">Browse categorized announcements or use the search filter below.</p>
+                </div>
+                <!-- Search bar & Filter tabs -->
+                <div class="flex flex-col sm:flex-row items-center gap-3">
+                    <div class="relative w-full sm:w-64">
+                        <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+                        <input type="text" id="noticeSearch" onkeyup="searchNotices()" placeholder="Search notices..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-sm">
+                    </div>
+                </div>
             </div>
-            <div id="transferList" style="margin-top:10px;font-size:.78rem;"></div>
-        </div>
-        <div class="grid" style="margin-top:10px;">
-            <div class="fg"><label>Opening Balance — Average pay on MC (at 1st DOJ)</label><input type="number" id="openingAvg" value="0" step="1"></div>
-            <div class="fg"><label>Opening Balance — Half Average pay on MC (at 1st DOJ)</label><input type="number" id="openingHalf" value="0" step="1"></div>
-        </div>
-        <div class="btn-row">
-            <button class="btn-print" onclick="autoGenerateRows()">Auto-Generate Period of Duty Rows</button>
-        </div>
-        <div id="statusMsg" style="margin-top:10px;font-size:.82rem;font-weight:600;"></div>
-    </div>
 
-    <h4>5.2 Period of Duty Rows</h4>
-    <div class="panel">
-        <p style="font-size:.8rem;color:#555;margin:0 0 8px;">Add or edit each duty-period row manually if needed. "Leave earned on" adds to the running credit at the start of that period; "Leave at Credit on" for Row 1 can be entered manually (opening balance), every later row carries forward automatically.</p>
-        <div id="periodRows"></div>
-        <div class="btn-row">
-            <button class="btn-add" onclick="addPeriodRow()">+ Add Period of Duty Row</button>
-        </div>
-        <div id="rowManageList" style="margin-top:10px;font-size:.78rem;"></div>
-    </div>
-
-    <h4>5.3 Add Leave Entry (ML / HPL / LWP) — feeds Leave A/c and all ROPA tables</h4>
-    <div class="panel">
-        <div class="grid">
-            <div class="fg"><label>Leave Type</label>
-                <select id="mlType">
-                    <option value="lwp_effect">1. LWP — WITH effect on 10/18/20Y increment (shifts CAS/increment date)</option>
-                    <option value="lwp_noeffect">2. LWP — NO effect on 10/18/20Y increment</option>
-                    <option value="avg">3. ML with Full Average Pay (commuted / EL on medical grounds)</option>
-                    <option value="half">4. HPL (Half Average Pay on M.C.)</option>
-                </select>
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap items-center gap-2 mb-8" id="filterTabs">
+                <button onclick="filterNotices('all')" class="filter-btn active px-4 py-2 rounded-xl text-sm font-semibold bg-blue-700 text-white shadow transition">All Notices</button>
+                <button onclick="filterNotices('exam')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Examinations</button>
+                <button onclick="filterNotices('reg')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Registrations</button>
+                <button onclick="filterNotices('govt')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Govt Orders</button>
+                <button onclick="filterNotices('staff')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Staff Updates</button>
             </div>
-            <div class="fg"><label>Leave Enjoyed From</label><input type="date" id="mlFrom"></div>
-            <div class="fg"><label>Leave Enjoyed To</label><input type="date" id="mlTo"></div>
-        </div>
-        <p style="font-size:.75rem;color:#555;margin:8px 0 0;">
-            Posted into the Leave Account (split across period rows if it crosses a year-end) and noted in the "Event / Reason" column of every ROPA-1998/2009/2019 row whose Effective Date&ndash;Date of Termination window overlaps these dates.
-            For option 1 ("LWP — WITH effect on 10/18/20Y increment"), every ROPA-1998/2009/2019 increment and 10/18/20-Year milestone date falling on or after this entry's start date is automatically shifted to account for it — multiple LWP spells across the whole career are all added up, there's no need to enter anything separately in Sections 2&ndash;4.
-        </p>
-        <div class="btn-row">
-            <button class="btn-add" onclick="addMlEntry()">+ Add Leave Entry</button>
-        </div>
-    </div>
-    <div id="leaveEntriesList" style="margin-top:6px;font-size:.78rem;"></div>
 
-    <h4>5.4 Leave Account Table</h4>
-    <div class="table-wrap">
-        <table id="mainTable">
-            <thead>
-                <tr>
-                    <th colspan="2">Period of Duty</th>
-                    <th colspan="2">Vacation</th>
-                    <th colspan="3">Leave earned on</th>
-                    <th colspan="3">Leave at Credit on</th>
-                    <th colspan="3">Leave taken (debited)</th>
-                    <th colspan="2">Leave Enjoyed (Physical Days)</th>
-                    <th colspan="2">Maternity Leave</th>
-                    <th>LWP</th>
-                    <th colspan="2">Special Leave</th>
-                    <th colspan="3">Balance</th>
-                </tr>
-                <tr>
-                    <th>From</th><th>To</th>
-                    <th>From</th><th>To</th>
-                    <th>Average pay on MC</th><th>Half Average pay on MC</th><th>Vacation Detention</th>
-                    <th>Average pay on MC</th><th>Half Average pay on MC</th><th>Vacation Detention</th>
-                    <th>Average pay on MC</th><th>Half Average pay on MC</th><th>Vacation Detention</th>
-                    <th>Average pay on MC</th><th>Half Average pay on MC</th>
-                    <th>Full</th><th>Half</th>
-                    <th>Extra Ordinary</th>
-                    <th>Full</th><th>Half</th>
-                    <th>Average pay on MC</th><th>Half Average pay on MC</th><th>Vacation Detention</th>
-                </tr>
-                <tr class="code-row">
-                    <td>2a</td><td>2b</td><td>3a</td><td>3b</td><td>4a</td><td>4b</td><td>4c</td>
-                    <td>5a</td><td>5b</td><td>6</td><td>7</td><td>8</td><td>9</td>
-                    <td>9a</td><td>9b</td>
-                    <td>10a</td><td>10b</td><td>11</td><td>12a</td><td>12b</td><td>13</td><td>14</td><td>15</td>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-            <tfoot id="leaveTotalsFoot"></tfoot>
-        </table>
-    </div>
-
-    <h4>5.5 Leave Taken — ML / HPL Synopsis (per Period Row)</h4>
-    <div class="panel" id="synopsisPanel" style="font-size:.8rem;"></div>
-
-    <div class="btn-group">
-        <button class="btn-print" onclick="doPrint()">Print / Generate Leave A/c Page</button>
-    </div>
-</div>
-
-<div id="printArea">
-    <div class="sb-header">
-        <h1 id="sbSchoolName">TALDANGRA FULMATI HIGH SCHOOL [H.S.]</h1>
-        <h2>Service Book Verification Entry</h2>
-    </div>
-    <table class="sb-meta-table">
-        <tr>
-            <td style="width: 50%;"><strong>Name of Employee:</strong> <span id="sbStaffName"></span></td>
-            <td style="width: 50%;"><strong>Designation:</strong> <span id="sbDesignation"></span></td>
-        </tr>
-        <tr>
-            <td><strong>Date of Birth:</strong> <span id="sbDob"></span></td>
-            <td><strong>Date of Joining:</strong> <span id="sbDoj"></span></td>
-        </tr>
-        <tr>
-            <td colspan="2"><strong>Date of Superannuation Retirement (DOR):</strong> <span id="sbDor"></span></td>
-        </tr>
-    </table>
-
-    <div id="sbRopa98Block" style="display:none;">
-        <h2 class="sb-section-title">ROPA-1998 Notional Fixation (Up to 31-03-2009)</h2>
-        <table class="sb-main-table" id="sbTable98">
-            <thead>
-                <tr>
-                    <th>Effective Date</th><th>Date of Termination</th><th>Scale (&rarr; GP)</th><th>Basic Pay</th><th>Event / Reason</th>
-                </tr>
-            </thead>
-            <tbody id="sbPrintTableBody98"></tbody>
-        </table>
-    </div>
-
-    <div id="sbRopa09Block">
-        <h2 class="sb-section-title">ROPA-2009 Notional Fixation (Up to 31-12-2019)</h2>
-        <table class="sb-main-table" id="sbTable09">
-            <thead>
-                <tr>
-                    <th>Effective Date</th><th>Date of Termination</th><th>Scale of Pay / Pay Band</th><th>Band Pay</th><th>Grade Pay</th><th>Basic Pay</th><th>Event / Reason / Steps</th>
-                </tr>
-            </thead>
-            <tbody id="sbPrintTableBody09"></tbody>
-        </table>
-    </div>
-
-    <h2 class="sb-section-title">ROPA-2019 Matrix Fixation (From Option Date)</h2>
-    <table class="sb-main-table" id="sbTable19">
-        <thead>
-            <tr>
-                <th>Effective Date</th><th>Date of Termination</th><th>Scale of Pay / Level Matrix</th><th>Cell</th><th>Grade Pay</th><th>Basic Pay</th><th>Event / Reason / Steps</th>
-            </tr>
-        </thead>
-        <tbody id="sbPrintTableBody19"></tbody>
-    </table>
-
-    <div id="sbLeaveBlock">
-        <h2 class="sb-section-title">Leave Account (Register)</h2>
-        <table class="sb-meta-table">
-            <tr>
-                <td style="width:25%;"><strong>Name:</strong> <span id="pName"></span></td>
-                <td style="width:25%;"><strong>Designation:</strong> <span id="pDesig"></span></td>
-                <td style="width:25%;"><strong>DOJ:</strong> <span id="pDoj"></span></td>
-                <td style="width:25%;"><strong>DOR:</strong> <span id="pDor"></span></td>
-            </tr>
-        </table>
-        <div id="printTableHolder"></div>
-    </div>
-</div>
-
-<script>
-    const matrixData19 = {
-        1: [17000, 17500, 18000, 18500, 19100, 19700, 20300, 20900, 21500, 22100, 22800, 23500, 24200, 24900, 25600, 26400, 27200, 28000, 28800, 29700, 30600, 31500, 32400, 33400, 34400, 35400, 36500, 37600, 38700, 39900, 41100, 42300, 43600],
-        2: [17600, 18100, 18600, 19200, 19800, 20400, 21000, 21600, 22200, 22900, 23600, 24300, 25000, 25800, 26600, 27400, 28200, 29000, 29900, 30800, 31700, 32700, 33700, 34700, 35700, 36800, 37900, 39000, 40200, 41400, 42600, 43900, 45200],
-        3: [18800, 19400, 20000, 20600, 21200, 21800, 22500, 23200, 23900, 24600, 25300, 26100, 26900, 27700, 28500, 29400, 30300, 31200, 32100, 33200, 34200, 35200, 36300, 37400, 38500, 39700, 40900, 42100, 43400, 44700, 46000, 47400, 48800, 50300, 51800, 53400, 55000, 56700, 58400, 60200, 62000, 63900],
-        7: [24700, 25400, 26200, 27000, 27800, 28600, 29500, 30400, 31300, 32200, 33200, 34200, 35200, 36300, 37400, 38500, 39700, 40900, 42100, 43400, 44700, 46000, 47400, 48800, 50300, 51800, 53400, 55000, 56700, 58400, 60200, 62000, 63900],
-        10: [32100, 33100, 34100, 35100, 36200, 37300, 38400, 39600, 40800, 42000, 43300, 44600, 45900, 47300, 48700, 50200, 51700, 53300, 54900, 56500, 58200, 59900, 61700, 63600, 65500, 67500, 69500, 71600, 73700, 75900, 78200, 80500, 82900],
-        11: [33400, 34400, 35400, 36500, 37600, 38700, 39900, 41100, 42300, 43600, 44900, 46200, 47600, 49000, 50500, 52000, 53600, 55200, 56900, 58600, 60400, 62200, 64100, 66000, 68000, 70000, 72100, 74300, 76500, 78800, 81200, 83600, 86100],
-        12: [35800, 36900, 38000, 39100, 40300, 41500, 42700, 44000, 45300, 46700, 48100, 49500, 51000, 52500, 54100, 55700, 57400, 59100, 60900, 62700, 64600, 66500, 68500, 70600, 72700, 74900, 77100, 79400, 81800, 84300, 86800, 89400, 92100],
-        14: [39900, 41100, 42300, 43600, 44900, 46200, 47600, 49000, 50500, 52000, 53600, 55200, 56900, 58600, 60400, 62200, 64100, 66000, 68000, 70000, 72100, 74300, 76500, 78800, 81200, 83600, 86100, 88700, 91400, 94100, 96900, 99800, 102800],
-        15: [42600, 43900, 45200, 46600, 48000, 49400, 50900, 52400, 54000, 55600, 57300, 59000, 60800, 62600, 64500, 66400, 68400, 70500, 72600, 74800, 77000, 79300, 81700, 84200, 86700, 89300, 92000, 94800, 97600, 100500, 103500, 106600, 109800],
-        16: [56100, 57800, 59500, 61300, 63100, 65000, 67000, 69000, 71100, 73200, 75400, 77700, 80000, 82400, 84900, 87400, 90000, 92700, 95500, 98400, 101400, 104400, 107500, 110700, 114000, 117400, 120900, 124500, 128200, 132000, 136000, 140100, 144300]
-    };
-
-    const pbMap09 = {
-        1700: "PB-1:4900-16200", 1800: "PB-1:4900-16200", 2600: "PB-2:5400-25200", 2900: "PB-2:5400-25200",
-        3900: "PB-3:7100-37600", 4100: "PB-3:7100-37600", 4400: "PB-4:9000-40500", 4700: "PB-4:9000-40500",
-        4800: "PB-4:9000-40500", 5400: "PB-4:9000-40500"
-    };
-
-    const minEntryPayBand09 = {
-        1700: 4900, 1800: 5030,
-        1900: 5400, 2100: 5580, 2300: 5860, 2600: 6240, 2900: 6700,
-        3200: 7100, 3600: 7440, 3900: 8370, 4100: 8650,
-        4400: 9000, 4600: 9300, 4700: 10230, 4800: 11160,
-        5400: 15600, 6600: 18600, 7000: 18600, 7600: 22320, 8000: 23250
-    };
-
-    const pbMap19 = {
-        1700: "PB-1", 1800: "PB-1", 2600: "PB-2", 2900: "PB-2", 3900: "PB-3", 4100: "PB-3", 4400: "PB-4", 4700: "PB-4", 4800: "PB-4", 5400: "PB-4"
-    };
-
-    const levelMap19 = {
-        1700: 1, 1800: 2, 2600: 3, 2900: 7, 3900: 10, 4100: 11, 4400: 12, 4700: 14, 4800: 15, 5400: 16
-    };
-
-    const promoMap09 = { 1700: 1800, 2600: 2900, 3900: 4100, 4100: 4400 };
-    const promoMap19 = { 1700: 1800, 2600: 2900, 3900: 4100, 4100: 4400 };
-
-    const matrixData98 = {
-        1700: [2600, 2655, 2710, 2765, 2820, 2875, 2930, 2985, 3045, 3105, 3165, 3225, 3285, 3345, 3405, 3465, 3525, 3590, 3655, 3720, 3785, 3850, 3915, 3980, 4045, 4110, 4175],
-        1800: [2700, 2760, 2820, 2880, 2940, 3000, 3060, 3120, 3185, 3250, 3315, 3380, 3445, 3510, 3575, 3640, 3705, 3770, 3840, 3910, 3980, 4050, 4120, 4190, 4260, 4330, 4400],
-        2600: [3350, 3440, 3530, 3620, 3710, 3800, 3900, 4000, 4100, 4200, 4300, 4400, 4500, 4600, 4700, 4825, 4950, 5075, 5200, 5325, 5450, 5575, 5700, 5825, 5950, 6075, 6200, 6325],
-        2900: [3800, 3900, 4000, 4100, 4225, 4350, 4475, 4600, 4725, 4875, 5025, 5175, 5325, 5475, 5625, 5775, 5925, 6075, 6225, 6375, 6550, 6725, 6900, 7075, 7250, 7425, 7600, 7775],
-        4100: [4650, 4800, 4950, 5100, 5275, 5450, 5625, 5800, 5975, 6150, 6325, 6525, 6725, 6925, 7125, 7325, 7525, 7725, 7925, 8150, 8375, 8600, 8825, 9050, 9275, 9500, 9725, 9950, 10175],
-        4400: [4800, 4975, 5150, 5325, 5500, 5675, 5850, 6050, 6250, 6450, 6650, 6875, 7100, 7325, 7550, 7775, 8000, 8225, 8450, 8675, 8925, 9175, 9425, 9675, 9925, 10175, 10425, 10675, 10925],
-        4700: [5500, 5700, 5900, 6100, 6300, 6525, 6750, 6975, 7200, 7425, 7650, 7875, 8100, 8325, 8575, 8825, 9075, 9325, 9575, 9825, 10075, 10325, 10575, 10825, 11075],
-        4800: [6000, 6225, 6450, 6675, 6900, 7125, 7350, 7575, 7800, 8050, 8300, 8550, 8800, 9050, 9300, 9550, 9800, 10075, 10350, 10625, 10900, 11175, 11450, 11725, 12000],
-        5400: [8000, 8275, 8550, 8825, 9100, 9375, 9650, 9925, 10200, 10475, 10750, 11025, 11300, 11575, 11850, 12125, 12400, 12675, 12950, 13225, 13500]
-    };
-
-    const ROPA98_TO_09_FACTOR = 1.86;
-
-    function ceilToNext10(value) {
-        return Math.ceil(value / 10) * 10;
-    }
-
-    const ROPA09_CUTOFF = new Date(2019, 11, 31);
-    const ROPA98_CUTOFF = new Date(2009, 2, 31);
-
-    function toggleRopa98Section() {
-        const enabled = document.getElementById('enableRopa98').checked;
-        document.getElementById('ropa98Fields').style.display = enabled ? '' : 'none';
-        document.getElementById('ropa98Section').style.display = enabled ? '' : 'none';
-        document.getElementById('sbRopa98Block').style.display = enabled ? '' : 'none';
-        document.getElementById('ropa09ManualGpGroup').style.display = enabled ? 'none' : '';
-        document.getElementById('ropa09ManualBandGroup').style.display = enabled ? 'none' : '';
-    }
-
-    function togglePromotionSection() {
-        const enabled = document.getElementById('enablePromotion').checked;
-        document.getElementById('promotionFields').style.display = enabled ? '' : 'none';
-    }
-
-    function toggleRopa09Section() {
-        const enabled = document.getElementById('enableRopa09').checked;
-        document.getElementById('ropa09Fields').style.display = enabled ? '' : 'none';
-        document.getElementById('ropa09Section').style.display = enabled ? '' : 'none';
-        document.getElementById('sbRopa09Block').style.display = enabled ? '' : 'none';
-        document.getElementById('ropa19ManualGpGroup').style.display = enabled ? 'none' : '';
-        document.getElementById('ropa19ManualBasicGroup').style.display = enabled ? 'none' : '';
-        toggleRopa98Section();
-    }
-
-    function getDOR() {
-        const dobInput = document.getElementById('dob').value;
-        if (!dobInput) return null;
-        const dob = new Date(dobInput);
-        let targetYear = dob.getFullYear() + 60;
-        return (dob.getDate() === 1) ? new Date(targetYear, dob.getMonth(), 0) : new Date(targetYear, dob.getMonth() + 1, 0);
-    }
-
-    function calculateDOR() {
-        const dor = getDOR();
-        if (dor) document.getElementById('dorOutput').innerHTML = `<strong>Date of Retirement (DOR):</strong> ${formatDate(dor)}`;
-        syncLeaveUpToDate();
-    }
-
-    function formatDate(d) {
-        return `${String(d.getDate()).padStart(2, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${d.getFullYear()}`;
-    }
-
-    function calculate09Increment(bandPay, gradePay) {
-        let increment = (bandPay + gradePay) * 0.03;
-        return (increment % 10 < 1) ? Math.floor(increment / 10) * 10 : Math.ceil(increment / 10) * 10;
-    }
-
-    function findCell19(level, basic) {
-        const arr = matrixData19[level];
-        if (!arr) return { cell: "N/A", value: basic, index: 0 };
-        let idx = arr.indexOf(basic);
-        if (idx !== -1) return { cell: `CELL-${idx + 1}`, value: basic, index: idx };
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i] >= basic) return { cell: `CELL-${i + 1}`, value: arr[i], index: i };
-        }
-        return { cell: `CELL-${arr.length}`, value: arr[arr.length - 1], index: arr.length - 1 };
-    }
-
-    function checkWindow(milestoneDate) {
-        const startWinA = new Date(milestoneDate.getFullYear(), 0, 2);
-        const endWinA = new Date(milestoneDate.getFullYear(), 5, 30);
-        return (milestoneDate >= startWinA && milestoneDate <= endWinA) ? 'A' : 'B';
-    }
-
-    function getLwpEffectEntries() {
-        if (typeof masterMlEntries === 'undefined') return [];
-        return masterMlEntries
-            .filter(e => e.type === 'lwp_effect')
-            .map(e => ({ from: new Date(e.from + 'T00:00:00'), to: new Date(e.to + 'T00:00:00'), days: daysBetween(e.from, e.to) }))
-            .sort((a, b) => a.from - b.from);
-    }
-
-    function lwpDaysAppliedBy(entries, date) {
-        return entries.filter(e => e.from <= date).reduce((sum, e) => sum + e.days, 0);
-    }
-
-    function addDays(date, days) {
-        const d = new Date(date);
-        d.setDate(d.getDate() + days);
-        return d;
-    }
-
-    function resolveDateNoWindow(originalDate, entries) {
-        const lwpDays = lwpDaysAppliedBy(entries, originalDate);
-        return lwpDays > 0 ? addDays(originalDate, lwpDays) : new Date(originalDate);
-    }
-
-    function resolveDateWithLwp(originalDate, entries) {
-        const win = checkWindow(originalDate);
-        const lwpDays = lwpDaysAppliedBy(entries, originalDate);
-        if (win === 'A') {
-            const jul1 = new Date(originalDate.getFullYear(), 6, 1);
-            if (lwpDays === 0) return { date: jul1, win: 'A', lwpShifted: false };
-            const jun30 = new Date(originalDate.getFullYear(), 5, 30);
-            const gapDays = Math.round((jun30 - originalDate) / 86400000);
-            if (lwpDays <= gapDays) {
-                return { date: jul1, win: 'A', lwpShifted: false };
-            }
-            return { date: addDays(originalDate, lwpDays), win: 'A', lwpShifted: true };
-        }
-        if (lwpDays > 0) {
-            return { date: addDays(originalDate, lwpDays), win: 'B', lwpShifted: true };
-        }
-        return { date: new Date(originalDate), win: 'B', lwpShifted: false };
-    }
-
-    function resolveRopa98MilestoneDate(originalDate, entries) {
-        const win = checkWindow(originalDate);
-        const lwpDays = lwpDaysAppliedBy(entries, originalDate);
-        if (win === 'A') {
-            const jun30 = new Date(originalDate.getFullYear(), 5, 30);
-            if (lwpDays === 0) return jun30;
-            const gapDays = Math.round((jun30 - originalDate) / 86400000);
-            if (lwpDays <= gapDays) return jun30;
-            return addDays(originalDate, lwpDays);
-        }
-        return lwpDays > 0 ? addDays(originalDate, lwpDays) : new Date(originalDate);
-    }
-
-    function resolveAnnualIncrementWithLwp(julDate, cumulativeLwp, alreadyConsumed) {
-        const newLwpDays = Math.max(0, cumulativeLwp - alreadyConsumed);
-        if (newLwpDays <= 30) {
-            return { date: new Date(julDate), win: 'B', lwpShifted: false };
-        }
-        const extraMonths = Math.floor((newLwpDays - 1) / 30);
-        const shifted = new Date(julDate.getFullYear(), julDate.getMonth() + extraMonths, 1);
-        return { date: shifted, win: 'B', lwpShifted: true };
-    }
-
-    function finalizeDot(compiledRows, endDate) {
-        for (let i = 0; i < compiledRows.length; i++) {
-            if (i < compiledRows.length - 1) {
-                let currDate = compiledRows[i].date;
-                let nextRowDate = compiledRows[i + 1].date;
+            <!-- Notice Cards Grid -->
+            <div id="noticeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                let isSameDay = currDate.getFullYear() === nextRowDate.getFullYear() &&
-                                currDate.getMonth() === nextRowDate.getMonth() &&
-                                currDate.getDate() === nextRowDate.getDate();
-                                
-                if (isSameDay) {
-                    compiledRows[i].dot = new Date(currDate);
-                } else {
-                    let prevDay = new Date(nextRowDate.getFullYear(), nextRowDate.getMonth(), nextRowDate.getDate() - 1);
-                    if (prevDay < currDate) {
-                        compiledRows[i].dot = new Date(currDate);
-                    } else {
-                        compiledRows[i].dot = prevDay;
-                    }
-                }
-            } else {
-                compiledRows[i].dot = endDate;
-            }
-        }
-    }
+                <!-- Notice Card 1 -->
+                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="exam">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-pen"></i> Examination
+                            </span>
+                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> 2 days ago</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">III Sem HS-27 Examination & Form Fill-up Schedule</h3>
+                        <p class="text-slate-600 text-sm mb-4">Detailed schedule and guidelines for Higher Secondary 3rd Semester examination form submission and fee clearance.</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-paperclip"></i> PDF Document</span>
+                        <button onclick="openDocModal('III Sem HS-27 Examination & Form Fill-up Schedule', 'Official notice regarding III Semester HS-27 examinations. All eligible candidates must complete their form fill-ups before the deadline. Ensure verification of registration details with the school office.')" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                            <span>View Notice</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
 
-    const eligibleFor18YScaleChange98 = [1700, 2600, 3900, 4100];
+                <!-- Notice Card 2 -->
+                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="exam">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <i class="fa-solid fa-award"></i> Board Exams
+                            </span>
+                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> 5 days ago</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">MP-2027 Programme & Test Timetable Announcement</h3>
+                        <p class="text-slate-600 text-sm mb-4">Madhyamik Programme 2027 tentative dates and preliminary preparation guidelines for students and teachers.</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-paperclip"></i> Schedule File</span>
+                        <button onclick="openDocModal('MP-2027 Programme & Test Timetable', 'Madhyamik Programme 2027 examination timetable and syllabus breakdown. Review the schedule for comprehensive test preparation.')" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                            <span>View Notice</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
 
-    function sortTimelineEvents(events) {
-        function eventPriority(ev) {
-            if (ev.isInitial) return 0;
-            if (ev.isAnnual) return 1;
-            if (ev.isMilestone) return 2;
-            if (ev.isPromotion) return 3;
-            return 4;
-        }
-        events.sort((a, b) => {
-            let yA = a.date.getFullYear(), yB = b.date.getFullYear();
-            let mA = a.date.getMonth(), mB = b.date.getMonth();
-            let dA = a.date.getDate(), dB = b.date.getDate();
-            
-            if (yA !== yB) return yA - yB;
-            if (mA !== mB) return mA - mB;
-            if (dA !== dB) return dA - dB;
-            
-            return eventPriority(a) - eventPriority(b);
+                <!-- Notice Card 3 -->
+                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="reg">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-plus"></i> Registration
+                            </span>
+                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> 1 week ago</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">Class IX & XI Registration Verification Notice</h3>
+                        <p class="text-slate-600 text-sm mb-4">Check student names, guardian details, and subject combinations for newly admitted Class IX and XI registration rolls.</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-table"></i> Spreadsheet Link</span>
+                        <button onclick="openDocModal('Class IX & XI Registration Verification', 'Registration lists for Class IX and XI have been uploaded. Please verify student spellings and details immediately to avoid board discrepancies.')" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                            <span>View Drive File</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Notice Card 4 -->
+                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="govt">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <i class="fa-solid fa-landmark"></i> Govt Order
+                            </span>
+                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> 2 weeks ago</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">Official Government Circulars & Holiday Guidelines</h3>
+                        <p class="text-slate-600 text-sm mb-4">State education department directives regarding academic calendar updates, holidays, and standard operating procedures.</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-file-pdf"></i> PDF Circular</span>
+                        <button onclick="openDocModal('Official Government Circulars & Holiday Guidelines', 'Latest state government education department orders. Compliance with specified guidelines is mandatory for all teaching and non-teaching staff.')" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                            <span>View Circular</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Notice Card 5 -->
+                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="staff">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <i class="fa-solid fa-id-card-clip"></i> Staff Portal
+                            </span>
+                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> Ongoing</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">STAFF_LEAVE_APPLICATION & Service Records</h3>
+                        <p class="text-slate-600 text-sm mb-4">Submit casual leave, medical leave, or duty leave applications digitally through the staff portal integrated form.</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-file-lines"></i> Application Form</span>
+                        <a href="#staff" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                            <span>Open Form</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Notice Card 6 -->
+                <div class="notice-card bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between" data-category="staff">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-rose-100 text-rose-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <i class="fa-solid fa-bullhorn"></i> General
+                            </span>
+                            <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-clock"></i> Active</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug">General Resources & Digital Notice Board Drive Links</h3>
+                        <p class="text-slate-600 text-sm mb-4">Access cloud repositories for question banks, syllabus outlines, student handbooks, and photography archives.</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500"><i class="fa-brands fa-google-drive text-blue-600"></i> Google Drive</span>
+                        <button onclick="openDocModal('General Resources & Google Drive Hub', 'Central Google Drive folder containing high-resolution school photos, anthem audio files, lesson plans, and administrative templates.')" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                            <span>Open Drive</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Staff Applications & Leave Section -->
+        <section id="staff" class="py-16 bg-white border-y border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Staff Portal</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-2">Staff Leave Application & Service Desk</h2>
+                    <p class="text-slate-600 text-sm mt-2">Submit official leave requests directly to the administration. Please fill in all required details accurately.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Form Container -->
+                    <div class="lg:col-span-7 bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                            <i class="fa-solid fa-id-card text-blue-700"></i> Leave Application Form (STAFF_LEAVE_APPLICATION)
+                        </h3>
+                        <form id="leaveForm" onsubmit="handleLeaveSubmit(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Staff Member Name *</label>
+                                    <input type="text" id="staffName" required placeholder="e.g. Subrata Mukherjee" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Employee ID / Designation *</label>
+                                    <input type="text" id="staffId" required placeholder="e.g. TFHS/EMP/104" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Leave Type *</label>
+                                    <select id="leaveType" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                                        <option value="Casual Leave (CL)">Casual Leave (CL)</option>
+                                        <option value="Medical Leave (ML)">Medical Leave (ML)</option>
+                                        <option value="Earned Leave (EL)">Earned Leave (EL)</option>
+                                        <option value="Duty Leave (DL)">Duty Leave (DL)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Number of Days *</label>
+                                    <input type="number" id="leaveDays" min="1" max="30" required value="1" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Start Date *</label>
+                                    <input type="date" id="startDate" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">End Date *</label>
+                                    <input type="date" id="endDate" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Reason for Leave *</label>
+                                <textarea id="leaveReason" rows="3" required placeholder="Provide brief reason for leave application..." class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Submit Leave Application
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Information & Guidelines Card -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl">
+                            <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-info text-blue-700"></i> Guidelines for Staff Leave
+                            </h4>
+                            <ul class="space-y-2 text-xs text-blue-900 leading-relaxed list-disc list-inside">
+                                <li>Casual Leave applications must be submitted at least 24 hours in advance where possible.</li>
+                                <li>Medical Leave exceeding 3 days requires a valid registered medical practitioner certificate.</li>
+                                <li>Ensure alternative class arrangements are communicated with the academic coordinator.</li>
+                                <li>Check approval status through the institutional desk register.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Recent Status Box -->
+                        <div class="bg-slate-50 border border-slate-200 p-6 rounded-2xl">
+                            <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-emerald-600"></i> Recent Submissions Log
+                            </h4>
+                            <div id="submissionLog" class="space-y-2 text-xs text-slate-600">
+                                <div class="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
+                                    <div>
+                                        <p class="font-semibold text-slate-800">A. Banerjee (Mathematics)</p>
+                                        <p class="text-[11px] text-slate-400">Casual Leave • 2 Days</p>
+                                    </div>
+                                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full">Approved</span>
+                                </div>
+                                <div class="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
+                                    <div>
+                                        <p class="font-semibold text-slate-800">P. Chatterjee (English)</p>
+                                        <p class="text-[11px] text-slate-400">Medical Leave • 1 Day</p>
+                                    </div>
+                                    <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded-full">Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- School Anthems & Media Section -->
+        <section id="media" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Multimedia Hub</span>
+                <h2 class="text-3xl font-bold text-slate-900 mt-2">School Anthems, Prayers & Media Gallery</h2>
+                <p class="text-slate-600 text-sm mt-2">Listen to national and school anthems, view prayer videos, and browse official school photographs.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Media Card 1: Vande Mataram -->
+                <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="h-48 bg-slate-900 relative flex items-center justify-center text-white">
+                        <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://placehold.co/600x400/1e3a8a/ffffff?text=Vande+Mataram')"></div>
+                        <button onclick="openVideoModal('Vande Mataram', 'Official National Song rendition. Commemorating our rich heritage and patriotism.')" class="relative z-10 w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 flex items-center justify-center shadow-lg transition transform hover:scale-105">
+                            <i class="fa-solid fa-play text-xl ml-1"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full">National Anthem</span>
+                        <h3 class="font-bold text-lg text-slate-900 mt-2">Vande Mataram Rendition</h3>
+                        <p class="text-slate-600 text-xs mt-1">Full orchestral and vocal recording for morning assembly and national celebrations.</p>
+                    </div>
+                </div>
+
+                <!-- Media Card 2: Jana Gana Mana -->
+                <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="h-48 bg-slate-900 relative flex items-center justify-center text-white">
+                        <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://placehold.co/600x400/1e40af/ffffff?text=Jana+Gana+Mana')"></div>
+                        <button onclick="openVideoModal('Jana Gana Mana', 'National Anthem of India. Standard version for daily school assembly.')" class="relative z-10 w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 flex items-center justify-center shadow-lg transition transform hover:scale-105">
+                            <i class="fa-solid fa-play text-xl ml-1"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full">National Anthem</span>
+                        <h3 class="font-bold text-lg text-slate-900 mt-2">Jana Gana Mana</h3>
+                        <p class="text-slate-600 text-xs mt-1">Official standardized audio recording for daily morning assembly.</p>
+                    </div>
+                </div>
+
+                <!-- Media Card 3: School Prayer & Campus -->
+                <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="h-48 bg-slate-900 relative flex items-center justify-center text-white">
+                        <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://placehold.co/600x400/0f172a/ffffff?text=School+Prayer')"></div>
+                        <button onclick="openVideoModal('School Morning Prayer & Campus Highlights', 'Compilation of morning prayers, yoga sessions, and campus tour footage.')" class="relative z-10 w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 flex items-center justify-center shadow-lg transition transform hover:scale-105">
+                            <i class="fa-solid fa-play text-xl ml-1"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">Campus & Prayer</span>
+                        <h3 class="font-bold text-lg text-slate-900 mt-2">Daily Prayer & Campus Video</h3>
+                        <p class="text-slate-600 text-xs mt-1">Video documentary featuring school morning assembly, prayer songs, and campus walkthrough.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculator & Utility Section -->
+        <section id="calculator" class="py-16 bg-slate-100 border-t border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Utility Tools</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-2">Interactive School Calculator</h2>
+                    <p class="text-slate-600 text-sm mt-2">Perform quick academic grading estimations or financial fee breakdown calculations.</p>
+                </div>
+
+                <div class="max-w-xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200">
+                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                        <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-blue-700"></i> Percentage & Grade Estimator
+                        </h3>
+                        <span class="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-semibold">Tool #1</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Total Marks Obtained</label>
+                            <input type="number" id="marksObtained" value="425" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Maximum Total Marks</label>
+                            <input type="number" id="marksTotal" value="500" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                        </div>
+                        <button onclick="calculateGrade()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition">
+                            Calculate Percentage & Grade
+                        </button>
+                        <div id="calcResult" class="hidden mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-center">
+                            <p class="text-xs text-slate-500 uppercase font-bold">Estimated Result</p>
+                            <h4 id="resultText" class="text-xl font-extrabold text-blue-900 mt-1">85.0% • Grade: AA (Outstanding)</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Retirement Celebration Hub Section -->
+        <section id="retirement" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-8 md:p-12 text-slate-950 shadow-xl relative overflow-hidden">
+                <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-10 translate-y-10">
+                    <i class="fa-solid fa-award text-9xl"></i>
+                </div>
+                <div class="max-w-2xl relative z-10 space-y-4">
+                    <span class="bg-slate-950 text-amber-400 text-xs font-extrabold uppercase px-3 py-1 rounded-full">Special Tribute Hub</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">Retirement Celebration & Farewells</h2>
+                    <p class="text-slate-900 text-base font-medium leading-relaxed">
+                        Honoring our esteemed teachers and staff members who have dedicated decades of service to shape generations of students. Explore farewell photo galleries, tribute messages, and event schedules.
+                    </p>
+                    <div class="pt-4 flex flex-wrap gap-4">
+                        <button onclick="openDocModal('Retirement Celebration Gallery & Tributes', 'Special tribute album honoring retiring faculty members. Includes farewell speeches, photo collages, and souvenir book downloads.')" class="bg-slate-950 hover:bg-slate-900 text-white font-bold px-6 py-3 rounded-xl shadow transition flex items-center gap-2">
+                            <i class="fa-solid fa-images"></i> View Farewell Gallery
+                        </button>
+                        <button onclick="openDocModal('Send a Farewell Message', 'Digital guestbook for posting heartfelt messages and wishes for retiring staff members.')" class="bg-white/20 hover:bg-white/30 border border-slate-950/20 text-slate-950 font-bold px-6 py-3 rounded-xl backdrop-blur transition flex items-center gap-2">
+                            <i class="fa-solid fa-pen-to-square"></i> Leave a Tribute Message
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Professional Footer -->
+    <footer class="bg-slate-900 text-slate-400 pt-16 pb-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+                <!-- Col 1: Brand -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl hero-gradient flex items-center justify-center text-white shadow">
+                            <i class="fa-solid fa-graduation-cap text-xl text-amber-400"></i>
+                        </div>
+                        <span class="text-white font-bold text-lg tracking-tight">TFHS PORTAL</span>
+                    </div>
+                    <p class="text-sm text-slate-400 max-w-sm leading-relaxed">
+                        Providing a secure, professional, and accessible digital ecosystem for students, teachers, and staff members of the institution.
+                    </p>
+                    <div class="flex items-center space-x-3 text-lg">
+                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-blue-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-blue-400 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-twitter text-sm"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-red-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-youtube text-sm"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-blue-700 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-linkedin-in text-sm"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Quick Links -->
+                <div>
+                    <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Navigation</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" onclick="showSection('home')" class="hover:text-white transition">Home Page</a></li>
+                        <li><a href="#notices" onclick="showSection('notices')" class="hover:text-white transition">Digital Notice Board</a></li>
+                        <li><a href="#staff" onclick="showSection('staff')" class="hover:text-white transition">Staff Applications</a></li>
+                        <li><a href="#media" onclick="showSection('media')" class="hover:text-white transition">Anthems & Media</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Resources -->
+                <div>
+                    <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#calculator" class="hover:text-white transition">Academic Calculator</a></li>
+                        <li><a href="#retirement" class="hover:text-white transition">Retirement Hub</a></li>
+                        <li><a href="#" onclick="openDocModal('Google Drive Repository', 'Direct link to institutional Google Drive repository.')" class="hover:text-white transition">Google Drive Cloud</a></li>
+                        <li><a href="#" onclick="openDocModal('Government Circulars Archive', 'State board and education ministry official directives.')" class="hover:text-white transition">Govt. Orders</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Contact -->
+                <div>
+                    <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-amber-500"></i> <span>Official School Campus, West Bengal, India</span></li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-envelope text-amber-500"></i> <span>portal@tfhs.edu.in</span></li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-phone text-amber-500"></i> <span>+91 (033) 2345-6789</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+                <p>&copy; 2026 TFHS Portal. All rights reserved. Designed for professional academic excellence.</p>
+                <div class="flex space-x-6 mt-4 sm:mt-0">
+                    <a href="#" onclick="openDocModal('Privacy Policy', 'Standard privacy and data protection policy for portal users.')" class="hover:underline">Privacy Policy</a>
+                    <a href="#" onclick="openDocModal('Terms of Use', 'Terms and conditions for utilizing the institutional portal resources.')" class="hover:underline">Terms of Use</a>
+                    <a href="#" onclick="openDocModal('Administrator Help', 'Contact admin desk for login or access issues.')" class="hover:underline">Admin Help</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Document / Notice Modal -->
+    <div id="docModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 md:p-8 shadow-2xl border border-slate-200 transform transition-all">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2 text-blue-700">
+                    <i class="fa-solid fa-file-shield text-xl"></i>
+                    <span class="text-xs font-bold uppercase tracking-wider bg-blue-100 px-2.5 py-1 rounded-full">Official Notice Viewer</span>
+                </div>
+                <button onclick="closeDocModal()" class="text-slate-400 hover:text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <h3 id="modalTitle" class="text-xl font-bold text-slate-900 mb-2">Notice Title</h3>
+            <p id="modalContent" class="text-slate-600 text-sm leading-relaxed mb-6">Detailed text description...</p>
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <button onclick="closeDocModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition">Close</button>
+                <button onclick="simulateDownload()" class="px-5 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-sm font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i> Download / Open Drive
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Search Modal (Ctrl+K) -->
+    <div id="searchModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start justify-center pt-20 p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-3 w-full">
+                    <i class="fa-solid fa-search text-blue-700 text-lg"></i>
+                    <input type="text" id="modalSearchInput" onkeyup="globalSearch()" placeholder="Type to search all notices, calculators, staff forms..." class="w-full text-base font-medium focus:outline-none text-slate-800">
+                </div>
+                <button onclick="closeSearchModal()" class="text-slate-400 hover:text-slate-700 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="searchResults" class="space-y-2 max-h-60 overflow-y-auto text-sm">
+                <p class="text-xs text-slate-400 text-center py-4">Start typing to search across all portal resources...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
         });
-    }
 
-    /* --- ROPA-1998 TIMELINE COMPUTATION --- */
-    function computeRopa98Timeline(doj, optionDate, scaleKey, initialBasicPay, endDate, promotionDate, promotionTargetGp, evType) {
-        let ladder = matrixData98[scaleKey] || [];
-        let currentScaleKey = scaleKey;
-        let events = [];
-        function pushEvent(dateObj, data) { events.push({ date: new Date(dateObj), ...data }); }
-
-        const lwpEntries98 = getLwpEffectEntries();
-
-        pushEvent(optionDate, { label: "DOA / PAY FIXATION", isInitial: true });
-
-        const optionMonth = optionDate.getMonth();
-        const isEligible18Y = eligibleFor18YScaleChange98.includes(scaleKey);
-
-        const promotionActive98 = (promotionDate instanceof Date && !isNaN(promotionDate) && promotionDate >= optionDate && promotionDate <= endDate);
-        if (promotionActive98) {
-            pushEvent(promotionDate, { label: evType === 'promo' ? "PROMOTION" : "HIGHER SCALE", isPromotion: true, targetGp: promotionTargetGp });
+        function toggleMobileMenu() {
+            mobileMenu.classList.add('hidden');
         }
 
-        let milestoneDefs = [
-            { d: new Date(doj.getFullYear() + 10, doj.getMonth(), doj.getDate()), name: "10 YEARS - ADDL. INCREMENT", type: "10Y" },
-            { d: new Date(doj.getFullYear() + 18, doj.getMonth(), doj.getDate()), name: "18 YEARS - SCALE CHANGE", type: "18Y" },
-            { d: new Date(doj.getFullYear() + 20, doj.getMonth(), doj.getDate()), name: "20 YEARS - ADDL. INCREMENT", type: "20Y" }
-        ];
-        if (!isEligible18Y) milestoneDefs = milestoneDefs.filter(m => m.type !== "18Y");
-        milestoneDefs = milestoneDefs.map(m => ({ ...m, d: resolveRopa98MilestoneDate(m.d, lwpEntries98) }))
-                                      .filter(m => m.d >= optionDate && m.d <= endDate);
-        milestoneDefs.forEach(m => pushEvent(m.d, { label: m.name, isMilestone: true, milestoneType: m.type }));
-
-        function vestingExtendedNextDate(milestoneDate) {
-            const y = milestoneDate.getFullYear() + 1, m = milestoneDate.getMonth(), d = milestoneDate.getDate();
-            if (d === 1) return new Date(y, m, 1);
-            const vestEnd = new Date(y, m + 1, 0);
-            const next = new Date(vestEnd);
-            next.setDate(next.getDate() + 1);
-            return next;
-        }
-
-        let lwpConsumedSoFar98 = 0;
-
-        if (promotionActive98) {
-            // 1. Pre-promotion annual increments (based on optionMonth)
-            let loopYear = optionDate.getFullYear() + 1;
-            while (loopYear <= promotionDate.getFullYear()) {
-                let normalCycleDate = new Date(loopYear, optionMonth, 1);
-                if (normalCycleDate < promotionDate) {
-                    let cumulativeLwp98 = lwpDaysAppliedBy(lwpEntries98, normalCycleDate);
-                    let newLwpThisCycle98 = Math.max(0, cumulativeLwp98 - lwpConsumedSoFar98);
-                    let incrementDate = newLwpThisCycle98 > 0 ? addDays(normalCycleDate, newLwpThisCycle98) : new Date(normalCycleDate);
-                    lwpConsumedSoFar98 = cumulativeLwp98;
-                    if (incrementDate >= optionDate && incrementDate < promotionDate) {
-                        pushEvent(incrementDate, { label: "INCREMENT", isAnnual: true });
-                    }
-                }
-                loopYear++;
-            }
-
-            // 2. Post-promotion annual increments (based on promotionDate month as per ROPA-98 Rule)
-            let promoMonth = promotionDate.getMonth();
-            let postLoopYear = promotionDate.getFullYear() + 1;
-            while (postLoopYear <= endDate.getFullYear() + 1) {
-                let normalCycleDate = new Date(postLoopYear, promoMonth, 1);
-                let priorCycleDate = new Date(postLoopYear - 1, promoMonth, 1);
-                let interveningMilestone = milestoneDefs.find(m => m.d >= priorCycleDate && m.d < normalCycleDate);
-                let cumulativeLwp98 = lwpDaysAppliedBy(lwpEntries98, normalCycleDate);
-                let newLwpThisCycle98 = Math.max(0, cumulativeLwp98 - lwpConsumedSoFar98);
-                let incrementDate;
-                if (interveningMilestone) {
-                    incrementDate = vestingExtendedNextDate(interveningMilestone.d);
-                    if (incrementDate < normalCycleDate) incrementDate = newLwpThisCycle98 > 0 ? addDays(normalCycleDate, newLwpThisCycle98) : new Date(normalCycleDate);
-                } else {
-                    incrementDate = newLwpThisCycle98 > 0 ? addDays(normalCycleDate, newLwpThisCycle98) : new Date(normalCycleDate);
-                }
-                lwpConsumedSoFar98 = cumulativeLwp98;
-                if (incrementDate > promotionDate && incrementDate <= endDate) {
-                    pushEvent(incrementDate, { label: "INCREMENT", isAnnual: true });
-                }
-                postLoopYear++;
-            }
-        } else {
-            // No promotion: standard annual increments based on optionMonth
-            let loopYear = optionDate.getFullYear() + 1;
-            while (loopYear <= endDate.getFullYear() + 1) {
-                let normalCycleDate = new Date(loopYear, optionMonth, 1);
-                let priorCycleDate = new Date(loopYear - 1, optionMonth, 1);
-                let interveningMilestone = milestoneDefs.find(m => m.d >= priorCycleDate && m.d < normalCycleDate);
-                let cumulativeLwp98 = lwpDaysAppliedBy(lwpEntries98, normalCycleDate);
-                let newLwpThisCycle98 = Math.max(0, cumulativeLwp98 - lwpConsumedSoFar98);
-                let incrementDate;
-                if (interveningMilestone) {
-                    incrementDate = vestingExtendedNextDate(interveningMilestone.d);
-                    if (incrementDate < normalCycleDate) incrementDate = newLwpThisCycle98 > 0 ? addDays(normalCycleDate, newLwpThisCycle98) : new Date(normalCycleDate);
-                } else {
-                    incrementDate = newLwpThisCycle98 > 0 ? addDays(normalCycleDate, newLwpThisCycle98) : new Date(normalCycleDate);
-                }
-                lwpConsumedSoFar98 = cumulativeLwp98;
-                if (incrementDate >= optionDate && incrementDate <= endDate) {
-                    pushEvent(incrementDate, { label: "INCREMENT", isAnnual: true });
-                }
-                loopYear++;
+        // Section navigation helper
+        function showSection(sectionId) {
+            const el = document.getElementById(sectionId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
             }
         }
 
-        sortTimelineEvents(events);
+        // Notice Filtering Logic
+        function filterNotices(category) {
+            const cards = document.querySelectorAll('.notice-card');
+            const buttons = document.querySelectorAll('#filterTabs button');
 
-        let compiledRows = [];
-        let runningBasicPay = initialBasicPay;
-        let idx = ladder.indexOf(initialBasicPay);
-        if (idx === -1) {
-            idx = ladder.findIndex(v => v >= initialBasicPay);
-            if (idx === -1) idx = ladder.length - 1;
-        }
-
-        events.forEach(ev => {
-            if (ev.isPromotion) {
-                let preChangeBasic = runningBasicPay;
-                if (evType === 'promo') {
-                    if (idx < ladder.length - 1) idx += 1;
-                    preChangeBasic = ladder[idx];
-                }
-                let newScaleKey = ev.targetGp;
-                let newLadder = matrixData98[newScaleKey] || ladder;
-                let newIdx = newLadder.findIndex(v => v >= preChangeBasic);
-                if (newIdx === -1) newIdx = newLadder.length - 1;
-                if (newLadder[newIdx] < newLadder[0]) newIdx = 0;
-                currentScaleKey = newScaleKey;
-                ladder = newLadder;
-                idx = newIdx;
-                runningBasicPay = ladder[idx];
-            } else if (ev.isAnnual) {
-                if (idx < ladder.length - 1) idx += 1;
-                runningBasicPay = ladder[idx];
-            } else if (ev.isMilestone) {
-                if (ev.milestoneType === "10Y" || ev.milestoneType === "20Y") {
-                    if (idx < ladder.length - 1) idx += 1;
-                    runningBasicPay = ladder[idx];
-                } else if (ev.milestoneType === "18Y") {
-                    if (idx < ladder.length - 1) idx += 1;
-                    let preChangeBasic = ladder[idx];
-                    let newScaleKey = promoMap09[currentScaleKey] || currentScaleKey;
-                    let newLadder = matrixData98[newScaleKey] || ladder;
-                    let newIdx = newLadder.findIndex(v => v >= preChangeBasic);
-                    if (newIdx === -1) newIdx = newLadder.length - 1;
-                    if (newLadder[newIdx] < newLadder[0]) newIdx = 0;
-                    currentScaleKey = newScaleKey;
-                    ladder = newLadder;
-                    idx = newIdx;
-                    runningBasicPay = ladder[idx];
-                }
-            }
-            compiledRows.push({
-                date: ev.date,
-                label: ev.label,
-                scaleStr: `Old Scale &rarr; GP ${currentScaleKey}`,
-                trackCol: '',
-                gpDisplay: '',
-                basicDisplay: runningBasicPay.toLocaleString('en-IN'),
-                slipHTML: '',
-                snapBasicPay: runningBasicPay,
-                snapScaleKey: currentScaleKey
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-blue-700', 'text-white', 'shadow');
+                btn.classList.add('bg-white', 'border', 'border-slate-200', 'text-slate-700');
             });
-        });
+            event.target.classList.remove('bg-white', 'border', 'border-slate-200', 'text-slate-700');
+            event.target.classList.add('bg-blue-700', 'text-white', 'shadow');
 
-        finalizeDot(compiledRows, endDate);
-        return { rows: compiledRows, finalScaleKey: currentScaleKey };
-    }
-
-    /* --- ROPA-2009 TIMELINE COMPUTATION --- */
-    function computeRopa09Timeline(doj, optionDate, gpInput, initialBandPay, endDate, promotionDate, promotionTargetGp, evType) {
-        let events = [];
-        function pushEvent(dateObj, data) { events.push({ date: new Date(dateObj), ...data }); }
-
-        pushEvent(optionDate, { label: "DOA / PAY REVISION", isInitial: true, exactMilestoneDate: optionDate });
-
-        const lwpEntries09 = getLwpEffectEntries();
-
-        const promotionActive = (promotionDate instanceof Date && !isNaN(promotionDate) && promotionDate >= optionDate && promotionDate <= endDate);
-        if (promotionActive) {
-            pushEvent(promotionDate, { label: evType === 'promo' ? "PROMOTION" : "HIGHER SCALE", isPromotion: true, targetGp: promotionTargetGp, exactPromotionDate: promotionDate });
-        }
-
-        const isExcludedFrom18Y = [4700, 4800, 5400].includes(gpInput);
-        const eligibleFor18YScaleChange = [1700, 2600, 3900, 4100].includes(gpInput);
-
-        let milestoneDefs09 = [
-            { d: new Date(doj.getFullYear() + 10, doj.getMonth(), doj.getDate()), name: "10 YEARS" },
-            { d: new Date(doj.getFullYear() + 18, doj.getMonth(), doj.getDate()), name: "18 YEARS" },
-            { d: new Date(doj.getFullYear() + 20, doj.getMonth(), doj.getDate()), name: "20 YEARS" }
-        ];
-        if (isExcludedFrom18Y) milestoneDefs09 = milestoneDefs09.filter(m => m.name !== "18 YEARS");
-
-        let lwpConsumedSoFar09 = 0;
-        let prevCycleBoundary09 = optionDate;
-
-        if (promotionActive) {
-            // 1. Pre-promotion annual increments (01-July prior to promotionDate)
-            let firstIncrementYear = optionDate.getFullYear();
-            let optionDay = optionDate.getDate();
-            let optionMonth = optionDate.getMonth();
-            if ((optionMonth === 0 && optionDay >= 2) || (optionMonth > 0 && optionMonth < 5) || (optionMonth === 5 && optionDay <= 30)) {
-                firstIncrementYear += 1;
-            }
-
-            let loopYear = firstIncrementYear;
-            while (loopYear <= promotionDate.getFullYear()) {
-                let julDate = new Date(loopYear, 6, 1);
-                if (julDate < promotionDate) {
-                    let interveningMilestone09 = milestoneDefs09.find(m => m.d >= prevCycleBoundary09 && m.d < julDate);
-                    let cumulativeLwp09 = lwpDaysAppliedBy(lwpEntries09, julDate);
-                    let resolved = interveningMilestone09 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp09, lwpConsumedSoFar09);
-                    lwpConsumedSoFar09 = cumulativeLwp09;
-                    if (resolved.date >= optionDate && resolved.date < promotionDate) {
-                        pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
-                    }
-                    prevCycleBoundary09 = julDate;
-                }
-                loopYear++;
-            }
-
-            // 2. Post-promotion annual increments (01-July calculated WRT promotionDate as per ROPA Rules)
-            // If promotion is on Jan 1: service on July 1st is 6 months -> next increment is July 1st of promotion year.
-            // If promotion is between Jan 2 and Dec 31: service on July 1st is < 6 months (or after July 1st) -> next increment is July 1st of NEXT year.
-            let postPromoStartYear = (promotionDate.getMonth() === 0 && promotionDate.getDate() === 1) ? promotionDate.getFullYear() : promotionDate.getFullYear() + 1;
-            let postLoopYear = postPromoStartYear;
-            prevCycleBoundary09 = promotionDate;
-
-            while (postLoopYear <= endDate.getFullYear()) {
-                let julDate = new Date(postLoopYear, 6, 1);
-                let interveningMilestone09 = milestoneDefs09.find(m => m.d >= prevCycleBoundary09 && m.d < julDate);
-                let cumulativeLwp09 = lwpDaysAppliedBy(lwpEntries09, julDate);
-                let resolved = interveningMilestone09 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp09, lwpConsumedSoFar09);
-                lwpConsumedSoFar09 = cumulativeLwp09;
-                if (resolved.date > promotionDate && resolved.date <= endDate) {
-                    pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
-                }
-                prevCycleBoundary09 = julDate;
-                postLoopYear++;
-            }
-        } else {
-            // No promotion: standard annual increments
-            let firstIncrementYear = optionDate.getFullYear();
-            let optionDay = optionDate.getDate();
-            let optionMonth = optionDate.getMonth();
-            if ((optionMonth === 0 && optionDay >= 2) || (optionMonth > 0 && optionMonth < 5) || (optionMonth === 5 && optionDay <= 30)) {
-                firstIncrementYear += 1;
-            }
-
-            let loopYear = firstIncrementYear;
-            while (loopYear <= endDate.getFullYear()) {
-                let julDate = new Date(loopYear, 6, 1);
-                let interveningMilestone09 = milestoneDefs09.find(m => m.d >= prevCycleBoundary09 && m.d < julDate);
-                let cumulativeLwp09 = lwpDaysAppliedBy(lwpEntries09, julDate);
-                let resolved = interveningMilestone09 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp09, lwpConsumedSoFar09);
-                lwpConsumedSoFar09 = cumulativeLwp09;
-                if (resolved.date >= optionDate && resolved.date <= endDate) {
-                    pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
-                }
-                prevCycleBoundary09 = julDate;
-                loopYear++;
-            }
-        }
-
-        milestoneDefs09.forEach(milestone => {
-            if (milestone.d >= optionDate) {
-                let resolved = resolveDateWithLwp(milestone.d, lwpEntries09);
-                if (resolved.date <= endDate) {
-                    pushEvent(resolved.date, { label: milestone.name, isMilestone: true, exactMilestoneDate: milestone.d, win: resolved.win, isLwpDeferred: resolved.lwpShifted, notionalDate: resolved.win === 'A' ? new Date(milestone.d.getFullYear(), 6, 1) : milestone.d });
-                }
-            }
-        });
-
-        sortTimelineEvents(events);
-
-        let compiledRows = [];
-        let runningBandPay = initialBandPay;
-        let runningGp = gpInput;
-        let runningBasicPay = initialBandPay + gpInput;
-
-        events.forEach(ev => {
-            let colScaleStr = `${pbMap09[runningGp] || ''}-GP-${runningGp}`;
-            let slipBlockHTML = "";
-            let existingBandPay = runningBandPay;
-            let existingGp = runningGp;
-            let incAmt = 0;
-            let lwpNote = ev.isLwpDeferred ? `<div class="slip-row" style="color:#c2410c;"><span>LWP (non-medical, G.O. 181-SE(B) Dt. 8.10.2009)</span><span>Notional date ${formatDate(ev.notionalDate)}; financial benefit deferred to ${formatDate(ev.date)}</span></div>` : '';
-
-            if (ev.isInitial) {
-                // Staging index row
-            } else if (ev.isPromotion) {
-                let oldGp = runningGp;
-                runningGp = ev.targetGp;
-                
-                if (evType === 'promo') {
-                    incAmt = calculate09Increment(runningBandPay, oldGp);
-                    runningBandPay += incAmt;
-                    runningBasicPay = runningBandPay + runningGp;
-                    slipBlockHTML = `
-                        <div class="slip-box">
-                            <div class="slip-row"><span class="slip-bold">1. Existing Pay on ${formatDate(ev.date)}</span><span>BP: Rs. ${existingBandPay.toLocaleString('en-IN')}, GP: Rs. ${oldGp.toLocaleString('en-IN')}</span></div>
-                            <div class="slip-row"><span>2.a) One Additional Increment in Existing Scale</span><span>Rs. ${incAmt.toLocaleString('en-IN')}</span></div>
-                            <div class="slip-row"><span>&nbsp;&nbsp;&nbsp;b) Grade Pay changed to promoted post</span><span>Rs. ${oldGp.toLocaleString('en-IN')} &rarr; Rs. ${runningGp.toLocaleString('en-IN')}</span></div>
-                            <div class="slip-row"><span class="slip-bold">&nbsp;&nbsp;&nbsp;c) Pay Fixed on Promotion w.e.f ${formatDate(ev.date)}</span><span class="slip-bold">Rs. ${runningBasicPay.toLocaleString('en-IN')}</span></div>
-                        </div>`;
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
                 } else {
-                    const floorBand = minEntryPayBand09[runningGp] || 0;
-                    if (runningBandPay < floorBand) {
-                        runningBandPay = floorBand;
-                    }
-                    runningBasicPay = runningBandPay + runningGp;
-                    slipBlockHTML = `
-                        <div class="slip-box">
-                            <div class="slip-row"><span class="slip-bold">1. Existing Pay on ${formatDate(ev.date)}</span><span>BP: Rs. ${existingBandPay.toLocaleString('en-IN')}, GP: Rs. ${oldGp.toLocaleString('en-IN')}</span></div>
-                            <div class="slip-row"><span>2. Fitted directly into Higher Scale GP ${runningGp.toLocaleString('en-IN')} (No promotional increment)</span><span>&mdash;</span></div>
-                            <div class="slip-row"><span class="slip-bold">3. Fixed Basic Pay w.e.f ${formatDate(ev.date)}</span><span class="slip-bold">Rs. ${runningBasicPay.toLocaleString('en-IN')}</span></div>
-                        </div>`;
+                    card.style.display = 'none';
                 }
-            } else if (ev.isAnnual) {
-                incAmt = calculate09Increment(runningBandPay, runningGp);
-                runningBandPay += incAmt;
-                runningBasicPay = runningBandPay + runningGp;
-                if (ev.isLwpDeferred) {
-                    slipBlockHTML = `<div class="slip-box">${lwpNote}</div>`;
-                }
-            } else if (ev.isMilestone) {
-                incAmt = calculate09Increment(runningBandPay, runningGp);
-                runningBandPay += incAmt;
-                if (ev.label === "18 YEARS" && eligibleFor18YScaleChange && promoMap09[runningGp]) {
-                    runningGp = promoMap09[runningGp];
-                }
-                runningBasicPay = runningBandPay + runningGp;
-
-                slipBlockHTML = `
-                    <div class="slip-box">
-                        <div class="slip-row"><span class="slip-bold">1. Existing Pay on ${formatDate(ev.exactMilestoneDate)}</span><span>BP: Rs. ${existingBandPay.toLocaleString('en-IN')}, GP: Rs. ${existingGp.toLocaleString('en-IN')}</span></div>
-                        <div class="slip-row"><span>2.a) Allowed Normal Increment</span><span>${ev.win === 'A' ? 'Stacked July' : 'Nil'}</span></div>
-                        <div class="slip-row"><span>&nbsp;&nbsp;&nbsp;b) Additional Increment for ${ev.label} Service</span><span>Rs. ${incAmt.toLocaleString('en-IN')}</span></div>
-                        <div class="slip-row"><span class="slip-bold">&nbsp;&nbsp;&nbsp;c) Pay Fixed w.e.f ${formatDate(ev.date)}</span><span class="slip-bold">Rs. ${runningBasicPay.toLocaleString('en-IN')}</span></div>
-                        ${lwpNote}
-                    </div>`;
-            }
-
-            compiledRows.push({
-                date: ev.date,
-                label: ev.label,
-                scaleStr: colScaleStr,
-                trackCol: runningBandPay.toLocaleString('en-IN'),
-                gpDisplay: runningGp.toLocaleString('en-IN'),
-                basicDisplay: runningBasicPay.toLocaleString('en-IN'),
-                slipHTML: slipBlockHTML,
-                snapBandPay: runningBandPay,
-                snapGp: runningGp
             });
-        });
-
-        finalizeDot(compiledRows, endDate);
-        return { rows: compiledRows };
-    }
-
-    /* --- ROPA-2019 TIMELINE COMPUTATION --- */
-    function computeRopa19Timeline(doj, startDate, gpInput, levelInput, basicInput, dor, promotionDate, promotionTargetGp, evType) {
-        let events = [];
-        function pushEvent(dateObj, data) { events.push({ date: new Date(dateObj), ...data }); }
-
-        pushEvent(startDate, { label: "ROPA-19 OPTION / FITMENT", isInitial: true, exactMilestoneDate: startDate });
-
-        const lwpEntries19 = getLwpEffectEntries();
-
-        const promotionActive = (promotionDate instanceof Date && !isNaN(promotionDate) && promotionDate >= startDate && promotionDate <= dor);
-        if (promotionActive) {
-            pushEvent(promotionDate, { label: evType === 'promo' ? "PROMOTION" : "HIGHER SCALE", isPromotion: true, targetGp: promotionTargetGp, exactPromotionDate: promotionDate });
         }
 
-        const isExcludedFrom18Y = [4700, 4800, 5400].includes(gpInput);
-        const eligibleFor18YScaleChange = [1700, 2600, 3900, 4100].includes(gpInput);
+        // Notice Search Bar in Section
+        function searchNotices() {
+            const query = document.getElementById('noticeSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.notice-card');
 
-        let milestoneDefs19 = [
-            { d: new Date(doj.getFullYear() + 10, doj.getMonth(), doj.getDate()), name: "10 YEARS" },
-            { d: new Date(doj.getFullYear() + 18, doj.getMonth(), doj.getDate()), name: "18 YEARS" },
-            { d: new Date(doj.getFullYear() + 20, doj.getMonth(), doj.getDate()), name: "20 YEARS" }
-        ];
-        if (isExcludedFrom18Y) milestoneDefs19 = milestoneDefs19.filter(m => m.name !== "18 YEARS");
-
-        let lwpConsumedSoFar19 = 0;
-        let prevCycleBoundary19 = startDate;
-
-        if (promotionActive) {
-            // 1. Pre-promotion annual increments (01-July prior to promotionDate)
-            let firstIncrementYear = startDate.getFullYear();
-            let optionDay = startDate.getDate();
-            let optionMonth = startDate.getMonth();
-            if ((optionMonth === 0 && optionDay >= 2) || (optionMonth > 0 && optionMonth < 5) || (optionMonth === 5 && optionDay <= 30)) {
-                firstIncrementYear += 1;
-            }
-
-            let loopYear = firstIncrementYear;
-            while (loopYear <= promotionDate.getFullYear()) {
-                let julDate = new Date(loopYear, 6, 1);
-                if (julDate < promotionDate) {
-                    let interveningMilestone19 = milestoneDefs19.find(m => m.d >= prevCycleBoundary19 && m.d < julDate);
-                    let cumulativeLwp19 = lwpDaysAppliedBy(lwpEntries19, julDate);
-                    let resolved = interveningMilestone19 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp19, lwpConsumedSoFar19);
-                    lwpConsumedSoFar19 = cumulativeLwp19;
-                    if (resolved.date >= startDate && resolved.date < promotionDate) {
-                        pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
-                    }
-                    prevCycleBoundary19 = julDate;
-                }
-                loopYear++;
-            }
-
-            // 2. Post-promotion annual increments (01-July calculated WRT promotionDate as per ROPA Rules)
-            let postPromoStartYear = (promotionDate.getMonth() === 0 && promotionDate.getDate() === 1) ? promotionDate.getFullYear() : promotionDate.getFullYear() + 1;
-            let postLoopYear = postPromoStartYear;
-            prevCycleBoundary19 = promotionDate;
-
-            while (postLoopYear <= dor.getFullYear()) {
-                let julDate = new Date(postLoopYear, 6, 1);
-                let interveningMilestone19 = milestoneDefs19.find(m => m.d >= prevCycleBoundary19 && m.d < julDate);
-                let cumulativeLwp19 = lwpDaysAppliedBy(lwpEntries19, julDate);
-                let resolved = interveningMilestone19 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp19, lwpConsumedSoFar19);
-                lwpConsumedSoFar19 = cumulativeLwp19;
-                if (resolved.date > promotionDate && resolved.date <= dor) {
-                    pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
-                }
-                prevCycleBoundary19 = julDate;
-                postLoopYear++;
-            }
-        } else {
-            // No promotion: standard annual increments
-            let firstIncrementYear = startDate.getFullYear();
-            let optionDay = startDate.getDate();
-            let optionMonth = startDate.getMonth();
-            if ((optionMonth === 0 && optionDay >= 2) || (optionMonth > 0 && optionMonth < 5) || (optionMonth === 5 && optionDay <= 30)) {
-                firstIncrementYear += 1;
-            }
-
-            let loopYear = firstIncrementYear;
-            while (loopYear <= dor.getFullYear()) {
-                let julDate = new Date(loopYear, 6, 1);
-                let interveningMilestone19 = milestoneDefs19.find(m => m.d >= prevCycleBoundary19 && m.d < julDate);
-                let cumulativeLwp19 = lwpDaysAppliedBy(lwpEntries19, julDate);
-                let resolved = interveningMilestone19 ? { date: new Date(julDate), lwpShifted: false } : resolveAnnualIncrementWithLwp(julDate, cumulativeLwp19, lwpConsumedSoFar19);
-                lwpConsumedSoFar19 = cumulativeLwp19;
-                if (resolved.date >= startDate && resolved.date <= dor) {
-                    pushEvent(resolved.date, { label: "INCREMENT", isAnnual: true, isLwpDeferred: resolved.lwpShifted, notionalDate: julDate });
-                }
-                prevCycleBoundary19 = julDate;
-                loopYear++;
-            }
-        }
-
-        milestoneDefs19.forEach(milestone => {
-            if (milestone.d >= startDate) {
-                let resolved = resolveDateWithLwp(milestone.d, lwpEntries19);
-                if (resolved.date <= dor) {
-                    pushEvent(resolved.date, { label: milestone.name, isMilestone: true, exactMilestoneDate: milestone.d, win: resolved.win, isLwpDeferred: resolved.lwpShifted, notionalDate: resolved.win === 'A' ? new Date(milestone.d.getFullYear(), 6, 1) : milestone.d });
-                }
-            }
-        });
-
-        sortTimelineEvents(events);
-
-        let compiledRows = [];
-        let runningBasicPay = basicInput;
-        let runningGp = gpInput;
-        let runningLevel = levelInput;
-
-        events.forEach(ev => {
-            let cellData = findCell19(runningLevel, runningBasicPay);
-            let colScaleStr = "";
-            let colTrackingInfo = "";
-            let slipBlockHTML = "";
-            let existingBasic = runningBasicPay;
-            let existingLevel = runningLevel;
-            let lwpNote = ev.isLwpDeferred ? `<div class="slip-row" style="color:#c2410c;"><span>LWP (non-medical, G.O. 181-SE(B) Dt. 8.10.2009)</span><span>Notional date ${formatDate(ev.notionalDate)}; financial benefit deferred to ${formatDate(ev.date)}</span></div>` : '';
-
-            if (ev.isInitial) {
-                colTrackingInfo = cellData.cell;
-            } else if (ev.isPromotion) {
-                let oldLevel = runningLevel;
-                let oldGp = runningGp;
-                let targetLevel = levelMap19[ev.targetGp] || runningLevel;
-                
-                if (evType === 'promo') {
-                    let oneStepValue = matrixData19[runningLevel][cellData.index + 1] || runningBasicPay;
-                    let fitted = findCell19(targetLevel, oneStepValue);
-                    runningLevel = targetLevel;
-                    runningGp = ev.targetGp;
-                    runningBasicPay = fitted.value;
-                    colTrackingInfo = fitted.cell;
-                    slipBlockHTML = `
-                        <div class="slip-box">
-                            <div class="slip-row"><span class="slip-bold">1. Existing Pay Matrix Cell on ${formatDate(ev.date)}</span><span>Rs. ${existingBasic.toLocaleString('en-IN')} (L-${oldLevel}, GP ${oldGp.toLocaleString('en-IN')})</span></div>
-                            <div class="slip-row"><span>2.a) One Increment within Existing Level ${oldLevel}</span><span>Rs. ${oneStepValue.toLocaleString('en-IN')}</span></div>
-                            <div class="slip-row"><span>&nbsp;&nbsp;&nbsp;b) Fitted into Target Level ${targetLevel} (equal/next-higher cell)</span><span>&mdash;</span></div>
-                            <div class="slip-row"><span class="slip-bold">&nbsp;&nbsp;&nbsp;c) Pay Fixed on Promotion w.e.f ${formatDate(ev.date)}</span><span class="slip-bold">Rs. ${runningBasicPay.toLocaleString('en-IN')} (${fitted.cell})</span></div>
-                        </div>`;
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    card.style.display = 'flex';
                 } else {
-                    let fitted = findCell19(targetLevel, runningBasicPay);
-                    runningLevel = targetLevel;
-                    runningGp = ev.targetGp;
-                    runningBasicPay = fitted.value;
-                    colTrackingInfo = fitted.cell;
-                    slipBlockHTML = `
-                        <div class="slip-box">
-                            <div class="slip-row"><span class="slip-bold">1. Existing Pay Matrix Cell on ${formatDate(ev.date)}</span><span>Rs. ${existingBasic.toLocaleString('en-IN')} (L-${oldLevel}, GP ${oldGp.toLocaleString('en-IN')})</span></div>
-                            <div class="slip-row"><span>2. Fitted directly into Target Level ${targetLevel} (equal/next-higher cell - No promo increment)</span><span>&mdash;</span></div>
-                            <div class="slip-row"><span class="slip-bold">3. Pay Fixed w.e.f ${formatDate(ev.date)}</span><span class="slip-bold">Rs. ${runningBasicPay.toLocaleString('en-IN')} (${fitted.cell})</span></div>
-                        </div>`;
+                    card.style.display = 'none';
                 }
-            } else if (ev.isAnnual) {
-                runningBasicPay = matrixData19[runningLevel][cellData.index + 1] || runningBasicPay;
-                colTrackingInfo = findCell19(runningLevel, runningBasicPay).cell;
-                if (ev.isLwpDeferred) {
-                    slipBlockHTML = `<div class="slip-box">${lwpNote}</div>`;
-                }
-            } else if (ev.isMilestone) {
-                let postMilestone = matrixData19[runningLevel][cellData.index + 1] || runningBasicPay;
-                if (ev.label === "18 YEARS" && eligibleFor18YScaleChange) {
-                    let nextGpKey = promoMap19[runningGp] || runningGp;
-                    runningLevel = levelMap19[nextGpKey] || runningLevel;
-                    runningGp = nextGpKey;
-                    runningBasicPay = findCell19(runningLevel, postMilestone).value;
-                } else {
-                    runningBasicPay = postMilestone;
-                }
-
-                let finalCellInfo = findCell19(runningLevel, runningBasicPay);
-                colTrackingInfo = finalCellInfo.cell;
-
-                slipBlockHTML = `
-                    <div class="slip-box">
-                        <div class="slip-row"><span class="slip-bold">1. Existing Pay Matrix Cell Row on ${formatDate(ev.exactMilestoneDate)}</span><span>Rs. ${existingBasic.toLocaleString('en-IN')} (L-${existingLevel})</span></div>
-                        <div class="slip-row"><span>2. Additional Step cell upgrade added for ${ev.label} Service</span><span>Rs. ${(postMilestone - existingBasic).toLocaleString('en-IN')}</span></div>
-                        <div class="slip-row"><span class="slip-bold">3. Final Matrix Fitment Entry w.e.f ${formatDate(ev.date)}</span><span class="slip-bold">Rs. ${runningBasicPay.toLocaleString('en-IN')} (${finalCellInfo.cell})</span></div>
-                        ${lwpNote}
-                    </div>`;
-            }
-
-            colScaleStr = `Level-${runningLevel}`;
-
-            compiledRows.push({
-                date: ev.date,
-                label: ev.label,
-                scaleStr: colScaleStr,
-                trackCol: colTrackingInfo,
-                gpDisplay: runningGp.toLocaleString('en-IN'),
-                basicDisplay: runningBasicPay.toLocaleString('en-IN'),
-                slipHTML: slipBlockHTML
             });
-        });
+        }
 
-        finalizeDot(compiledRows, dor);
-        return { rows: compiledRows };
-    }
+        // Modal Controls
+        function openDocModal(title, content) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalContent').innerText = content;
+            document.getElementById('docModal').classList.remove('hidden');
+            document.getElementById('docModal').classList.add('flex');
+        }
 
-    function getRopa98SnapshotAsOf(rows, initialBasicPay, initialScaleKey, asOfDate) {
-        let basic = initialBasicPay;
-        let scaleKey = initialScaleKey;
-        for (const row of rows) {
-            if (row.date <= asOfDate) {
-                basic = row.snapBasicPay;
-                scaleKey = row.snapScaleKey;
-            } else {
-                break;
+        function closeDocModal() {
+            document.getElementById('docModal').classList.remove('flex');
+            document.getElementById('docModal').classList.add('hidden');
+        }
+
+        function openVideoModal(title, desc) {
+            openDocModal(title, desc + " [Simulated Video/Audio Stream: Playing high-definition media file from school repository.]");
+        }
+
+        function simulateDownload() {
+            alert('File downloaded successfully from Google Drive repository.');
+            closeDocModal();
+        }
+
+        // Staff Leave Form Handling
+        function handleLeaveSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('staffName').value;
+            const type = document.getElementById('leaveType').value;
+            const days = document.getElementById('leaveDays').value;
+
+            const log = document.getElementById('submissionLog');
+            const newItem = document.createElement('div');
+            newItem.className = 'p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between animate-pulse';
+            newItem.innerHTML = `
+                <div>
+                    <p class="font-semibold text-slate-800">${name}</p>
+                    <p class="text-[11px] text-slate-400">${type} • ${days} Day(s) (Just now)</p>
+                </div>
+                <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded-full">Pending</span>
+            `;
+            log.prepend(newItem);
+
+            alert(`Leave application submitted successfully for ${name}. Status: Pending Admin Approval.`);
+            document.getElementById('leaveForm').reset();
+        }
+
+        // Grade Calculator
+        function calculateGrade() {
+            const obtained = parseFloat(document.getElementById('marksObtained').value) || 0;
+            const total = parseFloat(document.getElementById('marksTotal').value) || 100;
+            const pct = (obtained / total) * 100;
+
+            let grade = 'D';
+            if (pct >= 90) grade = 'AA (Outstanding)';
+            else if (pct >= 80) grade = 'A+ (Excellent)';
+            else if (pct >= 70) grade = 'A (Very Good)';
+            else if (pct >= 60) grade = 'B+ (Good)';
+            else if (pct >= 50) grade = 'B (Above Average)';
+            else if (pct >= 40) grade = 'C (Pass)';
+
+            const resDiv = document.getElementById('calcResult');
+            const resText = document.getElementById('resultText');
+            resText.innerText = `${pct.toFixed(1)}% • Grade: ${grade}`;
+            resDiv.classList.remove('hidden');
+        }
+
+        // Quick Search Modal Controls (Ctrl+K)
+        function openSearchModal() {
+            document.getElementById('searchModal').classList.remove('hidden');
+            document.getElementById('searchModal').classList.add('flex');
+            document.getElementById('modalSearchInput').focus();
+        }
+
+        function closeSearchModal() {
+            document.getElementById('searchModal').classList.remove('flex');
+            document.getElementById('searchModal').classList.add('hidden');
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                openSearchModal();
             }
-        }
-        return { basic, scaleKey };
-    }
-
-    function getRopa09SnapshotAsOf(rows, initialGp, initialBandPay, asOfDate) {
-        let bandPay = initialBandPay;
-        let gp = initialGp;
-        for (const row of rows) {
-            if (row.date <= asOfDate) {
-                bandPay = row.snapBandPay;
-                gp = row.snapGp;
-            } else {
-                break;
+            if (e.key === 'Escape') {
+                closeSearchModal();
+                closeDocModal();
             }
-        }
-        return { bandPay, gp };
-    }
-
-    function renderRows98(tbodyId, sbTbodyId, rows) {
-        let tbody = document.getElementById(tbodyId);
-        let sbTbody = document.getElementById(sbTbodyId);
-        tbody.innerHTML = "";
-        sbTbody.innerHTML = "";
-        if (rows.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #64748b; padding: 20px;">No applicable entries in this window.</td></tr>`;
-            return;
-        }
-        rows.forEach(row => {
-            let trDate = formatDate(row.date);
-            let trDot = formatDate(row.dot);
-            let rowHTML = `
-                <td><strong>${trDate}</strong></td>
-                <td><strong>${trDot}</strong></td>
-                <td style="font-size:0.8rem;">${row.scaleStr}</td>
-                <td><strong>₹ ${row.basicDisplay}</strong></td>
-                <td><strong>${row.label}</strong>${row.slipHTML}</td>`;
-            let dRow = document.createElement('tr'); dRow.innerHTML = rowHTML; tbody.appendChild(dRow);
-            let pRow = document.createElement('tr'); pRow.innerHTML = rowHTML; sbTbody.appendChild(pRow);
         });
-    }
 
-    function renderRows(tbodyId, sbTbodyId, rows) {
-        let tbody = document.getElementById(tbodyId);
-        let sbTbody = document.getElementById(sbTbodyId);
-        tbody.innerHTML = "";
-        sbTbody.innerHTML = "";
-        if (rows.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #64748b; padding: 20px;">No applicable entries in this window.</td></tr>`;
-            return;
+        function globalSearch() {
+            const q = document.getElementById('modalSearchInput').value.toLowerCase();
+            const results = document.getElementById('searchResults');
+            if (!q) {
+                results.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Start typing to search across all portal resources...</p>';
+                return;
+            }
+
+            const items = [
+                { title: 'III Sem HS-27 Examination Circular', cat: 'Notices', link: '#notices' },
+                { title: 'MP-2027 Programme Schedule', cat: 'Notices', link: '#notices' },
+                { title: 'Class IX & XI Registration Rolls', cat: 'Registrations', link: '#notices' },
+                { title: 'STAFF_LEAVE_APPLICATION Form', cat: 'Staff Portal', link: '#staff' },
+                { title: 'Government Circulars & Orders', cat: 'Govt. Orders', link: '#notices' },
+                { title: 'Vande Mataram & Jana Gana Mana Audio', cat: 'Media', link: '#media' },
+                { title: 'Percentage & Grade Calculator', cat: 'Utilities', link: '#calculator' },
+                { title: 'Retirement Celebration & Farewells', cat: 'Events', link: '#retirement' }
+            ];
+
+            const filtered = items.filter(i => i.title.toLowerCase().includes(q) || i.cat.toLowerCase().includes(q));
+            if (filtered.length === 0) {
+                results.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">No matching resources found.</p>';
+                return;
+            }
+
+            results.innerHTML = filtered.map(f => `
+                <a href="${f.link}" onclick="closeSearchModal()" class="block p-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition">
+                    <div class="flex items-center justify-between">
+                        <span class="font-semibold text-slate-800">${f.title}</span>
+                        <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">${f.cat}</span>
+                    </div>
+                </a>
+            `).join('');
         }
-        rows.forEach(row => {
-            let trDate = formatDate(row.date);
-            let trDot = formatDate(row.dot);
-
-            let rowHTML = `
-                <td><strong>${trDate}</strong></td>
-                <td><strong>${trDot}</strong></td>
-                <td style="font-size:0.8rem;">${row.scaleStr}</td>
-                <td style="text-align:center;">${row.trackCol}</td>
-                <td style="text-align:center;">₹ ${row.gpDisplay}</td>
-                <td><strong>₹ ${row.basicDisplay}</strong></td>
-                <td><strong>${row.label}</strong>${row.slipHTML}</td>`;
-
-            let dRow = document.createElement('tr'); dRow.innerHTML = rowHTML; tbody.appendChild(dRow);
-            let pRow = document.createElement('tr'); pRow.innerHTML = rowHTML; sbTbody.appendChild(pRow);
-        });
-    }
-
-    function processFixationTimeline() {
-        const dojInput = document.getElementById('doj').value;
-        const dor = getDOR();
-        if (!dojInput || !dor) return;
-        const doj = new Date(dojInput);
-
-        const ropa19OptionInput = document.getElementById('ropa19OptionDate').value;
-        if (!ropa19OptionInput) return;
-        const ropa19OptionDate = new Date(ropa19OptionInput);
-
-        const enableRPromotion = document.getElementById('enablePromotion').checked;
-        const evType = enableRPromotion ? document.getElementById('promotionType').value : 'none';
-
-        const enableRopa98 = document.getElementById('enableRopa98').checked;
-        const enableRopa09 = document.getElementById('enableRopa09').checked;
-
-        let ropa98Rows = [];
-        let ropa09Rows = [];
-        let carryGp, carryBasic, carryLevel;
-        let carryNote = "";
-        let carryNote98 = "";
-
-        let ropa09InitialGp, ropa09InitialBand, ropa09HasCarry = false;
-        if (enableRopa98) {
-            const ropa98OptionInput = document.getElementById('ropa98OptionDate').value;
-            const ropa98Scale = parseInt(document.getElementById('ropa98Scale').value, 10);
-            const ropa98BasicPay = parseInt(document.getElementById('ropa98BasicPay').value, 10);
-            if (!ropa98OptionInput || isNaN(ropa98Scale) || isNaN(ropa98BasicPay)) return;
-            const ropa98OptionDate = new Date(ropa98OptionInput);
-            const ropa98EndDate = dor < ROPA98_CUTOFF ? dor : ROPA98_CUTOFF;
-
-            const promotionDateInput98 = document.getElementById('promotionDate').value;
-            const promotionDate98 = (enableRPromotion && promotionDateInput98) ? new Date(promotionDateInput98) : null;
-            const promotionTargetGp98 = parseInt(document.getElementById('promotionTargetGp').value, 10);
-
-            const result98 = computeRopa98Timeline(doj, ropa98OptionDate, ropa98Scale, ropa98BasicPay, ropa98EndDate, promotionDate98, promotionTargetGp98, evType);
-            ropa98Rows = result98.rows;
-
-            const ropa09OptionInputForSnap = document.getElementById('ropa09OptionDate').value;
-            const snapAsOfDate = ropa09OptionInputForSnap ? new Date(ropa09OptionInputForSnap) : ropa98EndDate;
-            const snap98 = getRopa98SnapshotAsOf(ropa98Rows, ropa98BasicPay, ropa98Scale, snapAsOfDate);
-            const rawBand = snap98.basic * ROPA98_TO_09_FACTOR;
-            const multipliedBand = ceilToNext10(rawBand);
-            
-            ropa09InitialGp = snap98.scaleKey;
-
-            const minBandForGp = minEntryPayBand09[ropa09InitialGp];
-            const minEntryApplied = (minBandForGp !== undefined && multipliedBand < minBandForGp);
-            ropa09InitialBand = minEntryApplied ? minBandForGp : multipliedBand;
-            ropa09HasCarry = true;
-
-            carryNote98 = `<strong>Carried Forward into ROPA-2009 (Rule II, WBS(ROPA) Rules 2009):</strong> Notional basic pay as on ${formatDate(snapAsOfDate)} under ROPA-1998 = Rs. ${snap98.basic.toLocaleString('en-IN')} &times; fitment factor 1.86 = Rs. ${rawBand.toFixed(2)} &rarr; rounded up to next Rs. 10 = Rs. ${multipliedBand.toLocaleString('en-IN')}` +
-                (minEntryApplied ? ` &rarr; below the prescribed Minimum Entry Pay in the Pay Band for GP ${ropa09InitialGp.toLocaleString('en-IN')} (Rs. ${minBandForGp.toLocaleString('en-IN')}) &rarr; stepped up to the minimum entry figure of Rs. ${ropa09InitialBand.toLocaleString('en-IN')}` : ``) +
-                ` Pay in Pay Band + Grade Pay Rs. ${ropa09InitialGp.toLocaleString('en-IN')} = Total Rs. ${(ropa09InitialBand + ropa09InitialGp).toLocaleString('en-IN')}. The ROPA-1998 table above continues independently as a notional record up to ${formatDate(ropa98EndDate)}.`;
-        }
-
-        if (enableRopa09) {
-            const ropa09OptionInput = document.getElementById('ropa09OptionDate').value;
-            let ropa09Gp = ropa09HasCarry ? ropa09InitialGp : parseInt(document.getElementById('ropa09GradePay').value, 10);
-            let ropa09BandPay = ropa09HasCarry ? ropa09InitialBand : parseInt(document.getElementById('ropa09BandPay').value, 10);
-            if (!ropa09OptionInput || isNaN(ropa09Gp) || isNaN(ropa09BandPay)) return;
-            const ropa09OptionDate = new Date(ropa09OptionInput);
-            const ropa09EndDate = dor < ROPA09_CUTOFF ? dor : ROPA09_CUTOFF;
-
-            const promotionDateInput = document.getElementById('promotionDate').value;
-            const promotionDate = (enableRPromotion && promotionDateInput) ? new Date(promotionDateInput) : null;
-            const promotionTargetGp = parseInt(document.getElementById('promotionTargetGp').value, 10);
-
-            const result09 = computeRopa09Timeline(doj, ropa09OptionDate, ropa09Gp, ropa09BandPay, ropa09EndDate, promotionDate, promotionTargetGp, evType);
-            ropa09Rows = result09.rows;
-
-            const snap = getRopa09SnapshotAsOf(ropa09Rows, ropa09Gp, ropa09BandPay, ropa19OptionDate);
-            const notionalBasic = snap.bandPay + snap.gp;
-            const FITMENT_FACTOR = 2.57;
-            const revisedRaw = Math.round(notionalBasic * FITMENT_FACTOR);
-            carryLevel = levelMap19[snap.gp] || 1;
-            const fit = findCell19(carryLevel, revisedRaw);
-            carryGp = snap.gp;
-            carryBasic = fit.value;
-
-            carryNote = `<strong>Carried Forward into ROPA-2019 (Rule 7, WBS(RPA) Rules 2019):</strong> Notional pay as on ${formatDate(ropa19OptionDate)} under ROPA-2009 = BP Rs. ${snap.bandPay.toLocaleString('en-IN')} + GP Rs. ${snap.gp.toLocaleString('en-IN')} = Rs. ${notionalBasic.toLocaleString('en-IN')} &times; fitment factor 2.57 = Rs. ${revisedRaw.toLocaleString('en-IN')} &rarr; located at equal/next-higher cell in ROPA-2019 Level-${carryLevel}: Rs. ${carryBasic.toLocaleString('en-IN')} (${fit.cell}). The ROPA-2009 table above continues independently as a notional record up to ${formatDate(ropa09EndDate)}.`;
-        } else {
-            carryGp = parseInt(document.getElementById('ropa19GradePayManual').value, 10);
-            carryBasic = parseInt(document.getElementById('ropa19BasicPayManual').value, 10);
-            if (isNaN(carryGp) || isNaN(carryBasic)) return;
-            carryLevel = levelMap19[carryGp] || 1;
-            carryNote = `<strong>Manual Entry:</strong> ROPA-2019 fixation starts at Rs. ${carryBasic.toLocaleString('en-IN')} (GP Rs. ${carryGp.toLocaleString('en-IN')}, Level-${carryLevel}) as on ${formatDate(ropa19OptionDate)}.`;
-        }
-
-        const promotionDateInput19 = document.getElementById('promotionDate').value;
-        const promotionDate19 = (enableRPromotion && promotionDateInput19) ? new Date(promotionDateInput19) : null;
-        const promotionTargetGp19 = parseInt(document.getElementById('promotionTargetGp').value, 10);
-
-        const result19 = computeRopa19Timeline(doj, ropa19OptionDate, carryGp, carryLevel, carryBasic, dor, promotionDate19, promotionTargetGp19, evType);
-
-        document.getElementById('carryForwardOutput98').style.display = enableRopa98 ? '' : 'none';
-        document.getElementById('carryForwardOutput98').innerHTML = carryNote98;
-        document.getElementById('carryForwardOutput').style.display = '';
-        document.getElementById('carryForwardOutput').innerHTML = carryNote;
-
-        document.getElementById('sbSchoolName').innerText = document.getElementById('schoolName').value;
-        document.getElementById('sbStaffName').innerText = document.getElementById('staffName').value;
-        document.getElementById('sbDesignation').innerText = document.getElementById('designation').value;
-        const dobVal = document.getElementById('dob').value;
-        document.getElementById('sbDob').innerText = dobVal ? formatDate(new Date(dobVal)) : '';
-        document.getElementById('sbDoj').innerText = formatDate(doj);
-        document.getElementById('sbDor').innerText = formatDate(dor);
-
-        annotateAllTablesWithLeave([
-          {key:'ROPA-98', rows: ropa98Rows},
-          {key:'ROPA-09', rows: ropa09Rows},
-          {key:'ROPA-19', rows: result19.rows}
-        ]);
-
-        renderRows98('payTableBody98', 'sbPrintTableBody98', ropa98Rows);
-        renderRows('payTableBody09', 'sbPrintTableBody09', ropa09Rows);
-        renderRows('payTableBody19', 'sbPrintTableBody19', result19.rows);
-    }
-
-    window.addEventListener('DOMContentLoaded', function () {
-        calculateDOR();
-        toggleRopa09Section();
-        togglePromotionSection();
-    });
-</script>
-
-<script>
-/* =========================================================================
-   LEAVE ACCOUNT (REGISTER) ENGINE
-   ========================================================================= */
-window.onerror = function(msg, url, line, col, err){
-  const el = document.getElementById('errorBanner');
-  if(el){
-    el.style.display = '';
-    el.textContent = 'Something went wrong and the page could not update: ' + msg + ' (line ' + line + '). Please refresh the page; if this keeps happening, try opening the file in Chrome or Edge.';
-  }
-  return false;
-};
-
-function showStatus(msg, isError){
-  const el = document.getElementById('statusMsg');
-  if(el){
-    el.style.color = isError ? '#dc2626' : '#059669';
-    el.textContent = msg;
-    try{ el.scrollIntoView({block:'nearest'}); }catch(e){ /* ignore */ }
-  } else {
-    console.log(msg);
-  }
-}
-
-function fmt(d){
-  if(!d) return '-';
-  const dt = new Date(d+'T00:00:00');
-  const dd = String(dt.getDate()).padStart(2,'0');
-  const mm = String(dt.getMonth()+1).padStart(2,'0');
-  return `${dd}-${mm}-${dt.getFullYear()}`;
-}
-function daysBetween(from,to){
-  const f = new Date(from+'T00:00:00');
-  const t = new Date(to+'T00:00:00');
-  return Math.round((t-f)/86400000)+1;
-}
-
-let periods = [];
-let masterMlEntries = [];
-let transferEvents = [];
-let idCounter = 1;
-
-const EL_ANNUAL_RATE = 15;
-const HPL_ANNUAL_RATE = 15;
-const EL_CAP = 365;
-const HPL_CAP = 60;
-
-function syncLeaveUpToDate(){
-  const el = document.getElementById('leaveUpToDate');
-  if(!el) return;
-  if(el.dataset.userSet==='1') return;
-  const dor = getDOR();
-  if(dor) el.value = toISO(dor);
-}
-
-function addPeriodRow(){
-  const last = periods[periods.length-1];
-  const nextFrom = last ? toISO(new Date(new Date(last.to+'T00:00:00').getTime()+86400000)) : '';
-  periods.push({from:nextFrom, to:'', vacFrom:'', vacTo:'', earnedAvg:0, earnedHalf:0, vacDetEarn:0,
-    creditAvgManual:null, creditHalfManual:null, vacDetCredit:0,
-    maternityFull:0, maternityHalf:0, lwp:0, specialFull:0, specialHalf:0, mlEntries:[]});
-  assignMlEntries();
-  renderAll();
-}
-function deletePeriodRow(i){
-  periods.splice(i,1);
-  assignMlEntries();
-  renderAll();
-}
-function updatePeriodField(i, field, value){
-  periods[i][field] = value;
-  assignMlEntries();
-  renderAll();
-}
-
-function toggleTransferUI(){
-  const val = document.getElementById('hasTransfer').value;
-  document.getElementById('transferInputSection').style.display = (val==='yes') ? '' : 'none';
-}
-function addTransferEvent(){
-  const date = document.getElementById('transferDate').value;
-  if(!date){ showStatus('Please pick the new school joining date.', true); return; }
-  transferEvents.push({id:idCounter++, date});
-  transferEvents.sort((a,b)=> new Date(a.date)-new Date(b.date));
-  document.getElementById('transferDate').value='';
-  renderAll();
-}
-function deleteTransferEvent(id){
-  transferEvents = transferEvents.filter(t=>t.id!==id);
-  renderAll();
-}
-
-function addYears(date, years){
-  const d = new Date(date.getTime());
-  d.setFullYear(d.getFullYear()+years);
-  return d;
-}
-function toISO(d){
-  const y = d.getFullYear();
-  const m = String(d.getMonth()+1).padStart(2,'0');
-  const day = String(d.getDate()).padStart(2,'0');
-  return `${y}-${m}-${day}`;
-}
-
-function autoGenerateRows(){
-  const dojVal = document.getElementById('doj').value;
-  const dorVal = document.getElementById('leaveUpToDate').value;
-  if(!dojVal || !dorVal){ showStatus('Please set Date of Joining in Section 1, and a "Generate rows up to" date above.', true); return; }
-  const dojDate = new Date(dojVal+'T00:00:00');
-  const dorDate = new Date(dorVal+'T00:00:00');
-  if(dorDate <= dojDate){ showStatus('The "Generate rows up to" date must be after DOJ.', true); return; }
-
-  const hasTransfer = document.getElementById('hasTransfer').value === 'yes';
-  if(hasTransfer && transferEvents.length===0){
-    showStatus('You selected "Yes - transferred" but haven\'t added a transfer date yet. Please add one, or switch back to "No" if there was none.', true);
-    return;
-  }
-
-  let breakpoints = [];
-  let k = 1;
-  while(true){
-    const anniv = addYears(dojDate, k);
-    if(anniv > dorDate) break;
-    breakpoints.push(anniv.getTime());
-    k++;
-  }
-  if(hasTransfer){
-    transferEvents.forEach(t=>{
-      const td = new Date(t.date+'T00:00:00');
-      if(td > dojDate && td < dorDate) breakpoints.push(td.getTime());
-    });
-  }
-
-  breakpoints = [...new Set(breakpoints)].sort((a,b)=>a-b).map(t=>new Date(t));
-
-  const rowStarts = [dojDate, ...breakpoints];
-  const openingAvg = Math.round(parseFloat(document.getElementById('openingAvg').value)) || 0;
-  const openingHalf = Math.round(parseFloat(document.getElementById('openingHalf').value)) || 0;
-
-  const newPeriods = rowStarts.map((start,i)=>{
-    const end = (i+1<rowStarts.length) ? new Date(rowStarts[i+1].getTime()-86400000) : dorDate;
-    const days = daysBetween(toISO(start), toISO(end));
-    const earnedAvg = Math.round( (days/365)*EL_ANNUAL_RATE );
-    const earnedHalf = Math.round( (days/365)*HPL_ANNUAL_RATE );
-    return {
-      from: toISO(start), to: toISO(end), vacFrom:'', vacTo:'',
-      earnedAvg, earnedHalf, vacDetEarn:0,
-      creditAvgManual: i===0 ? openingAvg : null,
-      creditHalfManual: i===0 ? openingHalf : null,
-      vacDetCredit:0,
-      maternityFull:0, maternityHalf:0, lwp:0, specialFull:0, specialHalf:0,
-      mlEntries:[]
-    };
-  });
-
-  periods = newPeriods;
-  assignMlEntries();
-  renderAll();
-  showStatus(`Generated ${newPeriods.length} Period of Duty rows from ${fmt(toISO(dojDate))} to ${fmt(toISO(dorDate))}.`, false);
-}
-
-function addMlEntry(){
-  const type = document.getElementById('mlType').value;
-  const from = document.getElementById('mlFrom').value;
-  const to = document.getElementById('mlTo').value;
-  if(!from || !to){ showStatus('Please enter both From and To dates.', true); return; }
-  if(new Date(to) < new Date(from)){ showStatus('"To" date must not be before "From" date.', true); return; }
-
-  masterMlEntries.push({id:idCounter++, from, to, type});
-  const assigned = assignMlEntries();
-
-  if(!assigned.has(masterMlEntries[masterMlEntries.length-1].id)){
-    masterMlEntries.pop();
-    showStatus('These dates do not fall within any existing Period of Duty row. Please add/extend a period row (or Auto-Generate rows) to cover this date range first.', true);
-    return;
-  }
-
-  document.getElementById('mlFrom').value='';
-  document.getElementById('mlTo').value='';
-  renderAll();
-  const typeLabel = {avg:'ML (Full Avg Pay)', half:'HPL', lwp_effect:'LWP (with CAS effect)', lwp_noeffect:'LWP (no CAS effect)'}[type] || type;
-  showStatus(`${typeLabel} entry added: ${fmt(from)} to ${fmt(to)}.`, false);
-}
-
-function annotateAllTablesWithLeave(tables){
-  if(!tables || !Array.isArray(tables)) return;
-  const typeLabel = {avg:'ML (Full Avg Pay)', half:'HPL', lwp_effect:'LWP (affects CAS)', lwp_noeffect:'LWP (no CAS effect)'};
-
-  tables.forEach(t=>{
-    (t.rows||[]).forEach((row,idx)=>{ row._lineNum = idx+1; row._leaveNotes = []; });
-  });
-
-  const firstSeen = {};
-  masterMlEntries.forEach(entry=>{
-    const eFrom = new Date(entry.from+'T00:00:00');
-    const eTo = new Date(entry.to+'T00:00:00');
-    tables.forEach(t=>{
-      (t.rows||[]).forEach(row=>{
-        if(!row.date || !row.dot) return;
-        const overlapStart = eFrom > row.date ? eFrom : row.date;
-        const overlapEnd = eTo < row.dot ? eTo : row.dot;
-        if(overlapStart <= overlapEnd){
-          if(!firstSeen[entry.id]){
-            const segDays = daysBetween(toISO(overlapStart), toISO(overlapEnd));
-            const label = typeLabel[entry.type] || entry.type;
-            const dateStr = overlapStart.getTime()===overlapEnd.getTime()
-              ? fmt(toISO(overlapStart))
-              : `${fmt(toISO(overlapStart))} to ${fmt(toISO(overlapEnd))}`;
-            row._leaveNotes.push(`${label} ${dateStr} [${segDays}d]`);
-            firstSeen[entry.id] = {table:t.key, line: row._lineNum};
-          } else {
-            const first = firstSeen[entry.id];
-            const ref = (first.table===t.key)
-              ? `ALREADY NOTED IN LINE ${first.line}`
-              : `ALREADY NOTED IN ${first.table} LINE ${first.line}`;
-            row._leaveNotes.push(ref);
-          }
-        }
-      });
-    });
-  });
-
-  tables.forEach(t=>{
-    (t.rows||[]).forEach(row=>{
-      const notes = row._leaveNotes.length ? [...new Set(row._leaveNotes)] : ['NO LEAVE'];
-      row.label = (row.label ? row.label + '<br>' : '')
-        + '<span style="font-weight:400;font-size:.78em;color:#334155;">' + notes.join('; ') + '</span>';
-    });
-  });
-}
-
-function deleteMlEntry(masterId){
-  masterMlEntries = masterMlEntries.filter(e=>e.id!==masterId);
-  assignMlEntries();
-  renderAll();
-}
-
-function assignMlEntries(){
-  periods.forEach(p=> { p.mlEntries = []; p.lwp = 0; });
-  const matchedIds = new Set();
-  masterMlEntries.forEach(entry=>{
-    const leaveFrom = new Date(entry.from+'T00:00:00');
-    const leaveTo = new Date(entry.to+'T00:00:00');
-    const totalDays = daysBetween(entry.from, entry.to);
-    const totalDebit = (entry.type==='half') ? Math.ceil(totalDays/2) : (entry.type==='avg' ? totalDays : 0);
-    periods.forEach(p=>{
-      if(!p.from || !p.to) return;
-      const pFrom = new Date(p.from+'T00:00:00');
-      const pTo = new Date(p.to+'T00:00:00');
-      const overlapStart = leaveFrom > pFrom ? leaveFrom : pFrom;
-      const overlapEnd = leaveTo < pTo ? leaveTo : pTo;
-      if(overlapStart <= overlapEnd){
-        matchedIds.add(entry.id);
-        const segFrom = toISO(overlapStart);
-        const segTo = toISO(overlapEnd);
-        const segDays = daysBetween(segFrom, segTo);
-        const segDebit = (segDays===totalDays) ? totalDebit : Math.round(totalDebit * segDays/totalDays);
-        p.mlEntries.push({id:entry.id, from:segFrom, to:segTo, type:entry.type, days:segDays, debitDays:segDebit});
-        if(entry.type==='lwp_effect' || entry.type==='lwp_noeffect'){
-          p.lwp = (p.lwp||0) + segDays;
-        }
-      }
-    });
-  });
-  return matchedIds;
-}
-
-function computeDerived(){
-  let runningAvg = 0, runningHalf = 0;
-  let cumulativeEarnedAvg = null;
-
-  return periods.map((p, i) => {
-    const takenAvg = p.mlEntries.filter(e=>e.type==='avg').reduce((s,e)=>s+e.debitDays,0);
-    const takenHalf = p.mlEntries.filter(e=>e.type==='half').reduce((s,e)=>s+e.debitDays,0);
-    const enjoyedAvg = p.mlEntries.filter(e=>e.type==='avg').reduce((s,e)=>s+e.days,0);
-    const enjoyedHalf = p.mlEntries.filter(e=>e.type==='half').reduce((s,e)=>s+e.days,0);
-
-    const priorAvg = (i===0) ? (p.creditAvgManual!==null ? p.creditAvgManual : 0) : runningAvg;
-    const priorHalf = (i===0) ? (p.creditHalfManual!==null ? p.creditHalfManual : 0) : runningHalf;
-
-    if(cumulativeEarnedAvg===null){
-      cumulativeEarnedAvg = priorAvg;
-    }
-
-    const effectiveEarnedAvg = Math.max(0, Math.min(Number(p.earnedAvg)||0, EL_CAP - cumulativeEarnedAvg));
-    cumulativeEarnedAvg += effectiveEarnedAvg;
-
-    const effectiveEarnedHalf = (priorHalf >= HPL_CAP) ? 0 : Math.max(0, Math.min(Number(p.earnedHalf)||0, HPL_CAP - priorHalf));
-
-    let creditAvg = Math.min(EL_CAP, priorAvg + effectiveEarnedAvg);
-    let creditHalf = Math.min(HPL_CAP, priorHalf + effectiveEarnedHalf);
-
-    const balanceAvg = Math.max(0, creditAvg - takenAvg);
-    const balanceHalf = Math.max(0, creditHalf - takenHalf);
-
-    runningAvg = balanceAvg;
-    runningHalf = balanceHalf;
-
-    return {...p, takenAvg, takenHalf, enjoyedAvg, enjoyedHalf, creditAvg, creditHalf, balanceAvg, balanceHalf,
-            effectiveEarnedAvg, effectiveEarnedHalf};
-  });
-}
-
-function mlNotes(entries, type){
-  const seen = new Set();
-  const list = entries.filter(e=>{
-    if(e.type!==type) return false;
-    if(seen.has(e.id)) return false;
-    seen.add(e.id);
-    return true;
-  });
-  if(list.length===0) return '-';
-  const verb = (type==='lwp_effect'||type==='lwp_noeffect') ? 'LWP enjoyed for' : 'ML enjoyed for';
-  return list.map(e=>{
-    let label = (e.from===e.to)
-      ? `${verb} ${fmt(e.from)} [${e.days} day]`
-      : `${verb} ${fmt(e.from)}, ${fmt(e.to)} [${e.days} days]`;
-    if(e.debitDays!==e.days && e.debitDays>0){
-      label += ` — ${e.debitDays} day${e.debitDays===1?'':'s'} debited from HPL a/c`;
-    }
-    return `${label} <button class="btn-del" style="padding:1px 5px;font-size:.6rem;margin-left:4px;" onclick="deleteMlEntry(${e.id})">remove</button>`;
-  }).join('<br>');
-}
-
-function buildTableRows(derived, forPrint){
-  return derived.map((p, i) => {
-    return `<tr>
-      <td>${forPrint?'':'<input type="date" value="'+p.from+'" onchange="updatePeriodField('+i+',\'from\',this.value)" style="width:100%;font-size:.65rem;">'}${forPrint?fmt(p.from):''}</td>
-      <td>${forPrint?fmt(p.to):'<input type="date" value="'+p.to+'" onchange="updatePeriodField('+i+',\'to\',this.value)" style="width:100%;font-size:.65rem;">'}</td>
-      <td>${forPrint?fmt(p.vacFrom):'<input type="date" value="'+(p.vacFrom||'')+'" onchange="updatePeriodField('+i+',\'vacFrom\',this.value)" style="width:100%;font-size:.65rem;">'}</td>
-      <td>${forPrint?fmt(p.vacTo):'<input type="date" value="'+(p.vacTo||'')+'" onchange="updatePeriodField('+i+',\'vacTo\',this.value)" style="width:100%;font-size:.65rem;">'}</td>
-      <td>${forPrint?(p.effectiveEarnedAvg||'-'):'<input type="number" step="1" value="'+p.effectiveEarnedAvg+'" onchange="updatePeriodField('+i+',\'earnedAvg\',Math.round(parseFloat(this.value))||0)" style="width:100%;font-size:.65rem;">'}</td>
-      <td>${forPrint?(p.effectiveEarnedHalf||'-'):'<input type="number" step="1" value="'+p.effectiveEarnedHalf+'" onchange="updatePeriodField('+i+',\'earnedHalf\',Math.round(parseFloat(this.value))||0)" style="width:100%;font-size:.65rem;">'}</td>
-      <td>${p.vacDetEarn||'-'}</td>
-      <td class="credit-cell">${i===0 && !forPrint ? '<input type="number" value="'+(p.creditAvgManual!=null?p.creditAvgManual:0)+'" onchange="updatePeriodField(0,\'creditAvgManual\',Math.round(parseFloat(this.value))||0)" style="width:100%;font-size:.65rem;">' : p.creditAvg}</td>
-      <td class="credit-cell">${i===0 && !forPrint ? '<input type="number" value="'+(p.creditHalfManual!=null?p.creditHalfManual:0)+'" onchange="updatePeriodField(0,\'creditHalfManual\',Math.round(parseFloat(this.value))||0)" style="width:100%;font-size:.65rem;">' : p.creditHalf}</td>
-      <td>${p.vacDetCredit||'-'}</td>
-      <td class="taken-cell">${p.takenAvg||0}</td>
-      <td class="taken-cell">${p.takenHalf||0}</td>
-      <td class="vacdet-cell">-</td>
-      <td>${p.enjoyedAvg||0}</td>
-      <td>${p.enjoyedHalf||0}</td>
-      <td>${p.maternityFull||'-'}</td>
-      <td>${p.maternityHalf||'-'}</td>
-      <td>${p.lwp||'-'}</td>
-      <td>${p.specialFull||'-'}</td>
-      <td>${p.specialHalf||'-'}</td>
-      <td class="balance-num">${p.balanceAvg}</td>
-      <td class="balance-num">${p.balanceHalf}</td>
-      <td>-</td>
-    </tr>`;
-  }).join('');
-}
-
-function buildTotalsRowHtml(){
-  const totalMlDays = masterMlEntries.filter(e=>e.type==='avg').reduce((s,e)=>s+daysBetween(e.from,e.to),0);
-  const totalHplDays = masterMlEntries.filter(e=>e.type==='half').reduce((s,e)=>s+daysBetween(e.from,e.to),0);
-  return `<tr style="background:#dbeafe;font-weight:700;">
-      <td colspan="13" style="text-align:right;padding-right:8px;">TOTAL DAYS ENJOYED (ENTIRE SERVICE) &rarr;</td>
-      <td>${totalMlDays}</td>
-      <td>${totalHplDays}</td>
-      <td colspan="8">Total ML (Avg Pay) Enjoyed: ${totalMlDays} day${totalMlDays===1?'':'s'} &nbsp;|&nbsp; Total HPL (Half Pay) Enjoyed: ${totalHplDays} day${totalHplDays===1?'':'s'}</td>
-    </tr>`;
-}
-
-function renderAll(){
-  const derived = computeDerived();
-
-  const tableBodyEl = document.getElementById('tableBody');
-  if(!tableBodyEl) return;
-  tableBodyEl.innerHTML = buildTableRows(derived,false);
-  const totalsHtml = buildTotalsRowHtml();
-  document.getElementById('leaveTotalsFoot').innerHTML = totalsHtml;
-  document.getElementById('printTableHolder').innerHTML =
-    '<div class="table-wrap"><table>'+document.getElementById('mainTable').querySelector('thead').outerHTML+
-    '<tbody>'+buildTableRows(derived,true)+'</tbody><tfoot>'+totalsHtml+'</tfoot></table></div>';
-
-  const leaveTypeLabel = {avg:'ML (Full Avg Pay)', half:'HPL', lwp_effect:'LWP (with CAS effect)', lwp_noeffect:'LWP (no CAS effect)'};
-  const entriesListEl = document.getElementById('leaveEntriesList');
-  if(entriesListEl){
-    entriesListEl.innerHTML = masterMlEntries.length===0 ? '' : masterMlEntries.map(e=>
-      `<span style="display:inline-flex;align-items:center;gap:6px;background:#e2e8f0;border-radius:4px;padding:3px 8px;margin:2px;">
-         ${leaveTypeLabel[e.type]||e.type}: ${fmt(e.from)} to ${fmt(e.to)}
-         <button class="btn-del" onclick="deleteMlEntry(${e.id})">Delete</button>
-       </span>`).join('');
-  }
-
-  document.getElementById('rowManageList').innerHTML = periods.map((p,i)=>
-    `<span style="display:inline-flex;align-items:center;gap:6px;background:#e2e8f0;border-radius:4px;padding:3px 8px;margin:2px;">
-       Row ${i+1}: ${fmt(p.from)} to ${fmt(p.to)}
-       <button class="btn-del" onclick="deletePeriodRow(${i})">Delete</button>
-     </span>`).join('');
-
-  document.getElementById('transferList').innerHTML = transferEvents.length===0
-    ? '<span style="color:#64748b;">No transfer events added.</span>'
-    : transferEvents.map(t=>
-      `<span style="display:inline-flex;align-items:center;gap:6px;background:#e2e8f0;border-radius:4px;padding:3px 8px;margin:2px;">
-         New school joined: ${fmt(t.date)}
-         <button class="btn-del" onclick="deleteTransferEvent(${t.id})">Delete</button>
-       </span>`).join('');
-
-  document.getElementById('synopsisPanel').innerHTML = (periods.map((p,i)=>{
-    const avgList = mlNotes(p.mlEntries,'avg');
-    const halfList = mlNotes(p.mlEntries,'half');
-    const lwpEffList = mlNotes(p.mlEntries,'lwp_effect');
-    const lwpNoEffList = mlNotes(p.mlEntries,'lwp_noeffect');
-    if(avgList==='-' && halfList==='-' && lwpEffList==='-' && lwpNoEffList==='-') return '';
-    return `<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed #cbd5e1;">
-      <b>Row ${i+1}: ${fmt(p.from)} to ${fmt(p.to)}</b><br>
-      <span style="color:#334155;">Full Pay (Avg): </span>${avgList}<br>
-      <span style="color:#334155;">Half Pay (HPL): </span>${halfList}<br>
-      <span style="color:#334155;">LWP (with CAS effect): </span>${lwpEffList}<br>
-      <span style="color:#334155;">LWP (no CAS effect): </span>${lwpNoEffList}
-    </div>`;
-  }).join('') || '<span style="color:#64748b;">No leave entries recorded yet.</span>') +
-  (()=>{
-    const totalMlDays = masterMlEntries.filter(e=>e.type==='avg').reduce((s,e)=>s+daysBetween(e.from,e.to),0);
-    const totalHplDays = masterMlEntries.filter(e=>e.type==='half').reduce((s,e)=>s+daysBetween(e.from,e.to),0);
-    return `<div style="margin-top:6px;padding-top:8px;border-top:2px solid #1e3a8a;font-weight:700;color:#1e3a8a;">
-      Grand Total — ML (Avg Pay) Days Enjoyed: ${totalMlDays} &nbsp;|&nbsp; HPL (Half Pay) Days Enjoyed: ${totalHplDays}
-    </div>`;
-  })();
-
-  document.getElementById('pName').innerText = document.getElementById('staffName').value;
-  document.getElementById('pDesig').innerText = document.getElementById('designation').value;
-  document.getElementById('pDoj').innerText = fmt(document.getElementById('doj').value);
-  document.getElementById('pDor').innerText = fmt(document.getElementById('leaveUpToDate').value);
-}
-
-function doPrint(){
-  window.print();
-}
-
-document.getElementById('leaveUpToDate') && document.getElementById('leaveUpToDate').addEventListener('input', function(){
-  this.dataset.userSet = '1';
-});
-
-window.addEventListener('DOMContentLoaded', function(){
-  try{
-    syncLeaveUpToDate();
-    renderAll();
-  }catch(e){
-    window.onerror(e.message, '', (e.lineNumber||''), '', e);
-  }
-});
-</script>
-
+    </script>
 </body>
 </html>
