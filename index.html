@@ -31,7 +31,7 @@ nav.tabs button[aria-pressed=true]{background:var(--c-notice);color:#fff;border-
 h2.sec{font-size:14.5px;font-weight:700;margin:12px 0 0;padding:5px 10px;background:var(--c,var(--navy));color:#fff;scroll-margin-top:44px;letter-spacing:.2px}
 h2.sec:first-child{margin-top:0}
 .cols{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:0 14px;align-items:start}
-@media(max-width:860px){.cols{grid-template-columns:1fr}.side{order:-1}}
+@media(max-width:860px){.cols{grid-template-columns:1fr}.side{margin-top:12px}}
 .list,.box{background:var(--card);border:1px solid var(--line);border-top:0}
 .box{padding:8px 10px}
 .item{background:var(--card);border:1px solid var(--line);padding:6px 10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;justify-content:space-between}
@@ -72,7 +72,15 @@ table.t td:last-child{text-align:right;font-weight:600;white-space:nowrap}
 .tile:hover{background:color-mix(in srgb,var(--gold) 16%,var(--card))}
 details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px;font-size:13px}
 .contact{padding:8px 10px;font-size:13.5px}
-/* 
+.hero{position:relative;height:clamp(110px,21vw,250px);overflow:hidden;background:var(--navy);border:1px solid var(--line);margin:0 0 10px}
+.hero:not(.on){display:none}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 72%;opacity:0;transition:opacity .9s}
+.hero img.show{opacity:1}
+.hero .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 12px 5px;color:#fff;font-weight:600;font-size:13px;background:linear-gradient(0deg,rgba(6,20,60,.85),transparent)}
+.hero .dots{position:absolute;right:10px;bottom:7px;display:flex;gap:5px}
+.hero .dots button{width:9px;height:9px;border-radius:50%;border:1px solid #fff;background:transparent;padding:0;cursor:pointer}
+.hero .dots button[aria-current=true]{background:var(--gold);border-color:var(--gold)}
+@media(prefers-reduced-motion:reduce){.hero img{transition:none}}
 /* admin */
 #panel{display:none}
 #panel fieldset{border:1px solid var(--line);border-radius:8px;background:var(--card);margin:0 0 14px;padding:12px 14px}
@@ -80,7 +88,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
 #panel label{display:block;font-size:13px;color:var(--mut);margin-top:8px}
 #panel input,#panel select,#panel textarea{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
 #panel .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:560px){#panel .row{grid-template-columns:1fr}.item{flex-direction:column}}
+@media(max-width:560px){#panel .row{grid-template-columns:1fr}#panel .item{flex-direction:column;align-items:flex-start}}
 #msg{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:20px;display:none}
 </style>
 </head>
@@ -97,6 +105,11 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
 </nav>
 
 <main class="wrap" id="site">
+  <section class="hero" id="hero" aria-label="School photos">
+    <img src="images/school-gate.jpg" alt="তালডাংরা ফুলমতি উচ্চ বিদ্যালয়ের প্রবেশদ্বার / School main gate" data-cap="প্রবেশদ্বার / School Gate">
+    <img src="images/school-campus.jpg" alt="বিদ্যালয় প্রাঙ্গণ ও ভবন / School campus and building" data-cap="বিদ্যালয় প্রাঙ্গণ / School Campus" loading="lazy">
+    <div class="cap" id="heroCap"></div><div class="dots" id="heroDots"></div>
+  </section>
   <div class="adm" id="admBox"></div>
 
   <div class="cols">
@@ -541,6 +554,23 @@ function renderExtra(){
   $("holAll").innerHTML = all.map(h => `<tr><td>${esc(h.name)}${h.obs?" <span class='tag'>Obs.</span>":""}</td><td>${range(h)}</td></tr>`).join("");
 }
 
+</script>
+<script>
+(function(){
+  const hero = document.getElementById("hero"), cap = document.getElementById("heroCap"), dots = document.getElementById("heroDots");
+  let imgs = [...hero.querySelectorAll("img")], cur = 0, timer;
+  function go(i){ cur = (i + imgs.length) % imgs.length;
+    imgs.forEach((m, k) => m.classList.toggle("show", k === cur));
+    cap.textContent = imgs[cur].dataset.cap || "";
+    [...dots.children].forEach((d, k) => d.setAttribute("aria-current", k === cur)); }
+  function start(){ clearInterval(timer);
+    if (imgs.length > 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) timer = setInterval(() => go(cur + 1), 5000); }
+  function build(){ dots.innerHTML = ""; imgs.forEach((m, k) => { const b = document.createElement("button");
+      b.type = "button"; b.setAttribute("aria-label", "Photo " + (k + 1)); b.onclick = () => { go(k); start(); }; dots.appendChild(b); });
+    if (imgs.length) { hero.classList.add("on"); go(0); start(); } else hero.classList.remove("on"); }
+  imgs.forEach(m => m.addEventListener("error", () => { imgs = imgs.filter(x => x !== m); m.remove(); build(); }));
+  build();
+})();
 </script>
 </body>
 </html>
