@@ -296,7 +296,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <datalist id="tradeList"><option value="Agriculture Machineries"><option value="Auto Electrician"><option value="Domestic Appliances"><option value="Computer"><option value="Practice (Electrician)"><option value="Communicative English"><option value="Mathematics"><option value="Bengali"><option value="Management of Co-operative"></datalist>
       <div class="row"><label>Photo path (optional)<input id="sPhoto" list="photoList" placeholder="blank = auto, or pick / type a path"><datalist id="photoList"></datalist></label><label>Photo from computer (optional)<input type="file" id="sFile" accept="image/*"></label></div>
       <p><button class="btn" id="addS">Add staff</button> <button class="btn alt" id="cancelS" style="display:none">Cancel edit</button></p>
-      <p><button class="btn alt" id="syncS">Sync names from Salary Portal</button> <button class="btn alt" id="impV">Import vocational staff (17)</button> <span id="syncOut" class="meta"></span></p>
+      <p><button class="btn alt" id="syncS">Sync names from Salary Portal</button> <button class="btn alt" id="updR">Update regular staff (29)</button> <button class="btn alt" id="impV">Import vocational staff (17)</button> <span id="syncOut" class="meta"></span></p>
       <div id="photoRep" class="meta"></div>
       <div id="sList"></div>
     </fieldset>
@@ -663,6 +663,49 @@ const SEED_VOC = [
   ["Bikash Baskey","Para Teacher","All Subjects","Para","Contractual","2016-03-01"],
   ["Lakshmi Saren","Para Teacher","All Subjects","Para","Contractual","2016-03-01"],
   ["Ramprasad Layek","Temporary Night-Guard","Safety of vocational stream equipment","Support","Temporary","2017-04-27"]];
+const SEED_REG = [
+  ["Prabir Kumar Dangar", "Head Master", "Mathematics"],
+  ["Antara Ghorai", "Assistant Teacher", "Sanskrit"],
+  ["Bela Mahata", "Assistant Teacher", ""],
+  ["Bidhan Chandra Ghosh", "Assistant Teacher", ""],
+  ["Diptiman Saha", "Assistant Teacher", "Physical Education"],
+  ["Kabita Mandal", "Assistant Teacher", ""],
+  ["Kanti Malla", "Assistant Teacher", "Physical Education"],
+  ["Mahim Kumar Paine", "Assistant Teacher", ""],
+  ["Malati Tudu", "Assistant Teacher", "Santali"],
+  ["Mrinmayee Chakraborty", "Assistant Teacher", ""],
+  ["Papiya Maji", "Assistant Teacher", "English"],
+  ["Partha Mishra", "Assistant Teacher", "English"],
+  ["Partha Kumar Patra", "Assistant Teacher", "Pure Science"],
+  ["Sabyasachi Mandal", "Assistant Teacher", "Physical Science / Pure Science"],
+  ["Sahadeb Baskey", "Assistant Teacher", ""],
+  ["Sampa Pati", "Assistant Teacher", "English"],
+  ["Sasanka Saren", "Assistant Teacher", "Santali"],
+  ["Shephali Maji", "Assistant Teacher", "Geography"],
+  ["Sujata Mahata", "Assistant Teacher", ""],
+  ["Sumanta Mandal", "Assistant Teacher", "Mathematics"],
+  ["Swapan Kumar Maji", "Assistant Teacher", ""],
+  ["Swapna Mahanti", "Assistant Teacher", "Physics"],
+  ["Tanmoy Chakraborty", "Assistant Teacher", ""],
+  ["Tapas Kundu", "Assistant Teacher", ""],
+  ["Subhendu Karmakar", "Clerk", ""],
+  ["Tuhin Subhra Patra", "Librarian", ""],
+  ["Niranjan Murmu", "Group D Staff", ""],
+  ["Prakash Sardar", "Group D Staff", ""],
+  ["Tapan Kumar Diyasi", "Group D Staff", ""]];
+$("updR").onclick = () => {
+  const key = n => n.toLowerCase().replace(/[^\p{L}]/gu, ""), all = D.staff || [], reg = all.filter(t => t.unit !== "voc");
+  const by = new Map(reg.map(t => [key(t.name), t]));
+  let upd = 0, add = 0; const news = [];
+  SEED_REG.forEach(([n, post, sub]) => {
+    const o = by.get(key(n));
+    if (o) { let ch = false; if (sub && o.subject !== sub) { o.subject = sub; ch = true; } if (!o.post) { o.post = post; ch = true; } if (ch) upd++; }
+    else { news.push({id:uid(), name:n, post, subject:sub, photo:"", unit:"", level:"", eng:"", join:""}); add++; }
+  });
+  if (!upd && !add) return toast("Already up to date");
+  if (!confirm(upd + " existing staff will be updated and " + add + " new staff added (nobody is removed). Continue?")) return;
+  D.staff = all.concat(news); save();
+};
 $("impV").onclick = () => {
   const have = new Set((D.staff||[]).filter(t => t.unit === "voc").map(t => t.name.toLowerCase()));
   const add = SEED_VOC.filter(r => !have.has(r[0].toLowerCase())).map(r => ({id:uid(), name:r[0], post:r[1], subject:r[2], photo:"", unit:"voc", level:r[3], eng:r[4], join:r[5]}));
