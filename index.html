@@ -59,6 +59,15 @@ nav.menu a:hover{background:var(--gold);color:#1b1400}
 .ph{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none;background:var(--c-staff);color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px}
 .staff .item b{font-size:13px;line-height:1.25}
 .meta.blk{display:block}
+.ptabs{display:flex;gap:2px;overflow-x:auto;background:var(--navy);padding:4px 4px 0}
+.ptabs button{flex:1 1 auto;border:0;background:rgba(255,255,255,.12);color:#fff;font:600 13.5px inherit;font-family:inherit;padding:7px 12px;border-radius:5px 5px 0 0;cursor:pointer;white-space:nowrap}
+.ptabs button:hover{background:rgba(255,255,255,.25)}
+.ptabs button[aria-selected=true]{background:var(--c);box-shadow:inset 0 3px 0 var(--gold)}
+.ptabs .cnt{font-style:normal;font-size:11px;background:rgba(255,255,255,.25);border-radius:9px;padding:0 6px;margin-left:5px}.ptabs .cnt:empty{display:none}
+.pane[hidden]{display:none}
+.pane>.grid,.pane>.list{border-top:1px solid var(--line)}
+details.nb{margin-top:3px}details.nb summary{padding:0;font-size:12.5px}
+.nbody{white-space:pre-line;font-size:13.5px;line-height:1.4;margin-top:6px;padding:8px 10px;background:var(--bg);border-left:3px solid var(--c-notice)}
 .staff.v{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
 h3.sub{margin:0;padding:3px 10px;font-size:12.5px;background:color-mix(in srgb,var(--c-staff) 14%,var(--card));color:var(--ink);border:1px solid var(--line);border-top:0}
 h3.sub.vh{background:var(--c-staff);color:#fff;font-size:13px}
@@ -118,23 +127,34 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
 
   <div class="cols">
     <div class="mainc">
-      <h2 class="sec" id="notices-top" style="--c:var(--c-notice)">বিজ্ঞপ্তি / Notices</h2>
-      <nav class="tabs" aria-label="Filter notices">
-        <button data-f="all" aria-pressed="true">সবার জন্য / All</button>
-        <button data-f="staff" aria-pressed="false">শিক্ষক-শিক্ষাকর্মী / Staff</button>
-        <button data-f="student" aria-pressed="false">ছাত্রছাত্রী / Students</button>
-        <button data-f="general" aria-pressed="false">সাধারণ / General</button>
-      </nav>
-      <div class="list" id="notices" style="--c:var(--c-notice)"></div>
+      <div class="ptabs" id="ptabs" role="tablist" aria-label="Sections">
+        <button role="tab" data-p="notices" aria-selected="true" style="--c:var(--c-notice)">📢 <span>বিজ্ঞপ্তি</span><i class="cnt" id="cnt-notices"></i></button>
+        <button role="tab" data-p="results" aria-selected="false" style="--c:var(--c-result)">🏆 <span>ফলাফল</span><i class="cnt" id="cnt-results"></i></button>
+        <button role="tab" data-p="gallery" aria-selected="false" style="--c:var(--c-gallery)">🖼️ <span>গ্যালারি</span><i class="cnt" id="cnt-gallery"></i></button>
+        <button role="tab" data-p="staff" aria-selected="false" style="--c:var(--c-staff)">👥 <span>শিক্ষক-শিক্ষাকর্মী</span><i class="cnt" id="cnt-staff"></i></button>
+      </div>
 
-      <h2 class="sec" style="--c:var(--c-result)">ফলাফল / Results</h2>
-      <div class="list" id="results" style="--c:var(--c-result)"></div>
+      <section class="pane" id="p-notices" role="tabpanel" style="--c:var(--c-notice)">
+        <nav class="tabs" aria-label="Filter notices">
+          <button data-f="all" aria-pressed="true">সবার জন্য / All</button>
+          <button data-f="staff" aria-pressed="false">শিক্ষক-শিক্ষাকর্মী / Staff</button>
+          <button data-f="student" aria-pressed="false">ছাত্রছাত্রী / Students</button>
+          <button data-f="general" aria-pressed="false">সাধারণ / General</button>
+        </nav>
+        <div class="list" id="notices" style="--c:var(--c-notice)"></div>
+      </section>
 
-      <h2 class="sec" id="gallery" style="--c:var(--c-gallery)">ফটো গ্যালারি / Photo Gallery</h2>
-      <div class="grid" id="galleryBox"></div>
+      <section class="pane" id="p-results" role="tabpanel" style="--c:var(--c-result)" hidden>
+        <div class="list" id="results" style="--c:var(--c-result)"></div>
+      </section>
 
-      <h2 class="sec" id="staff" style="--c:var(--c-staff)">শিক্ষক-শিক্ষাকর্মী / Teachers &amp; Staff</h2>
-      <div id="staffBox"></div>
+      <section class="pane" id="p-gallery" role="tabpanel" style="--c:var(--c-gallery)" hidden>
+        <div class="grid" id="galleryBox"></div>
+      </section>
+
+      <section class="pane" id="p-staff" role="tabpanel" style="--c:var(--c-staff)" hidden>
+        <div id="staffBox"></div>
+      </section>
     </div>
 
     <aside class="side">
@@ -183,12 +203,13 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
 
     <fieldset><legend>Add notice</legend>
       <label>Title<input id="nTitle"></label>
-      <label>File or page link (Google Drive "anyone with link", PDF, etc.)<input id="nLink" placeholder="https://..."></label>
+      <label>File or page link (optional – Google Drive "anyone with link", PDF, etc.)<input id="nLink" placeholder="https://..."></label>
+      <label>Details (optional – full notice text, shown under a "Details" button)<textarea id="nBody" rows="6" placeholder="Paste the full notice text here. Line breaks are kept."></textarea></label>
       <div class="row">
         <label>For<select id="nFor"><option value="general">General</option><option value="staff">Staff</option><option value="student">Students</option></select></label>
         <label>Date<input id="nDate" type="date"></label>
       </div>
-      <p><button class="btn" id="addN">Publish notice</button></p>
+      <p><button class="btn" id="addN">Publish notice</button> <button class="btn alt" id="loadSampleN" type="button">Load sample notice into form</button></p>
       <div id="nList"></div>
     </fieldset>
 
@@ -302,7 +323,8 @@ function render(){
     .sort((x,y) => (y.date||"").localeCompare(x.date||""));
   $("notices").innerHTML = ns.length ? ns.map(n => `<div class="item"><div>
       <b>${esc(n.title)}</b>
-      <span class="meta">${isNew(n.date)?'<span class="tag new">NEW</span>':""}<span class="tag">${forLabel[n.for]||"General"}</span>${fmt(n.date)}</span></div>
+      <span class="meta">${isNew(n.date)?'<span class="tag new">NEW</span>':""}<span class="tag">${forLabel[n.for]||"General"}</span>${fmt(n.date)}</span>
+      ${n.body?`<details class="nb"><summary>📄 বিস্তারিত / Details</summary><div class="nbody">${esc(n.body)}</div></details>`:""}</div>
       ${safeUrl(n.link)?`<a class="btn sm" href="${safeUrl(n.link)}" target="_blank" rel="noopener">Open</a>`:""}</div>`).join("")
     : `<div class="empty">কোনো বিজ্ঞপ্তি নেই। / No notices yet.</div>`;
   const rs = [...(D.results || [])].sort((x,y) => (y.date||"").localeCompare(x.date||""));
@@ -312,6 +334,20 @@ function render(){
     : `<div class="empty">কোনো ফলাফল প্রকাশিত হয়নি। / No results published yet.</div>`;
   renderExtra();
   renderAdminLists();
+  paneCounts();
+}
+function showPane(name, scroll){
+  document.querySelectorAll("#ptabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.p === name));
+  document.querySelectorAll(".pane").forEach(p => p.hidden = p.id !== "p-" + name);
+  if (scroll) $("ptabs").scrollIntoView({block:"start", behavior:"smooth"});
+}
+document.querySelectorAll("#ptabs button").forEach(b => b.onclick = () => showPane(b.dataset.p));
+const MENU_PANE = {"#notices-top":"notices", "#gallery":"gallery", "#staff":"staff"};
+document.querySelectorAll("nav.menu a").forEach(a => { const n = MENU_PANE[a.getAttribute("href")];
+  if (n) a.onclick = e => { e.preventDefault(); showPane(n, true); }; });
+function paneCounts(){
+  const c = {notices:(D.notices||[]).length, results:(D.results||[]).length, gallery:(D.gallery||[]).length, staff:(D.staff||[]).length};
+  for (const k in c) { const el = $("cnt-" + k); if (el) el.textContent = c[k] || ""; }
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
   filter = b.dataset.f;
@@ -352,8 +388,11 @@ $("saveAdm").onclick = () => { D.admission = { open:$("aOpen").checked, title:$(
   link:$("aLink").value.trim(), last:$("aLast").value, note:$("aNote").value.trim() }; save(); };
 $("addN").onclick = () => {
   const t = $("nTitle").value.trim(); if (!t) return toast("Title is required");
-  (D.notices ||= []).push({ id:uid(), title:t, link:$("nLink").value.trim(), for:$("nFor").value, date:$("nDate").value || today() });
-  $("nTitle").value = $("nLink").value = ""; save();
+  const body = $("nBody").value.trim();
+  if (body.length > 6000) return toast("Details too long (max 6000 characters)");
+  if (tooBig(body.length + 300)) return toast("Storage full - delete old items first");
+  (D.notices ||= []).push({ id:uid(), title:t, link:$("nLink").value.trim(), body, for:$("nFor").value, date:$("nDate").value || today() });
+  $("nTitle").value = $("nLink").value = $("nBody").value = ""; save();
 };
 $("addR").onclick = () => {
   const t = $("rTitle").value.trim(); if (!t) return toast("Title is required");
@@ -409,6 +448,9 @@ function renderAdminLists(){
     Object.assign(h, {name:n.trim()||h.name, date:f.trim()||h.date, to:t.trim()}); save();
   });
 }
+const SAMPLE_NOTICE = {"title": "বিদ্যালয় পুনরায় খোলার বিজ্ঞপ্তি ও সাধারণ নির্দেশাবলী", "body": "এতদ্বারা বিদ্যালয়ের সকল ছাত্র-ছাত্রী, শিক্ষক-শিক্ষিকা, গ্রন্থাগারিক, শিক্ষাকর্মী ও অভিভাবকদের জানানো যাচ্ছে যে, আগামী ১লা জুন, ২০২৬ থেকে একাদশ শ্রেণি ব্যতীত অন্য সমস্ত শ্রেণির পঠন-পাঠন ও সাধারণ কার্যক্রম যথারীতি শুরু হচ্ছে।\n\n• বিদ্যালয় শুরুর সময়: সকাল ১০:৩০ মিনিট (নির্ধারিত সময়সূচি অনুযায়ী)\n\n• একাদশ শ্রেণির জন্য বিশেষ বিজ্ঞপ্তি: একাদশ শ্রেণির ভর্তি প্রক্রিয়া সম্পন্ন হওয়ার অর্থাৎ ৪-৫ দিনের মধ্যে তাদের ক্লাস শুরুর তারিখ এই পোর্টালে পৃথকভাবে জানিয়ে দেওয়া হবে। সকলকে নিয়মিত পোর্টাল নজর রাখার অনুরোধ করা হচ্ছে।\n\n🔹 গুরুত্বপূর্ণ নির্দেশাবলী (General Guidelines)\n\nবিদ্যালয়ের শৃঙ্খলা ও পঠন-পাঠনের সুষ্ঠু পরিবেশ বজায় রাখতে নিম্নলিখিত নিয়মাবলী কঠোরভাবে মেনে চলতে হবে:\n\n⏱️ ১. প্রার্থনা সভা ও সময়ানুবর্তিতা\n\n• সমস্ত শিক্ষক-শিক্ষিকা, গ্রন্থাগারিক ,শিক্ষাকর্মী ও ছাত্র-ছাত্রীদের যথাসময়ে বিদ্যালয়ে উপস্থিত হয়ে প্রার্থনা সভায় অংশগ্রহণ করা বাধ্যতামূলক।\n\n• সকল ছাত্র-ছাত্রীকে বিদ্যালয়ের নির্ধারিত পোশাক (Uniform) পরিধান করে উপস্থিত থাকতে হবে।\n\n🎶 ২. \"বন্দে মাতরম্\" সঙ্গীত পরিবেশন\n\n• পশ্চিমবঙ্গ সরকারের নির্দেশিকা অনুযায়ী, প্রতিদিন প্রার্থনা সভায় যৌথভাবে “বন্দে মাতরম্” গান পরিবেশন করা হবে।\n\n• প্রার্থনা ও সঙ্গীত পরিবেশন শেষ হওয়ার অব্যবহিত পরেই শ্রেণিকক্ষে নিয়মিত পঠন-পাঠন শুরু হবে।\n\n📚 ৩. পঠন-পাঠন ও উপস্থিতি\n\n• ১লা জুন, ২০২৬ থেকে প্রতিটি শ্রেণির ক্লাস [একাদশ শ্রেণি ব্যতীত] পুরোদমে চালু হয়ে যাবে।\n\n• শিক্ষার্থীদের পড়াশোনার ধারাবাহিকতা বজায় রাখার জন্য প্রতিদিন নিয়মিত উপস্থিতি অত্যন্ত জরুরি।\n\n🍱 ৪. মিড-ডে মিল (Mid-Day Meal)\n\n• পঞ্চম থেকে অষ্টম শ্রেণির ছাত্র-ছাত্রীদের জন্য সরকারি নিয়মানুযায়ী Mid-Day Meal কার্যক্রম ১লা জুন থেকেই যথারীতি চালু থাকবে।\n\n⚠️ বিশেষ সতর্কবার্তা\n\nবিদ্যালয়ের প্রতিটি ছাত্র-ছাত্রীকে প্রাতিষ্ঠানিক শৃঙ্খলা, ভদ্রতা ও সময়ানুবর্তিতা বজায় রেখে নির্দিষ্ট সময়ের পূর্বে বিদ্যালয়ে উপস্থিত হওয়ার জন্য বিশেষভাবে নির্দেশ দেওয়া হচ্ছে। এতে কোনো প্রকার শিথিলতা গ্রহণযোগ্য নয়।\n\nআদেশানুসারে,\n\nপ্রধান শিক্ষক\n\nতালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উচ্চ মাধ্যমিক)\n\nবাঁকুড়া"};
+$("loadSampleN").onclick = () => { $("nTitle").value = SAMPLE_NOTICE.title; $("nBody").value = SAMPLE_NOTICE.body; $("nFor").value = "general";
+  toast("Sample loaded - set the date, edit if needed, then click Publish notice"); $("nTitle").scrollIntoView({block:"center"}); };
 const addTo = (k, obj) => { D[k] = eff(k).slice(); D[k].push({id:uid(), ...obj}); save(); };
 function shrink(file, maxDim, maxBytes){
   return new Promise((ok, bad) => {
