@@ -144,7 +144,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 <main class="wrap" id="site">
   <section class="hero" id="hero" aria-label="School photos">
     <img src="images/school-gate.jpg" alt="তালডাংরা ফুলমতি উচ্চ বিদ্যালয়ের প্রবেশদ্বার / School main gate" data-cap="প্রবেশদ্বার / School Gate">
-    <img src="images/school-campus.jpg" alt="বিদ্যালয় প্রাঙ্গণ ও ভবন / School campus and building" data-cap="বিদ্যালয় প্রাঙ্গণ / School Campus" loading="lazy">
+    <img src="images/school-campus.jpg" alt="বিদ্যালয় প্রাঙ্গণ ও ভবন / School campus and building" data-cap="বিদ্যালয় প্রাঙ্গণ / School Campus">
     <div class="cap" id="heroCap"></div><div class="dots" id="heroDots"></div>
   </section>
   <div class="adm" id="admBox"></div>
@@ -781,7 +781,7 @@ function renderMp(){
   $("mpBox").innerHTML = has ? `<div class="item"><div><b>${esc(m.title || "Class X MP (SE) 2027 Selection Test – Programme")}</b>
       ${m.range?`<span class="meta">${esc(m.range)}</span>`:""}
       ${m.note?`<div class="nbody">${esc(m.note)}</div>`:""}</div>
-      ${link?`<a class="btn sm" href="${link}" target="_blank" rel="noopener">Exam portal</a>`:""}</div>
+</div>
     ${isData(m.poster)?`<img class="zoom mpposter" src="${esc(m.poster)}" alt="MP Test programme poster">`:""}
     ${rows.length?`<table class="t mp"><tr><th>তারিখ / Date</th><th>বার / Day</th><th>সময় / Time</th><th>বিষয় / Subject</th></tr>${rows.map(r => `<tr><td>${fmt(r.date)}</td><td>${esc(dayName(r.date))}</td><td>${esc(r.time||"")}</td><td>${esc(r.subject)}</td></tr>`).join("")}</table>`:""}`
     : `<div class="empty">প্রোগ্রাম শীঘ্রই প্রকাশিত হবে। / Programme will be published soon.</div>`;
@@ -854,7 +854,11 @@ addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true
       b.type = "button"; b.setAttribute("aria-label", "Photo " + (k + 1)); b.onclick = () => { go(k); start(); }; dots.appendChild(b); });
     if (imgs.length) { hero.classList.add("on"); go(0); start(); } else hero.classList.remove("on"); }
   imgs.forEach(m => m.addEventListener("error", () => { imgs = imgs.filter(x => x !== m); m.remove(); build(); }));
+  /* images that already failed before this script ran never fire "error" – drop them now */
+  imgs.filter(m => m.complete && m.naturalWidth === 0 && m.getAttribute("loading") !== "lazy").forEach(m => { imgs = imgs.filter(x => x !== m); m.remove(); });
   build();
+  addEventListener("load", () => { const bad = imgs.filter(m => m.complete && m.naturalWidth === 0);
+    if (bad.length) { bad.forEach(m => m.remove()); imgs = imgs.filter(x => !bad.includes(x)); build(); } });
 })();
 </script>
 </body>
