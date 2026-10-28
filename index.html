@@ -392,7 +392,11 @@ const eff = k => k === "links" ? (D.links ?? DEFAULT_LINKS) : (D[k] || []);
 const B = "https://prabirdangar-web.github.io/";
 const DEFAULT_LINKS = [
   {id:"l1", group:"general", icon:"📝", title:"Admission & Certificates", desc:"Online admission and certificate portal", url:B+"certificate/"},
-  {id:"l2", group:"student", icon:"📊", title:"Class XI & X – Tests, Results, Programme", desc:"Test marks, results and examination programme", url:B+"xi_mp_test/"},
+  {id:"l2", group:"student", icon:"🎓", title:"Class XI Result", desc:"Enter any two: Reg. No., date of birth, Banglar Siksha ID or Roll", url:B+"xi_mp_test/?m=result&sub=*"},
+  {id:"l2a", group:"student", icon:"📘", title:"Class XI – Semester I Result", desc:"Semester I marks only", url:B+"xi_mp_test/?m=result&sub=*&exam=SEM1"},
+  {id:"l2b", group:"student", icon:"📗", title:"Class XI – Semester II Result", desc:"Semester II marks only", url:B+"xi_mp_test/?m=result&sub=*&exam=SEM2"},
+  {id:"l2c", group:"student", icon:"🏆", title:"Class X (MP SE 2027) Result", desc:"Enter any two: B.S. Portal ID, date of birth or Roll", url:B+"xi_mp_test/?m=resultx&sub=*"},
+  {id:"l6", group:"staff", icon:"📝", title:"Examination Portal (teachers)", desc:"Marks entry, attendance and tabulation – teacher login", url:B+"xi_mp_test/"},
   {id:"l3", group:"staff", icon:"🧾", title:"My Pay Slip", desc:"Open “My Pay Slip” and enter any two ID details", url:B+"salary/"},
   {id:"l4", group:"staff", icon:"💰", title:"My PF / GPF Statement", desc:"View your individual PF account", url:B+"pf_interest/?staff=1"},
   {id:"l5", group:"staff", icon:"🏖️", title:"Apply for Leave", desc:"Staff e-leave application", url:B+"e-leave-application/"}
