@@ -189,7 +189,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar)}
 
     <fieldset><legend>Teacher / staff</legend>
       <div class="row"><label>Name<input id="sName"></label><label>Post<input id="sPost" placeholder="Assistant Teacher"></label></div>
-      <div class="row"><label>Subject<input id="sSub" placeholder="Mathematics"></label><label>Photo path (optional)<input id="sPhoto" placeholder="images/staff/name.jpg"></label></div>
+      <div class="row"><label>Subject<input id="sSub" placeholder="Mathematics"></label><label>Photo path (optional)<input id="sPhoto" placeholder="blank = images/staff/&lt;name&gt;.jpg"></label></div>
       <p><button class="btn" id="addS">Add staff</button></p>
       <p><button class="btn alt" id="syncS">Sync names from Salary Portal</button> <span id="syncOut" class="meta"></span></p>
       <div id="sList"></div>
@@ -339,13 +339,21 @@ function renderAdminLists(){
   for (const [k, id] of Object.entries(LISTS)){
     $(id).innerHTML = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||x.url)}</b>
       <span class="meta">${esc(x.post||x.time||x.url&&"")} ${fmt(x.date)}</span></div>
-      ${k==="holidays"?`<button class="btn alt sm" data-edit="${x.id}">Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">Delete</button></div>`).join("");
+      ${k==="holidays"||k==="staff"?`<button class="btn alt sm" data-edit="${x.id}" data-ek="${k}">Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">Delete</button></div>`).join("");
   }
   document.querySelectorAll("#panel [data-id]").forEach(b => b.onclick = () => {
     if (!confirm("Delete this item?")) return;
     D[b.dataset.k] = eff(b.dataset.k).filter(x => x.id !== b.dataset.id); save();
   });
   document.querySelectorAll("#panel [data-edit]").forEach(b => b.onclick = () => {
+    if (b.dataset.ek === "staff") {
+      const t = (D.staff||[]).find(x => x.id === b.dataset.edit); if (!t) return;
+      const n = prompt("Name", t.name); if (n === null) return;
+      const po = prompt("Post", t.post || ""); if (po === null) return;
+      const su = prompt("Subject", t.subject || ""); if (su === null) return;
+      const ph = prompt("Photo path (blank = images/staff/" + slug(t.name) + ".jpg)", t.photo || ""); if (ph === null) return;
+      Object.assign(t, {name:n.trim()||t.name, post:po.trim(), subject:su.trim(), photo:ph.trim()}); return save();
+    }
     const h = (D.holidays||[]).find(x => x.id === b.dataset.edit); if (!h) return;
     const n = prompt("Holiday name", h.name); if (n === null) return;
     const f = prompt("From date (YYYY-MM-DD)", h.date); if (f === null) return;
@@ -436,13 +444,15 @@ function findStaff(root){
   const best = cands.reduce((a, b) => b.length >= a.length ? b : a);
   return best.map(v => ({name:v.name.trim(), post:String(v.desig || v.designation || v.post || "").trim()}));
 }
+const slug = n => (n||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const photoOf = t => t.photo || (slug(t.name) ? "images/staff/" + slug(t.name) + ".jpg" : "");
 function renderExtra(){
   renderLinks();
   $("galleryBox").innerHTML = (D.gallery||[]).length ? D.gallery.slice().reverse().map(g => imgUrl(g.url) ?
     `<figure><a href="${imgUrl(g.url)}" target="_blank" rel="noopener"><img loading="lazy" src="${imgUrl(g.url)}" alt="${esc(g.caption||"School photo")}"></a>${g.caption?`<figcaption>${esc(g.caption)}</figcaption>`:""}</figure>`:"").join("")
     : `<div class="empty">শীঘ্রই ছবি যোগ করা হবে। / Photos coming soon.</div>`;
   $("staffBox").innerHTML = (D.staff||[]).length ? D.staff.map(t => `<div class="item">
-    ${imgUrl(t.photo)?`<img class="ph" loading="lazy" src="${imgUrl(t.photo)}" alt="">`:`<span class="ph">${esc((t.name||"?").trim().charAt(0))}</span>`}
+    ${imgUrl(photoOf(t))?`<img class="ph" loading="lazy" src="${imgUrl(photoOf(t))}" alt="" data-i="${esc((t.name||"?").trim().charAt(0))}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph',textContent:this.dataset.i}))">`:`<span class="ph">${esc((t.name||"?").trim().charAt(0))}</span>`}
     <div><b>${esc(t.name)}</b><span class="meta">${esc(t.post)}${t.subject?" · "+esc(t.subject):""}</span></div></div>`).join("")
     : `<div class="empty">তালিকা শীঘ্রই। / List coming soon.</div>`;
   $("routineBox").innerHTML = (D.routine||[]).map(r => `<tr><td>${esc(r.label)}</td><td>${esc(r.time)}</td></tr>`).join("");
