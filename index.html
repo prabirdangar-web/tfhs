@@ -162,6 +162,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar)}
 
     <fieldset><legend>Gallery photo</legend>
       <label>Image path or link (best: upload to the repo's <code>images/</code> folder, then enter <code>images/sports-day.jpg</code>)<input id="gUrl"></label>
+      <label>OR choose a photo directly from your computer<input type="file" id="gFile" accept="image/*"></label>
       <label>Caption<input id="gCap"></label>
       <p><button class="btn" id="addG">Add photo</button></p>
       <div id="gList"></div>
@@ -202,6 +203,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar)}
 
 <footer>© Taldangra Fulmati High School (H.S.) · Updated by the school administration</footer>
 <div id="msg" role="status"></div>
+<input type="file" id="phFile" accept="image/*" style="display:none">
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -228,7 +230,8 @@ let D = { ticker: "", admission: {}, notices: [], results: [] }, filter = "all";
 
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const safeUrl = u => /^https?:\/\//i.test(u || "") ? esc(u) : "";
-const imgUrl = u => /^(https?:\/\/|[\w\-][\w\-.\/ ]*$)/i.test(u || "") && !/\.\./.test(u) ? esc(u) : "";
+const isData = u => /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(u || "");
+const imgUrl = u => isData(u) || (/^(https?:\/\/|[\w\-][\w\-.\/ ]*$)/i.test(u || "") && !/\.\./.test(u)) ? esc(u) : "";
 const fmt = d => d ? new Date(d).toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"}) : "";
 const isNew = d => d && (Date.now() - new Date(d)) < 7 * 864e5;
 const forLabel = {general:"General", staff:"Staff", student:"Students"};
@@ -355,8 +358,31 @@ function renderAdminLists(){
   });
 }
 const addTo = (k, obj) => { D[k] = eff(k).slice(); D[k].push({id:uid(), ...obj}); save(); };
-$("addG").onclick = () => { const u=$("gUrl").value.trim(); if(!u) return toast("Image path is required");
-  addTo("gallery",{url:u, caption:$("gCap").value.trim()}); $("gUrl").value=$("gCap").value=""; };
+function shrink(file, maxDim, maxBytes){
+  return new Promise((ok, bad) => {
+    const fr = new FileReader();
+    fr.onerror = () => bad(new Error("read"));
+    fr.onload = () => { const im = new Image(); im.onerror = () => bad(new Error("not an image"));
+      im.onload = () => {
+        const r = Math.min(1, maxDim / Math.max(im.width, im.height)), c = document.createElement("canvas");
+        c.width = Math.round(im.width * r); c.height = Math.round(im.height * r);
+        const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+        let q = 0.8, out = c.toDataURL("image/jpeg", q);
+        while (out.length > maxBytes && q > 0.3) { q -= 0.1; out = c.toDataURL("image/jpeg", q); }
+        ok(out); };
+      im.src = fr.result; };
+    fr.readAsDataURL(file);
+  });
+}
+const tooBig = () => new Blob([JSON.stringify(D)]).size > 900000;
+$("addG").onclick = async () => {
+  const f = $("gFile").files[0]; let u = $("gUrl").value.trim();
+  if (f) { try { u = await shrink(f, 1000, 130000); } catch(e) { return toast("Could not read this image"); } }
+  if (!u) return toast("Choose a photo or enter an image path");
+  const before = D.gallery;
+  addTo("gallery",{url:u, caption:$("gCap").value.trim()});
+  if (tooBig()) { D.gallery = before; render(); return toast("Storage full - delete old gallery photos or use images/ folder"); }
+  $("gUrl").value=$("gCap").value=$("gFile").value=""; };
 $("addS").onclick = () => { const n=$("sName").value.trim(); if(!n) return toast("Name is required");
   addTo("staff",{name:n, post:$("sPost").value.trim(), subject:$("sSub").value.trim(), photo:$("sPhoto").value.trim()});
   ["sName","sPost","sSub","sPhoto"].forEach(i=>$(i).value=""); };
