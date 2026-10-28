@@ -1,744 +1,385 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TFHS Portal - Taldangra Fulmati High School</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for professional icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0f6ff',
-                            100: '#e0effe',
-                            600: '#1d4ed8',
-                            700: '#1e40af',
-                            900: '#1e3a8a',
-                        },
-                        gold: {
-                            500: '#d97706',
-                            600: '#b45309',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #0f172a 100%);
-        }
-        /* Custom scrollbar for cleanliness */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taldangra Fulmati High School (H.S.) – Notice Board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Serif+Bengali:wght@700&display=swap">
+<style>
+:root{--bg:#f2f4f6;--ink:#17212b;--mut:#5b6773;--card:#fff;--line:#d9dee3;--mar:#8c1d2f;--gold:#d9a520;--ok:#1d6b4a}
+@media(prefers-color-scheme:dark){:root{--bg:#10161c;--ink:#e8edf1;--mut:#9aa7b3;--card:#192129;--line:#2b3641;--mar:#e0657a;--gold:#e8b93a;--ok:#5fc596}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Noto Sans Bengali",system-ui,sans-serif}
+a{color:var(--mar)}
+header{background:var(--mar);color:#fff;padding:20px 16px;text-align:center}
+header h1{margin:0;font:700 clamp(20px,4.5vw,32px)/1.25 "Noto Serif Bengali",serif}
+header p{margin:4px 0 0;opacity:.9;font-size:14px}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+.ticker{background:var(--gold);color:#1b1400;padding:8px 16px;font-weight:600;text-align:center}
+.ticker:empty{display:none}
+.adm{border:2px solid var(--mar);background:var(--card);border-radius:10px;padding:14px 16px;margin:16px 0}
+.adm.closed{border-color:var(--line);color:var(--mut)}
+.adm h2{margin:0 0 4px;font-size:18px}
+.btn{display:inline-block;border:0;border-radius:8px;background:var(--mar);color:#fff;padding:8px 16px;font:600 15px inherit;font-family:inherit;text-decoration:none;cursor:pointer}
+.btn.alt{background:transparent;color:var(--mar);border:1.5px solid var(--mar)}
+.btn.sm{padding:3px 10px;font-size:13px}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
+nav.tabs button{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:5px 14px;font:inherit;cursor:pointer}
+nav.tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+h2.sec{font-size:19px;margin:22px 0 8px;border-bottom:2px solid var(--line);padding-bottom:4px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+.item b{display:block}
+.meta{font-size:13px;color:var(--mut)}
+.tag{display:inline-block;font-size:12px;border-radius:4px;padding:0 6px;background:var(--line);color:var(--ink);margin-right:4px}
+.tag.new{background:var(--gold);color:#1b1400;font-weight:700}
+.empty{color:var(--mut);padding:8px 2px}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:24px 16px 40px}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+nav.menu{display:flex;gap:4px 16px;flex-wrap:wrap;justify-content:center;background:var(--card);border-bottom:1px solid var(--line);padding:8px 12px}
+nav.menu a{text-decoration:none;font-weight:600;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.grid figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.grid img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--line)}
+.grid figcaption{font-size:13px;padding:6px 10px}
+.staff{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.staff .item{flex-direction:row;align-items:center}
+.ph{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none;background:var(--mar);color:#fff;display:grid;place-items:center;font-weight:700;font-size:20px}
+table.t{width:100%;border-collapse:collapse;background:var(--card)}
+table.t td{border:1px solid var(--line);padding:6px 12px}
+table.t td:last-child{text-align:right;font-weight:600;white-space:nowrap}
+.apply{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 16px 16px}
+.apply label{display:block;font-size:13px;color:var(--mut);margin-top:10px}
+.apply input,.apply select,.apply textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+.apply .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hp{position:absolute;left:-9999px}
+@media(max-width:560px){.apply .row{grid-template-columns:1fr}}
+/* admin */
+#panel{display:none}
+#panel fieldset{border:1px solid var(--line);border-radius:8px;background:var(--card);margin:0 0 14px;padding:12px 14px}
+#panel legend{font-weight:700;padding:0 6px}
+#panel label{display:block;font-size:13px;color:var(--mut);margin-top:8px}
+#panel input,#panel select,#panel textarea{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+#panel .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:560px){#panel .row{grid-template-columns:1fr}.item{flex-direction:column}}
+#msg{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:20px;display:none}
+</style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+<body>
+<header>
+  <h1>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)</h1>
+  <p>Taldangra Fulmati High School (H.S.) · Estd. 1956 · Taldangra, Khatra, Bankura</p>
+</header>
+<div class="ticker" id="ticker"></div>
+<nav class="menu" aria-label="Sections">
+  <a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
+  <a href="#routine">রুটিন ও ছুটি</a><a href="#apply">ভর্তির আবেদন</a>
+</nav>
 
-    <!-- Top Announcement Bar -->
-    <div class="bg-amber-500 text-slate-900 px-4 py-2 text-xs md:text-sm font-medium flex items-center justify-between shadow-inner">
-        <div class="max-w-7xl mx-auto flex items-center space-x-2 truncate">
-            <span class="bg-slate-900 text-white text-[10px] uppercase px-2 py-0.5 rounded-full font-bold tracking-wider animate-pulse">Notice</span>
-            <span class="truncate">📢 Admission Portal and Examination 2027 links are live under Notices and Web Apps.</span>
-        </div>
-        <div class="hidden md:flex items-center space-x-4 text-xs font-semibold">
-            <a href="#apps" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-grip"></i> Web Apps</a>
-            <a href="#notices" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-bell"></i> Circulars</a>
-            <a href="#calculator" class="hover:underline flex items-center gap-1"><i class="fa-solid fa-calculator"></i> Calculator</a>
-        </div>
+<main class="wrap" id="site">
+  <div class="adm" id="admBox"></div>
+
+  <nav class="tabs" aria-label="Filter notices">
+    <button data-f="all" aria-pressed="true">সবার জন্য / All</button>
+    <button data-f="staff" aria-pressed="false">শিক্ষক-শিক্ষাকর্মী / Staff</button>
+    <button data-f="student" aria-pressed="false">ছাত্রছাত্রী / Students</button>
+    <button data-f="general" aria-pressed="false">সাধারণ / General</button>
+  </nav>
+
+  <h2 class="sec" id="notices-top">বিজ্ঞপ্তি / Notices</h2>
+  <div id="notices"></div>
+
+  <h2 class="sec">ফলাফল / Results</h2>
+  <div id="results"></div>
+
+  <h2 class="sec" id="gallery">ফটো গ্যালারি / Photo Gallery</h2>
+  <div class="grid" id="galleryBox"></div>
+
+  <h2 class="sec" id="staff">শিক্ষক-শিক্ষাকর্মী / Teachers &amp; Staff</h2>
+  <div class="staff" id="staffBox"></div>
+
+  <h2 class="sec" id="routine">বিদ্যালয়ের রুটিন ও ছুটি / Routine &amp; Holidays</h2>
+  <table class="t" id="routineBox"></table>
+  <h3 style="margin:14px 0 6px;font-size:16px">আসন্ন ছুটি / Upcoming holidays</h3>
+  <div id="holidayBox"></div>
+
+  <h2 class="sec" id="apply">অনলাইন ভর্তির আবেদন / Apply Online</h2>
+  <div class="apply">
+    <p class="meta">আবেদন জমা দিলে বিদ্যালয় আপনার সাথে যোগাযোগ করবে। / The school will contact you after you submit.</p>
+    <label>ছাত্র/ছাত্রীর নাম / Student name *<input id="eName" maxlength="80"></label>
+    <label>অভিভাবকের নাম / Guardian name<input id="eGuard" maxlength="80"></label>
+    <div class="row">
+      <label>কোন শ্রেণিতে / Class applying for *<select id="eCls"><option>V</option><option>VI</option><option>VII</option><option>VIII</option><option>IX</option><option>XI</option></select></label>
+      <label>মোবাইল / Mobile *<input id="ePhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10 digits"></label>
     </div>
+    <label>আগের স্কুল / Previous school<input id="ePrev" maxlength="100"></label>
+    <label>ঠিকানা / Address (village, P.O.)<input id="eAddr" maxlength="150"></label>
+    <label>অন্য তথ্য / Message<textarea id="eNote" rows="2" maxlength="300"></textarea></label>
+    <input class="hp" id="eHp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <p style="margin:14px 0 0"><button class="btn" id="eSend">আবেদন জমা দিন / Submit</button> <span id="eOut" class="meta"></span></p>
+  </div>
 
-    <!-- Navigation Header -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Brand Logo & Title -->
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <div class="w-12 h-12 rounded-xl hero-gradient flex items-center justify-center text-white shadow-md">
-                    <i class="fa-solid fa-graduation-cap text-2xl text-amber-400"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg md:text-xl font-bold text-slate-900 tracking-tight leading-tight">TFHS PORTAL</h1>
-                    <p class="text-xs text-slate-500 font-medium">Taldangra Fulmati High School (H.S.) · Estd. 1956</p>
-                </div>
-            </div>
+  <h2 class="sec">যোগাযোগ / Contact</h2>
+  <div class="item"><div>
+    Landline: 03243-265114<br>
+    H.M.: 9434654678, 9933035811<br>
+    <a href="mailto:highschooltaldangrafulmati@gmail.com">highschooltaldangrafulmati@gmail.com</a><br>
+    <span class="meta">UDISE 19132104401 · H.S. Code 114071 · Index No. U1-083</span>
+  </div></div>
+</main>
 
-            <!-- Desktop Menu -->
-            <nav class="hidden lg:flex items-center space-x-1">
-                <a href="#" onclick="showSection('home')" class="nav-link active px-3.5 py-2 rounded-lg text-sm font-semibold text-blue-700 bg-blue-50 transition-colors">Home</a>
-                <a href="#notices" onclick="showSection('notices')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Notices & Exams</a>
-                <a href="#apps" onclick="showSection('apps')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Web Apps</a>
-                <a href="#media" onclick="showSection('media')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Anthems & Media</a>
-                <a href="#calculator" onclick="showSection('calculator')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Calculator</a>
-                <a href="#retirement" onclick="showSection('retirement')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-slate-50 transition-colors">Retirement Hub</a>
-            </nav>
+<!-- ADMIN PANEL: open this page with #admin at the end of the URL -->
+<main class="wrap" id="panel">
+  <h2>Admin panel</h2>
+  <p><span id="who" class="meta">Not signed in</span>
+    <button class="btn alt sm" id="login">Sign in with Google</button>
+    <button class="btn alt sm" id="logout" style="display:none">Sign out</button>
+    <a class="btn alt sm" href="#">View site</a></p>
+  <div id="editor" style="display:none">
+    <fieldset><legend>Top ticker (one-line alert)</legend>
+      <input id="tk" placeholder="e.g. School closed on 31 October">
+    </fieldset>
 
-            <!-- Quick Action & Mobile Toggle -->
-            <div class="flex items-center space-x-3">
-                <button onclick="openSearchModal()" class="hidden sm:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2 rounded-lg text-sm transition">
-                    <i class="fa-solid fa-search text-xs"></i>
-                    <span>Quick Search...</span>
-                    <kbd class="bg-white px-1.5 py-0.5 text-[10px] rounded border border-slate-300 text-slate-400">Ctrl+K</kbd>
-                </button>
-                <button id="mobileMenuBtn" class="lg:hidden text-slate-700 hover:text-blue-700 focus:outline-none p-2 rounded-lg hover:bg-slate-100">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
-            </div>
-        </div>
+    <fieldset><legend>Admission</legend>
+      <label><input type="checkbox" id="aOpen" style="width:auto"> Admission open</label>
+      <label>Heading<input id="aTitle" placeholder="Admission 2027 – Class V / IX / XI"></label>
+      <label>Form / notice link<input id="aLink" placeholder="https://..."></label>
+      <div class="row">
+        <label>Last date<input id="aLast" type="date"></label>
+        <label>Short note<input id="aNote"></label>
+      </div>
+      <p><button class="btn" id="saveAdm">Save admission</button></p>
+    </fieldset>
 
-        <!-- Mobile Dropdown Menu -->
-        <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-1 shadow-lg">
-            <a href="#" onclick="toggleMobileMenu(); showSection('home');" class="block px-3 py-2 rounded-md text-base font-medium text-blue-700 bg-blue-50">Home</a>
-            <a href="#apps" onclick="toggleMobileMenu(); showSection('apps');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Web Apps</a>
-            <a href="#notices" onclick="toggleMobileMenu(); showSection('notices');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Notices & Exams</a>
-            <a href="#media" onclick="toggleMobileMenu(); showSection('media');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Anthems & Media</a>
-            <a href="#calculator" onclick="toggleMobileMenu(); showSection('calculator');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Calculator</a>
-            <a href="#retirement" onclick="toggleMobileMenu(); showSection('retirement');" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Retirement Celebration</a>
-        </div>
-    </header>
+    <fieldset><legend>Add notice</legend>
+      <label>Title<input id="nTitle"></label>
+      <label>File or page link (Google Drive "anyone with link", PDF, etc.)<input id="nLink" placeholder="https://..."></label>
+      <div class="row">
+        <label>For<select id="nFor"><option value="general">General</option><option value="staff">Staff</option><option value="student">Students</option></select></label>
+        <label>Date<input id="nDate" type="date"></label>
+      </div>
+      <p><button class="btn" id="addN">Publish notice</button></p>
+      <div id="nList"></div>
+    </fieldset>
 
-    <!-- Main Content Container -->
-    <main class="flex-grow">
+    <fieldset><legend>Add result</legend>
+      <label>Title<input id="rTitle" placeholder="Class IX Annual Examination 2026 – Result"></label>
+      <label>Result link<input id="rLink" placeholder="https://..."></label>
+      <label>Date<input id="rDate" type="date"></label>
+      <p><button class="btn" id="addR">Publish result</button></p>
+      <div id="rList"></div>
+    </fieldset>
 
-        <!-- Hero Banner Section -->
-        <section class="hero-gradient text-white py-16 md:py-24 relative overflow-hidden">
-            <!-- Background Decorative Elements -->
-            <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute left-10 top-10 w-72 h-72 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+    <fieldset><legend>Gallery photo</legend>
+      <label>Image path or link (best: upload to the repo's <code>images/</code> folder, then enter <code>images/sports-day.jpg</code>)<input id="gUrl"></label>
+      <label>Caption<input id="gCap"></label>
+      <p><button class="btn" id="addG">Add photo</button></p>
+      <div id="gList"></div>
+    </fieldset>
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                        <div class="inline-flex items-center gap-2 bg-blue-900/80 border border-blue-400/30 px-3 py-1.5 rounded-full text-xs font-medium text-amber-300">
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <span>Welcome to the Official Digital Gateway</span>
-                        </div>
-                        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-                            Empowering Education & <span class="text-amber-400">Administrative Excellence</span>
-                        </h1>
-                        <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                            Access examination notices, staff leave applications, government circulars, calculation tools, and multimedia archives instantly from one unified hub.
-                        </p>
-                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
-                            <a href="#notices" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-6 py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 flex items-center gap-2">
-                                <i class="fa-solid fa-bullhorn"></i> View Notice Board
-                            </a>
-                            <a href="#apps" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur transition flex items-center gap-2"><i class="fa-solid fa-grip"></i> Web Apps</a>
-                        </div>
-                    </div>
+    <fieldset><legend>Teacher / staff</legend>
+      <div class="row"><label>Name<input id="sName"></label><label>Post<input id="sPost" placeholder="Assistant Teacher"></label></div>
+      <div class="row"><label>Subject<input id="sSub" placeholder="Mathematics"></label><label>Photo path (optional)<input id="sPhoto" placeholder="images/staff/name.jpg"></label></div>
+      <p><button class="btn" id="addS">Add staff</button></p>
+      <div id="sList"></div>
+    </fieldset>
 
-                    <!-- Quick Stats / Quick Links Widget Card -->
-                    <div class="lg:col-span-5">
-                        <div class="glass-card rounded-2xl p-6 md:p-8 text-slate-900 shadow-2xl space-y-6">
-                            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-                                <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">
-                                    <i class="fa-solid fa-bolt text-amber-500"></i> Quick Access
-                                </h3>
-                                <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-semibold">Active Hub</span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <a href="#notices" onclick="filterNotices('exam')" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
-                                    <div class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center mb-2 group-hover:scale-110 transition">
-                                        <i class="fa-solid fa-file-pen text-sm"></i>
-                                    </div>
-                                    <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Exam Forms</h4>
-                                    <p class="text-xs text-slate-500">MP HS 2027</p>
-                                </a>
-                                <a href="#notices" onclick="filterNotices('admission')" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
-                                    <div class="w-9 h-9 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center mb-2 group-hover:scale-110 transition">
-                                        <i class="fa-solid fa-user-plus text-sm"></i>
-                                    </div>
-                                    <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Admission</h4>
-                                    <p class="text-xs text-slate-500">Portal & forms</p>
-                                </a>
-                                <a href="https://prabirdangar-web.github.io/e-leave-application/" target="_blank" rel="noopener" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
-                                    <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center mb-2 group-hover:scale-110 transition">
-                                        <i class="fa-solid fa-calendar-days text-sm"></i>
-                                    </div>
-                                    <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Staff Leave</h4>
-                                    <p class="text-xs text-slate-500">Apply & Status</p>
-                                </a>
-                                <a href="#calculator" class="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition group text-left">
-                                    <div class="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center mb-2 group-hover:scale-110 transition">
-                                        <i class="fa-solid fa-calculator text-sm"></i>
-                                    </div>
-                                    <h4 class="font-semibold text-sm text-slate-800 group-hover:text-blue-700">Calculator</h4>
-                                    <p class="text-xs text-slate-500">Tools & Utilities</p>
-                                </a>
-                            </div>
-                            <div class="pt-2">
-                                <a href="#retirement" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium py-3 px-4 rounded-xl flex items-center justify-between transition shadow">
-                                    <span class="flex items-center gap-2"><i class="fa-solid fa-award text-amber-400"></i> Retirement Celebration Gallery</span>
-                                    <i class="fa-solid fa-arrow-right text-xs"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <fieldset><legend>Daily routine</legend>
+      <div class="row"><label>Item<input id="tLabel" placeholder="Morning assembly"></label><label>Time<input id="tTime" placeholder="10:30 AM"></label></div>
+      <p><button class="btn" id="addT">Add routine row</button></p>
+      <div id="tList"></div>
+    </fieldset>
 
-        <!-- Web Applications Section -->
-        <section id="apps" class="py-16 bg-white border-y border-slate-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-                    <div>
-                        <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Digital Services</span>
-                        <h2 class="text-3xl font-bold text-slate-900 mt-2">TFHS Web Applications</h2>
-                        <p class="text-slate-600 text-sm mt-1">All published school tools in one place. Each opens in a new tab.</p>
-                    </div>
-                    <div class="flex flex-wrap gap-2" id="appFilters"></div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div id="appGrid" class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4 content-start"></div>
-                    <aside class="lg:col-span-4">
-                        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-                            <h3 class="font-bold text-slate-900 flex items-center gap-2 mb-4"><i class="fa-solid fa-circle-up text-amber-500"></i> What's New</h3>
-                            <ul class="space-y-4 text-sm">
-                                <li class="flex gap-3"><span class="mt-1.5 w-2 h-2 rounded-full bg-blue-600 shrink-0"></span><div><p class="font-semibold text-slate-800">Certificate System</p><p class="text-slate-500 text-xs">New-session promotion and roll allocation with draft, finalize and lock.</p></div></li>
-                                <li class="flex gap-3"><span class="mt-1.5 w-2 h-2 rounded-full bg-blue-600 shrink-0"></span><div><p class="font-semibold text-slate-800">MDM Manager</p><p class="text-slate-500 text-xs">Data entry with MDCF, Form-C and Form-K generation.</p></div></li>
-                                <li class="flex gap-3"><span class="mt-1.5 w-2 h-2 rounded-full bg-blue-600 shrink-0"></span><div><p class="font-semibold text-slate-800">Examination Command Center</p><p class="text-slate-500 text-xs">Invigilator requisition letters and fee receipts.</p></div></li>
-                                <li class="flex gap-3"><span class="mt-1.5 w-2 h-2 rounded-full bg-blue-600 shrink-0"></span><div><p class="font-semibold text-slate-800">Class XI Dashboard</p><p class="text-slate-500 text-xs">Semester marks, attendance and combined result.</p></div></li>
-                            </ul>
-                            <p class="text-[11px] text-slate-400 mt-5 pt-4 border-t border-slate-200"><i class="fa-solid fa-lock mr-1"></i> Tools marked Staff Access hold service records; use only on authorised devices.</p>
-                        </div>
-                    </aside>
-                </div>
-            </div>
-        </section>
+    <fieldset><legend>Holiday</legend>
+      <div class="row"><label>Date<input id="hDate" type="date"></label><label>Holiday name<input id="hName"></label></div>
+      <p><button class="btn" id="addH">Add holiday</button></p>
+      <div id="hList"></div>
+    </fieldset>
 
-        <!-- Main Notice Board Section -->
-        <section id="notices" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-                <div>
-                    <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Notice Board</span>
-                    <h2 class="text-3xl font-bold text-slate-900 mt-2">Admission, Examination & Certificates</h2>
-                    <p class="text-slate-600 text-sm mt-1">Current notices link directly to the live school portals.</p>
-                </div>
-                <div class="relative w-full md:w-64">
-                    <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
-                    <input type="text" id="noticeSearch" onkeyup="searchNotices()" placeholder="Search notices..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-sm">
-                </div>
-            </div>
-            <div class="flex flex-wrap items-center gap-2 mb-8" id="filterTabs">
-                <button onclick="filterNotices('all')" class="px-4 py-2 rounded-xl text-sm font-semibold bg-blue-700 text-white shadow transition">All</button>
-                <button onclick="filterNotices('admission')" class="px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Admission</button>
-                <button onclick="filterNotices('exam')" class="px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Examination</button>
-                <button onclick="filterNotices('cert')" class="px-4 py-2 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition">Certificates</button>
-            </div>
-            <div id="noticeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <a href="https://prabirdangar-web.github.io/certificate/" target="_blank" rel="noopener" data-category="admission" class="notice-card group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-user-plus"></i> Admission</span>
-                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Live</span>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-blue-700">Admission Portal</h3>
-                        <p class="text-slate-600 text-sm">Admission notice, forms, bonafide, character and other student certificates.</p>
-                    </div>
-                    <div class="pt-4 mt-4 border-t border-slate-100 text-sm font-semibold text-blue-700 flex items-center justify-between">Open link <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></div>
-                </a>
-                <a href="https://prabirdangar-web.github.io/centre_exam/" target="_blank" rel="noopener" data-category="exam" class="notice-card group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-file-pen"></i> Examination 2027</span>
-                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Live</span>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-blue-700">MP HS Examination 2027</h3>
-                        <p class="text-slate-600 text-sm">H.S. and Madhyamik examination records, results and related documents.</p>
-                    </div>
-                    <div class="pt-4 mt-4 border-t border-slate-100 text-sm font-semibold text-blue-700 flex items-center justify-between">Open link <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></div>
-                </a>
-                <a href="https://prabirdangar-web.github.io/xi_mp_test/" target="_blank" rel="noopener" data-category="exam" class="notice-card group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-clipboard-check"></i> Examination</span>
-                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Live</span>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-blue-700">XI MP Test</h3>
-                        <p class="text-slate-600 text-sm">Class XI test records and marks.</p>
-                    </div>
-                    <div class="pt-4 mt-4 border-t border-slate-100 text-sm font-semibold text-blue-700 flex items-center justify-between">Open link <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></div>
-                </a>
-                <a href="https://prabirdangar-web.github.io/hs_leaving/" target="_blank" rel="noopener" data-category="cert" class="notice-card group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-file-signature"></i> Certificates</span>
-                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Live</span>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-blue-700">H.S. Leaving Certificate</h3>
-                        <p class="text-slate-600 text-sm">Leaving certificate for H.S. students.</p>
-                    </div>
-                    <div class="pt-4 mt-4 border-t border-slate-100 text-sm font-semibold text-blue-700 flex items-center justify-between">Open link <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></div>
-                </a>
-            </div>
-        </section>
+    <fieldset><legend>Admission enquiries (private)</legend>
+      <div id="enqList"><span class="meta">No enquiries yet.</span></div>
+    </fieldset>
+  </div>
+</main>
 
-        <!-- School Anthems & Media Section -->
-        <section id="media" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Multimedia Hub</span>
-                <h2 class="text-3xl font-bold text-slate-900 mt-2">School Anthems, Prayers & Media Gallery</h2>
-                <p class="text-slate-600 text-sm mt-2">Listen to national and school anthems, view prayer videos, and browse official school photographs.</p>
-            </div>
+<footer>© Taldangra Fulmati High School (H.S.) · Updated by the school administration</footer>
+<div id="msg" role="status"></div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Media Card 1: Vande Mataram -->
-                <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition">
-                    <div class="h-48 bg-slate-900 relative flex items-center justify-center text-white">
-                        <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://placehold.co/600x400/1e3a8a/ffffff?text=Vande+Mataram')"></div>
-                        <button onclick="openVideoModal('Vande Mataram', 'Official National Song rendition. Commemorating our rich heritage and patriotism.')" class="relative z-10 w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 flex items-center justify-center shadow-lg transition transform hover:scale-105">
-                            <i class="fa-solid fa-play text-xl ml-1"></i>
-                        </button>
-                    </div>
-                    <div class="p-6">
-                        <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full">National Anthem</span>
-                        <h3 class="font-bold text-lg text-slate-900 mt-2">Vande Mataram Rendition</h3>
-                        <p class="text-slate-600 text-xs mt-1">Full orchestral and vocal recording for morning assembly and national celebrations.</p>
-                    </div>
-                </div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* ===== 1. PASTE your tfhs-portal Firebase config here (Project settings > Your apps) ===== */
+const firebaseConfig = {
+  apiKey: "PASTE_API_KEY",
+  authDomain: "tfhs-portal.firebaseapp.com",
+  projectId: "tfhs-portal",
+  appId: "PASTE_APP_ID"
+};
+const ADMIN_EMAIL = "prabir.dangar@gmail.com";   /* only this Google account can edit */
+const DOC_PATH = ["tfhs", "website"];            /* single-document pattern: /tfhs/website */
+/* ======================================================================================== */
 
-                <!-- Media Card 2: Jana Gana Mana -->
-                <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition">
-                    <div class="h-48 bg-slate-900 relative flex items-center justify-center text-white">
-                        <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://placehold.co/600x400/1e40af/ffffff?text=Jana+Gana+Mana')"></div>
-                        <button onclick="openVideoModal('Jana Gana Mana', 'National Anthem of India. Standard version for daily school assembly.')" class="relative z-10 w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 flex items-center justify-center shadow-lg transition transform hover:scale-105">
-                            <i class="fa-solid fa-play text-xl ml-1"></i>
-                        </button>
-                    </div>
-                    <div class="p-6">
-                        <span class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full">National Anthem</span>
-                        <h3 class="font-bold text-lg text-slate-900 mt-2">Jana Gana Mana</h3>
-                        <p class="text-slate-600 text-xs mt-1">Official standardized audio recording for daily morning assembly.</p>
-                    </div>
-                </div>
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth(), db = firebase.firestore();
+const ref = db.collection(DOC_PATH[0]).doc(DOC_PATH[1]);
+const $ = id => document.getElementById(id);
+let D = { ticker: "", admission: {}, notices: [], results: [] }, filter = "all";
 
-                <!-- Media Card 3: School Prayer & Campus -->
-                <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition">
-                    <div class="h-48 bg-slate-900 relative flex items-center justify-center text-white">
-                        <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://placehold.co/600x400/0f172a/ffffff?text=School+Prayer')"></div>
-                        <button onclick="openVideoModal('School Morning Prayer & Campus Highlights', 'Compilation of morning prayers, yoga sessions, and campus tour footage.')" class="relative z-10 w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 flex items-center justify-center shadow-lg transition transform hover:scale-105">
-                            <i class="fa-solid fa-play text-xl ml-1"></i>
-                        </button>
-                    </div>
-                    <div class="p-6">
-                        <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">Campus & Prayer</span>
-                        <h3 class="font-bold text-lg text-slate-900 mt-2">Daily Prayer & Campus Video</h3>
-                        <p class="text-slate-600 text-xs mt-1">Video documentary featuring school morning assembly, prayer songs, and campus walkthrough.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl = u => /^https?:\/\//i.test(u || "") ? esc(u) : "";
+const imgUrl = u => /^(https?:\/\/|[\w\-][\w\-.\/ ]*$)/i.test(u || "") && !/\.\./.test(u) ? esc(u) : "";
+const fmt = d => d ? new Date(d).toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"}) : "";
+const isNew = d => d && (Date.now() - new Date(d)) < 7 * 864e5;
+const forLabel = {general:"General", staff:"Staff", student:"Students"};
+function toast(t){const m=$("msg");m.textContent=t;m.style.display="block";setTimeout(()=>m.style.display="none",2200)}
 
-        <!-- Calculator & Utility Section -->
-        <section id="calculator" class="py-16 bg-slate-100 border-t border-slate-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-12">
-                    <span class="text-blue-700 text-xs font-bold uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">Utility Tools</span>
-                    <h2 class="text-3xl font-bold text-slate-900 mt-2">Interactive School Calculator</h2>
-                    <p class="text-slate-600 text-sm mt-2">Perform quick academic grading estimations or financial fee breakdown calculations.</p>
-                </div>
+/* ---------- Public view ---------- */
+function render(){
+  $("ticker").textContent = D.ticker || "";
+  const a = D.admission || {};
+  const box = $("admBox");
+  if (a.open && a.title){
+    box.className = "adm";
+    box.innerHTML = `<h2>${esc(a.title)}</h2>${a.note?`<div>${esc(a.note)}</div>`:""}
+      ${a.last?`<div class="meta">শেষ তারিখ / Last date: ${fmt(a.last)}</div>`:""}
+      ${safeUrl(a.link)?`<p style="margin:10px 0 0"><a class="btn" href="${safeUrl(a.link)}" target="_blank" rel="noopener">ভর্তির ফর্ম / Admission form</a></p>`:""}`;
+  } else {
+    box.className = "adm closed";
+    box.innerHTML = `<h2>ভর্তি / Admission</h2><div>এখন কোনো ভর্তি চলছে না। / Admission is not open right now.</div>`;
+  }
+  const ns = (D.notices || []).filter(n => filter === "all" || n.for === filter || n.for === "general")
+    .sort((x,y) => (y.date||"").localeCompare(x.date||""));
+  $("notices").innerHTML = ns.length ? ns.map(n => `<div class="item"><div>
+      <b>${esc(n.title)}</b>
+      <span class="meta">${isNew(n.date)?'<span class="tag new">NEW</span>':""}<span class="tag">${forLabel[n.for]||"General"}</span>${fmt(n.date)}</span></div>
+      ${safeUrl(n.link)?`<a class="btn sm" href="${safeUrl(n.link)}" target="_blank" rel="noopener">Open</a>`:""}</div>`).join("")
+    : `<div class="empty">কোনো বিজ্ঞপ্তি নেই। / No notices yet.</div>`;
+  const rs = [...(D.results || [])].sort((x,y) => (y.date||"").localeCompare(x.date||""));
+  $("results").innerHTML = rs.length ? rs.map(r => `<div class="item"><div><b>${esc(r.title)}</b>
+      <span class="meta">${isNew(r.date)?'<span class="tag new">NEW</span>':""}${fmt(r.date)}</span></div>
+      ${safeUrl(r.link)?`<a class="btn sm" href="${safeUrl(r.link)}" target="_blank" rel="noopener">View</a>`:""}</div>`).join("")
+    : `<div class="empty">কোনো ফলাফল প্রকাশিত হয়নি। / No results published yet.</div>`;
+  renderExtra();
+  renderAdminLists();
+}
+document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
+  filter = b.dataset.f;
+  document.querySelectorAll("nav.tabs button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  render();
+});
 
-                <div class="max-w-xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200">
-                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-                        <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-calculator text-blue-700"></i> Percentage & Grade Estimator
-                        </h3>
-                        <span class="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-semibold">Tool #1</span>
-                    </div>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Total Marks Obtained</label>
-                            <input type="number" id="marksObtained" value="425" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Maximum Total Marks</label>
-                            <input type="number" id="marksTotal" value="500" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
-                        </div>
-                        <button onclick="calculateGrade()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition">
-                            Calculate Percentage & Grade
-                        </button>
-                        <div id="calcResult" class="hidden mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-center">
-                            <p class="text-xs text-slate-500 uppercase font-bold">Estimated Result</p>
-                            <h4 id="resultText" class="text-xl font-extrabold text-blue-900 mt-1">85.0% • Grade: AA (Outstanding)</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+/* ---------- Live data (public read, no login needed) ---------- */
+ref.onSnapshot(s => { if (s.exists) D = Object.assign(D, s.data()); render(); },
+  e => { console.error(e); toast("Could not load data"); });
 
-        <!-- Retirement Celebration Hub Section -->
-        <section id="retirement" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-8 md:p-12 text-slate-950 shadow-xl relative overflow-hidden">
-                <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-10 translate-y-10">
-                    <i class="fa-solid fa-award text-9xl"></i>
-                </div>
-                <div class="max-w-2xl relative z-10 space-y-4">
-                    <span class="bg-slate-950 text-amber-400 text-xs font-extrabold uppercase px-3 py-1 rounded-full">Special Tribute Hub</span>
-                    <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">Retirement Celebration & Farewells</h2>
-                    <p class="text-slate-900 text-base font-medium leading-relaxed">
-                        Honoring our esteemed teachers and staff members who have dedicated decades of service to shape generations of students. Explore farewell photo galleries, tribute messages, and event schedules.
-                    </p>
-                    <div class="pt-4 flex flex-wrap gap-4">
-                        <button onclick="openDocModal('Retirement Celebration Gallery & Tributes', 'Special tribute album honoring retiring faculty members. Includes farewell speeches, photo collages, and souvenir book downloads.')" class="bg-slate-950 hover:bg-slate-900 text-white font-bold px-6 py-3 rounded-xl shadow transition flex items-center gap-2">
-                            <i class="fa-solid fa-images"></i> View Farewell Gallery
-                        </button>
-                        <button onclick="openDocModal('Send a Farewell Message', 'Digital guestbook for posting heartfelt messages and wishes for retiring staff members.')" class="bg-white/20 hover:bg-white/30 border border-slate-950/20 text-slate-950 font-bold px-6 py-3 rounded-xl backdrop-blur transition flex items-center gap-2">
-                            <i class="fa-solid fa-pen-to-square"></i> Leave a Tribute Message
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
+/* ---------- Admin ---------- */
+const save = async () => { try { await ref.set(D); toast("Published"); } catch(e){ toast("Save failed: " + e.code); } };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+const today = () => new Date().toISOString().slice(0,10);
 
-    </main>
+function route(){
+  const adm = location.hash === "#admin";
+  $("site").style.display = adm ? "none" : "";
+  $("panel").style.display = adm ? "block" : "none";
+  if (adm){ $("nDate").value ||= today(); $("rDate").value ||= today(); }
+}
+addEventListener("hashchange", route); route();
 
-    <!-- Professional Footer -->
-    <footer class="bg-slate-900 text-slate-400 pt-16 pb-12 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
-                <!-- Col 1: Brand -->
-                <div class="lg:col-span-2 space-y-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl hero-gradient flex items-center justify-center text-white shadow">
-                            <i class="fa-solid fa-graduation-cap text-xl text-amber-400"></i>
-                        </div>
-                        <div><span class="text-white font-bold text-lg tracking-tight block leading-tight">TALDANGRA FULMATI HIGH SCHOOL (H.S.)</span><span class="text-slate-400 text-sm">তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:) · স্থাপিত ১৯৫৬</span></div>
-                    </div>
-                    <p class="text-sm text-slate-400 max-w-sm leading-relaxed">
-                        Providing a secure, professional, and accessible digital ecosystem for students, teachers, and staff members of the institution.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-semibold">
-                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full">Index No: U1-083</span>
-                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full">UDISE: 19132104401</span>
-                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full">H.S. Code: 114071</span>
-                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full">VTC Code: 5006</span>
-                    </div>
-                </div>
+$("login").onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => toast(e.code));
+$("logout").onclick = () => auth.signOut();
+auth.onAuthStateChanged(u => {
+  const ok = u && u.email === ADMIN_EMAIL;
+  $("who").textContent = u ? (ok ? "Signed in: " + u.email : "Not authorised: " + u.email) : "Not signed in";
+  $("login").style.display = u ? "none" : ""; $("logout").style.display = u ? "" : "none";
+  $("editor").style.display = ok ? "" : "none";
+  watchEnq(ok);
+  if (ok){ $("tk").value = D.ticker || ""; const a = D.admission || {};
+    $("aOpen").checked = !!a.open; $("aTitle").value = a.title||""; $("aLink").value = a.link||"";
+    $("aLast").value = a.last||""; $("aNote").value = a.note||""; }
+});
+$("tk").onchange = () => { D.ticker = $("tk").value.trim(); save(); };
+$("saveAdm").onclick = () => { D.admission = { open:$("aOpen").checked, title:$("aTitle").value.trim(),
+  link:$("aLink").value.trim(), last:$("aLast").value, note:$("aNote").value.trim() }; save(); };
+$("addN").onclick = () => {
+  const t = $("nTitle").value.trim(); if (!t) return toast("Title is required");
+  (D.notices ||= []).push({ id:uid(), title:t, link:$("nLink").value.trim(), for:$("nFor").value, date:$("nDate").value || today() });
+  $("nTitle").value = $("nLink").value = ""; save();
+};
+$("addR").onclick = () => {
+  const t = $("rTitle").value.trim(); if (!t) return toast("Title is required");
+  (D.results ||= []).push({ id:uid(), title:t, link:$("rLink").value.trim(), date:$("rDate").value || today() });
+  $("rTitle").value = $("rLink").value = ""; save();
+};
+const LISTS = {notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList"};
+function renderAdminLists(){
+  for (const [k, id] of Object.entries(LISTS)){
+    $(id).innerHTML = (D[k]||[]).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||x.url)}</b>
+      <span class="meta">${esc(x.post||x.time||x.url&&"")} ${fmt(x.date)}</span></div>
+      <button class="btn alt sm" data-k="${k}" data-id="${x.id}">Delete</button></div>`).join("");
+  }
+  document.querySelectorAll("#panel [data-id]").forEach(b => b.onclick = () => {
+    if (!confirm("Delete this item?")) return;
+    D[b.dataset.k] = D[b.dataset.k].filter(x => x.id !== b.dataset.id); save();
+  });
+}
+const addTo = (k, obj) => { (D[k] ||= []).push({id:uid(), ...obj}); save(); };
+$("addG").onclick = () => { const u=$("gUrl").value.trim(); if(!u) return toast("Image path is required");
+  addTo("gallery",{url:u, caption:$("gCap").value.trim()}); $("gUrl").value=$("gCap").value=""; };
+$("addS").onclick = () => { const n=$("sName").value.trim(); if(!n) return toast("Name is required");
+  addTo("staff",{name:n, post:$("sPost").value.trim(), subject:$("sSub").value.trim(), photo:$("sPhoto").value.trim()});
+  ["sName","sPost","sSub","sPhoto"].forEach(i=>$(i).value=""); };
+$("addT").onclick = () => { const l=$("tLabel").value.trim(); if(!l) return toast("Item is required");
+  addTo("routine",{label:l, time:$("tTime").value.trim()}); $("tLabel").value=$("tTime").value=""; };
+$("addH").onclick = () => { const n=$("hName").value.trim(), d=$("hDate").value; if(!n||!d) return toast("Date and name are required");
+  addTo("holidays",{name:n, date:d}); $("hName").value=$("hDate").value=""; };
 
-                <!-- Col 2: Quick Links -->
-                <div>
-                    <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Navigation</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" onclick="showSection('home')" class="hover:text-white transition">Home Page</a></li>
-                        <li><a href="#notices" onclick="showSection('notices')" class="hover:text-white transition">Digital Notice Board</a></li>
-                        <li><a href="#apps" onclick="showSection('apps')" class="hover:text-white transition">Web Applications</a></li>
-                        <li><a href="#media" onclick="showSection('media')" class="hover:text-white transition">Anthems & Media</a></li>
-                    </ul>
-                </div>
+function renderExtra(){
+  $("galleryBox").innerHTML = (D.gallery||[]).length ? D.gallery.slice().reverse().map(g => imgUrl(g.url) ?
+    `<figure><a href="${imgUrl(g.url)}" target="_blank" rel="noopener"><img loading="lazy" src="${imgUrl(g.url)}" alt="${esc(g.caption||"School photo")}"></a>${g.caption?`<figcaption>${esc(g.caption)}</figcaption>`:""}</figure>`:"").join("")
+    : `<div class="empty">শীঘ্রই ছবি যোগ করা হবে। / Photos coming soon.</div>`;
+  $("staffBox").innerHTML = (D.staff||[]).length ? D.staff.map(t => `<div class="item">
+    ${imgUrl(t.photo)?`<img class="ph" loading="lazy" src="${imgUrl(t.photo)}" alt="">`:`<span class="ph">${esc((t.name||"?").trim().charAt(0))}</span>`}
+    <div><b>${esc(t.name)}</b><span class="meta">${esc(t.post)}${t.subject?" · "+esc(t.subject):""}</span></div></div>`).join("")
+    : `<div class="empty">তালিকা শীঘ্রই। / List coming soon.</div>`;
+  $("routineBox").innerHTML = (D.routine||[]).map(r => `<tr><td>${esc(r.label)}</td><td>${esc(r.time)}</td></tr>`).join("");
+  const hs = (D.holidays||[]).filter(h => h.date >= today()).sort((a,b) => a.date.localeCompare(b.date));
+  $("holidayBox").innerHTML = hs.length ? hs.map(h => `<div class="item"><b>${esc(h.name)}</b><span class="meta">${fmt(h.date)}</span></div>`).join("")
+    : `<div class="empty">কোনো আসন্ন ছুটি নেই। / No upcoming holidays listed.</div>`;
+}
 
-                <!-- Col 3: Resources -->
-                <div>
-                    <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Resources</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="https://prabirdangar-web.github.io/certificate/" target="_blank" rel="noopener" class="hover:text-white transition">Admission Portal</a></li>
-                        <li><a href="https://prabirdangar-web.github.io/centre_exam/" target="_blank" rel="noopener" class="hover:text-white transition">MP HS Examination</a></li>
-                        <li><a href="#calculator" class="hover:text-white transition">Academic Calculator</a></li>
-                        <li><a href="#retirement" class="hover:text-white transition">Retirement Hub</a></li>
-                    </ul>
-                </div>
+/* ---------- Apply online ---------- */
+$("eSend").onclick = async () => {
+  const name=$("eName").value.trim(), phone=$("ePhone").value.trim(), out=$("eOut");
+  if ($("eHp").value) return;                                  /* bot trap */
+  if (!name) return out.textContent = "ছাত্র/ছাত্রীর নাম লিখুন / Enter student name";
+  if (!/^[6-9]\d{9}$/.test(phone)) return out.textContent = "সঠিক ১০ সংখ্যার মোবাইল নম্বর দিন / Enter a valid 10-digit mobile";
+  try { if (Date.now() - (+localStorage.getItem("enqT")||0) < 60000) return out.textContent = "একটু পরে আবার চেষ্টা করুন / Please wait a minute"; } catch(e){}
+  $("eSend").disabled = true;
+  try {
+    await db.collection("enquiries").add({ name, guardian:$("eGuard").value.trim(), cls:$("eCls").value, phone,
+      prevSchool:$("ePrev").value.trim(), address:$("eAddr").value.trim(), note:$("eNote").value.trim(),
+      ts:firebase.firestore.FieldValue.serverTimestamp() });
+    try { localStorage.setItem("enqT", Date.now()); } catch(e){}
+    ["eName","eGuard","ePhone","ePrev","eAddr","eNote"].forEach(i=>$(i).value="");
+    out.textContent = "✓ আবেদন জমা হয়েছে। / Submitted. The school will contact you.";
+  } catch(e){ out.textContent = "জমা হয়নি, আবার চেষ্টা করুন / Could not submit: " + e.code; }
+  $("eSend").disabled = false;
+};
 
-                <!-- Col 4: Contact -->
-                <div>
-                    <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Contact Info</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-amber-500"></i> <span>P.O. &amp; Block – Taldangra, Sub-Div – Khatra, Dist – Bankura, West Bengal, PIN – 722152</span></li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-envelope text-amber-500"></i> <a href="mailto:highschooltaldangrafulmati@gmail.com" class="hover:text-white break-all">highschooltaldangrafulmati@gmail.com</a></li>
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-phone mt-1 text-amber-500"></i> <span>Landline: <a href="tel:+913243265114" class="hover:text-white">03243-265114</a></span></li>
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-mobile-screen mt-1 text-amber-500"></i> <span>H.M.: <a href="tel:+919434654678" class="hover:text-white">9434654678</a>, <a href="tel:+919933035811" class="hover:text-white">9933035811</a></span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
-                <p>&copy; 2026 Taldangra Fulmati High School (H.S.). All rights reserved.</p>
-                <div class="flex space-x-6 mt-4 sm:mt-0">
-                    <a href="#" onclick="openDocModal('Privacy Policy', 'Standard privacy and data protection policy for portal users.')" class="hover:underline">Privacy Policy</a>
-                    <a href="#" onclick="openDocModal('Terms of Use', 'Terms and conditions for utilizing the institutional portal resources.')" class="hover:underline">Terms of Use</a>
-                    <a href="#" onclick="openDocModal('Administrator Help', 'Contact admin desk for login or access issues.')" class="hover:underline">Admin Help</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Interactive Document / Notice Modal -->
-    <div id="docModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 md:p-8 shadow-2xl border border-slate-200 transform transition-all">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2 text-blue-700">
-                    <i class="fa-solid fa-file-shield text-xl"></i>
-                    <span class="text-xs font-bold uppercase tracking-wider bg-blue-100 px-2.5 py-1 rounded-full">Official Notice Viewer</span>
-                </div>
-                <button onclick="closeDocModal()" class="text-slate-400 hover:text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            <h3 id="modalTitle" class="text-xl font-bold text-slate-900 mb-2">Notice Title</h3>
-            <p id="modalContent" class="text-slate-600 text-sm leading-relaxed mb-6">Detailed text description...</p>
-            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-                <button onclick="closeDocModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition">Close</button>
-                <button onclick="simulateDownload()" class="px-5 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-sm font-semibold transition flex items-center gap-2">
-                    <i class="fa-solid fa-download"></i> Download / Open Drive
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Search Modal (Ctrl+K) -->
-    <div id="searchModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start justify-center pt-20 p-4">
-        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200">
-            <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                <div class="flex items-center gap-3 w-full">
-                    <i class="fa-solid fa-search text-blue-700 text-lg"></i>
-                    <input type="text" id="modalSearchInput" onkeyup="globalSearch()" placeholder="Type to search all notices, calculators, staff forms..." class="w-full text-base font-medium focus:outline-none text-slate-800">
-                </div>
-                <button onclick="closeSearchModal()" class="text-slate-400 hover:text-slate-700 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div id="searchResults" class="space-y-2 max-h-60 overflow-y-auto text-sm">
-                <p class="text-xs text-slate-400 text-center py-4">Start typing to search across all portal resources...</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript Application Logic -->
-    <script>
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        function toggleMobileMenu() {
-            mobileMenu.classList.add('hidden');
-        }
-
-        // Section navigation helper
-        function showSection(sectionId) {
-            const el = document.getElementById(sectionId);
-            if (el) {
-                el.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Notice Filtering Logic
-        function filterNotices(category) {
-            const cards = document.querySelectorAll('.notice-card');
-            const buttons = document.querySelectorAll('#filterTabs button');
-
-            buttons.forEach(btn => {
-                btn.classList.remove('bg-blue-700', 'text-white', 'shadow');
-                btn.classList.add('bg-white', 'border', 'border-slate-200', 'text-slate-700');
-            });
-            event.target.classList.remove('bg-white', 'border', 'border-slate-200', 'text-slate-700');
-            event.target.classList.add('bg-blue-700', 'text-white', 'shadow');
-
-            cards.forEach(card => {
-                if (category === 'all' || card.getAttribute('data-category') === category) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // Notice Search Bar in Section
-        function searchNotices() {
-            const query = document.getElementById('noticeSearch').value.toLowerCase();
-            const cards = document.querySelectorAll('.notice-card');
-
-            cards.forEach(card => {
-                const text = card.innerText.toLowerCase();
-                if (text.includes(query)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // Modal Controls
-        function openDocModal(title, content) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalContent').innerText = content;
-            document.getElementById('docModal').classList.remove('hidden');
-            document.getElementById('docModal').classList.add('flex');
-        }
-
-        function closeDocModal() {
-            document.getElementById('docModal').classList.remove('flex');
-            document.getElementById('docModal').classList.add('hidden');
-        }
-
-        function openVideoModal(title, desc) {
-            openDocModal(title, desc + " [Simulated Video/Audio Stream: Playing high-definition media file from school repository.]");
-        }
-
-        function simulateDownload() {
-            alert('File downloaded successfully from Google Drive repository.');
-            closeDocModal();
-        }
-
-        // Grade Calculator
-        function calculateGrade() {
-            const obtained = parseFloat(document.getElementById('marksObtained').value) || 0;
-            const total = parseFloat(document.getElementById('marksTotal').value) || 100;
-            const pct = (obtained / total) * 100;
-
-            let grade = 'D';
-            if (pct >= 90) grade = 'AA (Outstanding)';
-            else if (pct >= 80) grade = 'A+ (Excellent)';
-            else if (pct >= 70) grade = 'A (Very Good)';
-            else if (pct >= 60) grade = 'B+ (Good)';
-            else if (pct >= 50) grade = 'B (Above Average)';
-            else if (pct >= 40) grade = 'C (Pass)';
-
-            const resDiv = document.getElementById('calcResult');
-            const resText = document.getElementById('resultText');
-            resText.innerText = `${pct.toFixed(1)}% • Grade: ${grade}`;
-            resDiv.classList.remove('hidden');
-        }
-
-        // Quick Search Modal Controls (Ctrl+K)
-        function openSearchModal() {
-            document.getElementById('searchModal').classList.remove('hidden');
-            document.getElementById('searchModal').classList.add('flex');
-            document.getElementById('modalSearchInput').focus();
-        }
-
-        function closeSearchModal() {
-            document.getElementById('searchModal').classList.remove('flex');
-            document.getElementById('searchModal').classList.add('hidden');
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                openSearchModal();
-            }
-            if (e.key === 'Escape') {
-                closeSearchModal();
-                closeDocModal();
-            }
-        });
-
-        const BASE = 'https://prabirdangar-web.github.io/';
-        const CATS = {
-            'Certificates & Students': ['fa-certificate','bg-blue-600',false],
-            'Examination': ['fa-clipboard-check','bg-purple-600',false],
-            'Accounts & Audit': ['fa-scale-balanced','bg-teal-600',true],
-            'SALARY ,ITAX,GPF': ['fa-money-check-dollar','bg-emerald-600',true],
-            'Service, Leave & Pension': ['fa-book','bg-indigo-600',true]
-        };
-        const TOOLS = [
-            ['certificate','ADMISSION PORTAL','Certificates & Students','Bonafide, character and other certificates'],
-            ['hs_leaving','H.S. Leaving Certificate','Certificates & Students','Leaving certificate for H.S. students'],
-            ['letter_head','Letter Head','Certificates & Students','Official school letter head'],
-            ['file_cover','File Cover','Certificates & Students','Printable file covers'],
-            ['outside-pad','Outside Pad','Certificates & Students','Outside pad printing'],
-            ['para_teacher','Para Teacher','Certificates & Students','Para teacher records'],
-            ['xi_mp_test','XI MP Test','Examination','Class XI test records'],
-            ['centre_exam','MP HS EXAMINATION','Examination','H.S. and Madhyamik examination records'],
-            ['payment','Payment','Accounts & Audit','Payment vouchers and records'],
-            ['MDM','MDM','Accounts & Audit','Mid-day meal accounts'],
-            ['cash_auditable','Cash Book (Auditable)','Accounts & Audit','Cash book for audit'],
-            ['non_auditable','Cash Book (Non-auditable)','Accounts & Audit','Cash book outside audit'],
-            ['voucher','Voucher','Accounts & Audit','Shop vouchers and bills'],
-            ['salary','STAFF SALARY','SALARY ,ITAX,GPF','Monthly salary statement'],
-            ['itax_staff','INCOME TAX','SALARY ,ITAX,GPF','Staff income tax statements'],
-            ['pf_interest','GPF 2025-26 & Onwards','SALARY ,ITAX,GPF','Provident fund interest'],
-            ['GPF','GPF Final Payment Documents','SALARY ,ITAX,GPF','GPF final payment documents'],
-            ['NEW-APPROVAL','New Approval','Service, Leave & Pension','Approval records'],
-            ['sb_arrear_od_da','SB Arrear OD DA','Service, Leave & Pension','Service book arrear and DA'],
-            ['SB','Service Book Generation','Service, Leave & Pension','Employee service book'],
-            ['staff_sb','Individual Service Book','Service, Leave & Pension','Verification of service records'],
-            ['service_continuation','Service Continuation Documents','Service, Leave & Pension','Service continuation records'],
-            ['staff_pattern_noc_exp','Staff Pattern, NOC, Experience','Service, Leave & Pension','Staff pattern, NOC and experience certificates'],
-            ['e-leave-application','E-Leave Application','Service, Leave & Pension','Staff leave applications'],
-            ['all_leave','All Leave','Service, Leave & Pension','Leave account of all staff'],
-            ['pension_data_collection','Pension Data Collection','Service, Leave & Pension','Collect staff pension data'],
-            ['pension_rop19_da_hike','Pension Calculator','Service, Leave & Pension','Pension with ROP-19 DA increase'],
-            ['wb_pen','Pension Paper Generation','Service, Leave & Pension','Pension calculation']
-        ];
-        const urlOf = r => BASE + r + '/';
-        const APPS = TOOLS.map(t => ({ name:t[1], cat:t[2], desc:t[3], url:urlOf(t[0]) }));
-
-        function renderApps(cat, btn) {
-            cat = cat || 'All';
-            const box = document.getElementById('appFilters');
-            box.innerHTML = ['All', ...Object.keys(CATS)].map(c => `<button onclick="renderApps('${c}')" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm ${c === cat ? 'font-semibold bg-blue-700 text-white shadow' : 'font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'}">${c === 'All' ? 'All (' + APPS.length + ')' : c.replace(' ,', ', ')}</button>`).join('');
-            document.getElementById('appGrid').innerHTML = APPS.filter(a => cat === 'All' || a.cat === cat).map(a => {
-                const [icon, color, staff] = CATS[a.cat];
-                return `<a href="${a.url}" target="_blank" rel="noopener" class="group bg-white rounded-2xl p-5 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition flex gap-4">
-                    <div class="w-12 h-12 rounded-xl ${color} text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition"><i class="fa-solid ${icon}"></i></div>
-                    <div class="min-w-0">
-                        <h3 class="font-bold text-slate-900 group-hover:text-blue-700 leading-snug">${a.name}</h3>
-                        <p class="text-xs text-slate-500 mt-1">${a.desc}</p>
-                        <div class="mt-3 flex items-center gap-2 text-[11px] font-semibold">
-                            <span class="text-blue-700">Open <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></span>
-                            ${staff ? '<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full"><i class="fa-solid fa-lock text-[9px]"></i> Staff Access</span>' : ''}
-                        </div>
-                    </div>
-                </a>`; }).join('');
-        }
-        renderApps();
-
-        function globalSearch() {
-            const q = document.getElementById('modalSearchInput').value.toLowerCase();
-            const results = document.getElementById('searchResults');
-            if (!q) {
-                results.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Start typing to search across all portal resources...</p>';
-                return;
-            }
-
-            const items = [
-                ...APPS.map(a => ({ title: a.name, cat: 'Web App', link: a.url })),
-                                { title: 'Vande Mataram & Jana Gana Mana Audio', cat: 'Media', link: '#media' },
-                { title: 'Percentage & Grade Calculator', cat: 'Utilities', link: '#calculator' },
-                { title: 'Retirement Celebration & Farewells', cat: 'Events', link: '#retirement' }
-            ];
-
-            const filtered = items.filter(i => i.title.toLowerCase().includes(q) || i.cat.toLowerCase().includes(q));
-            if (filtered.length === 0) {
-                results.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">No matching resources found.</p>';
-                return;
-            }
-
-            results.innerHTML = filtered.map(f => `
-                <a href="${f.link}" ${f.link.startsWith('http') ? 'target="_blank" rel="noopener"' : ''} onclick="closeSearchModal()" class="block p-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition">
-                    <div class="flex items-center justify-between">
-                        <span class="font-semibold text-slate-800">${f.title}</span>
-                        <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">${f.cat}</span>
-                    </div>
-                </a>
-            `).join('');
-        }
-    </script>
+/* ---------- Enquiries (admin only) ---------- */
+let unsubEnq = null;
+function watchEnq(ok){
+  if (unsubEnq){ unsubEnq(); unsubEnq = null; }
+  if (!ok) return;
+  unsubEnq = db.collection("enquiries").orderBy("ts","desc").limit(100).onSnapshot(q => {
+    $("enqList").innerHTML = q.empty ? '<span class="meta">No enquiries yet.</span>' : q.docs.map(d => { const e=d.data();
+      return `<div class="item"><div><b>${esc(e.name)} — Class ${esc(e.cls)}</b>
+      <span class="meta">Guardian: ${esc(e.guardian)} · <a href="tel:${esc(e.phone)}">${esc(e.phone)}</a><br>${esc(e.prevSchool)} ${esc(e.address)}<br>${esc(e.note)}
+      ${e.ts?fmt(e.ts.toDate()):""}</span></div>
+      <button class="btn alt sm" data-enq="${d.id}">Delete</button></div>`; }).join("");
+    document.querySelectorAll("[data-enq]").forEach(b => b.onclick = () => confirm("Delete this enquiry?") && db.collection("enquiries").doc(b.dataset.enq).delete());
+  }, e => toast("Enquiries: " + e.code));
+}
+</script>
 </body>
 </html>
