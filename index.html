@@ -6,56 +6,73 @@
 <title>Taldangra Fulmati High School (H.S.) – Notice Board</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Serif+Bengali:wght@700&display=swap">
 <style>
-:root{--bg:#f2f4f6;--ink:#17212b;--mut:#5b6773;--card:#fff;--line:#d9dee3;--mar:#8c1d2f;--gold:#d9a520;--ok:#1d6b4a}
-@media(prefers-color-scheme:dark){:root{--bg:#10161c;--ink:#e8edf1;--mut:#9aa7b3;--card:#192129;--line:#2b3641;--mar:#e0657a;--gold:#e8b93a;--ok:#5fc596}}
+:root{--bg:#eef1f6;--ink:#1a2230;--mut:#586274;--card:#fff;--line:#cfd6e2;--mar:#12388a;--navy:#0c2a6b;--gold:#f2a900;--ok:#1d6b4a;--c-notice:#12388a;--c-result:#1d7a46;--c-gallery:#c2410c;--c-staff:#7a1f3d;--c-routine:#0e7490;--c-link:#5b2a86}
+@media(prefers-color-scheme:dark){:root{--bg:#0f151d;--ink:#e8edf1;--mut:#9aa7b3;--card:#18212b;--line:#2b3744;--mar:#7fa6ff;--navy:#0a1d4a;--gold:#f2b93a;--ok:#5fc596}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Noto Sans Bengali",system-ui,sans-serif}
+body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.45 "Noto Sans Bengali",system-ui,sans-serif}
 a{color:var(--mar)}
-header{background:var(--mar);color:#fff;padding:20px 16px;text-align:center}
-header h1{margin:0;font:700 clamp(20px,4.5vw,32px)/1.25 "Noto Serif Bengali",serif}
-header p{margin:4px 0 0;opacity:.9;font-size:14px}
-.wrap{max-width:900px;margin:0 auto;padding:16px}
-.ticker{background:var(--gold);color:#1b1400;padding:8px 16px;font-weight:600;text-align:center}
+.strip{height:5px;background:linear-gradient(90deg,#ff9933 0 33.3%,#fff 33.3% 66.6%,#138808 66.6%)}
+header{background:linear-gradient(180deg,var(--navy),#123c94);color:#fff;padding:10px 16px;text-align:center;border-bottom:3px solid var(--gold)}
+header h1{margin:0;font:700 clamp(18px,3.6vw,26px)/1.25 "Noto Serif Bengali",serif}
+header p{margin:2px 0 0;opacity:.92;font-size:12.5px}
+.wrap{max-width:1180px;margin:0 auto;padding:10px 12px}
+.ticker{background:#7a0f1f;color:#fff;padding:5px 16px;font-weight:600;font-size:13.5px;display:flex;gap:10px;align-items:center;justify-content:center;text-align:center}
 .ticker:empty{display:none}
-.adm{border:2px solid var(--mar);background:var(--card);border-radius:10px;padding:14px 16px;margin:16px 0}
-.adm.closed{border-color:var(--line);color:var(--mut)}
-.adm h2{margin:0 0 4px;font-size:18px}
-.btn{display:inline-block;border:0;border-radius:8px;background:var(--mar);color:#fff;padding:8px 16px;font:600 15px inherit;font-family:inherit;text-decoration:none;cursor:pointer}
+.ticker:not(:empty)::before{content:"NEW";background:var(--gold);color:#1b1400;font-size:11px;font-weight:800;padding:0 7px;border-radius:3px}
+.adm{border:1px solid var(--line);border-left:5px solid var(--ok);background:var(--card);padding:8px 12px;margin:0 0 10px}
+.adm.closed{border-left-color:#94a0b3;color:var(--mut)}
+.adm h2{margin:0 0 2px;font-size:15px}
+.btn{display:inline-block;border:0;border-radius:3px;background:var(--mar);color:#fff;padding:5px 12px;font:600 13.5px inherit;font-family:inherit;text-decoration:none;cursor:pointer}
 .btn.alt{background:transparent;color:var(--mar);border:1.5px solid var(--mar)}
-.btn.sm{padding:3px 10px;font-size:13px}
-nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
-nav.tabs button{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:5px 14px;font:inherit;cursor:pointer}
-nav.tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-h2.sec{font-size:19px;margin:22px 0 8px;border-bottom:2px solid var(--line);padding-bottom:4px}
-.item{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
-.item b{display:block}
+.btn.sm{padding:2px 9px;font-size:12.5px}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:0;padding:6px 8px;background:var(--card);border:1px solid var(--line);border-top:0}
+nav.tabs button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:3px;padding:2px 10px;font:inherit;font-size:13px;cursor:pointer}
+nav.tabs button[aria-pressed=true]{background:var(--c-notice);color:#fff;border-color:var(--c-notice)}
+h2.sec{font-size:14.5px;font-weight:700;margin:12px 0 0;padding:5px 10px;background:var(--c,var(--navy));color:#fff;scroll-margin-top:44px;letter-spacing:.2px}
+h2.sec:first-child{margin-top:0}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:0 14px;align-items:start}
+@media(max-width:860px){.cols{grid-template-columns:1fr}.side{order:-1}}
+.list,.box{background:var(--card);border:1px solid var(--line);border-top:0}
+.box{padding:8px 10px}
+.item{background:var(--card);border:1px solid var(--line);padding:6px 10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.list .item{border:0;border-bottom:1px solid var(--line);margin:0;border-left:4px solid var(--c,var(--mar))}
+.list .item:last-child{border-bottom:0}
+.list .item:nth-child(even){background:color-mix(in srgb,var(--bg) 55%,var(--card))}
+.item b{display:block;font-weight:600}
 .pp{display:flex;align-items:center;gap:8px;margin-left:auto}.pp img{width:40px;height:40px;border-radius:50%;object-fit:cover}.pp label{margin:0;font-size:12px}.pp .addph{display:none;background:#b3261e}.pp.miss .addph{display:inline-block}.pp select{max-width:190px}
-.meta{font-size:13px;color:var(--mut)}
-.tag{display:inline-block;font-size:12px;border-radius:4px;padding:0 6px;background:var(--line);color:var(--ink);margin-right:4px}
-.tag.new{background:var(--gold);color:#1b1400;font-weight:700}
-.empty{color:var(--mut);padding:8px 2px}
-footer{text-align:center;color:var(--mut);font-size:13px;padding:24px 16px 40px}
+.meta{font-size:12px;color:var(--mut)}
+.tag{display:inline-block;font-size:11px;border-radius:3px;padding:0 6px;background:var(--line);color:var(--ink);margin-right:4px}
+.tag.new{background:#d62828;color:#fff;font-weight:700}
+.empty{color:var(--mut);padding:8px 10px}
+footer{text-align:center;background:var(--navy);color:#dbe4ff;font-size:12.5px;padding:12px 16px;margin-top:14px;border-top:3px solid var(--gold)}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-nav.menu{display:flex;gap:4px 16px;flex-wrap:wrap;justify-content:center;background:var(--card);border-bottom:1px solid var(--line);padding:8px 12px}
-nav.menu a{text-decoration:none;font-weight:600;font-size:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
-.grid figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+nav.menu{display:flex;gap:0;flex-wrap:wrap;justify-content:center;background:var(--mar);position:sticky;top:0;z-index:5;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+nav.menu a{text-decoration:none;font-weight:600;font-size:13.5px;color:#fff;padding:8px 14px;border-right:1px solid rgba(255,255,255,.18)}
+nav.menu a:hover{background:var(--gold);color:#1b1400}
+@media(prefers-color-scheme:dark){nav.menu{background:#17327a}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;padding:8px;background:var(--card);border:1px solid var(--line);border-top:0}
+.grid figure{margin:0;background:var(--card);border:1px solid var(--line);overflow:hidden}
 .grid img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--line)}
-.grid figcaption{font-size:13px;padding:6px 10px}
-.staff{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
-.staff .item{flex-direction:row;align-items:center}
-.ph{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none;background:var(--mar);color:#fff;display:grid;place-items:center;font-weight:700;font-size:20px}
-table.t{width:100%;border-collapse:collapse;background:var(--card)}
-table.t td{border:1px solid var(--line);padding:6px 12px}
+.grid figcaption{font-size:12px;padding:3px 6px}
+.staff{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:6px;padding:8px;background:var(--card);border:1px solid var(--line);border-top:0}
+.staff .item{flex-direction:row;align-items:center;justify-content:flex-start;margin:0;padding:5px 8px;border-left:3px solid var(--c-staff)}
+.ph{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none;background:var(--c-staff);color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px}
+.staff .item b{font-size:13px;line-height:1.25}
+table.t{width:100%;border-collapse:collapse;background:var(--card);font-size:13.5px}
+table.t td{border:1px solid var(--line);padding:3px 10px}
 table.t td:last-child{text-align:right;font-weight:600;white-space:nowrap}
-
-#linksBox h3{font-size:15px;margin:14px 0 6px;color:var(--mut)}
-.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
-.tile{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:8px;padding:12px 14px}
+.side h3{font-size:12.5px;margin:0;padding:3px 10px;background:color-mix(in srgb,var(--c-link) 14%,var(--card));color:var(--ink);border:1px solid var(--line);border-top:0}
+#linksBox{background:var(--card);border:1px solid var(--line);border-top:0}
+#linksBox h3{border-left:0;border-right:0;border-top:1px solid var(--line)}
+#linksBox h3:first-child{border-top:0}
+.tiles{display:grid;grid-template-columns:1fr;gap:0}
+.tile{display:block;text-decoration:none;color:var(--ink);background:var(--card);border-bottom:1px solid var(--line);border-left:4px solid var(--gold);padding:5px 10px}
 .tile.g-staff{border-left-color:#2a6f9e}.tile.g-student{border-left-color:var(--ok)}
-.tile b{display:block}.tile span{font-size:13px;color:var(--mut)}
-.tile:hover{background:var(--bg)}
-details summary{cursor:pointer;font-weight:600;color:var(--mar)}
+.tile b{display:block;font-size:13.5px}.tile span{font-size:11.5px;color:var(--mut);line-height:1.2;display:block}
+.tile:hover{background:color-mix(in srgb,var(--gold) 16%,var(--card))}
+details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px;font-size:13px}
+.contact{padding:8px 10px;font-size:13.5px}
+/* 
 /* admin */
 #panel{display:none}
 #panel fieldset{border:1px solid var(--line);border-radius:8px;background:var(--card);margin:0 0 14px;padding:12px 14px}
@@ -68,6 +85,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar)}
 </style>
 </head>
 <body>
+<div class="strip"></div>
 <header>
   <h1>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)</h1>
   <p>Taldangra Fulmati High School (H.S.) · Estd. 1956 · Taldangra, Khatra, Bankura</p>
@@ -81,45 +99,50 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar)}
 <main class="wrap" id="site">
   <div class="adm" id="admBox"></div>
 
-  <h2 class="sec" id="links">দ্রুত লিংক / Quick Links</h2>
-  <div id="linksBox"></div>
+  <div class="cols">
+    <div class="mainc">
+      <h2 class="sec" id="notices-top" style="--c:var(--c-notice)">বিজ্ঞপ্তি / Notices</h2>
+      <nav class="tabs" aria-label="Filter notices">
+        <button data-f="all" aria-pressed="true">সবার জন্য / All</button>
+        <button data-f="staff" aria-pressed="false">শিক্ষক-শিক্ষাকর্মী / Staff</button>
+        <button data-f="student" aria-pressed="false">ছাত্রছাত্রী / Students</button>
+        <button data-f="general" aria-pressed="false">সাধারণ / General</button>
+      </nav>
+      <div class="list" id="notices" style="--c:var(--c-notice)"></div>
 
-  <nav class="tabs" aria-label="Filter notices">
-    <button data-f="all" aria-pressed="true">সবার জন্য / All</button>
-    <button data-f="staff" aria-pressed="false">শিক্ষক-শিক্ষাকর্মী / Staff</button>
-    <button data-f="student" aria-pressed="false">ছাত্রছাত্রী / Students</button>
-    <button data-f="general" aria-pressed="false">সাধারণ / General</button>
-  </nav>
+      <h2 class="sec" style="--c:var(--c-result)">ফলাফল / Results</h2>
+      <div class="list" id="results" style="--c:var(--c-result)"></div>
 
-  <h2 class="sec" id="notices-top">বিজ্ঞপ্তি / Notices</h2>
-  <div id="notices"></div>
+      <h2 class="sec" id="gallery" style="--c:var(--c-gallery)">ফটো গ্যালারি / Photo Gallery</h2>
+      <div class="grid" id="galleryBox"></div>
 
-  <h2 class="sec">ফলাফল / Results</h2>
-  <div id="results"></div>
+      <h2 class="sec" id="staff" style="--c:var(--c-staff)">শিক্ষক-শিক্ষাকর্মী / Teachers &amp; Staff</h2>
+      <div class="staff" id="staffBox"></div>
+    </div>
 
-  <h2 class="sec" id="gallery">ফটো গ্যালারি / Photo Gallery</h2>
-  <div class="grid" id="galleryBox"></div>
+    <aside class="side">
+      <h2 class="sec" id="links" style="--c:var(--c-link)">দ্রুত লিংক / Quick Links</h2>
+      <div id="linksBox"></div>
 
-  <h2 class="sec" id="staff">শিক্ষক-শিক্ষাকর্মী / Teachers &amp; Staff</h2>
-  <div class="staff" id="staffBox"></div>
+      <h2 class="sec" id="routine" style="--c:var(--c-routine)">রুটিন ও ছুটি / Routine &amp; Holidays</h2>
+      <table class="t" id="routineBox"></table>
+      <h3>আসন্ন ছুটি / Upcoming holidays</h3>
+      <div class="list" id="holidayBox" style="--c:var(--c-routine)"></div>
+      <details class="box" style="padding:0"><summary>সারা বছরের তালিকা / Full list</summary><table class="t" id="holAll"></table></details>
 
-  <h2 class="sec" id="routine">বিদ্যালয়ের রুটিন ও ছুটি / Routine &amp; Holidays</h2>
-  <table class="t" id="routineBox"></table>
-  <h3 style="margin:14px 0 6px;font-size:16px">আসন্ন ছুটি / Upcoming holidays</h3>
-  <div id="holidayBox"></div>
-  <details style="margin-top:8px"><summary>সারা বছরের তালিকা / Full list</summary><table class="t" id="holAll"></table></details>
-
-  <h2 class="sec">যোগাযোগ / Contact</h2>
-  <div class="item"><div>
-    Landline: 03243-265114<br>
-    H.M.: 9434654678, 9933035811<br>
-    <a href="mailto:highschooltaldangrafulmati@gmail.com">highschooltaldangrafulmati@gmail.com</a><br>
-    <span class="meta">UDISE 19132104401 · H.S. Code 114071 · Index No. U1-083</span>
-  </div></div>
+      <h2 class="sec" style="--c:var(--navy)">যোগাযোগ / Contact</h2>
+      <div class="box contact">
+        Landline: 03243-265114<br>
+        H.M.: 9434654678, 9933035811<br>
+        <a href="mailto:highschooltaldangrafulmati@gmail.com">highschooltaldangrafulmati@gmail.com</a><br>
+        <span class="meta">UDISE 19132104401 · H.S. Code 114071 · Index No. U1-083</span>
+      </div>
+    </aside>
+  </div>
 </main>
 
 <!-- ADMIN PANEL: open this page with #admin at the end of the URL -->
-<main class="wrap" id="panel">
+<main class="wrap" id="panel" style="max-width:900px">
   <h2>Admin panel</h2>
   <p><span id="who" class="meta">Not signed in</span>
     <button class="btn alt sm" id="login">Sign in with Google</button>
