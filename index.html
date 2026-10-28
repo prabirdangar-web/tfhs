@@ -1,865 +1,1166 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Taldangra Fulmati High School (H.S.) – Notice Board</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Serif+Bengali:wght@700&display=swap">
-<style>
-:root{--bg:#eef1f6;--ink:#1a2230;--mut:#586274;--card:#fff;--line:#cfd6e2;--mar:#12388a;--navy:#0c2a6b;--gold:#f2a900;--ok:#1d6b4a;--c-notice:#12388a;--c-result:#1d7a46;--c-gallery:#c2410c;--c-staff:#7a1f3d;--c-routine:#0e7490;--c-link:#5b2a86;--c-mp:#b45309}
-@media(prefers-color-scheme:dark){:root{--bg:#0f151d;--ink:#e8edf1;--mut:#9aa7b3;--card:#18212b;--line:#2b3744;--mar:#7fa6ff;--navy:#0a1d4a;--gold:#f2b93a;--ok:#5fc596}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.45 "Noto Sans Bengali",system-ui,sans-serif}
-a{color:var(--mar)}
-.strip{height:5px;background:linear-gradient(90deg,#ff9933 0 33.3%,#fff 33.3% 66.6%,#138808 66.6%)}
-header{background:linear-gradient(180deg,var(--navy),#123c94);color:#fff;padding:10px 16px;text-align:center;border-bottom:3px solid var(--gold)}
-header h1{margin:0;font:700 clamp(18px,3.6vw,26px)/1.25 "Noto Serif Bengali",serif}
-header p{margin:2px 0 0;opacity:.92;font-size:12.5px}
-.wrap{max-width:1180px;margin:0 auto;padding:10px 12px}
-.ticker{background:#7a0f1f;color:#fff;padding:5px 16px;font-weight:600;font-size:13.5px;display:flex;gap:10px;align-items:center;justify-content:center;text-align:center}
-.ticker:empty{display:none}
-.ticker:not(:empty)::before{content:"NEW";background:var(--gold);color:#1b1400;font-size:11px;font-weight:800;padding:0 7px;border-radius:3px}
-.adm{border:1px solid var(--line);border-left:5px solid var(--ok);background:var(--card);padding:8px 12px;margin:0 0 10px}
-.adm.closed{border-left-color:#94a0b3;color:var(--mut)}
-.adm h2{margin:0 0 2px;font-size:15px}
-.btn{display:inline-block;border:0;border-radius:3px;background:var(--mar);color:#fff;padding:5px 12px;font:600 13.5px inherit;font-family:inherit;text-decoration:none;cursor:pointer}
-.btn.alt{background:transparent;color:var(--mar);border:1.5px solid var(--mar)}
-.btn.sm{padding:2px 9px;font-size:12.5px}
-nav.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:0;padding:6px 8px;background:var(--card);border:1px solid var(--line);border-top:0}
-nav.tabs button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:3px;padding:2px 10px;font:inherit;font-size:13px;cursor:pointer}
-nav.tabs button[aria-pressed=true]{background:var(--c-notice);color:#fff;border-color:var(--c-notice)}
-h2.sec{font-size:14.5px;font-weight:700;margin:12px 0 0;padding:5px 10px;background:var(--c,var(--navy));color:#fff;scroll-margin-top:44px;letter-spacing:.2px}
-h2.sec:first-child{margin-top:0}
-.cols{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:0 14px;align-items:start}
-@media(max-width:860px){.cols{grid-template-columns:1fr}.side{margin-top:12px}}
-.list,.box{background:var(--card);border:1px solid var(--line);border-top:0}
-.box{padding:8px 10px}
-.item{background:var(--card);border:1px solid var(--line);padding:6px 10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;justify-content:space-between}
-.list .item{border:0;border-bottom:1px solid var(--line);margin:0;border-left:4px solid var(--c,var(--mar))}
-.list .item:last-child{border-bottom:0}
-.list .item:nth-child(even){background:color-mix(in srgb,var(--bg) 55%,var(--card))}
-.item b{display:block;font-weight:600}
-.pp{display:flex;align-items:center;gap:8px;margin-left:auto}.pp img{width:40px;height:40px;border-radius:50%;object-fit:cover}.pp label{margin:0;font-size:12px}.pp .addph{display:none;background:#b3261e}.pp.miss .addph{display:inline-block}.pp select{max-width:190px}
-.meta{font-size:12px;color:var(--mut)}
-.tag{display:inline-block;font-size:11px;border-radius:3px;padding:0 6px;background:var(--line);color:var(--ink);margin-right:4px}
-.tag.new{background:#d62828;color:#fff;font-weight:700}
-.empty{color:var(--mut);padding:8px 10px}
-footer{text-align:center;background:var(--navy);color:#dbe4ff;font-size:12.5px;padding:12px 16px;margin-top:14px;border-top:3px solid var(--gold)}
-:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-nav.menu{display:flex;gap:0;flex-wrap:wrap;justify-content:center;background:var(--mar);position:sticky;top:0;z-index:5;box-shadow:0 1px 3px rgba(0,0,0,.25)}
-nav.menu a{text-decoration:none;font-weight:600;font-size:13.5px;color:#fff;padding:8px 14px;border-right:1px solid rgba(255,255,255,.18)}
-nav.menu a:hover{background:var(--gold);color:#1b1400}
-@media(prefers-color-scheme:dark){nav.menu{background:#17327a}}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;padding:8px;background:var(--card);border:1px solid var(--line);border-top:0}
-.grid figure{margin:0;background:var(--card);border:1px solid var(--line);overflow:hidden}
-.grid img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--line)}
-.grid figcaption{font-size:12px;padding:3px 6px}
-.staff{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:6px;padding:8px;background:var(--card);border:1px solid var(--line);border-top:0}
-.staff .item{flex-direction:row;align-items:center;justify-content:flex-start;margin:0;padding:5px 8px;border-left:3px solid var(--c-staff)}
-.ph{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none;background:var(--c-staff);color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px}
-.staff .item b{font-size:13px;line-height:1.25}
-.meta.blk{display:block}
-.flash{position:fixed;inset:0;z-index:50;background:rgba(5,15,45,.72);display:flex;align-items:center;justify-content:center;padding:12px}
-.flash[hidden]{display:none}
-.fbox{background:var(--card);color:var(--ink);width:min(720px,100%);max-height:calc(100vh - 24px);display:flex;flex-direction:column;border-top:5px solid var(--gold);border-radius:4px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
-.fhead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:7px 12px;font-weight:700}
-.fhead button{background:transparent;border:0;color:#fff;font-size:20px;line-height:1;cursor:pointer;padding:2px 6px}
-.flang{display:flex;gap:4px;padding:6px 12px 0}
-.flang button{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:2px 12px;border-radius:3px;font:inherit;font-size:13px;cursor:pointer}
-.flang button[aria-pressed=true]{background:var(--mar);color:#fff;border-color:var(--mar)}
-.flang.one{display:none}
-.fbody{padding:8px 16px;overflow:auto}
-.fbody h2{font-size:17px;margin:4px 0 4px;color:var(--mar);line-height:1.35}
-.fmeta{font-size:13px;color:var(--mut);padding-bottom:6px;border-bottom:1px solid var(--line);margin-bottom:8px;white-space:pre-line}
-.ftext{white-space:pre-line;font-size:15px;line-height:1.6}
-.ffoot{padding:8px 16px;text-align:right;border-top:1px solid var(--line)}
-.ptabs{display:flex;gap:2px;overflow-x:auto;background:var(--navy);padding:4px 4px 0}
-.ptabs button{flex:1 1 auto;border:0;background:rgba(255,255,255,.12);color:#fff;font:600 13.5px inherit;font-family:inherit;padding:7px 12px;border-radius:5px 5px 0 0;cursor:pointer;white-space:nowrap}
-.ptabs button:hover{background:rgba(255,255,255,.25)}
-.ptabs button[aria-selected=true]{background:var(--c);box-shadow:inset 0 3px 0 var(--gold)}
-.ptabs .cnt{font-style:normal;font-size:11px;background:rgba(255,255,255,.25);border-radius:9px;padding:0 6px;margin-left:5px}.ptabs .cnt:empty{display:none}
-.pane[hidden]{display:none}
-.pane>.grid,.pane>.list{border-top:1px solid var(--line)}
-details.nb{margin-top:3px}details.nb summary{padding:0;font-size:12.5px}
-.nbody{white-space:pre-line;font-size:13.5px;line-height:1.4;margin-top:6px;padding:8px 10px;background:var(--bg);border-left:3px solid var(--c-notice)}
-.staff.v{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-h3.sub{margin:0;padding:3px 10px;font-size:12.5px;background:color-mix(in srgb,var(--c-staff) 14%,var(--card));color:var(--ink);border:1px solid var(--line);border-top:0}
-h3.sub.vh{background:var(--c-staff);color:#fff;font-size:13px}
-table.t{width:100%;border-collapse:collapse;background:var(--card);font-size:13.5px}
-table.t td{border:1px solid var(--line);padding:3px 10px}
-table.t td:last-child{text-align:right;font-weight:600;white-space:nowrap}
-.side h3{font-size:12.5px;margin:0;padding:3px 10px;background:color-mix(in srgb,var(--c-link) 14%,var(--card));color:var(--ink);border:1px solid var(--line);border-top:0}
-#linksBox{background:var(--card);border:1px solid var(--line);border-top:0}
-#linksBox h3{border-left:0;border-right:0;border-top:1px solid var(--line)}
-#linksBox h3:first-child{border-top:0}
-.tiles{display:grid;grid-template-columns:1fr;gap:0}
-.tile{display:block;text-decoration:none;color:var(--ink);background:var(--card);border-bottom:1px solid var(--line);border-left:4px solid var(--gold);padding:5px 10px}
-.tile.g-staff{border-left-color:#2a6f9e}.tile.g-student{border-left-color:var(--ok)}
-.tile b{display:block;font-size:13.5px}.tile span{font-size:11.5px;color:var(--mut);line-height:1.2;display:block}
-.tile:hover{background:color-mix(in srgb,var(--gold) 16%,var(--card))}
-details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px;font-size:13px}
-.contact{padding:8px 10px;font-size:13.5px}
-.hero{position:relative;height:clamp(110px,21vw,250px);overflow:hidden;background:var(--navy);border:1px solid var(--line);margin:0 0 10px}
-.hero:not(.on){display:none}
-.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 72%;opacity:0;transition:opacity .9s}
-.hero img.show{opacity:1}
-.hero .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 12px 5px;color:#fff;font-weight:600;font-size:13px;background:linear-gradient(0deg,rgba(6,20,60,.85),transparent)}
-.hero .dots{position:absolute;right:10px;bottom:7px;display:flex;gap:5px}
-.hero .dots button{width:9px;height:9px;border-radius:50%;border:1px solid #fff;background:transparent;padding:0;cursor:pointer}
-.hero .dots button[aria-current=true]{background:var(--gold);border-color:var(--gold)}
-@media(prefers-reduced-motion:reduce){.hero img{transition:none}}
-/* admin */
-#panel{display:none}
-#panel fieldset{border:1px solid var(--line);border-radius:8px;background:var(--card);margin:0 0 14px;padding:12px 14px}
-#panel legend{font-weight:700;padding:0 6px}
-#panel label{display:block;font-size:13px;color:var(--mut);margin-top:8px}
-#panel input,#panel select,#panel textarea{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
-#panel .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:560px){#panel .row{grid-template-columns:1fr}#panel .item{flex-direction:column;align-items:flex-start}}
-#msg{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:20px;display:none}
-img.zoom{cursor:zoom-in;max-width:100%}
-.poster-s{display:block;margin-top:6px;max-height:150px;max-width:100%;border:1px solid var(--line);border-radius:3px}
-.mpposter{display:block;max-width:100%;max-height:520px;margin:8px auto;border:1px solid var(--line);border-radius:3px}
-table.t.mp td:last-child{text-align:left;font-weight:400}
-table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left;border:1px solid var(--line);font-size:13px}
-.mpbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}
-.lb{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:10px}
-.lb[hidden]{display:none}
-.lb img{max-width:100%;max-height:100%;object-fit:contain;background:#fff}
-.lb button{position:absolute;top:10px;right:14px;font-size:26px;background:transparent;color:#fff;border:0;cursor:pointer}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Teacher Section (Medium-Wise) | Taldangra Fulmati High School (H.S.)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0f172a;
+      --primary: #1e3a8a;
+      --primary-light: #2563eb;
+      --teal: #0d9488;
+      --teal-dark: #0f766e;
+      --amber: #d97706;
+      --purple: #7c3aed;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* Hero Banner */
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #0f766e 100%);
+      color: #ffffff;
+      padding: 2.5rem 1.25rem 3.2rem;
+      text-align: center;
+      border-bottom: 4px solid var(--amber);
+      position: relative;
+    }
+
+    .school-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+      color: #fde68a;
+    }
+
+    header h1 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      margin-bottom: 0.25rem;
+    }
+
+    header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #99f6e4;
+      margin-bottom: 0.4rem;
+    }
+
+    header p {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Filter & Search Bar */
+    .toolbar-container {
+      max-width: 1280px;
+      margin: -1.8rem auto 1.5rem;
+      padding: 0 1rem;
+      position: relative;
+      z-index: 20;
+    }
+
+    .toolbar {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .medium-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tab-btn {
+      padding: 0.55rem 1.05rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .tab-btn:hover {
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 3px 10px rgba(30, 58, 138, 0.25);
+    }
+
+    .tab-btn.active[data-medium="Santhali"] {
+      background: var(--teal-dark);
+      border-color: var(--teal-dark);
+    }
+
+    .search-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+      flex: 1;
+      justify-content: flex-end;
+      min-width: 260px;
+    }
+
+    .search-box {
+      padding: 0.55rem 0.95rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      width: 250px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus {
+      border-color: var(--primary-light);
+    }
+
+    .btn-print {
+      padding: 0.55rem 0.95rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .btn-print:hover {
+      background: #f1f5f9;
+    }
+
+    /* Quick Stats Row */
+    .stats-grid {
+      max-width: 1280px;
+      margin: 0 auto 1.75rem;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .stat-card.santhali {
+      border-left-color: var(--teal);
+    }
+
+    .stat-card.amber {
+      border-left-color: var(--amber);
+    }
+
+    .stat-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.4px;
+    }
+
+    .stat-num {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    /* Main Content Sections */
+    .main-container {
+      max-width: 1280px;
+      margin: 0 auto 3.5rem;
+      padding: 0 1rem;
+    }
+
+    .medium-section {
+      margin-bottom: 2.75rem;
+    }
+
+    .section-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      padding: 0.75rem 1.1rem;
+      background: linear-gradient(90deg, #eff6ff 0%, #ffffff 100%);
+      border-left: 5px solid var(--primary);
+      border-radius: 8px;
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-banner.santhali-banner {
+      background: linear-gradient(90deg, #f0fdfa 0%, #ffffff 100%);
+      border-left-color: var(--teal);
+    }
+
+    .section-banner h3 {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-banner.santhali-banner h3 {
+      color: var(--teal-dark);
+    }
+
+    .badge-count {
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.76rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .santhali-banner .badge-count {
+      background: var(--teal-dark);
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .profile-card {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .profile-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.1);
+    }
+
+    .card-strip {
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary), #3b82f6);
+    }
+
+    .profile-card.santhali-card .card-strip {
+      background: linear-gradient(90deg, var(--teal-dark), #14b8a6);
+    }
+
+    .card-content {
+      padding: 1.25rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .card-top {
+      display: flex;
+      gap: 0.95rem;
+      align-items: center;
+    }
+
+    .avatar-circle {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: #dbeafe;
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #93c5fd;
+      flex-shrink: 0;
+    }
+
+    .santhali-card .avatar-circle {
+      background: #ccfbf1;
+      color: var(--teal-dark);
+      border-color: #5eead4;
+    }
+
+    .name-block {
+      flex: 1;
+    }
+
+    .teacher-id-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .teacher-name {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0.1rem 0 0.3rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.18rem 0.55rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .pill-para {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .pill-med-bn {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .pill-med-sn {
+      background: #ccfbf1;
+      color: #115e59;
+    }
+
+    .pill-cat {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Key-Value Data Grid inside Card */
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem 0.75rem;
+      background: #f8fafc;
+      padding: 0.85rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+
+    .data-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .data-item.full {
+      grid-column: span 2;
+    }
+
+    .data-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .data-val {
+      font-weight: 700;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .card-actions {
+      padding: 0.75rem 1.25rem;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-sm {
+      padding: 0.42rem 0.75rem;
+      border-radius: 7px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+
+    .btn-sm:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-primary-sm {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-primary-sm:hover {
+      background: #1d4ed8;
+    }
+
+    .santhali-card .btn-primary-sm {
+      background: var(--teal-dark);
+      border-color: var(--teal-dark);
+    }
+
+    /* Full Datasheet Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #fff;
+      width: 100%;
+      max-width: 720px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-head {
+      background: var(--navy);
+      color: #fff;
+      padding: 1.1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-head h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .sheet-section-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--primary);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.35rem;
+      margin: 1.1rem 0 0.75rem;
+    }
+
+    .sheet-section-title:first-child {
+      margin-top: 0;
+    }
+
+    .sheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .sheet-table td {
+      padding: 0.5rem 0.65rem;
+      border: 1px solid var(--border);
+    }
+
+    .sheet-table td.lbl {
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 600;
+      width: 28%;
+    }
+
+    .sheet-table td.val {
+      font-weight: 700;
+      color: var(--text);
+      width: 22%;
+    }
+
+    .medium-switch-bar {
+      margin-top: 1.25rem;
+      padding: 0.85rem 1rem;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .sheet-table td {
+        display: block;
+        width: 100% !important;
+      }
+    }
+
+    @media print {
+      .toolbar-container, .card-actions, .modal-overlay {
+        display: none !important;
+      }
+      body {
+        background: #fff;
+      }
+      header {
+        background: #fff !important;
+        color: #000 !important;
+        padding: 1rem;
+        border-bottom: 2px solid #000;
+      }
+      header h2, header p, .school-badge {
+        color: #222 !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="strip"></div>
-<header>
-  <h1>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)</h1>
-  <p>Taldangra Fulmati High School (H.S.) · Estd. 1956 · Taldangra, Khatra, Bankura</p>
-</header>
-<div class="ticker" id="ticker"></div>
-<nav class="menu" aria-label="Sections">
-  <a href="#links">দ্রুত লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
-  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
-</nav>
 
-<main class="wrap" id="site">
-  <section class="hero" id="hero" aria-label="School photos">
-    <img src="images/school-gate.jpg" alt="তালডাংরা ফুলমতি উচ্চ বিদ্যালয়ের প্রবেশদ্বার / School main gate" data-cap="প্রবেশদ্বার / School Gate">
-    <img src="images/school-campus.jpg" alt="বিদ্যালয় প্রাঙ্গণ ও ভবন / School campus and building" data-cap="বিদ্যালয় প্রাঙ্গণ / School Campus">
-    <div class="cap" id="heroCap"></div><div class="dots" id="heroDots"></div>
-  </section>
-  <div class="adm" id="admBox"></div>
+  <header>
+    <div class="school-badge">Banglar Shiksha Portal Verified Profile Directory</div>
+    <h1>TALDANGRA FULMATI HIGH SCHOOL (H.S.)</h1>
+    <h2>তালডাংরা ফুলমতী উচ্চ বিদ্যালয় (উঃ মাঃ) — প্যারা টিচার বিভাগ</h2>
+    <p>Medium-Wise Para Teacher Profile Section (Upper Primary Contract / Para Faculty)</p>
+  </header>
 
-  <div class="cols">
-    <div class="mainc">
-      <div class="ptabs" id="ptabs" role="tablist" aria-label="Sections">
-        <button role="tab" data-p="notices" aria-selected="true" style="--c:var(--c-notice)">📢 <span>বিজ্ঞপ্তি</span><i class="cnt" id="cnt-notices"></i></button>
-        <button role="tab" data-p="results" aria-selected="false" style="--c:var(--c-result)">🏆 <span>ফলাফল</span><i class="cnt" id="cnt-results"></i></button>
-        <button role="tab" data-p="gallery" aria-selected="false" style="--c:var(--c-gallery)">🖼️ <span>গ্যালারি</span><i class="cnt" id="cnt-gallery"></i></button>
-        <button role="tab" data-p="staff" aria-selected="false" style="--c:var(--c-staff)">👥 <span>শিক্ষক-শিক্ষাকর্মী</span><i class="cnt" id="cnt-staff"></i></button>
-        <button role="tab" data-p="mptest" aria-selected="false" style="--c:var(--c-mp)">📅 <span>MP টেস্ট প্রোগ্রাম</span><i class="cnt" id="cnt-mptest"></i></button>
+  <!-- Filter & Search Controls -->
+  <div class="toolbar-container">
+    <div class="toolbar">
+      <div class="medium-tabs" id="mediumTabs">
+        <button class="tab-btn active" data-medium="ALL">All Para Teachers (7)</button>
+        <button class="tab-btn" data-medium="Bengali">Bengali Medium (বাংলা মাধ্যম)</button>
+        <button class="tab-btn" data-medium="Santhali">Santhali Medium (সাঁওতালি মাধ্যম)</button>
       </div>
 
-      <section class="pane" id="p-notices" role="tabpanel" style="--c:var(--c-notice)">
-        <nav class="tabs" aria-label="Filter notices">
-          <button data-f="all" aria-pressed="true">সবার জন্য / All</button>
-          <button data-f="staff" aria-pressed="false">শিক্ষক-শিক্ষাকর্মী / Staff</button>
-          <button data-f="student" aria-pressed="false">ছাত্রছাত্রী / Students</button>
-          <button data-f="general" aria-pressed="false">সাধারণ / General</button>
-        </nav>
-        <div class="list" id="notices" style="--c:var(--c-notice)"></div>
-      </section>
-
-      <section class="pane" id="p-results" role="tabpanel" style="--c:var(--c-result)" hidden>
-        <div class="list" id="results" style="--c:var(--c-result)"></div>
-      </section>
-
-      <section class="pane" id="p-gallery" role="tabpanel" style="--c:var(--c-gallery)" hidden>
-        <div class="grid" id="galleryBox"></div>
-      </section>
-
-      <section class="pane" id="p-staff" role="tabpanel" style="--c:var(--c-staff)" hidden>
-        <div id="staffBox"></div>
-      </section>
-
-      <section class="pane" id="p-mptest" role="tabpanel" style="--c:var(--c-mp)" hidden>
-        <div id="mpBox"></div>
-      </section>
+      <div class="search-group">
+        <input type="text" id="searchInput" class="search-box" placeholder="Search Name, ID, Subject, Phone..." />
+        <button class="btn-print" onclick="window.print()">🖨️ Print Directory</button>
+      </div>
     </div>
-
-    <aside class="side">
-      <h2 class="sec" id="links" style="--c:var(--c-link)">দ্রুত লিংক / Quick Links</h2>
-      <div id="linksBox"></div>
-
-      <h2 class="sec" id="routine" style="--c:var(--c-routine)">রুটিন ও ছুটি / Routine &amp; Holidays</h2>
-      <table class="t" id="routineBox"></table>
-      <h3>আসন্ন ছুটি / Upcoming holidays</h3>
-      <div class="list" id="holidayBox" style="--c:var(--c-routine)"></div>
-      <details class="box" style="padding:0"><summary>সারা বছরের তালিকা / Full list</summary><table class="t" id="holAll"></table></details>
-
-      <h2 class="sec" style="--c:var(--navy)">যোগাযোগ / Contact</h2>
-      <div class="box contact">
-        Landline: 03243-265114<br>
-        H.M.: 9434654678, 9933035811<br>
-        <a href="mailto:highschooltaldangrafulmati@gmail.com">highschooltaldangrafulmati@gmail.com</a><br>
-        <span class="meta">UDISE 19132104401 · H.S. Code 114071 · Index No. U1-083</span>
-      </div>
-    </aside>
   </div>
-</main>
 
-<!-- ADMIN PANEL: open this page with #admin at the end of the URL -->
-<main class="wrap" id="panel" style="max-width:900px">
-  <h2>Admin panel</h2>
-  <p><span id="who" class="meta">Not signed in</span>
-    <button class="btn alt sm" id="login">Sign in with Google</button>
-    <button class="btn alt sm" id="logout" style="display:none">Sign out</button>
-    <a class="btn alt sm" href="#">View site</a></p>
-  <div id="editor" style="display:none">
-    <fieldset><legend>Top ticker (one-line alert)</legend>
-      <input id="tk" placeholder="e.g. School closed on 31 October">
-    </fieldset>
-
-    <fieldset><legend>Admission</legend>
-      <label><input type="checkbox" id="aOpen" style="width:auto"> Admission open</label>
-      <label>Heading<input id="aTitle" placeholder="Admission 2027 – Class V / IX / XI"></label>
-      <label>Form / notice link<input id="aLink" placeholder="https://..."></label>
-      <div class="row">
-        <label>Last date<input id="aLast" type="date"></label>
-        <label>Short note<input id="aNote"></label>
+  <!-- Summary Statistics -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div>
+        <div class="stat-title">Total Para Teachers</div>
+        <div class="stat-num" id="totalCount">7</div>
       </div>
-      <p><button class="btn" id="saveAdm">Save admission</button></p>
-    </fieldset>
-
-    <fieldset><legend>Pop-up notice (opens in front when the site is visited)</legend>
-      <label><input type="checkbox" id="fOn" style="width:auto"> Show pop-up on the site</label>
-      <div class="row"><label>Title (Bengali)<input id="fiTitle"></label><label>Title (English, optional)<input id="fiTitleEn"></label></div>
-      <div class="row"><label>Date (text, as it should appear)<input id="fiDate" placeholder="১৩ নভেম্বর, ২০২৬ / 13 November, 2026"></label><label>Place (optional)<input id="fiPlace" placeholder="বিদ্যালয় প্রাঙ্গণ / School Premises"></label></div>
-      <label>Show until (optional – pop-up stops automatically after this date)<input id="fiUntil" type="date"></label>
-      <label>Full notice text (Bengali)<textarea id="fiBody" rows="9"></textarea></label>
-      <label>Full notice text (English, optional – adds an English button)<textarea id="fiBodyEn" rows="7"></textarea></label>
-      <p><button class="btn" id="saveFlash">Save pop-up</button> <button class="btn alt" id="prevFlash" type="button">Preview</button> <button class="btn alt" id="loadFlash" type="button">Load Vijaya/Diwali reopening notice</button> <button class="btn alt" id="offFlash" type="button">Turn off</button></p>
-    </fieldset>
-
-    <fieldset><legend>Add notice</legend>
-      <label>Title<input id="nTitle"></label>
-      <label>File or page link (optional – Google Drive "anyone with link", PDF, etc.)<input id="nLink" placeholder="https://..."></label>
-      <label>Details (optional – full notice text, shown under a "Details" button)<textarea id="nBody" rows="6" placeholder="Paste the full notice text here. Line breaks are kept."></textarea></label>
-      <label>Notice as poster (optional – upload a JPG/PNG image of the notice; it is shrunk automatically and shown under the notice, click to enlarge)<input type="file" id="nPoster" accept="image/*"></label>
-      <div class="row">
-        <label>For<select id="nFor"><option value="general">General</option><option value="staff">Staff</option><option value="student">Students</option></select></label>
-        <label>Date<input id="nDate" type="date"></label>
+    </div>
+    <div class="stat-card">
+      <div>
+        <div class="stat-title">Bengali Medium</div>
+        <div class="stat-num" id="bnCount">4</div>
       </div>
-      <p><button class="btn" id="addN">Publish notice</button> <button class="btn alt" id="loadSampleN" type="button">Load sample notice into form</button></p>
-      <div id="nList"></div>
-    </fieldset>
-
-    <fieldset><legend>MP (SE) 2027 Selection Test – Programme</legend>
-      <div class="mpbar"><button class="btn" id="fetchMp" type="button">⬇ Fetch programme from Exam Portal</button>
-        <label style="margin:0;display:flex;gap:6px;align-items:center">Time for all rows<input id="mpFetchTime" placeholder="11:00 AM – 1:30 PM" style="width:190px"></label>
-        <span class="meta" id="fetchMpOut">Reads Class X Programme (xi_mp_test → Programme) and fills the table below.</span></div>
-      <div class="row"><label>Heading<input id="mpTitle" placeholder="Class X MP (SE) 2027 Selection Test – Programme"></label><label>Dates (text)<input id="mpRange" placeholder="20 to 28 November 2026"></label></div>
-      <label>Portal / result link<input id="mpLink" placeholder="https://prabirdangar-web.github.io/xi_mp_test/"></label>
-      <label>Note (optional – e.g. reporting time, instructions)<textarea id="mpNote" rows="3"></textarea></label>
-      <label>Programme as poster (optional – upload image of the programme/notice)<input type="file" id="mpPoster" accept="image/*"></label>
-      <p><button class="btn" id="saveMp" type="button">Save programme details</button> <button class="btn alt" id="rmMpPoster" type="button">Remove poster</button></p>
-      <p class="meta" style="margin:8px 0 0"><b>Add exam row</b> (one row per subject, same as Class X Programme in the exam portal)</p>
-      <div class="row"><label>Date<input id="mpDate" type="date"></label><label>Time<input id="mpTime" placeholder="11:00 AM – 1:30 PM"></label></div>
-      <label>Subject<input id="mpSub" placeholder="Bengali / Santali / English / Mathematics ..."></label>
-      <p><button class="btn" id="addMp" type="button">Add exam row</button></p>
-      <div id="mpList"></div>
-    </fieldset>
-
-    <fieldset><legend>Add result</legend>
-      <label>Title<input id="rTitle" placeholder="Class IX Annual Examination 2026 – Result"></label>
-      <label>Result link<input id="rLink" placeholder="https://..."></label>
-      <label>Date<input id="rDate" type="date"></label>
-      <p><button class="btn" id="addR">Publish result</button></p>
-      <div id="rList"></div>
-    </fieldset>
-
-    <fieldset><legend>Gallery photo</legend>
-      <label>Image path or link (best: upload to the repo's <code>images/</code> folder, then enter <code>images/sports-day.jpg</code>)<input id="gUrl"></label>
-      <label>OR choose a photo directly from your computer<input type="file" id="gFile" accept="image/*"></label>
-      <label>Caption<input id="gCap"></label>
-      <p><button class="btn" id="addG">Add photo</button></p>
-      <div id="gList"></div>
-    </fieldset>
-
-    <fieldset><legend>Teacher / staff</legend>
-      <div class="row"><label>Staff type<select id="sType"><option value="">Regular school staff</option><option value="voc">Vocational unit (WBSCTVE&amp;SD)</option></select></label><label>Name<input id="sName"></label></div>
-      <div id="vocFields" style="display:none">
-        <div class="row"><label>Course level<select id="sLevel"><option value="VIII+">VIII+ Level</option><option value="X+2">X+2 Level</option></select></label><label>Engagement status<select id="sEng"><option>Contractual</option><option>Part-time</option><option>Regular</option></select></label></div>
-        <div class="row"><label>Designation<select id="sDesig"><option>Contractual Instructor</option><option>Contractual Teacher</option><option>Part Time Teacher</option><option value="other">Other (type below)</option></select></label><label>Date of joining (optional)<input id="sJoin" type="date"></label></div>
-        <p class="meta" style="margin:6px 0 0">Aadhaar, PAN, bank and other personal details are NOT stored here – this page is public.</p>
+    </div>
+    <div class="stat-card santhali">
+      <div>
+        <div class="stat-title">Santhali Medium</div>
+        <div class="stat-num" id="snCount">3</div>
       </div>
-      <div class="row"><label id="sPostL">Post<input id="sPost" placeholder="Assistant Teacher"></label><label><span id="sSubT">Subject</span><input id="sSub" list="tradeList" placeholder="Mathematics"></label></div>
-      <datalist id="tradeList"><option value="Agriculture Machineries"><option value="Auto Electrician"><option value="Domestic Appliances"><option value="Computer"><option value="Practice (Electrician)"><option value="Communicative English"><option value="Mathematics"><option value="Bengali"><option value="Management of Co-operative"></datalist>
-      <div class="row"><label>Photo path (optional)<input id="sPhoto" list="photoList" placeholder="blank = auto, or pick / type a path"><datalist id="photoList"></datalist></label><label>Photo from computer (optional)<input type="file" id="sFile" accept="image/*"></label></div>
-      <p><button class="btn" id="addS">Add staff</button> <button class="btn alt" id="cancelS" style="display:none">Cancel edit</button></p>
-      <p><button class="btn alt" id="syncS">Sync names from Salary Portal</button> <button class="btn alt" id="impV">Import vocational staff (9)</button> <span id="syncOut" class="meta"></span></p>
-      <div id="photoRep" class="meta"></div>
-      <div id="sList"></div>
-    </fieldset>
-
-    <fieldset><legend>Daily routine</legend>
-      <div class="row"><label>Item<input id="tLabel" placeholder="Morning assembly"></label><label>Time<input id="tTime" placeholder="10:30 AM"></label></div>
-      <p><button class="btn" id="addT">Add routine row</button></p>
-      <div id="tList"></div>
-    </fieldset>
-
-    <fieldset><legend>Holiday</legend>
-      <div class="row"><label>From date<input id="hDate" type="date"></label><label>To date (blank = one day)<input id="hTo" type="date"></label></div>
-      <label>Holiday name<input id="hName"></label>
-      <label><input type="checkbox" id="hObs" style="width:auto"> Observation day only (school open)</label>
-      <p><button class="btn" id="addH">Add holiday</button> <button class="btn alt" id="impH">Import 2026 holiday list</button></p>
-      <div id="hList"></div>
-    </fieldset>
-
-    <fieldset><legend>Quick links (staff / students / everyone)</legend>
-      <div class="row"><label>Title<input id="lTitle"></label><label>Link<input id="lUrl" placeholder="https://..."></label></div>
-      <div class="row"><label>For<select id="lGroup"><option value="student">Students</option><option value="staff">Staff</option><option value="general">Everyone</option></select></label><label>Icon (emoji)<input id="lIcon" placeholder="🔗"></label></div>
-      <label>Short description<input id="lDesc"></label>
-      <p><button class="btn" id="addL">Add link</button></p>
-      <div id="lList"></div>
-    </fieldset>
+    </div>
+    <div class="stat-card amber">
+      <div>
+        <div class="stat-title">Class Taught</div>
+        <div class="stat-num" style="font-size:1.2rem;">UPPER PRIMARY</div>
+      </div>
+    </div>
   </div>
-</main>
 
-<footer>© Taldangra Fulmati High School (H.S.) · Updated by the school administration</footer>
-<div id="flash" class="flash" hidden>
-  <div class="fbox" role="dialog" aria-modal="true" aria-labelledby="fTitle">
-    <div class="fhead"><span>📢 বিজ্ঞপ্তি / NOTICE</span><button type="button" id="fClose" aria-label="Close">✕</button></div>
-    <div class="flang" id="fLang"><button type="button" data-l="bn" aria-pressed="true">বাংলা</button><button type="button" data-l="en" aria-pressed="false">English</button></div>
-    <div class="fbody"><h2 id="fTitle"></h2><div class="fmeta" id="fMeta"></div><div class="ftext" id="fText"></div></div>
-    <div class="ffoot"><button type="button" class="btn" id="fOk">ঠিক আছে / OK</button></div>
+  <!-- Medium-Wise Sections -->
+  <main class="main-container">
+    <!-- Bengali Medium Section -->
+    <section class="medium-section" id="bengaliSection">
+      <div class="section-banner">
+        <h3>
+          <span>📘 Bengali Medium Para Teachers (বাংলা মাধ্যম প্যারা টিচার)</span>
+        </h3>
+        <span class="badge-count" id="bnBadge">4 Profiles</span>
+      </div>
+      <div class="cards-grid" id="bengaliGrid"></div>
+    </section>
+
+    <!-- Santhali Medium Section -->
+    <section class="medium-section" id="santhaliSection">
+      <div class="section-banner santhali-banner">
+        <h3>
+          <span>📗 Santhali Medium Para Teachers (সাঁওতালি মাধ্যম প্যারা টিচার)</span>
+        </h3>
+        <span class="badge-count" id="snBadge">3 Profiles</span>
+      </div>
+      <div class="cards-grid" id="santhaliGrid"></div>
+    </section>
+  </main>
+
+  <!-- Full Profile Datasheet Modal -->
+  <div class="modal-overlay" id="profileModal" onclick="if(event.target===this) closeProfileModal()">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="modalHeaderTitle">Teacher Profile Datasheet</h3>
+        <button class="close-btn" onclick="closeProfileModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modalBodyContent"></div>
+    </div>
   </div>
-</div>
-<div id="lb" class="lb" hidden><button type="button" aria-label="Close">✕</button><img alt="Poster"></div>
-<div id="msg" role="status"></div>
-<input type="file" id="phFile" accept="image/*" style="display:none">
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script>
-/* ===== Firebase config (tfhs-portal) ===== */
-const firebaseConfig = {
-  apiKey: "AIzaSyCiqQFsnbSi6eCgUI_W3NTybzIkRmCI_54",
-  authDomain: "tfhs-portal.firebaseapp.com",
-  projectId: "tfhs-portal",
-  storageBucket: "tfhs-portal.firebasestorage.app",
-  messagingSenderId: "316041012204",
-  appId: "1:316041012204:web:04ee8b19374c60f63716c9"
-};
-const ADMIN_EMAIL = "prabir.dangar@gmail.com";   /* only this Google account can edit */
-const DOC_PATH = ["tfhs", "website"];            /* single-document pattern: /tfhs/website */
-/* ======================================================================================== */
+  <script>
+    // Complete Extracted Data from the 7 Uploaded Banglar Shiksha PDFs
+    const initialParaTeachers = [
+      {
+        id: "KNUB5393",
+        name: "RINKU BHUIN",
+        medium: "Bengali",
+        dob: "01-03-1980",
+        pan: "XXXXX12341",
+        gender: "FEMALE",
+        socialCategory: "OBC-B",
+        religion: "HINDU",
+        bloodGroup: "A+",
+        nationality: "INDIAN",
+        joiningDate: "19-10-2004",
+        presentSchoolSince: "2004",
+        designation: "PARA TEACHER",
+        classTaught: "UPPER PRIMARY",
+        appointmentNature: "CONTRACT/PARA",
+        appointedSubject: "BENGALI",
+        mainSubject1: "BENGALI",
+        mainSubject2: "HISTORY",
+        trainingNeed: "ICT SKILLS",
+        mathSciUpTo: "SECONDARY",
+        englishUpTo: "HIGHER SECONDARY",
+        socialStudiesUpTo: "GRADUATE",
+        cwsnTrained: "No",
+        computerTrained: "No",
+        attendance: "182",
+        academicQual: "GRADUATE",
+        profQual: "D.El.Ed.",
+        address: "JARKA, P.O: PALI, P.S: BARIKUL, Block: RAIPUR-I, Dist: BANKURA - 722134",
+        email: "--",
+        phone: "9732050650",
+        pdfFile: "RINKU.pdf"
+      },
+      {
+        id: "DDOW2749",
+        name: "BHARATI DEY",
+        medium: "Bengali",
+        dob: "12-07-1973",
+        pan: "AXOPD92651",
+        gender: "FEMALE",
+        socialCategory: "OBC-B",
+        religion: "HINDU",
+        bloodGroup: "B+",
+        nationality: "INDIAN",
+        joiningDate: "19-10-2004",
+        presentSchoolSince: "2004",
+        designation: "PARA TEACHER",
+        classTaught: "UPPER PRIMARY",
+        appointmentNature: "CONTRACT/PARA",
+        appointedSubject: "GEOGRAPHY",
+        mainSubject1: "GEOGRAPHY",
+        mainSubject2: "HISTORY",
+        trainingNeed: "ICT SKILLS",
+        mathSciUpTo: "SECONDARY",
+        englishUpTo: "HIGHER SECONDARY",
+        socialStudiesUpTo: "GRADUATE",
+        cwsnTrained: "No",
+        computerTrained: "No",
+        attendance: "180",
+        academicQual: "GRADUATE",
+        profQual: "D.El.Ed.",
+        address: "TALDANGRA, P.O: TALDANGRA, P.S: TALDANGRA, Block: TALDANGRA, Dist: BANKURA - 722152",
+        email: "--",
+        phone: "9679129420",
+        pdfFile: "BHARATI.pdf"
+      },
+      {
+        id: "BQIT4906",
+        name: "DOLI MONDAL",
+        medium: "Bengali",
+        dob: "17-01-1975",
+        pan: "ARXPM0124H",
+        gender: "FEMALE",
+        socialCategory: "GENERAL",
+        religion: "HINDU",
+        bloodGroup: "B+",
+        nationality: "INDIAN",
+        joiningDate: "03-01-2007",
+        presentSchoolSince: "2010",
+        designation: "PARA TEACHER",
+        classTaught: "UPPER PRIMARY",
+        appointmentNature: "CONTRACT/PARA",
+        appointedSubject: "SCIENCE",
+        mainSubject1: "SCIENCE",
+        mainSubject2: "MATHEMATICS",
+        trainingNeed: "ICT SKILLS",
+        mathSciUpTo: "GRADUATE",
+        englishUpTo: "HIGHER SECONDARY",
+        socialStudiesUpTo: "SECONDARY",
+        cwsnTrained: "No",
+        computerTrained: "No",
+        attendance: "183",
+        academicQual: "GRADUATE",
+        profQual: "B.ED. OR EQUIVALENT",
+        address: "TALDANGRA, P.O: TALDANGRA, P.S: TALDANGRA, Block: TALDANGRA, Dist: BANKURA - 722152",
+        email: "--",
+        phone: "9434181889",
+        pdfFile: "DOLI.pdf"
+      },
+      {
+        id: "RVUD5747",
+        name: "BISWARUP DEY",
+        medium: "Bengali",
+        dob: "12-04-1987",
+        pan: "BDMPD6641N",
+        gender: "MALE",
+        socialCategory: "OBC-B",
+        religion: "HINDU",
+        bloodGroup: "O+",
+        nationality: "INDIAN",
+        joiningDate: "17-12-2008",
+        presentSchoolSince: "2008",
+        designation: "PARA TEACHER",
+        classTaught: "UPPER PRIMARY",
+        appointmentNature: "CONTRACT/PARA",
+        appointedSubject: "ENGLISH",
+        mainSubject1: "ENGLISH",
+        mainSubject2: "BENGALI",
+        trainingNeed: "ICT SKILLS",
+        mathSciUpTo: "SECONDARY",
+        englishUpTo: "GRADUATE",
+        socialStudiesUpTo: "HIGHER SECONDARY",
+        cwsnTrained: "No",
+        computerTrained: "No",
+        attendance: "181",
+        academicQual: "GRADUATE",
+        profQual: "D.El.Ed.",
+        address: "TALDANGRA, P.O: TALDANGRA, P.S: TALDANGRA, Block: TALDANGRA, Dist: BANKURA - 722152",
+        email: "biswarupdey87@gmail.com",
+        phone: "9153461286",
+        pdfFile: "BISWARUP.pdf"
+      },
+      {
+        id: "XGGE2049",
+        name: "GANESH MANDI",
+        medium: "Santhali",
+        dob: "04-01-1993",
+        pan: "BWZPM7708K",
+        gender: "MALE",
+        socialCategory: "ST",
+        religion: "OTHERS",
+        bloodGroup: "A+",
+        nationality: "INDIAN",
+        joiningDate: "02-03-2015",
+        presentSchoolSince: "2015",
+        designation: "PARA TEACHER",
+        classTaught: "UPPER PRIMARY",
+        appointmentNature: "CONTRACT/PARA",
+        appointedSubject: "ALL SUBJECTS",
+        mainSubject1: "ALL SUBJECTS",
+        mainSubject2: "ALL SUBJECTS",
+        trainingNeed: "ICT SKILLS",
+        mathSciUpTo: "SECONDARY",
+        englishUpTo: "HIGHER SECONDARY",
+        socialStudiesUpTo: "GRADUATE",
+        cwsnTrained: "No",
+        computerTrained: "No",
+        attendance: "191",
+        academicQual: "POST GRADUATE",
+        profQual: "D.El.Ed.",
+        address: "PATHARKATA, P.O: HETYAGARA, P.S: SIMLAPAL, Block: SIMLAPAL, Dist: BANKURA - 722151",
+        email: "ganeshmandi93@gmail.com",
+        phone: "9002652478",
+        pdfFile: "GANESH.pdf"
+      },
+      {
+        id: "THUL6432",
+        name: "BIKASH BASKEY",
+        medium: "Santhali",
+        dob: "18-10-1980",
+        pan: "CJWPB9081M",
+        gender: "MALE",
+        socialCategory: "ST",
+        religion: "OTHERS",
+        bloodGroup: "B+",
+        nationality: "INDIAN",
+        joiningDate: "01-03-2016",
+        presentSchoolSince: "2016",
+        designation: "PARA TEACHER",
+        classTaught: "UPPER PRIMARY",
+        appointmentNature: "CONTRACT/PARA",
+        appointedSubject: "ALL SUBJECTS",
+        mainSubject1: "ALL SUBJECTS",
+        mainSubject2: "ALL SUBJECTS",
+        trainingNeed: "ICT SKILLS",
+        mathSciUpTo: "SECONDARY",
+        englishUpTo: "GRADUATE",
+        socialStudiesUpTo: "GRADUATE",
+        cwsnTrained: "No",
+        computerTrained: "No",
+        attendance: "192",
+        academicQual: "GRADUATE",
+        profQual: "NONE",
+        address: "KRISHNARDANGA, P.O: KHALAGRAM, P.S: TALDANGRA, Block: TALDANGRA, Dist: BANKURA - 722152",
+        email: "--",
+        phone: "9641767566",
+        pdfFile: "BIKASH.pdf"
+      },
+      {
+        id: "BCZF4671",
+        name: "LAKSHMI SAREN",
+        medium: "Santhali",
+        dob: "25-02-1989",
+        pan: "JJZPS3172Q",
+        gender: "FEMALE",
+        socialCategory: "ST",
+        religion: "OTHERS",
+        bloodGroup: "B+",
+        nationality: "INDIAN",
+        joiningDate: "01-03-2016",
+        presentSchoolSince: "2016",
+        designation: "PARA TEACHER",
+        classTaught: "UPPER PRIMARY",
+        appointmentNature: "CONTRACT/PARA",
+        appointedSubject: "ALL SUBJECTS",
+        mainSubject1: "ALL SUBJECTS",
+        mainSubject2: "ALL SUBJECTS",
+        trainingNeed: "ICT SKILLS",
+        mathSciUpTo: "SECONDARY",
+        englishUpTo: "HIGHER SECONDARY",
+        socialStudiesUpTo: "GRADUATE",
+        cwsnTrained: "No",
+        computerTrained: "No",
+        attendance: "192",
+        academicQual: "GRADUATE",
+        profQual: "NONE",
+        address: "BALIBANDH, P.O: HARMASRA, P.S: TALDANGRA, Block: TALDANGRA, Dist: BANKURA - 722152",
+        email: "lakshmisaren39@gmail.com",
+        phone: "8670207687",
+        pdfFile: "LAXMI.pdf"
+      }
+    ];
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth(), db = firebase.firestore();
-const ref = db.collection(DOC_PATH[0]).doc(DOC_PATH[1]);
-const $ = id => document.getElementById(id);
-let D = { ticker: "", admission: {}, notices: [], results: [] }, filter = "all";
+    const STORAGE_KEY = "tfhs_para_teachers_v2";
+    let paraTeachers = JSON.parse(localStorage.getItem(STORAGE_KEY)) || initialParaTeachers;
 
-const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const safeUrl = u => /^https?:\/\//i.test(u || "") ? esc(u) : "";
-const isData = u => /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(u || "");
-const imgUrl = u => isData(u) || (/^(https?:\/\/|[\w\-][\w\-.\/ ]*$)/i.test(u || "") && !/\.\./.test(u)) ? esc(u) : "";
-const fmt = d => d ? new Date(d).toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"}) : "";
-const isNew = d => d && (Date.now() - new Date(d)) < 7 * 864e5;
-const forLabel = {general:"General", staff:"Staff", student:"Students"};
-function toast(t){const m=$("msg");m.textContent=t;m.style.display="block";setTimeout(()=>m.style.display="none",2200)}
+    let activeMedium = "ALL";
+    let searchQuery = "";
 
-/* ---------- Public view ---------- */
-function render(){
-  $("ticker").textContent = D.ticker || "";
-  const a = D.admission || {};
-  const box = $("admBox");
-  if (a.open && a.title){
-    box.className = "adm";
-    box.innerHTML = `<h2>${esc(a.title)}</h2>${a.note?`<div>${esc(a.note)}</div>`:""}
-      ${a.last?`<div class="meta">শেষ তারিখ / Last date: ${fmt(a.last)}</div>`:""}
-      ${safeUrl(a.link)?`<p style="margin:10px 0 0"><a class="btn" href="${safeUrl(a.link)}" target="_blank" rel="noopener">ভর্তির ফর্ম / Admission form</a></p>`:""}`;
-  } else {
-    box.className = "adm closed";
-    box.innerHTML = `<h2>ভর্তি / Admission</h2><div>এখন কোনো ভর্তি চলছে না। / Admission is not open right now.</div>`;
-  }
-  const ns = (D.notices || []).filter(n => filter === "all" || n.for === filter || n.for === "general")
-    .sort((x,y) => (y.date||"").localeCompare(x.date||""));
-  $("notices").innerHTML = ns.length ? ns.map(n => `<div class="item"><div>
-      <b>${esc(n.title)}</b>
-      <span class="meta">${isNew(n.date)?'<span class="tag new">NEW</span>':""}<span class="tag">${forLabel[n.for]||"General"}</span>${fmt(n.date)}</span>
-      ${n.body?`<details class="nb"><summary>📄 বিস্তারিত / Details</summary><div class="nbody">${esc(n.body)}</div></details>`:""}
-      ${imgUrl(n.poster)&&isData(n.poster)?`<img class="zoom poster-s" loading="lazy" src="${imgUrl(n.poster)}" alt="Notice poster">`:""}</div>
-      ${safeUrl(n.link)?`<a class="btn sm" href="${safeUrl(n.link)}" target="_blank" rel="noopener">Open</a>`:""}</div>`).join("")
-    : `<div class="empty">কোনো বিজ্ঞপ্তি নেই। / No notices yet.</div>`;
-  const rs = [...(D.results || [])].sort((x,y) => (y.date||"").localeCompare(x.date||""));
-  $("results").innerHTML = rs.length ? rs.map(r => `<div class="item"><div><b>${esc(r.title)}</b>
-      <span class="meta">${isNew(r.date)?'<span class="tag new">NEW</span>':""}${fmt(r.date)}</span></div>
-      ${safeUrl(r.link)?`<a class="btn sm" href="${safeUrl(r.link)}" target="_blank" rel="noopener">View</a>`:""}</div>`).join("")
-    : `<div class="empty">কোনো ফলাফল প্রকাশিত হয়নি। / No results published yet.</div>`;
-  renderExtra();
-  renderMp();
-  renderAdminLists();
-  paneCounts();
-  flashInit();
-  if ($("editor").style.display !== "none") fillFlash();
-}
-function showPane(name, scroll){
-  document.querySelectorAll("#ptabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.p === name));
-  document.querySelectorAll(".pane").forEach(p => p.hidden = p.id !== "p-" + name);
-  if (scroll) $("ptabs").scrollIntoView({block:"start", behavior:"smooth"});
-}
-document.querySelectorAll("#ptabs button").forEach(b => b.onclick = () => showPane(b.dataset.p));
-const MENU_PANE = {"#notices-top":"notices", "#gallery":"gallery", "#staff":"staff", "#mptest":"mptest"};
-document.querySelectorAll("nav.menu a").forEach(a => { const n = MENU_PANE[a.getAttribute("href")];
-  if (n) a.onclick = e => { e.preventDefault(); showPane(n, true); }; });
-function paneCounts(){
-  const c = {notices:(D.notices||[]).length, results:(D.results||[]).length, gallery:(D.gallery||[]).length, staff:(D.staff||[]).length, mptest:((D.mpTest||{}).rows||[]).length || ((D.mpTest||{}).poster ? 1 : 0)};
-  for (const k in c) { const el = $("cnt-" + k); if (el) el.textContent = c[k] || ""; }
-}
-document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
-  filter = b.dataset.f;
-  document.querySelectorAll("nav.tabs button").forEach(x => x.setAttribute("aria-pressed", x === b));
-  render();
-});
+    function getInitials(name) {
+      return name.split(" ").map(n => n[0]).join("").substring(0, 2);
+    }
 
-/* ---------- Live data (public read, no login needed) ---------- */
-ref.onSnapshot(s => { if (s.exists) D = Object.assign(D, s.data()); render(); },
-  e => { console.error(e); toast("Could not load data"); });
+    function buildCardHTML(t) {
+      const isSanthali = t.medium === "Santhali";
+      return `
+        <article class="profile-card ${isSanthali ? 'santhali-card' : ''}">
+          <div class="card-strip"></div>
+          <div class="card-content">
+            <div class="card-top">
+              <div class="avatar-circle">${getInitials(t.name)}</div>
+              <div class="name-block">
+                <div class="teacher-id-tag">ID: ${t.id} • PAN: ${t.pan}</div>
+                <div class="teacher-name">${t.name}</div>
+                <div class="pill-row">
+                  <span class="pill pill-para">${t.designation}</span>
+                  <span class="pill ${isSanthali ? 'pill-med-sn' : 'pill-med-bn'}">${t.medium} Medium</span>
+                  <span class="pill pill-cat">${t.socialCategory} | ${t.bloodGroup}</span>
+                </div>
+              </div>
+            </div>
 
-/* ---------- Admin ---------- */
-const save = async () => { try { await ref.set(D); toast("Published"); } catch(e){ toast("Save failed: " + e.code); } };
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,5);
-const today = () => new Date().toISOString().slice(0,10);
+            <div class="data-grid">
+              <div class="data-item">
+                <span class="data-label">Appointed Subject</span>
+                <span class="data-val">${t.appointedSubject}</span>
+              </div>
+              <div class="data-item">
+                <span class="data-label">Subjects Taught (1 & 2)</span>
+                <span class="data-val">${t.mainSubject1}, ${t.mainSubject2}</span>
+              </div>
+              <div class="data-item">
+                <span class="data-label">Academic / Prof. Qual</span>
+                <span class="data-val">${t.academicQual} (${t.profQual})</span>
+              </div>
+              <div class="data-item">
+                <span class="data-label">Joining Date (School)</span>
+                <span class="data-val">${t.joiningDate} (${t.presentSchoolSince})</span>
+              </div>
+              <div class="data-item">
+                <span class="data-label">Date of Birth</span>
+                <span class="data-val">${t.dob} (${t.gender})</span>
+              </div>
+              <div class="data-item">
+                <span class="data-label">Contact Mobile</span>
+                <span class="data-val">📞 ${t.phone}</span>
+              </div>
+              <div class="data-item full">
+                <span class="data-label">Permanent Address</span>
+                <span class="data-val">${t.address}</span>
+              </div>
+            </div>
+          </div>
 
-function route(){
-  const adm = location.hash === "#admin";
-  $("site").style.display = adm ? "none" : "";
-  $("panel").style.display = adm ? "block" : "none";
-  if (adm){ $("nDate").value ||= today(); $("rDate").value ||= today(); }
-}
-addEventListener("hashchange", route); route();
+          <div class="card-actions">
+            <a href="${t.pdfFile}" target="_blank" class="btn-sm">📄 Open ${t.pdfFile}</a>
+            <button class="btn-sm btn-primary-sm" onclick="openProfileModal('${t.id}')">🔍 View Full Datasheet</button>
+          </div>
+        </article>
+      `;
+    }
 
-$("login").onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => toast(e.code));
-$("logout").onclick = () => auth.signOut();
-auth.onAuthStateChanged(u => {
-  const ok = u && u.email === ADMIN_EMAIL;
-  $("who").textContent = u ? (ok ? "Signed in: " + u.email : "Not authorised: " + u.email) : "Not signed in";
-  $("login").style.display = u ? "none" : ""; $("logout").style.display = u ? "" : "none";
-  $("editor").style.display = ok ? "" : "none";
-  if (ok){ fillFlash(true); fillMp(); $("tk").value = D.ticker || ""; const a = D.admission || {};
-    $("aOpen").checked = !!a.open; $("aTitle").value = a.title||""; $("aLink").value = a.link||"";
-    $("aLast").value = a.last||""; $("aNote").value = a.note||""; }
-});
-$("tk").onchange = () => { D.ticker = $("tk").value.trim(); save(); };
-$("saveAdm").onclick = () => { D.admission = { open:$("aOpen").checked, title:$("aTitle").value.trim(),
-  link:$("aLink").value.trim(), last:$("aLast").value, note:$("aNote").value.trim() }; save(); };
-$("addN").onclick = async () => {
-  const t = $("nTitle").value.trim(); if (!t) return toast("Title is required");
-  const body = $("nBody").value.trim();
-  if (body.length > 6000) return toast("Details too long (max 6000 characters)");
-  let poster = ""; const pf = $("nPoster").files[0];
-  if (pf) { try { poster = await shrink(pf, 1200, 170000); } catch(e) { return toast("Could not read the poster image"); }
-    if (poster.length > 260000) return toast("Poster too large even after shrinking - use a smaller image"); }
-  if (tooBig(body.length + poster.length + 300)) return toast("Storage full - delete old items first");
-  const n = { id:uid(), title:t, link:$("nLink").value.trim(), body, for:$("nFor").value, date:$("nDate").value || today() };
-  if (poster) n.poster = poster;
-  (D.notices ||= []).push(n);
-  $("nTitle").value = $("nLink").value = $("nBody").value = $("nPoster").value = ""; save();
-};
-$("addR").onclick = () => {
-  const t = $("rTitle").value.trim(); if (!t) return toast("Title is required");
-  (D.results ||= []).push({ id:uid(), title:t, link:$("rLink").value.trim(), date:$("rDate").value || today() });
-  $("rTitle").value = $("rLink").value = ""; save();
-};
-const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList"};
-let PH_ID = null;
-$("phFile").addEventListener("cancel", () => render());
-$("phFile").onchange = async () => {
-  const f = $("phFile").files[0], t = (D.staff||[]).find(x => x.id === PH_ID); if (!f || !t) return render();
-  try { const u = await shrink(f, 240, 14000);
-    if (tooBig(u.length + 200)) return toast("Storage full - use the images/staff folder instead");
-    t.photo = u; save();
-  } catch(e) { toast("Could not read this image"); render(); }
-};
-function photoPicker(t){
-  const cur = t.photo || "", files = PHOTOS.map(f => "images/staff/" + f), known = files.includes(cur);
-  const opts = [`<option value="">Auto (match by name)</option>`]
-    .concat(files.map(f => `<option value="${esc(f)}"${f===cur?" selected":""}>${esc(f.split("/").pop())}</option>`))
-    .concat(cur && !known ? [`<option value="${esc(cur)}" selected>${isData(cur) ? "Uploaded photo" : "Custom: " + esc(cur)}</option>`] : [])
-    .concat([`<option value="__upload">Upload from computer…</option>`, `<option value="__custom">Type a path / link…</option>`]);
-  const shown = photoOf(t);
-  return `<div class="pp${imgUrl(shown)?"":" miss"}">${imgUrl(shown)?`<img src="${imgUrl(shown)}" alt="" onerror="this.style.display='none';this.parentNode.classList.add('miss')">`:""}
-    <button type="button" class="btn sm addph" data-up="${esc(t.id)}">&#128247; Add photo (missing)</button>
-    <label>Photo (manual)<select data-ph="${esc(t.id)}">${opts.join("")}</select></label></div>`;
-}
-function renderAdminLists(){
-  for (const [k, id] of Object.entries(LISTS)){
-    $(id).innerHTML = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||(isData(x.url)?"Uploaded photo":x.url))}</b>
-      <span class="meta">${esc((x.unit==="voc"?"VOC "+(x.level||"")+" · "+(x.eng||"")+" · ":"")+(x.post||x.time||x.url&&""))} ${fmt(x.date)}</span></div>
-      ${k==="staff"?photoPicker(x):""}
-      ${k==="holidays"||k==="staff"?`<button class="btn alt sm" data-edit="${x.id}" data-ek="${k}">Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">Delete</button></div>`).join("");
-  }
-  document.querySelectorAll("#panel [data-id]").forEach(b => b.onclick = () => {
-    if (!confirm("Delete this item?")) return;
-    D[b.dataset.k] = eff(b.dataset.k).filter(x => x.id !== b.dataset.id); save();
-  });
-  document.querySelectorAll("#panel [data-up]").forEach(b => b.onclick = () => { PH_ID = b.dataset.up; $("phFile").value = ""; $("phFile").click(); });
-  document.querySelectorAll("#panel select[data-ph]").forEach(sel => sel.onchange = () => {
-    const t = (D.staff||[]).find(x => x.id === sel.dataset.ph); if (!t) return;
-    let v = sel.value;
-    if (v === "__upload") { PH_ID = t.id; $("phFile").value = ""; $("phFile").click(); return; }
-    if (v === "__custom") { v = prompt("Photo path or https link", t.photo || "images/staff/"); if (v === null) return render(); v = v.trim(); }
-    t.photo = v; save();
-  });
-  document.querySelectorAll("#panel [data-edit]").forEach(b => b.onclick = () => {
-    if (b.dataset.ek === "staff") { const t = (D.staff||[]).find(x => x.id === b.dataset.edit); if (t) loadStaff(t); return; }
-    const h = (D.holidays||[]).find(x => x.id === b.dataset.edit); if (!h) return;
-    const n = prompt("Holiday name", h.name); if (n === null) return;
-    const f = prompt("From date (YYYY-MM-DD)", h.date); if (f === null) return;
-    const t = prompt("To date (YYYY-MM-DD, blank if one day)", h.to || ""); if (t === null) return;
-    Object.assign(h, {name:n.trim()||h.name, date:f.trim()||h.date, to:t.trim()}); save();
-  });
-}
-const SAMPLE_NOTICE = {"title": "বিদ্যালয় পুনরায় খোলার বিজ্ঞপ্তি ও সাধারণ নির্দেশাবলী", "body": "এতদ্বারা বিদ্যালয়ের সকল ছাত্র-ছাত্রী, শিক্ষক-শিক্ষিকা, গ্রন্থাগারিক, শিক্ষাকর্মী ও অভিভাবকদের জানানো যাচ্ছে যে, আগামী ১লা জুন, ২০২৬ থেকে একাদশ শ্রেণি ব্যতীত অন্য সমস্ত শ্রেণির পঠন-পাঠন ও সাধারণ কার্যক্রম যথারীতি শুরু হচ্ছে।\n\n• বিদ্যালয় শুরুর সময়: সকাল ১০:৩০ মিনিট (নির্ধারিত সময়সূচি অনুযায়ী)\n\n• একাদশ শ্রেণির জন্য বিশেষ বিজ্ঞপ্তি: একাদশ শ্রেণির ভর্তি প্রক্রিয়া সম্পন্ন হওয়ার অর্থাৎ ৪-৫ দিনের মধ্যে তাদের ক্লাস শুরুর তারিখ এই পোর্টালে পৃথকভাবে জানিয়ে দেওয়া হবে। সকলকে নিয়মিত পোর্টাল নজর রাখার অনুরোধ করা হচ্ছে।\n\n🔹 গুরুত্বপূর্ণ নির্দেশাবলী (General Guidelines)\n\nবিদ্যালয়ের শৃঙ্খলা ও পঠন-পাঠনের সুষ্ঠু পরিবেশ বজায় রাখতে নিম্নলিখিত নিয়মাবলী কঠোরভাবে মেনে চলতে হবে:\n\n⏱️ ১. প্রার্থনা সভা ও সময়ানুবর্তিতা\n\n• সমস্ত শিক্ষক-শিক্ষিকা, গ্রন্থাগারিক ,শিক্ষাকর্মী ও ছাত্র-ছাত্রীদের যথাসময়ে বিদ্যালয়ে উপস্থিত হয়ে প্রার্থনা সভায় অংশগ্রহণ করা বাধ্যতামূলক।\n\n• সকল ছাত্র-ছাত্রীকে বিদ্যালয়ের নির্ধারিত পোশাক (Uniform) পরিধান করে উপস্থিত থাকতে হবে।\n\n🎶 ২. \"বন্দে মাতরম্\" সঙ্গীত পরিবেশন\n\n• পশ্চিমবঙ্গ সরকারের নির্দেশিকা অনুযায়ী, প্রতিদিন প্রার্থনা সভায় যৌথভাবে “বন্দে মাতরম্” গান পরিবেশন করা হবে।\n\n• প্রার্থনা ও সঙ্গীত পরিবেশন শেষ হওয়ার অব্যবহিত পরেই শ্রেণিকক্ষে নিয়মিত পঠন-পাঠন শুরু হবে।\n\n📚 ৩. পঠন-পাঠন ও উপস্থিতি\n\n• ১লা জুন, ২০২৬ থেকে প্রতিটি শ্রেণির ক্লাস [একাদশ শ্রেণি ব্যতীত] পুরোদমে চালু হয়ে যাবে।\n\n• শিক্ষার্থীদের পড়াশোনার ধারাবাহিকতা বজায় রাখার জন্য প্রতিদিন নিয়মিত উপস্থিতি অত্যন্ত জরুরি।\n\n🍱 ৪. মিড-ডে মিল (Mid-Day Meal)\n\n• পঞ্চম থেকে অষ্টম শ্রেণির ছাত্র-ছাত্রীদের জন্য সরকারি নিয়মানুযায়ী Mid-Day Meal কার্যক্রম ১লা জুন থেকেই যথারীতি চালু থাকবে।\n\n⚠️ বিশেষ সতর্কবার্তা\n\nবিদ্যালয়ের প্রতিটি ছাত্র-ছাত্রীকে প্রাতিষ্ঠানিক শৃঙ্খলা, ভদ্রতা ও সময়ানুবর্তিতা বজায় রেখে নির্দিষ্ট সময়ের পূর্বে বিদ্যালয়ে উপস্থিত হওয়ার জন্য বিশেষভাবে নির্দেশ দেওয়া হচ্ছে। এতে কোনো প্রকার শিথিলতা গ্রহণযোগ্য নয়।\n\nআদেশানুসারে,\n\nপ্রধান শিক্ষক\n\nতালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উচ্চ মাধ্যমিক)\n\nবাঁকুড়া"};
-$("loadSampleN").onclick = () => { $("nTitle").value = SAMPLE_NOTICE.title; $("nBody").value = SAMPLE_NOTICE.body; $("nFor").value = "general";
-  toast("Sample loaded - set the date, edit if needed, then click Publish notice"); $("nTitle").scrollIntoView({block:"center"}); };
-/* ---------- Pop-up (flash) notice ---------- */
-const SAMPLE_FLASH = {"title": "বিজয়া ও দীপাবলীর শুভেচ্ছা এবং বিদ্যালয় পুনর্সূচনা সংক্রান্ত বিজ্ঞপ্তি", "titleEn": "Vijaya & Diwali Greetings and Notice on Reopening of the School", "date": "১৩ নভেম্বর, ২০২৬ / 13 November, 2026", "place": "বিদ্যালয় প্রাঙ্গণ / School Premises", "body": "সকল ছাত্রছাত্রী, শিক্ষক-শিক্ষিকা, শিক্ষাকর্মী ও অভিভাবকবৃন্দের অবগতির জন্য জানানো যাচ্ছে যে—\n\nদীর্ঘ পূজা ও দীপাবলী উৎসবের আনন্দঘন ছুটি শেষে আগামী ১৩ নভেম্বর, ২০২৬ (বৃহস্পতিবার) থেকে আমাদের বিদ্যালয়ের ডে সেকশন (Day Section)-এর পঠন-পাঠন ও নিয়মিত কার্যক্রম পুনরায় যথারীতি শুরু হতে চলেছে।\n\nশারদীয়া দুর্গোৎসব, কালীপূজা ও ভাইফোঁটার এই শুভ লগ্নে বিদ্যালয় পরিবারের পক্ষ থেকে আপনাদের সকলকে জানাই আন্তরিক বিজয়া সম্মিলনীর প্রীতি ও শুভেচ্ছা এবং দীপাবলীর হার্দিক শুভকামনা। আশা করি আপনাদের সকলের পুজো অত্যন্ত আনন্দের মধ্য দিয়ে কেটেছে।\n\nআসুন, নতুন উদ্যম ও উৎসাহ নিয়ে আমরা সকলে আবার বিদ্যালয়মুখী হই এবং পড়াশোনা ও অন্যান্য কার্যক্রমে মনোনিবেশ করি। নির্দিষ্ট দিনে নির্ধারিত সময়ে সকল ছাত্রছাত্রীকে সঠিক ইউনিফর্মে উপস্থিত থাকার জন্য নির্দেশ দেওয়া হচ্ছে।\n\nআপনাদের সকলের সর্বাঙ্গীন মঙ্গল কামনা করি।\n\nআদেশানুসারে,\nপ্রধান শিক্ষক / ভারপ্রাপ্ত প্রধান শিক্ষক\nতালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)", "bodyEn": "For the information of all students, teachers, non-teaching staff and guardians:\n\nAfter the joyous long holidays of Puja and Diwali, teaching-learning and regular activities of the Day Section of our school will resume as usual from 13 November, 2026 (Thursday).\n\nOn this auspicious occasion of Sharadiya Durgotsav, Kali Puja and Bhai Phonta, the school family extends its heartfelt Vijaya greetings and warm Diwali wishes to all of you. We hope you all had a very joyful Puja.\n\nLet us all return to school with fresh energy and enthusiasm and focus on our studies and other activities. All students are directed to be present on the appointed day, at the appointed time, in the proper uniform.\n\nWe wish you all the very best.\n\nBy order,\nHeadmaster / Teacher-in-Charge\nTaldangra Fulmati High School (H.S.)"};
-let FLASH_DONE = false, FLASH_LANG = "bn";
-const flashActive = () => { const f = D.flash; return !!(f && f.on && f.title && (!f.until || today() <= f.until)); };
-function openFlash(){
-  const f = D.flash || {}, hasEn = !!(f.bodyEn && f.bodyEn.trim());
-  $("fLang").classList.toggle("one", !hasEn);
-  if (!hasEn) FLASH_LANG = "bn";
-  const bn = FLASH_LANG === "bn";
-  $("fTitle").textContent = bn ? f.title : (f.titleEn || f.title);
-  $("fMeta").textContent = [f.date ? (bn ? "তারিখ: " : "Date: ") + f.date : "", f.place ? (bn ? "স্থান: " : "Place: ") + f.place : ""].filter(Boolean).join("\n");
-  $("fText").textContent = bn ? (f.body || "") : (f.bodyEn || f.body || "");
-  document.querySelectorAll("#fLang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.l === FLASH_LANG));
-  $("flash").hidden = false; document.body.style.overflow = "hidden"; $("fOk").focus();
-}
-function closeFlash(){ $("flash").hidden = true; document.body.style.overflow = ""; }
-document.querySelectorAll("#fLang button").forEach(b => b.onclick = () => { FLASH_LANG = b.dataset.l; openFlash(); });
-$("fClose").onclick = $("fOk").onclick = closeFlash;
-$("flash").addEventListener("click", e => { if (e.target === $("flash")) closeFlash(); });
-addEventListener("keydown", e => { if (e.key === "Escape" && !$("flash").hidden) closeFlash(); });
-$("flashLink").onclick = e => { e.preventDefault(); if (flashActive()) openFlash(); };
-function flashInit(){
-  $("flashLink").style.display = flashActive() ? "" : "none";
-  if (FLASH_DONE || location.hash === "#admin" || !flashActive()) return;
-  FLASH_DONE = true;
-  let seen = false; try { seen = sessionStorage.getItem("flashSeen") === D.flash.id; } catch(e) {}
-  if (seen) return;
-  try { sessionStorage.setItem("flashSeen", D.flash.id); } catch(e) {}
-  openFlash();
-}
-let FF_ID = null;
-function fillFlash(force){
-  const f = D.flash || {}; if (!force && FF_ID === (f.id || "none")) return; FF_ID = f.id || "none";
-  $("fOn").checked = !!f.on; $("fiTitle").value = f.title || ""; $("fiTitleEn").value = f.titleEn || ""; $("fiDate").value = f.date || "";
-  $("fiPlace").value = f.place || ""; $("fiUntil").value = f.until || ""; $("fiBody").value = f.body || ""; $("fiBodyEn").value = f.bodyEn || "";
-}
-const flashFromForm = () => ({ id:uid(), on:$("fOn").checked, title:$("fiTitle").value.trim(), titleEn:$("fiTitleEn").value.trim(), date:$("fiDate").value.trim(),
-  place:$("fiPlace").value.trim(), until:$("fiUntil").value, body:$("fiBody").value.trim(), bodyEn:$("fiBodyEn").value.trim() });
-$("saveFlash").onclick = () => { const f = flashFromForm(); if (!f.title || !f.body) return toast("Title and Bengali text are required");
-  if (tooBig(f.body.length + f.bodyEn.length + 500)) return toast("Storage full - delete old gallery photos first");
-  D.flash = f; FF_ID = f.id; save(); };
-$("prevFlash").onclick = () => { const keep = D.flash; D.flash = flashFromForm(); if (!D.flash.title) { D.flash = keep; return toast("Enter a title first"); } FLASH_LANG = "bn"; openFlash(); D.flash = keep; };
-$("loadFlash").onclick = () => { const x = SAMPLE_FLASH; $("fOn").checked = true; $("fiTitle").value = x.title; $("fiTitleEn").value = x.titleEn; $("fiDate").value = x.date;
-  $("fiPlace").value = x.place; $("fiBody").value = x.body; $("fiBodyEn").value = x.bodyEn; $("fiUntil").value = "";
-  toast("Loaded - check the text, then click Save pop-up"); $("fiTitle").scrollIntoView({block:"center"}); };
-$("offFlash").onclick = () => { if (!D.flash) return toast("No pop-up saved"); D.flash = {...D.flash, on:false, id:uid()}; fillFlash(true); save(); };
-const addTo = (k, obj) => { D[k] = eff(k).slice(); D[k].push({id:uid(), ...obj}); save(); };
-function shrink(file, maxDim, maxBytes){
-  return new Promise((ok, bad) => {
-    const fr = new FileReader();
-    fr.onerror = () => bad(new Error("read"));
-    fr.onload = () => { const im = new Image(); im.onerror = () => bad(new Error("not an image"));
-      im.onload = () => {
-        const r = Math.min(1, maxDim / Math.max(im.width, im.height)), c = document.createElement("canvas");
-        c.width = Math.round(im.width * r); c.height = Math.round(im.height * r);
-        const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
-        let q = 0.8, out = c.toDataURL("image/jpeg", q);
-        while (out.length > maxBytes && q > 0.3) { q -= 0.1; out = c.toDataURL("image/jpeg", q); }
-        ok(out); };
-      im.src = fr.result; };
-    fr.readAsDataURL(file);
-  });
-}
-const tooBig = extra => new Blob([JSON.stringify(D)]).size + (extra || 0) > 900000;
-$("addG").onclick = async () => {
-  const f = $("gFile").files[0]; let u = $("gUrl").value.trim();
-  if (f) { try { u = await shrink(f, 1000, 130000); } catch(e) { return toast("Could not read this image"); } }
-  if (!u) return toast("Choose a photo or enter an image path");
-  if (tooBig(u.length + 200)) return toast("Storage full - delete old gallery photos or use the images/ folder");
-  addTo("gallery",{url:u, caption:$("gCap").value.trim()});
-  $("gUrl").value=$("gCap").value=$("gFile").value=""; };
-const DESIGS = ["Contractual Instructor","Contractual Teacher","Part Time Teacher"];
-let EDIT_ID = null;
-function syncType(){
-  const v = $("sType").value === "voc";
-  $("vocFields").style.display = v ? "" : "none";
-  $("sSubT").textContent = v ? "Trade / Subject (e.g. Auto Electrician, Mathematics)" : "Subject";
-  $("sPostL").style.display = (!v || $("sDesig").value === "other") ? "" : "none";
-}
-$("sType").onchange = $("sDesig").onchange = syncType; syncType();
-function resetStaffForm(){
-  EDIT_ID = null; ["sName","sPost","sSub","sPhoto","sFile","sJoin"].forEach(i => $(i).value = "");
-  $("addS").textContent = "Add staff"; $("cancelS").style.display = "none"; syncType();
-}
-$("cancelS").onclick = resetStaffForm;
-function loadStaff(t){
-  EDIT_ID = t.id; const v = t.unit === "voc";
-  $("sType").value = v ? "voc" : ""; $("sName").value = t.name || ""; $("sSub").value = t.subject || "";
-  $("sLevel").value = t.level || "VIII+"; $("sEng").value = t.eng || "Contractual"; $("sJoin").value = t.join || "";
-  if (v && DESIGS.includes(t.post)) { $("sDesig").value = t.post; $("sPost").value = ""; }
-  else { $("sDesig").value = v ? "other" : DESIGS[0]; $("sPost").value = t.post || ""; }
-  $("sPhoto").value = isData(t.photo) ? "" : (t.photo || ""); $("sFile").value = "";
-  $("addS").textContent = "Save changes"; $("cancelS").style.display = ""; syncType();
-  $("sName").scrollIntoView({block:"center"}); $("sName").focus();
-}
-$("addS").onclick = async () => { const n=$("sName").value.trim(); if(!n) return toast("Name is required");
-  const v = $("sType").value === "voc", old = EDIT_ID ? (D.staff||[]).find(x => x.id === EDIT_ID) : null;
-  let ph = $("sPhoto").value.trim(), f = $("sFile").files[0];
-  if (f) { try { ph = await shrink(f, 240, 14000); } catch(e) { return toast("Could not read this image"); }
-    if (tooBig(ph.length + 300)) return toast("Storage full - use the images/staff folder instead"); }
-  else if (!ph && old && isData(old.photo)) ph = old.photo;
-  const post = v && $("sDesig").value !== "other" ? $("sDesig").value : $("sPost").value.trim();
-  const obj = {name:n, post, subject:$("sSub").value.trim(), photo:ph,
-    unit: v ? "voc" : "", level: v ? $("sLevel").value : "", eng: v ? $("sEng").value : "", join: v ? $("sJoin").value : ""};
-  if (old) { Object.assign(old, obj); save(); }
-  else addTo("staff", obj);
-  resetStaffForm(); };
-$("addT").onclick = () => { const l=$("tLabel").value.trim(); if(!l) return toast("Item is required");
-  addTo("routine",{label:l, time:$("tTime").value.trim()}); $("tLabel").value=$("tTime").value=""; };
-$("addH").onclick = () => { const n=$("hName").value.trim(), d=$("hDate").value; if(!n||!d) return toast("Date and name are required");
-  addTo("holidays",{name:n, date:d, to:$("hTo").value, obs:$("hObs").checked}); $("hName").value=$("hDate").value=$("hTo").value=""; $("hObs").checked=false; };
-$("addL").onclick = () => { const t=$("lTitle").value.trim(), u=$("lUrl").value.trim(); if(!t||!/^https?:\/\//i.test(u)) return toast("Title and a full https link are required");
-  addTo("links",{title:t, url:u, group:$("lGroup").value, icon:$("lIcon").value.trim(), desc:$("lDesc").value.trim()});
-  ["lTitle","lUrl","lIcon","lDesc"].forEach(i=>$(i).value=""); };
-$("impH").onclick = () => {
-  const have = new Set((D.holidays||[]).map(h => h.name.toLowerCase()+h.date));
-  const add = SEED_HOL.map(([n,f,t,o]) => ({id:uid(), name:n, date:f, to:t||"", obs:!!o})).filter(h => !have.has(h.name.toLowerCase()+h.date));
-  if (!add.length) return toast("Already imported");
-  D.holidays = (D.holidays||[]).concat(add); save();
-};
-const SEED_VOC = [
-  ["Aviram Dey","Contractual Instructor","Agriculture Machineries","VIII+","Contractual","2007-05-30"],
-  ["Dhirendra Nath Santra","Contractual Instructor","Auto Electrician","VIII+","Contractual","2007-05-30"],
-  ["Kuntal Kumar Mukhopadhyay","Contractual Teacher","Domestic Appliances","X+2","Contractual","2007-05-30"],
-  ["Ram Dulal Choudhury","Contractual Teacher","Computer","X+2","Contractual","2007-05-30"],
-  ["Sunil Kumar Santra","Contractual Instructor","Practice (Electrician)","X+2","Contractual","2007-05-30"],
-  ["Chandan Ghosh","Part Time Teacher","Mathematics","X+2","Part-time","2010-08-21"],
-  ["Dipankar Patra","Part Time Teacher","Bengali","X+2","Part-time","2007-03-24"],
-  ["Gopinath De","Part Time Teacher","Management of Co-operative","X+2","Part-time","2007-05-30"],
-  ["Annapurna Bhuin","Part Time Teacher","Communicative English","X+2","Part-time","2018-04-16"]];
-$("impV").onclick = () => {
-  const have = new Set((D.staff||[]).filter(t => t.unit === "voc").map(t => t.name.toLowerCase()));
-  const add = SEED_VOC.filter(r => !have.has(r[0].toLowerCase())).map(r => ({id:uid(), name:r[0], post:r[1], subject:r[2], photo:"", unit:"voc", level:r[3], eng:r[4], join:r[5]}));
-  if (!add.length) return toast("Already imported");
-  if (!confirm("Add " + add.length + " vocational staff to the website?")) return;
-  D.staff = (D.staff||[]).concat(add); save();
-};
-$("syncS").onclick = async () => {
-  const out = $("syncOut"); out.textContent = "Reading…";
-  try {
-    const snap = await db.collection("tfhs").doc("salaryPortal").get();
-    const list = findStaff(snap.data() || {});
-    if (!list.length) return out.textContent = "Staff list not found. Data keys: " + Object.keys(snap.data()||{}).slice(0,12).join(", ");
-    const key = n => n.toLowerCase().replace(/[^\p{L}]/gu, ""), allOld = D.staff || [], old = allOld.filter(t => t.unit !== "voc"), vocs = allOld.filter(t => t.unit === "voc");
-    const oldBy = new Map(old.map(t => [key(t.name), t]));
-    const next = list.map(p => { const o = oldBy.get(key(p.name)) || {}; return {...o, id:o.id||uid(), name:p.name, post:p.post, subject:o.subject||"", photo:o.photo||""}; });
-    const nk = new Set(next.map(t => key(t.name)));
-    const added = next.filter(t => !oldBy.has(key(t.name))).length, gone = old.filter(t => !nk.has(key(t.name))).length;
-    if (!confirm(`Salary Portal has ${next.length} staff.\n${added} new, ${gone} will be removed. Update the website list?`)) return out.textContent = "Cancelled";
-    D.staff = next.concat(vocs); await save(); out.textContent = "Synced " + next.length + " staff";
-  } catch(e){ out.textContent = "Failed: " + (e.code || e.message); }
-};
+    function renderAll() {
+      const q = searchQuery.toLowerCase();
+      const filtered = paraTeachers.filter(t => {
+        const matchMed = activeMedium === "ALL" || t.medium === activeMedium;
+        const matchSearch =
+          t.name.toLowerCase().includes(q) ||
+          t.id.toLowerCase().includes(q) ||
+          t.appointedSubject.toLowerCase().includes(q) ||
+          t.mainSubject2.toLowerCase().includes(q) ||
+          t.phone.includes(q) ||
+          t.address.toLowerCase().includes(q);
+        return matchMed && matchSearch;
+      });
 
-const eff = k => k === "links" ? (D.links ?? DEFAULT_LINKS) : (D[k] || []);
-const B = "https://prabirdangar-web.github.io/";
-const DEFAULT_LINKS = [
-  {id:"l1", group:"general", icon:"📝", title:"Admission & Certificates", desc:"Online admission and certificate portal", url:B+"certificate/"},
-  {id:"l2", group:"student", icon:"🎓", title:"Class XI Result", desc:"Enter any two: Reg. No., date of birth, Banglar Siksha ID or Roll", url:B+"xi_mp_test/?m=result&sub=*"},
-  {id:"l2a", group:"student", icon:"📘", title:"Class XI – Semester I Result", desc:"Semester I marks only", url:B+"xi_mp_test/?m=result&sub=*&exam=SEM1"},
-  {id:"l2b", group:"student", icon:"📗", title:"Class XI – Semester II Result", desc:"Semester II marks only", url:B+"xi_mp_test/?m=result&sub=*&exam=SEM2"},
-  {id:"l2c", group:"student", icon:"🏆", title:"Class X (MP SE 2027) Result", desc:"Enter any two: B.S. Portal ID, date of birth or Roll", url:B+"xi_mp_test/?m=resultx&sub=*"},
-  {id:"l6", group:"staff", icon:"📝", title:"Examination Portal (teachers)", desc:"Marks entry, attendance and tabulation – teacher login", url:B+"xi_mp_test/"},
-  {id:"l3", group:"staff", icon:"🧾", title:"My Pay Slip", desc:"Open “My Pay Slip” and enter any two ID details", url:B+"salary/"},
-  {id:"l4", group:"staff", icon:"💰", title:"My PF / GPF Statement", desc:"View your individual PF account", url:B+"pf_interest/?staff=1"},
-  {id:"l5", group:"staff", icon:"🏖️", title:"Apply for Leave", desc:"Staff e-leave application", url:B+"e-leave-application/"}
-];
-const GROUPS = [["student","ছাত্রছাত্রীদের জন্য / For Students"],["staff","শিক্ষক-শিক্ষাকর্মীদের জন্য / For Staff"],["general","সবার জন্য / For Everyone"]];
-function renderLinks(){
-  $("linksBox").innerHTML = GROUPS.map(([g, label]) => {
-    const items = eff("links").filter(x => x.group === g && safeUrl(x.url));
-    return items.length ? `<h3>${label}</h3><div class="tiles">${items.map(x => `<a class="tile g-${g}" href="${safeUrl(x.url)}" target="_blank" rel="noopener"><b>${esc(x.icon||"🔗")} ${esc(x.title)}</b><span>${esc(x.desc||"")}</span></a>`).join("")}</div>` : "";
-  }).join("");
-}
-const SEED_HOL = [
-["New Year's Day","2026-01-01"],["Vivekananda's Birth Day","2026-01-12"],["Makar Sankranti","2026-01-14","2026-01-15"],
-["Netaji's Birthday, Saraswati Puja","2026-01-23","2026-01-24"],["Republic Day","2026-01-26"],
-["Shab-e-Barat (stop-gap exam)","2026-02-04","",1],["Panchanan Barma Birth Day (stop-gap exam)","2026-02-14","",1],["Shivaratri (stop-gap exam)","2026-02-15","",1],
-["Dol Jatra / Holi","2026-03-03","2026-03-04"],["Harichand Thakur Birth Day","2026-03-17"],["Id-ul-Fitr","2026-03-21"],["Ram Nabami","2026-03-26"],
-["Mahavir Jayanti","2026-03-31"],["Good Friday","2026-04-03"],["Nil Puja","2026-04-13"],
-["Dr. B.R. Ambedkar Birth Day / Chaitra Sankranti, Bangla Naba Barsha","2026-04-14","2026-04-15"],
-["May Day, Buddha Purnima / Pandit Raghunath Murmu Birth Day","2026-05-01"],["Rabindra Jayanti","2026-05-09","",1],
-["Summer Vacation","2026-05-11","2026-05-16"],["Id-ul-Zuha","2026-05-27"],["Muharram","2026-06-26"],["Hul Diwas","2026-06-30"],
-["Rath Jatra","2026-07-16"],["Independence Day","2026-08-15"],["Manasa Puja","2026-08-18","2026-08-19"],["Fateha Dohaj Doham","2026-08-26"],
-["Rakhi Bandhan","2026-08-28"],["Janmashtami","2026-09-04"],["Teacher's Day","2026-09-05","",1],["Biswakarma Puja","2026-09-17"],
-["Vidyasagar's Birth Day","2026-09-26","",1],["Gandhi Jayanti","2026-10-02"],["Mahalaya","2026-10-10"],["Puja Vacation","2026-10-16","2026-11-12"],
-["Birsa Munda Birthday","2026-11-15","",1],["Chhath Puja","2026-11-16"],["Guru Nanak Jayanti / Rath Jatra","2026-11-24"],["Christmas","2026-12-25","2026-12-26"]
-];
-function findStaff(root){
-  const cands = [];
-  (function walk(o, d){
-    if (typeof o === "string" && /^\s*[\[{]/.test(o)) { try { o = JSON.parse(o); } catch(e){ return; } }
-    if (!o || typeof o !== "object" || d > 6) return;
-    const vals = Array.isArray(o) ? o : Object.values(o);
-    const objs = vals.filter(v => v && typeof v === "object" && typeof v.name === "string");
-    if (objs.length >= 3 && objs.some(v => v.desig || v.designation || v.post)) cands.push(objs);
-    vals.forEach(v => walk(v, d + 1));
-  })(root, 0);
-  if (!cands.length) return [];
-  const best = cands.reduce((a, b) => b.length >= a.length ? b : a);
-  return best.map(v => ({name:v.name.trim(), post:String(v.desig || v.designation || v.post || "").trim()}));
-}
-const slug = n => (n||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
-let PHOTOS = [], AUTO = new Map();
-fetch("images/staff/photos.json").then(r => r.ok ? r.json() : []).then(a => { PHOTOS = a; render(); }).catch(() => {});
-const toks = n => (n||"").toLowerCase().replace(/\.jpe?g$/, "").split(/[^a-z0-9]+/).filter(Boolean);
-function autoPhotos(){
-  const claims = {}, out = new Map();
-  (D.staff||[]).forEach(t => {
-    if (t.photo) return;
-    const st = new Set(toks(t.name)); let best = null, bs = 0, tie = false;
-    PHOTOS.forEach(f => { const ft = toks(f);
-      if (ft.length && ft.every(x => st.has(x))) { if (ft.length > bs) { best = f; bs = ft.length; tie = false; } else if (ft.length === bs) tie = true; } });
-    if (best && !tie) (claims[best] ||= []).push({t, bs});
-  });
-  for (const [f, c] of Object.entries(claims)) { const m = Math.max(...c.map(x => x.bs)), w = c.filter(x => x.bs === m); if (w.length === 1) out.set(w[0].t.id, f); }
-  return out;
-}
-const photoOf = t => t.photo || (AUTO.get(t.id) ? "images/staff/" + AUTO.get(t.id) : (slug(t.name) ? "images/staff/" + slug(t.name) + ".jpg" : ""));
-function renderExtra(){
-  renderLinks();
-  AUTO = autoPhotos();
-  if ($("photoList")) $("photoList").innerHTML = PHOTOS.map(f => `<option value="images/staff/${esc(f)}">`).join("");
-  if ($("photoRep")) { const used = new Set(AUTO.values()), left = PHOTOS.filter(f => !used.has(f));
-    $("photoRep").textContent = PHOTOS.length ? `Photos matched by name: ${AUTO.size} of ${(D.staff||[]).length} staff. Unmatched photo files: ${left.length ? left.join(", ") : "none"}` : ""; }
-  $("galleryBox").innerHTML = (D.gallery||[]).length ? D.gallery.slice().reverse().map(g => imgUrl(g.url) ?
-    `<figure><a href="${imgUrl(g.url)}" target="_blank" rel="noopener"><img loading="lazy" src="${imgUrl(g.url)}" alt="${esc(g.caption||"School photo")}"></a>${g.caption?`<figcaption>${esc(g.caption)}</figcaption>`:""}</figure>`:"").join("")
-    : `<div class="empty">শীঘ্রই ছবি যোগ করা হবে। / Photos coming soon.</div>`;
-  const card = t => `<div class="item">
-    ${imgUrl(photoOf(t))?`<img class="ph" loading="lazy" src="${imgUrl(photoOf(t))}" alt="" data-i="${esc((t.name||"?").trim().charAt(0))}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph',textContent:this.dataset.i}))">`:`<span class="ph">${esc((t.name||"?").trim().charAt(0))}</span>`}
-    <div><b>${esc(t.name)}</b><span class="meta">${esc(t.post)}${t.subject?" · "+esc(t.subject):""}</span>${t.unit==="voc"&&(t.eng||t.join)?`<span class="meta blk">${esc(t.eng||"")}${t.join?(t.eng?" · ":"")+"since "+esc(String(t.join).slice(0,4)):""}</span>`:""}</div></div>`;
-  const stf = D.staff||[], reg = stf.filter(t => t.unit !== "voc"), voc = stf.filter(t => t.unit === "voc");
-  const vl = (lv, lab) => { const g = voc.filter(t => (t.level||"VIII+") === lv); return g.length ? `<h3 class="sub">${lab}</h3><div class="staff v">${g.map(card).join("")}</div>` : ""; };
-  $("staffBox").innerHTML = stf.length
-    ? (reg.length ? `<div class="staff">${reg.map(card).join("")}</div>` : "")
-      + (voc.length ? `<h3 class="sub vh">ভোকেশনাল ইউনিট / Vocational Unit (WBSCTVE&amp;SD)</h3>` + vl("VIII+","VIII+ Level") + vl("X+2","X+2 Level") : "")
-    : `<div class="empty">তালিকা শীঘ্রই। / List coming soon.</div>`;
-  $("routineBox").innerHTML = (D.routine||[]).map(r => `<tr><td>${esc(r.label)}</td><td>${esc(r.time)}</td></tr>`).join("");
-  const all = (D.holidays||[]).slice().sort((a,b) => a.date.localeCompare(b.date)), t0 = today();
-  const range = h => fmt(h.date) + (h.to && h.to !== h.date ? " – " + fmt(h.to) : "");
-  const hs = all.filter(h => (h.to || h.date) >= t0);
-  $("holidayBox").innerHTML = hs.length ? hs.map(h => `<div class="item"><div><b>${esc(h.name)}</b>
-    <span class="meta">${!h.obs && h.date <= t0 ? '<span class="tag new">চলছে / Ongoing</span>' : ""}${h.obs?'<span class="tag">Observation day · school open</span>':""}${range(h)}</span></div></div>`).join("")
-    : `<div class="empty">কোনো আসন্ন ছুটি নেই। / No upcoming holidays listed.</div>`;
-  $("holAll").innerHTML = all.map(h => `<tr><td>${esc(h.name)}${h.obs?" <span class='tag'>Obs.</span>":""}</td><td>${range(h)}</td></tr>`).join("");
-}
+      const bnList = filtered.filter(t => t.medium === "Bengali");
+      const snList = filtered.filter(t => t.medium === "Santhali");
 
-/* ---------- MP (SE) 2027 Selection Test programme ---------- */
-const MP_LINK = "https://prabirdangar-web.github.io/xi_mp_test/";
-const dayName = d => { try { return new Date(d + "T00:00:00").toLocaleDateString("en-GB", {weekday:"long"}); } catch(e) { return ""; } };
-function renderMp(){
-  const m = D.mpTest || {}, rows = (m.rows||[]).slice().sort((a,b) => (a.date||"").localeCompare(b.date||"") || (a.time||"").localeCompare(b.time||""));
-  const link = safeUrl(m.link || MP_LINK);
-  const has = m.title || m.range || m.note || m.poster || rows.length;
-  $("mpBox").innerHTML = has ? `<div class="item"><div><b>${esc(m.title || "Class X MP (SE) 2027 Selection Test – Programme")}</b>
-      ${m.range?`<span class="meta">${esc(m.range)}</span>`:""}
-      ${m.note?`<div class="nbody">${esc(m.note)}</div>`:""}</div>
-</div>
-    ${isData(m.poster)?`<img class="zoom mpposter" src="${esc(m.poster)}" alt="MP Test programme poster">`:""}
-    ${rows.length?`<table class="t mp"><tr><th>তারিখ / Date</th><th>বার / Day</th><th>সময় / Time</th><th>বিষয় / Subject</th></tr>${rows.map(r => `<tr><td>${fmt(r.date)}</td><td>${esc(dayName(r.date))}</td><td>${esc(r.time||"")}</td><td>${esc(r.subject)}</td></tr>`).join("")}</table>`:""}`
-    : `<div class="empty">প্রোগ্রাম শীঘ্রই প্রকাশিত হবে। / Programme will be published soon.</div>`;
-  const al = $("mpList"); if (!al) return;
-  al.innerHTML = rows.map(r => `<div class="item"><div><b>${esc(r.subject)}</b><span class="meta">${fmt(r.date)} ${esc(dayName(r.date))} ${esc(r.time||"")}</span></div><button class="btn alt sm" data-mpdel="${esc(r.id)}">Delete</button></div>`).join("");
-  al.querySelectorAll("[data-mpdel]").forEach(b => b.onclick = () => { if (!confirm("Delete this exam row?")) return;
-    D.mpTest = {...(D.mpTest||{}), rows:((D.mpTest||{}).rows||[]).filter(x => x.id !== b.dataset.mpdel)}; save(); });
-}
-function fillMp(){ const m = D.mpTest || {};
-  $("mpTitle").value = m.title || "Class X MP (SE) 2027 Selection Test – Programme"; $("mpRange").value = m.range || "20 to 28 November 2026";
-  $("mpLink").value = m.link || MP_LINK; $("mpNote").value = m.note || ""; }
-$("saveMp").onclick = async () => {
-  const old = D.mpTest || {}; let poster = old.poster || ""; const f = $("mpPoster").files[0];
-  if (f) { try { poster = await shrink(f, 1200, 170000); } catch(e) { return toast("Could not read the poster image"); }
-    if (poster.length > 260000) return toast("Poster too large even after shrinking - use a smaller image"); }
-  if (tooBig(poster.length - (old.poster||"").length + 600)) return toast("Storage full - delete old gallery photos / posters first");
-  D.mpTest = {...old, title:$("mpTitle").value.trim(), range:$("mpRange").value.trim(), link:$("mpLink").value.trim(), note:$("mpNote").value.trim(), poster};
-  $("mpPoster").value = ""; save(); };
-$("rmMpPoster").onclick = () => { if (!(D.mpTest||{}).poster) return toast("No poster saved"); D.mpTest = {...D.mpTest, poster:""}; save(); };
-$("addMp").onclick = () => { const d = $("mpDate").value, sub = $("mpSub").value.trim(); if (!d || !sub) return toast("Date and subject are required");
-  const old = D.mpTest || {};
-  D.mpTest = {...old, rows:[...(old.rows||[]), {id:uid(), date:d, time:$("mpTime").value.trim(), subject:sub}]};
-  $("mpSub").value = ""; save(); };
-/* ---- Fetch Class X programme from the exam portal (Firestore mpStudents/mpConfig.programme) ---- */
-const niceName = n => String(n||"").toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-const isoFromDmy = d => { const m = /^(\d{2})-(\d{2})-(\d{4})$/.exec(d||""); return m ? `${m[3]}-${m[2]}-${m[1]}` : ""; };
-const rangeText = (a, b) => { const f = (d, full) => new Date(d+"T00:00:00").toLocaleDateString("en-GB", full ? {day:"numeric", month:"long", year:"numeric"} : {day:"numeric"});
-  const A = new Date(a+"T00:00:00"), B = new Date(b+"T00:00:00");
-  if (a === b) return f(a, true);
-  return A.getMonth() === B.getMonth() && A.getFullYear() === B.getFullYear() ? `${f(a)} to ${f(b, true)}` : `${f(a, true)} to ${f(b, true)}`; };
-$("fetchMp").onclick = async () => {
-  const out = $("fetchMpOut"); out.textContent = "Fetching…";
-  try {
-    const snap = await db.collection("mpStudents").doc("mpConfig").get();
-    const P = snap.exists ? (snap.data().programme || {}) : {};
-    const codes = Object.keys(P).filter(c => isoFromDmy(P[c].date));
-    if (!codes.length) { out.textContent = "No programme found in the exam portal."; return toast("No programme found"); }
-    const old = D.mpTest || {}, oldRows = old.rows || [];
-    const manual = oldRows.filter(r => !String(r.id||"").startsWith("mp_"));
-    if (manual.length && !confirm(`Replace ${oldRows.length} existing row(s) with ${codes.length} fetched subject(s)?`)) { out.textContent = "Cancelled."; return; }
-    const t = $("mpFetchTime").value.trim();
-    const rows = codes.map(c => { const prev = oldRows.find(r => r.id === "mp_" + c);
-      return {id:"mp_" + c, code:c, date:isoFromDmy(P[c].date), time: t || (prev && prev.time) || "", subject:niceName(P[c].name)}; })
-      .sort((x,y) => x.date.localeCompare(y.date) || x.subject.localeCompare(y.subject));
-    const ds = rows.map(r => r.date).sort();
-    D.mpTest = {...old, rows, range: rangeText(ds[0], ds[ds.length-1]), fetchedAt: new Date().toISOString()};
-    $("mpRange").value = D.mpTest.range;
-    out.textContent = `Fetched ${rows.length} subjects (${D.mpTest.range}).`;
-    save();
-  } catch(e) { console.error(e); out.textContent = "Fetch failed: " + (e.code || e.message); toast("Fetch failed: " + (e.code || "error")); }
-};
-/* click-to-enlarge for posters */
-document.addEventListener("click", e => { const im = e.target.closest && e.target.closest("img.zoom"); if (!im) return;
-  $("lb").querySelector("img").src = im.src; $("lb").hidden = false; });
-$("lb").addEventListener("click", () => { $("lb").hidden = true; });
-addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true; });
+      document.getElementById("bengaliSection").style.display =
+        activeMedium === "Santhali" ? "none" : "block";
+      document.getElementById("santhaliSection").style.display =
+        activeMedium === "Bengali" ? "none" : "block";
 
-</script>
-<script>
-(function(){
-  const hero = document.getElementById("hero"), cap = document.getElementById("heroCap"), dots = document.getElementById("heroDots");
-  let imgs = [...hero.querySelectorAll("img")], cur = 0, timer;
-  function go(i){ cur = (i + imgs.length) % imgs.length;
-    imgs.forEach((m, k) => m.classList.toggle("show", k === cur));
-    cap.textContent = imgs[cur].dataset.cap || "";
-    [...dots.children].forEach((d, k) => d.setAttribute("aria-current", k === cur)); }
-  function start(){ clearInterval(timer);
-    if (imgs.length > 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) timer = setInterval(() => go(cur + 1), 5000); }
-  function build(){ dots.innerHTML = ""; imgs.forEach((m, k) => { const b = document.createElement("button");
-      b.type = "button"; b.setAttribute("aria-label", "Photo " + (k + 1)); b.onclick = () => { go(k); start(); }; dots.appendChild(b); });
-    if (imgs.length) { hero.classList.add("on"); go(0); start(); } else hero.classList.remove("on"); }
-  imgs.forEach(m => m.addEventListener("error", () => { imgs = imgs.filter(x => x !== m); m.remove(); build(); }));
-  /* images that already failed before this script ran never fire "error" – drop them now */
-  imgs.filter(m => m.complete && m.naturalWidth === 0 && m.getAttribute("loading") !== "lazy").forEach(m => { imgs = imgs.filter(x => x !== m); m.remove(); });
-  build();
-  addEventListener("load", () => { const bad = imgs.filter(m => m.complete && m.naturalWidth === 0);
-    if (bad.length) { bad.forEach(m => m.remove()); imgs = imgs.filter(x => !bad.includes(x)); build(); } });
-})();
-</script>
+      document.getElementById("bengaliGrid").innerHTML =
+        bnList.map(buildCardHTML).join("") ||
+        `<p style="color:#64748b;">No Bengali Medium Para Teacher profiles match your search.</p>`;
+
+      document.getElementById("santhaliGrid").innerHTML =
+        snList.map(buildCardHTML).join("") ||
+        `<p style="color:#64748b;">No Santhali Medium Para Teacher profiles match your search.</p>`;
+
+      document.getElementById("bnBadge").textContent = `${bnList.length} Profiles`;
+      document.getElementById("snBadge").textContent = `${snList.length} Profiles`;
+      document.getElementById("totalCount").textContent = filtered.length;
+      document.getElementById("bnCount").textContent = paraTeachers.filter(t => t.medium === "Bengali").length;
+      document.getElementById("snCount").textContent = paraTeachers.filter(t => t.medium === "Santhali").length;
+    }
+
+    function openProfileModal(teacherId) {
+      const t = paraTeachers.find(item => item.id === teacherId);
+      if (!t) return;
+
+      document.getElementById("modalHeaderTitle").textContent = `${t.name} (${t.id}) — Complete Banglar Shiksha Profile`;
+      document.getElementById("modalBodyContent").innerHTML = `
+        <div class="sheet-section-title">1. Basic Information</div>
+        <table class="sheet-table">
+          <tr>
+            <td class="lbl">Teacher ID</td><td class="val">${t.id}</td>
+            <td class="lbl">Teacher Name</td><td class="val">${t.name}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Date of Birth</td><td class="val">${t.dob}</td>
+            <td class="lbl">PAN Number</td><td class="val">${t.pan}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Gender</td><td class="val">${t.gender}</td>
+            <td class="lbl">Social Category</td><td class="val">${t.socialCategory}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Religion</td><td class="val">${t.religion}</td>
+            <td class="lbl">Blood Group</td><td class="val">${t.bloodGroup}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Nationality</td><td class="val">${t.nationality}</td>
+            <td class="lbl">Aadhaar No.</td><td class="val">[Aadhaar Redacted]</td>
+          </tr>
+        </table>
+
+        <div class="sheet-section-title">2. Professional & Academic Information</div>
+        <table class="sheet-table">
+          <tr>
+            <td class="lbl">Joining in Service</td><td class="val">${t.joiningDate}</td>
+            <td class="lbl">Designation</td><td class="val">${t.designation}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Class Taught</td><td class="val">${t.classTaught}</td>
+            <td class="lbl">Appointment Nature</td><td class="val">${t.appointmentNature}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Appointed Subject</td><td class="val">${t.appointedSubject}</td>
+            <td class="lbl">Main Subject 1 & 2</td><td class="val">1: ${t.mainSubject1} | 2: ${t.mainSubject2}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Approved Qualification</td><td class="val">${t.academicQual}</td>
+            <td class="lbl">Prof. Qualification</td><td class="val">${t.profQual}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Maths/Science Up To</td><td class="val">${t.mathSciUpTo}</td>
+            <td class="lbl">English Studied Up To</td><td class="val">${t.englishUpTo}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Social Studies Up To</td><td class="val">${t.socialStudiesUpTo}</td>
+            <td class="lbl">Present School Since</td><td class="val">${t.presentSchoolSince}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Attendance (Last Yr)</td><td class="val">${t.attendance} Days</td>
+            <td class="lbl">Training Need</td><td class="val">${t.trainingNeed}</td>
+          </tr>
+        </table>
+
+        <div class="sheet-section-title">3. Contact Information</div>
+        <table class="sheet-table">
+          <tr>
+            <td class="lbl">Contact Number</td><td class="val">${t.phone}</td>
+            <td class="lbl">Email ID</td><td class="val">${t.email}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Full Address</td>
+            <td class="val" colspan="3">${t.address}</td>
+          </tr>
+        </table>
+
+        <div class="medium-switch-bar">
+          <span><strong>Assigned Medium Section:</strong> Currently listed under <strong>${t.medium} Medium</strong></span>
+          <button class="btn-sm btn-primary-sm" onclick="toggleMedium('${t.id}')">
+            ⇄ Switch to ${t.medium === 'Bengali' ? 'Santhali' : 'Bengali'} Medium
+          </button>
+        </div>
+      `;
+
+      document.getElementById("profileModal").classList.add("active");
+    }
+
+    function closeProfileModal() {
+      document.getElementById("profileModal").classList.remove("active");
+    }
+
+    function toggleMedium(teacherId) {
+      const idx = paraTeachers.findIndex(t => t.id === teacherId);
+      if (idx === -1) return;
+      paraTeachers[idx].medium = paraTeachers[idx].medium === "Bengali" ? "Santhali" : "Bengali";
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(paraTeachers));
+      openProfileModal(teacherId);
+      renderAll();
+    }
+
+    // Tab & Search Listeners
+    document.querySelectorAll("#mediumTabs .tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#mediumTabs .tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeMedium = btn.getAttribute("data-medium");
+        renderAll();
+      });
+    });
+
+    document.getElementById("searchInput").addEventListener("input", e => {
+      searchQuery = e.target.value;
+      renderAll();
+    });
+
+    renderAll();
+  </script>
 </body>
 </html>
