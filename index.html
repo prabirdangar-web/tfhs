@@ -288,15 +288,15 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
     <fieldset><legend>Teacher / staff</legend>
       <div class="row"><label>Staff type<select id="sType"><option value="">Regular school staff</option><option value="voc">Vocational unit (WBSCTVE&amp;SD)</option></select></label><label>Name<input id="sName"></label></div>
       <div id="vocFields" style="display:none">
-        <div class="row"><label>Course level<select id="sLevel"><option value="VIII+">VIII+ Level</option><option value="X+2">X+2 Level</option><option value="Para">Para Teacher</option></select></label><label>Engagement status<select id="sEng"><option>Contractual</option><option>Part-time</option><option>Regular</option></select></label></div>
-        <div class="row"><label>Designation<select id="sDesig"><option>Contractual Instructor</option><option>Contractual Teacher</option><option>Part Time Teacher</option><option>Para Teacher</option><option value="other">Other (type below)</option></select></label><label>Date of joining (optional)<input id="sJoin" type="date"></label></div>
+        <div class="row"><label>Course level<select id="sLevel"><option value="VIII+">VIII+ Level</option><option value="X+2">X+2 Level</option><option value="Para">Para Teacher</option><option value="Support">Support Staff</option></select></label><label>Engagement status<select id="sEng"><option>Contractual</option><option>Part-time</option><option>Temporary</option><option>Regular</option></select></label></div>
+        <div class="row"><label>Designation<select id="sDesig"><option>Contractual Instructor</option><option>Contractual Teacher</option><option>Part Time Teacher</option><option>Para Teacher</option><option>Temporary Night-Guard</option><option value="other">Other (type below)</option></select></label><label>Date of joining (optional)<input id="sJoin" type="date"></label></div>
         <p class="meta" style="margin:6px 0 0">Aadhaar, PAN, bank and other personal details are NOT stored here – this page is public.</p>
       </div>
       <div class="row"><label id="sPostL">Post<input id="sPost" placeholder="Assistant Teacher"></label><label><span id="sSubT">Subject</span><input id="sSub" list="tradeList" placeholder="Mathematics"></label></div>
       <datalist id="tradeList"><option value="Agriculture Machineries"><option value="Auto Electrician"><option value="Domestic Appliances"><option value="Computer"><option value="Practice (Electrician)"><option value="Communicative English"><option value="Mathematics"><option value="Bengali"><option value="Management of Co-operative"></datalist>
       <div class="row"><label>Photo path (optional)<input id="sPhoto" list="photoList" placeholder="blank = auto, or pick / type a path"><datalist id="photoList"></datalist></label><label>Photo from computer (optional)<input type="file" id="sFile" accept="image/*"></label></div>
       <p><button class="btn" id="addS">Add staff</button> <button class="btn alt" id="cancelS" style="display:none">Cancel edit</button></p>
-      <p><button class="btn alt" id="syncS">Sync names from Salary Portal</button> <button class="btn alt" id="impV">Import vocational staff (16)</button> <span id="syncOut" class="meta"></span></p>
+      <p><button class="btn alt" id="syncS">Sync names from Salary Portal</button> <button class="btn alt" id="impV">Import vocational staff (17)</button> <span id="syncOut" class="meta"></span></p>
       <div id="photoRep" class="meta"></div>
       <div id="sList"></div>
     </fieldset>
@@ -596,7 +596,7 @@ $("addG").onclick = async () => {
   if (tooBig(u.length + 200)) return toast("Storage full - delete old gallery photos or use the images/ folder");
   addTo("gallery",{url:u, caption:$("gCap").value.trim()});
   $("gUrl").value=$("gCap").value=$("gFile").value=""; };
-const DESIGS = ["Contractual Instructor","Contractual Teacher","Part Time Teacher","Para Teacher"];
+const DESIGS = ["Contractual Instructor","Contractual Teacher","Part Time Teacher","Para Teacher","Temporary Night-Guard"];
 let EDIT_ID = null;
 function syncType(){
   const v = $("sType").value === "voc";
@@ -661,7 +661,8 @@ const SEED_VOC = [
   ["Doli Mondal","Para Teacher","Science & Mathematics","Para","Contractual","2007-01-03"],
   ["Ganesh Mandi","Para Teacher","All Subjects","Para","Contractual","2015-03-02"],
   ["Bikash Baskey","Para Teacher","All Subjects","Para","Contractual","2016-03-01"],
-  ["Lakshmi Saren","Para Teacher","All Subjects","Para","Contractual","2016-03-01"]];
+  ["Lakshmi Saren","Para Teacher","All Subjects","Para","Contractual","2016-03-01"],
+  ["Ramprasad Layek","Temporary Night-Guard","Safety of vocational stream equipment","Support","Temporary","2017-04-27"]];
 $("impV").onclick = () => {
   const have = new Set((D.staff||[]).filter(t => t.unit === "voc").map(t => t.name.toLowerCase()));
   const add = SEED_VOC.filter(r => !have.has(r[0].toLowerCase())).map(r => ({id:uid(), name:r[0], post:r[1], subject:r[2], photo:"", unit:"voc", level:r[3], eng:r[4], join:r[5]}));
@@ -766,7 +767,7 @@ function renderExtra(){
   const vl = (lv, lab) => { const g = voc.filter(t => (t.level||"VIII+") === lv); return g.length ? `<h3 class="sub">${lab}</h3><div class="staff v">${g.map(card).join("")}</div>` : ""; };
   $("staffBox").innerHTML = stf.length
     ? (reg.length ? `<div class="staff">${reg.map(card).join("")}</div>` : "")
-      + (voc.length ? `<h3 class="sub vh">ভোকেশনাল ইউনিট / Vocational Unit (WBSCTVE&amp;SD)</h3>` + vl("VIII+","VIII+ Level") + vl("X+2","X+2 Level") + vl("Para","Para Teachers") : "")
+      + (voc.length ? `<h3 class="sub vh">ভোকেশনাল ইউনিট / Vocational Unit (WBSCTVE&amp;SD)</h3>` + vl("VIII+","VIII+ Level") + vl("X+2","X+2 Level") + vl("Para","Para Teachers") + vl("Support","Support Staff") : "")
     : `<div class="empty">তালিকা শীঘ্রই। / List coming soon.</div>`;
   $("routineBox").innerHTML = (D.routine||[]).map(r => `<tr><td>${esc(r.label)}</td><td>${esc(r.time)}</td></tr>`).join("");
   const all = (D.holidays||[]).slice().sort((a,b) => a.date.localeCompare(b.date)), t0 = today();
