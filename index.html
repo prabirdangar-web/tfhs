@@ -29,7 +29,7 @@ nav.tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-
 h2.sec{font-size:19px;margin:22px 0 8px;border-bottom:2px solid var(--line);padding-bottom:4px}
 .item{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
 .item b{display:block}
-.pp{display:flex;align-items:center;gap:8px;margin-left:auto}.pp img{width:40px;height:40px;border-radius:50%;object-fit:cover}.pp label{margin:0;font-size:12px}.pp select{max-width:190px}
+.pp{display:flex;align-items:center;gap:8px;margin-left:auto}.pp img{width:40px;height:40px;border-radius:50%;object-fit:cover}.pp label{margin:0;font-size:12px}.pp .addph{display:none;background:#b3261e}.pp.miss .addph{display:inline-block}.pp select{max-width:190px}
 .meta{font-size:13px;color:var(--mut)}
 .tag{display:inline-block;font-size:12px;border-radius:4px;padding:0 6px;background:var(--line);color:var(--ink);margin-right:4px}
 .tag.new{background:var(--gold);color:#1b1400;font-weight:700}
@@ -171,6 +171,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar)}
     <fieldset><legend>Teacher / staff</legend>
       <div class="row"><label>Name<input id="sName"></label><label>Post<input id="sPost" placeholder="Assistant Teacher"></label></div>
       <div class="row"><label>Subject<input id="sSub" placeholder="Mathematics"></label><label>Photo path (optional)<input id="sPhoto" list="photoList" placeholder="blank = auto, or pick / type a path"><datalist id="photoList"></datalist></label></div>
+      <label>Photo from computer (optional)<input type="file" id="sFile" accept="image/*"></label>
       <p><button class="btn" id="addS">Add staff</button></p>
       <p><button class="btn alt" id="syncS">Sync names from Salary Portal</button> <span id="syncOut" class="meta"></span></p>
       <div id="photoRep" class="meta"></div>
@@ -314,19 +315,29 @@ $("addR").onclick = () => {
   $("rTitle").value = $("rLink").value = ""; save();
 };
 const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList"};
+let PH_ID = null;
+$("phFile").addEventListener("cancel", () => render());
+$("phFile").onchange = async () => {
+  const f = $("phFile").files[0], t = (D.staff||[]).find(x => x.id === PH_ID); if (!f || !t) return render();
+  try { const u = await shrink(f, 240, 14000);
+    if (tooBig(u.length + 200)) return toast("Storage full - use the images/staff folder instead");
+    t.photo = u; save();
+  } catch(e) { toast("Could not read this image"); render(); }
+};
 function photoPicker(t){
   const cur = t.photo || "", files = PHOTOS.map(f => "images/staff/" + f), known = files.includes(cur);
   const opts = [`<option value="">Auto (match by name)</option>`]
     .concat(files.map(f => `<option value="${esc(f)}"${f===cur?" selected":""}>${esc(f.split("/").pop())}</option>`))
-    .concat(cur && !known ? [`<option value="${esc(cur)}" selected>Custom: ${esc(cur)}</option>`] : [])
-    .concat([`<option value="__custom">Type a path / link…</option>`]);
+    .concat(cur && !known ? [`<option value="${esc(cur)}" selected>${isData(cur) ? "Uploaded photo" : "Custom: " + esc(cur)}</option>`] : [])
+    .concat([`<option value="__upload">Upload from computer…</option>`, `<option value="__custom">Type a path / link…</option>`]);
   const shown = photoOf(t);
-  return `<div class="pp">${imgUrl(shown)?`<img src="${imgUrl(shown)}" alt="" onerror="this.style.visibility='hidden'">`:""}
+  return `<div class="pp${imgUrl(shown)?"":" miss"}">${imgUrl(shown)?`<img src="${imgUrl(shown)}" alt="" onerror="this.style.display='none';this.parentNode.classList.add('miss')">`:""}
+    <button type="button" class="btn sm addph" data-up="${esc(t.id)}">&#128247; Add photo (missing)</button>
     <label>Photo (manual)<select data-ph="${esc(t.id)}">${opts.join("")}</select></label></div>`;
 }
 function renderAdminLists(){
   for (const [k, id] of Object.entries(LISTS)){
-    $(id).innerHTML = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||x.url)}</b>
+    $(id).innerHTML = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||(isData(x.url)?"Uploaded photo":x.url))}</b>
       <span class="meta">${esc(x.post||x.time||x.url&&"")} ${fmt(x.date)}</span></div>
       ${k==="staff"?photoPicker(x):""}
       ${k==="holidays"||k==="staff"?`<button class="btn alt sm" data-edit="${x.id}" data-ek="${k}">Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">Delete</button></div>`).join("");
@@ -335,9 +346,11 @@ function renderAdminLists(){
     if (!confirm("Delete this item?")) return;
     D[b.dataset.k] = eff(b.dataset.k).filter(x => x.id !== b.dataset.id); save();
   });
+  document.querySelectorAll("#panel [data-up]").forEach(b => b.onclick = () => { PH_ID = b.dataset.up; $("phFile").value = ""; $("phFile").click(); });
   document.querySelectorAll("#panel select[data-ph]").forEach(sel => sel.onchange = () => {
     const t = (D.staff||[]).find(x => x.id === sel.dataset.ph); if (!t) return;
     let v = sel.value;
+    if (v === "__upload") { PH_ID = t.id; $("phFile").value = ""; $("phFile").click(); return; }
     if (v === "__custom") { v = prompt("Photo path or https link", t.photo || "images/staff/"); if (v === null) return render(); v = v.trim(); }
     t.photo = v; save();
   });
@@ -374,18 +387,20 @@ function shrink(file, maxDim, maxBytes){
     fr.readAsDataURL(file);
   });
 }
-const tooBig = () => new Blob([JSON.stringify(D)]).size > 900000;
+const tooBig = extra => new Blob([JSON.stringify(D)]).size + (extra || 0) > 900000;
 $("addG").onclick = async () => {
   const f = $("gFile").files[0]; let u = $("gUrl").value.trim();
   if (f) { try { u = await shrink(f, 1000, 130000); } catch(e) { return toast("Could not read this image"); } }
   if (!u) return toast("Choose a photo or enter an image path");
-  const before = D.gallery;
+  if (tooBig(u.length + 200)) return toast("Storage full - delete old gallery photos or use the images/ folder");
   addTo("gallery",{url:u, caption:$("gCap").value.trim()});
-  if (tooBig()) { D.gallery = before; render(); return toast("Storage full - delete old gallery photos or use images/ folder"); }
   $("gUrl").value=$("gCap").value=$("gFile").value=""; };
-$("addS").onclick = () => { const n=$("sName").value.trim(); if(!n) return toast("Name is required");
-  addTo("staff",{name:n, post:$("sPost").value.trim(), subject:$("sSub").value.trim(), photo:$("sPhoto").value.trim()});
-  ["sName","sPost","sSub","sPhoto"].forEach(i=>$(i).value=""); };
+$("addS").onclick = async () => { const n=$("sName").value.trim(); if(!n) return toast("Name is required");
+  let ph = $("sPhoto").value.trim(), f = $("sFile").files[0];
+  if (f) { try { ph = await shrink(f, 240, 14000); } catch(e) { return toast("Could not read this image"); }
+    if (tooBig(ph.length + 300)) return toast("Storage full - use the images/staff folder instead"); }
+  addTo("staff",{name:n, post:$("sPost").value.trim(), subject:$("sSub").value.trim(), photo:ph});
+  ["sName","sPost","sSub","sPhoto","sFile"].forEach(i=>$(i).value=""); };
 $("addT").onclick = () => { const l=$("tLabel").value.trim(); if(!l) return toast("Item is required");
   addTo("routine",{label:l, time:$("tTime").value.trim()}); $("tLabel").value=$("tTime").value=""; };
 $("addH").onclick = () => { const n=$("hName").value.trim(), d=$("hDate").value; if(!n||!d) return toast("Date and name are required");
