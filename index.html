@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Para Teacher Section (Medium-Wise) | Taldangra Fulmati High School (H.S.)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@500;600;700&display=swap" rel="stylesheet">
+  <title>Taldangra Fulmati High School (H.S.) | তালডাংরা ফুলমতী উচ্চ বিদ্যালয় (উঃ মাঃ)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --navy: #0f172a;
@@ -13,8 +13,8 @@
       --teal: #0d9488;
       --teal-dark: #0f766e;
       --amber: #d97706;
-      --purple: #7c3aed;
-      --bg: #f1f5f9;
+      --amber-light: #fef3c7;
+      --bg: #f8fafc;
       --card: #ffffff;
       --text: #0f172a;
       --muted: #475569;
@@ -27,73 +27,487 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
       background-color: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
-    /* Hero Banner */
-    header {
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #0f766e 100%);
-      color: #ffffff;
-      padding: 2.5rem 1.25rem 3.2rem;
-      text-align: center;
-      border-bottom: 4px solid var(--amber);
+    /* 1. Top Institutional Bar */
+    .top-bar {
+      background: var(--navy);
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      padding: 0.45rem 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .top-bar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .top-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .top-badge {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.15rem 0.6rem;
+      border-radius: 4px;
+      color: #fde68a;
+      font-weight: 600;
+    }
+
+    /* 2. Main Header & Navigation */
+    .site-header {
+      background: #ffffff;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 3px solid var(--amber);
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .school-crest {
+      width: 54px;
+      height: 54px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--teal-dark));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.35rem;
+      box-shadow: 0 4px 10px rgba(30, 58, 138, 0.25);
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+
+    .brand-text h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--teal-dark);
+      margin-top: 0.1rem;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.86rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: #eff6ff;
+      color: var(--primary-light);
+    }
+
+    .nav-links a.btn-nav {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .nav-links a.btn-nav:hover {
+      background: #1d4ed8;
+      color: #fff;
+    }
+
+    /* 3. Notice Ticker Bar */
+    .notice-bar {
+      background: #fffbeb;
+      border-bottom: 1px solid #fde68a;
+      padding: 0.5rem 1.25rem;
+      font-size: 0.84rem;
+    }
+
+    .notice-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      overflow: hidden;
+    }
+
+    .notice-tag {
+      background: var(--amber);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .notice-text {
+      color: #92400e;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 4. Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #0f766e 100%);
+      color: #fff;
+      padding: 3.5rem 1.25rem;
       position: relative;
+      overflow: hidden;
     }
 
-    .school-badge {
+    .hero-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .hero-pill {
       display: inline-block;
       background: rgba(255, 255, 255, 0.14);
       border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 0.3rem 0.9rem;
-      border-radius: 999px;
+      color: #fde68a;
       font-size: 0.78rem;
       font-weight: 600;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      margin-bottom: 0.65rem;
-      color: #fde68a;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
     }
 
-    header h1 {
-      font-size: 1.9rem;
+    .hero h2 {
+      font-size: 2.3rem;
       font-weight: 800;
-      letter-spacing: 0.3px;
-      margin-bottom: 0.25rem;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
     }
 
-    header h2 {
-      font-size: 1.25rem;
+    .hero h3 {
+      font-size: 1.35rem;
       font-weight: 600;
       color: #99f6e4;
-      margin-bottom: 0.4rem;
+      margin-bottom: 1rem;
     }
 
-    header p {
-      font-size: 0.92rem;
-      color: #cbd5e1;
-      max-width: 650px;
-      margin: 0 auto;
+    .hero p {
+      color: #e2e8f0;
+      font-size: 0.98rem;
+      margin-bottom: 1.5rem;
+      max-width: 640px;
     }
 
-    /* Filter & Search Bar */
-    .toolbar-container {
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.7rem 1.3rem;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-gold {
+      background: var(--amber);
+      color: #fff;
+    }
+
+    .btn-gold:hover {
+      background: #b45309;
+    }
+
+    .btn-outline-light {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-outline-light:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    /* Headmaster Desk Card in Hero */
+    .hm-card {
+      background: rgba(255, 255, 255, 0.97);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      border-top: 5px solid var(--amber);
+    }
+
+    .hm-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hm-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #dbeafe;
+      flex-shrink: 0;
+    }
+
+    .hm-title h4 {
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .hm-title span {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--teal-dark);
+    }
+
+    .hm-quote {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .hm-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      background: #f8fafc;
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.76rem;
+    }
+
+    .hm-meta div strong {
+      display: block;
+      color: var(--text);
+    }
+
+    /* 5. Institutional Quick Highlights */
+    .highlights-section {
       max-width: 1280px;
-      margin: -1.8rem auto 1.5rem;
-      padding: 0 1rem;
+      margin: -1.75rem auto 2.5rem;
+      padding: 0 1.25rem;
       position: relative;
-      z-index: 20;
+      z-index: 10;
     }
 
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .highlight-box {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.15rem 1.25rem;
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--primary);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .highlight-box.teal {
+      border-left-color: var(--teal);
+    }
+
+    .highlight-box.amber {
+      border-left-color: var(--amber);
+    }
+
+    .highlight-box .lbl {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .highlight-box .val {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-top: 0.15rem;
+    }
+
+    .highlight-box .sub {
+      font-size: 0.75rem;
+      color: var(--teal-dark);
+      font-weight: 600;
+    }
+
+    /* 6. Section Wrapper & Titles */
+    .section-wrap {
+      max-width: 1280px;
+      margin: 0 auto 3.5rem;
+      padding: 0 1.25rem;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-head .eyebrow {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      letter-spacing: 0.8px;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .section-head h2 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .section-head p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      max-width: 650px;
+      margin: 0.4rem auto 0;
+    }
+
+    /* 7. Academic & Medium Wings Overview */
+    .wings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .wing-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .wing-card h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .wing-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .wing-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .wing-tag {
+      background: #f1f5f9;
+      color: var(--text);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+    }
+
+    /* 8. Para Teacher Filter Toolbar */
     .toolbar {
       background: var(--card);
       border-radius: 14px;
-      padding: 1rem 1.25rem;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+      padding: 1.1rem 1.25rem;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
       border: 1px solid var(--border);
+      margin-bottom: 1.75rem;
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
@@ -113,13 +527,10 @@
       border: 1px solid var(--border);
       background: #f8fafc;
       color: var(--muted);
-      font-weight: 600;
-      font-size: 0.85rem;
+      font-weight: 700;
+      font-size: 0.84rem;
       cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      transition: all 0.2s;
     }
 
     .tab-btn:hover {
@@ -131,7 +542,6 @@
       background: var(--primary);
       color: #fff;
       border-color: var(--primary);
-      box-shadow: 0 3px 10px rgba(30, 58, 138, 0.25);
     }
 
     .tab-btn.active[data-medium="Santhali"] {
@@ -153,117 +563,70 @@
       padding: 0.55rem 0.95rem;
       border: 1px solid var(--border);
       border-radius: 8px;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       width: 250px;
       outline: none;
-      transition: border-color 0.2s;
     }
 
     .search-box:focus {
       border-color: var(--primary-light);
     }
 
-    .btn-print {
-      padding: 0.55rem 0.95rem;
+    .btn-tool {
+      padding: 0.55rem 0.9rem;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: #fff;
       color: var(--text);
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
+      transition: background 0.15s;
     }
 
-    .btn-print:hover {
+    .btn-tool:hover {
       background: #f1f5f9;
     }
 
-    /* Quick Stats Row */
-    .stats-grid {
-      max-width: 1280px;
-      margin: 0 auto 1.75rem;
-      padding: 0 1rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
+    .btn-tool.primary {
+      background: var(--teal-dark);
+      color: #fff;
+      border-color: var(--teal-dark);
     }
 
-    .stat-card {
-      background: var(--card);
-      border-radius: 12px;
-      padding: 1rem 1.2rem;
-      border: 1px solid var(--border);
-      border-left: 5px solid var(--primary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    /* Medium Group Banners & Cards */
+    .medium-block {
+      margin-bottom: 2.5rem;
     }
 
-    .stat-card.santhali {
-      border-left-color: var(--teal);
-    }
-
-    .stat-card.amber {
-      border-left-color: var(--amber);
-    }
-
-    .stat-title {
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--muted);
-      letter-spacing: 0.4px;
-    }
-
-    .stat-num {
-      font-size: 1.65rem;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    /* Main Content Sections */
-    .main-container {
-      max-width: 1280px;
-      margin: 0 auto 3.5rem;
-      padding: 0 1rem;
-    }
-
-    .medium-section {
-      margin-bottom: 2.75rem;
-    }
-
-    .section-banner {
+    .medium-banner {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 0.5rem;
-      margin-bottom: 1.25rem;
-      padding: 0.75rem 1.1rem;
+      margin-bottom: 1.2rem;
+      padding: 0.8rem 1.15rem;
       background: linear-gradient(90deg, #eff6ff 0%, #ffffff 100%);
       border-left: 5px solid var(--primary);
-      border-radius: 8px;
+      border-radius: 10px;
       border-top: 1px solid var(--border);
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
 
-    .section-banner.santhali-banner {
+    .medium-banner.santhali {
       background: linear-gradient(90deg, #f0fdfa 0%, #ffffff 100%);
       border-left-color: var(--teal);
     }
 
-    .section-banner h3 {
-      font-size: 1.18rem;
+    .medium-banner h3 {
+      font-size: 1.15rem;
       font-weight: 800;
       color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
     }
 
-    .section-banner.santhali-banner h3 {
+    .medium-banner.santhali h3 {
       color: var(--teal-dark);
     }
 
@@ -271,16 +634,15 @@
       background: var(--primary);
       color: #fff;
       font-size: 0.76rem;
-      padding: 0.2rem 0.65rem;
+      padding: 0.22rem 0.7rem;
       border-radius: 999px;
       font-weight: 700;
     }
 
-    .santhali-banner .badge-count {
+    .medium-banner.santhali .badge-count {
       background: var(--teal-dark);
     }
 
-    /* Cards Grid */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -327,13 +689,13 @@
     }
 
     .avatar-circle {
-      width: 62px;
-      height: 62px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       background: #dbeafe;
       color: var(--primary);
       font-weight: 800;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -355,7 +717,7 @@
       font-size: 0.72rem;
       font-weight: 700;
       color: var(--muted);
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       text-transform: uppercase;
     }
 
@@ -373,9 +735,9 @@
     }
 
     .pill {
-      font-size: 0.7rem;
+      font-size: 0.69rem;
       font-weight: 700;
-      padding: 0.18rem 0.55rem;
+      padding: 0.16rem 0.55rem;
       border-radius: 6px;
       text-transform: uppercase;
     }
@@ -401,7 +763,6 @@
       border: 1px solid #cbd5e1;
     }
 
-    /* Key-Value Data Grid inside Card */
     .data-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -410,7 +771,7 @@
       padding: 0.85rem;
       border-radius: 10px;
       border: 1px solid var(--border);
-      font-size: 0.82rem;
+      font-size: 0.81rem;
     }
 
     .data-item {
@@ -423,7 +784,7 @@
     }
 
     .data-label {
-      font-size: 0.7rem;
+      font-size: 0.69rem;
       color: var(--muted);
       font-weight: 600;
       text-transform: uppercase;
@@ -432,7 +793,6 @@
     .data-val {
       font-weight: 700;
       color: var(--text);
-      word-break: break-word;
     }
 
     .card-actions {
@@ -448,7 +808,7 @@
     .btn-sm {
       padding: 0.42rem 0.75rem;
       border-radius: 7px;
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       font-weight: 600;
       cursor: pointer;
       text-decoration: none;
@@ -477,11 +837,97 @@
       border-color: var(--teal-dark);
     }
 
-    /* Full Datasheet Modal */
+    /* 9. Master Summary Table */
+    .table-card {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .master-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      text-align: left;
+    }
+
+    .master-table th {
+      background: var(--navy);
+      color: #fff;
+      padding: 0.85rem 1rem;
+      font-weight: 700;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .master-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .master-table tr:hover td {
+      background: #f8fafc;
+    }
+
+    /* 10. Footer */
+    footer {
+      background: var(--navy);
+      color: #cbd5e1;
+      padding: 3rem 1.25rem 1.5rem;
+      border-top: 4px solid var(--amber);
+    }
+
+    .footer-grid {
+      max-width: 1280px;
+      margin: 0 auto 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .footer-col h4 {
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-col p,
+    .footer-col li {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 0.4rem;
+      list-style: none;
+    }
+
+    .footer-col a {
+      color: #cbd5e1;
+      text-decoration: none;
+    }
+
+    .footer-col a:hover {
+      color: #fde68a;
+    }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    /* Modal Styling */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.65);
       display: none;
       align-items: center;
       justify-content: center;
@@ -496,10 +942,10 @@
     .modal-box {
       background: #fff;
       width: 100%;
-      max-width: 720px;
+      max-width: 740px;
       border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
       max-height: 90vh;
       display: flex;
       flex-direction: column;
@@ -515,12 +961,12 @@
     }
 
     .modal-head h3 {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
     }
 
     .close-btn {
-      background: rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.15);
       color: #fff;
       border: none;
       width: 32px;
@@ -536,7 +982,7 @@
     }
 
     .sheet-section-title {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 800;
       text-transform: uppercase;
       color: var(--primary);
@@ -552,7 +998,7 @@
     .sheet-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
     }
 
     .sheet-table td {
@@ -584,7 +1030,43 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 0.5rem;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .form-group.full {
+      grid-column: span 2;
+    }
+
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.86rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 640px) {
@@ -595,106 +1077,296 @@
         display: block;
         width: 100% !important;
       }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-group.full {
+        grid-column: span 1;
+      }
     }
 
     @media print {
-      .toolbar-container, .card-actions, .modal-overlay {
+      .top-bar, .site-header, .notice-bar, .hero, .toolbar, .card-actions, footer, .modal-overlay {
         display: none !important;
       }
       body {
         background: #fff;
-      }
-      header {
-        background: #fff !important;
-        color: #000 !important;
-        padding: 1rem;
-        border-bottom: 2px solid #000;
-      }
-      header h2, header p, .school-badge {
-        color: #222 !important;
       }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="school-badge">Banglar Shiksha Portal Verified Profile Directory</div>
-    <h1>TALDANGRA FULMATI HIGH SCHOOL (H.S.)</h1>
-    <h2>তালডাংরা ফুলমতী উচ্চ বিদ্যালয় (উঃ মাঃ) — প্যারা টিচার বিভাগ</h2>
-    <p>Medium-Wise Para Teacher Profile Section (Upper Primary Contract / Para Faculty)</p>
+  <!-- 1. Top Institutional Bar -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div>📍 P.O. & P.S.: Taldangra, Dist.: Bankura, West Bengal – 722152</div>
+      <div class="top-badges">
+        <span class="top-badge">WBBSE & WBCHSE Affiliated</span>
+        <span class="top-badge">HS Centre Code: 2206</span>
+        <span class="top-badge">Vocational VTC Code: 5006</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Sticky Main Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="brand">
+        <div class="school-crest">TFHS</div>
+        <div class="brand-text">
+          <h1>TALDANGRA FULMATI HIGH SCHOOL (H.S.)</h1>
+          <h2>তালডাংরা ফুলমতী উচ্চ বিদ্যালয় (উঃ মাঃ)</h2>
+          <p>Department of School Education, Govt. of West Bengal</p>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#home" class="active">Home</a>
+        <a href="#academics">Medium & Wings</a>
+        <a href="#para-directory">Para Teacher Directory</a>
+        <a href="#master-register">Staff Register</a>
+        <a href="#contact">Contact</a>
+        <a href="#para-directory" class="btn-nav" onclick="openEditModal()">+ Add / Edit Profile</a>
+      </nav>
+    </div>
   </header>
 
-  <!-- Filter & Search Controls -->
-  <div class="toolbar-container">
+  <!-- 3. Official Notice Ticker -->
+  <div class="notice-bar">
+    <div class="notice-inner">
+      <span class="notice-tag">Official Portal</span>
+      <div class="notice-text">
+        Banglar Shiksha Verified Medium-Wise Para Teacher Profile Directory (Bengali & Santhali Mediums) • Click "View Full Datasheet" on any teacher card to view or print their complete official service record.
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Hero Section & Headmaster Desk -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div>
+        <span class="hero-pill">Excellence in Secondary, Higher Secondary & Vocational Education</span>
+        <h2>Empowering Learners Across Every Medium of Instruction</h2>
+        <h3>তালডাঙ্গা / তালড্যাংরা অঞ্চলের ঐতিহ্যবাহী শিক্ষাপ্রতিষ্ঠান</h3>
+        <p>
+          Welcome to the official digital portal of Taldangra Fulmati High School (H.S.). Explore our academic wings, administrative records, and the dedicated Medium-Wise Para Teacher Profile Section verified through the Banglar Shiksha portal.
+        </p>
+        <div class="hero-buttons">
+          <a href="#para-directory" class="btn btn-gold">📂 Explore Para Teacher Directory</a>
+          <a href="#master-register" class="btn btn-outline-light">📊 View Master Register Table</a>
+        </div>
+      </div>
+
+      <!-- Headmaster's Desk Card -->
+      <div class="hm-card">
+        <div class="hm-header">
+          <div class="hm-avatar">PKD</div>
+          <div class="hm-title">
+            <h4>Sri Prabir Kumar Dangar</h4>
+            <span>শ্রী প্রবীর কুমার ডাঙ্গর</span>
+            <span>Headmaster & Head of Institution (HOI)</span>
+          </div>
+        </div>
+        <p class="hm-quote">
+          "Our institution is committed to inclusive, high-quality education across both Bengali and Santhali mediums, supported by dedicated regular faculty and Para Teachers serving our Upper Primary and Secondary learners."
+        </p>
+        <div class="hm-meta">
+          <div>
+            <span>Institution Role</span>
+            <strong>Headmaster (HOI)</strong>
+          </div>
+          <div>
+            <span>HS Centre / VTC</span>
+            <strong>Code 2206 / VTC 5006</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Quick Institutional & Directory Stats -->
+  <section class="highlights-section">
+    <div class="highlights-grid">
+      <div class="highlight-box">
+        <div>
+          <div class="lbl">Total Para Teachers</div>
+          <div class="val" id="statTotal">7</div>
+          <div class="sub">Banglar Shiksha Verified</div>
+        </div>
+      </div>
+      <div class="highlight-box">
+        <div>
+          <div class="lbl">Bengali Medium Para</div>
+          <div class="val" id="statBengali">4</div>
+          <div class="sub">Subject-Specific Faculty</div>
+        </div>
+      </div>
+      <div class="highlight-box teal">
+        <div>
+          <div class="lbl">Santhali Medium Para</div>
+          <div class="val" id="statSanthali">3</div>
+          <div class="sub">All-Subjects Upper Primary</div>
+        </div>
+      </div>
+      <div class="highlight-box amber">
+        <div>
+          <div class="lbl">Assigned Section</div>
+          <div class="val" style="font-size:1.15rem;">UPPER PRIMARY</div>
+          <div class="sub">Contract / Para Cadre</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Academic & Medium Wings Section -->
+  <section class="section-wrap" id="academics">
+    <div class="section-head">
+      <span class="eyebrow">Academic Structure</span>
+      <h2>Medium-Wise Instructional Wings</h2>
+      <p>Structured academic delivery across Upper Primary, Secondary (WBBSE), Higher Secondary (WBCHSE), and Vocational Training (DVET).</p>
+    </div>
+
+    <div class="wings-grid">
+      <div class="wing-card">
+        <h3>📘 Bengali Medium Wing (বাংলা মাধ্যম)</h3>
+        <p>Comprehensive instruction from Class V to Class XII covering Language, Science, Mathematics, and Humanities streams with dedicated Para Teacher support in Upper Primary.</p>
+        <div class="wing-tags">
+          <span class="wing-tag">Bengali & English</span>
+          <span class="wing-tag">Science & Mathematics</span>
+          <span class="wing-tag">History & Geography</span>
+        </div>
+      </div>
+
+      <div class="wing-card">
+        <h3>📗 Santhali Medium Wing (সাঁওতালি মাধ্যম)</h3>
+        <p>Dedicated mother-tongue instruction and academic support for Santhali medium students in the Upper Primary and Secondary sections by trained Para Teachers.</p>
+        <div class="wing-tags">
+          <span class="wing-tag">All Subjects (Upper Primary)</span>
+          <span class="wing-tag">Ol Chiki / Santhali Medium</span>
+          <span class="wing-tag">Inclusive Education</span>
+        </div>
+      </div>
+
+      <div class="wing-card">
+        <h3>🎓 H.S. (Centre 2206) & Vocational (VTC 5006)</h3>
+        <p>Serving as a key WBCHSE Examination Venue (Centre Code 2206) and DVET Vocational Training Centre (VTC Code 5006) equipping students with career-ready skills.</p>
+        <div class="wing-tags">
+          <span class="wing-tag">WBCHSE Centre 2206</span>
+          <span class="wing-tag">DVET VTC 5006</span>
+          <span class="wing-tag">ICT & Skill Development</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Medium-Wise Para Teacher Directory Section -->
+  <section class="section-wrap" id="para-directory">
+    <div class="section-head">
+      <span class="eyebrow">Banglar Shiksha Verified Records</span>
+      <h2>Medium-Wise Para Teacher Profile Section</h2>
+      <p>Filter by Medium of Instruction, search by Teacher ID, Subject, or Name, and view or print individual official profile datasheets.</p>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
     <div class="toolbar">
       <div class="medium-tabs" id="mediumTabs">
         <button class="tab-btn active" data-medium="ALL">All Para Teachers (7)</button>
-        <button class="tab-btn" data-medium="Bengali">Bengali Medium (বাংলা মাধ্যম)</button>
-        <button class="tab-btn" data-medium="Santhali">Santhali Medium (সাঁওতালি মাধ্যম)</button>
+        <button class="tab-btn" data-medium="Bengali">📘 Bengali Medium (বাংলা মাধ্যম)</button>
+        <button class="tab-btn" data-medium="Santhali">📗 Santhali Medium (সাঁওতালি মাধ্যম)</button>
       </div>
 
       <div class="search-group">
         <input type="text" id="searchInput" class="search-box" placeholder="Search Name, ID, Subject, Phone..." />
-        <button class="btn-print" onclick="window.print()">🖨️ Print Directory</button>
+        <button class="btn-tool" onclick="window.print()">🖨️ Print</button>
+        <button class="btn-tool primary" onclick="openEditModal()">+ Add Profile</button>
       </div>
     </div>
-  </div>
 
-  <!-- Summary Statistics -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div>
-        <div class="stat-title">Total Para Teachers</div>
-        <div class="stat-num" id="totalCount">7</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div>
-        <div class="stat-title">Bengali Medium</div>
-        <div class="stat-num" id="bnCount">4</div>
-      </div>
-    </div>
-    <div class="stat-card santhali">
-      <div>
-        <div class="stat-title">Santhali Medium</div>
-        <div class="stat-num" id="snCount">3</div>
-      </div>
-    </div>
-    <div class="stat-card amber">
-      <div>
-        <div class="stat-title">Class Taught</div>
-        <div class="stat-num" style="font-size:1.2rem;">UPPER PRIMARY</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Medium-Wise Sections -->
-  <main class="main-container">
-    <!-- Bengali Medium Section -->
-    <section class="medium-section" id="bengaliSection">
-      <div class="section-banner">
-        <h3>
-          <span>📘 Bengali Medium Para Teachers (বাংলা মাধ্যম প্যারা টিচার)</span>
-        </h3>
+    <!-- Bengali Medium Para Teachers -->
+    <div class="medium-block" id="bengaliBlock">
+      <div class="medium-banner">
+        <h3>📘 Bengali Medium Para Teachers (বাংলা মাধ্যম প্যারা টিচার বিভাগ)</h3>
         <span class="badge-count" id="bnBadge">4 Profiles</span>
       </div>
       <div class="cards-grid" id="bengaliGrid"></div>
-    </section>
+    </div>
 
-    <!-- Santhali Medium Section -->
-    <section class="medium-section" id="santhaliSection">
-      <div class="section-banner santhali-banner">
-        <h3>
-          <span>📗 Santhali Medium Para Teachers (সাঁওতালি মাধ্যম প্যারা টিচার)</span>
-        </h3>
+    <!-- Santhali Medium Para Teachers -->
+    <div class="medium-block" id="santhaliBlock">
+      <div class="medium-banner santhali">
+        <h3>📗 Santhali Medium Para Teachers (সাঁওতালি মাধ্যম প্যারা টিচার বিভাগ)</h3>
         <span class="badge-count" id="snBadge">3 Profiles</span>
       </div>
       <div class="cards-grid" id="santhaliGrid"></div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <!-- Full Profile Datasheet Modal -->
+  <!-- 8. Master Comparison & Register Table -->
+  <section class="section-wrap" id="master-register">
+    <div class="section-head">
+      <span class="eyebrow">Institutional Register</span>
+      <h2>Para Teacher Master Summary Table</h2>
+      <p>Quick-reference tabular register of all 7 Para Teachers for official school documentation and inspection.</p>
+    </div>
+
+    <div class="table-card">
+      <table class="master-table">
+        <thead>
+          <tr>
+            <th>Teacher ID</th>
+            <th>Teacher Name</th>
+            <th>Medium</th>
+            <th>Gender / Cat.</th>
+            <th>DOB</th>
+            <th>Joining Date</th>
+            <th>Appointed Subject (Main 1 & 2)</th>
+            <th>Qualification</th>
+            <th>Contact & PAN</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="masterTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 9. Footer -->
+  <footer id="contact">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Taldangra Fulmati High School (H.S.)</h4>
+        <p>তালডাংরা ফুলমতী উচ্চ বিদ্যালয় (উঃ মাঃ)</p>
+        <p>P.O. & P.S.: Taldangra, District: Bankura, West Bengal – 722152</p>
+        <p>Head of Institution: Sri Prabir Kumar Dangar (Headmaster)</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Portal Links</h4>
+        <ul>
+          <li><a href="#home">Home & Headmaster's Desk</a></li>
+          <li><a href="#academics">Academic & Medium Wings</a></li>
+          <li><a href="#para-directory">Para Teacher Profile Directory</a></li>
+          <li><a href="#master-register">Master Staff Register</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Uploaded PDF Archives</h4>
+        <ul>
+          <li><a href="RINKU.pdf" target="_blank">📄 RINKU.pdf (Rinku Bhuin)</a></li>
+          <li><a href="BHARATI.pdf" target="_blank">📄 BHARATI.pdf (Bharati Dey)</a></li>
+          <li><a href="DOLI.pdf" target="_blank">📄 DOLI.pdf (Doli Mondal)</a></li>
+          <li><a href="BISWARUP.pdf" target="_blank">📄 BISWARUP.pdf (Biswarup Dey)</a></li>
+          <li><a href="GANESH.pdf" target="_blank">📄 GANESH.pdf (Ganesh Mandi)</a></li>
+          <li><a href="BIKASH.pdf" target="_blank">📄 BIKASH.pdf (Bikash Baskey)</a></li>
+          <li><a href="LAXMI.pdf" target="_blank">📄 LAXMI.pdf (Lakshmi Saren)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Taldangra Fulmati High School (H.S.), Bankura. Data Synchronized with Banglar Shiksha Portal.
+    </div>
+  </footer>
+
+  <!-- Full Datasheet Modal -->
   <div class="modal-overlay" id="profileModal" onclick="if(event.target===this) closeProfileModal()">
     <div class="modal-box">
       <div class="modal-head">
@@ -705,8 +1377,103 @@
     </div>
   </div>
 
+  <!-- Add / Edit Profile Modal -->
+  <div class="modal-overlay" id="editModal" onclick="if(event.target===this) closeEditModal()">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="editModalTitle">Add / Edit Para Teacher Profile</h3>
+        <button class="close-btn" onclick="closeEditModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="teacherForm" onsubmit="saveTeacherForm(event)">
+          <input type="hidden" id="editOriginalId" />
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Teacher ID (Banglar Shiksha)</label>
+              <input type="text" id="fId" required placeholder="e.g., KNUB5393" />
+            </div>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="fName" required placeholder="e.g., RINKU BHUIN" />
+            </div>
+            <div class="form-group">
+              <label>Medium Section</label>
+              <select id="fMedium" required>
+                <option value="Bengali">Bengali Medium</option>
+                <option value="Santhali">Santhali Medium</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Date of Birth (DD-MM-YYYY)</label>
+              <input type="text" id="fDob" required placeholder="01-03-1980" />
+            </div>
+            <div class="form-group">
+              <label>PAN Number</label>
+              <input type="text" id="fPan" placeholder="ABCDE1234F" />
+            </div>
+            <div class="form-group">
+              <label>Gender</label>
+              <select id="fGender">
+                <option value="FEMALE">FEMALE</option>
+                <option value="MALE">MALE</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Social Category</label>
+              <input type="text" id="fCat" placeholder="GENERAL / OBC-B / ST / SC" />
+            </div>
+            <div class="form-group">
+              <label>Blood Group</label>
+              <input type="text" id="fBlood" placeholder="A+ / B+ / O+" />
+            </div>
+            <div class="form-group">
+              <label>Joining Date in Service</label>
+              <input type="text" id="fJoin" placeholder="19-10-2004" />
+            </div>
+            <div class="form-group">
+              <label>Working in Present School Since</label>
+              <input type="text" id="fSince" placeholder="2004" />
+            </div>
+            <div class="form-group">
+              <label>Appointed Subject</label>
+              <input type="text" id="fAppSub" required placeholder="BENGALI / ALL SUBJECTS" />
+            </div>
+            <div class="form-group">
+              <label>Main Subject 1 & 2 (Comma Separated)</label>
+              <input type="text" id="fMainSubs" placeholder="BENGALI, HISTORY" />
+            </div>
+            <div class="form-group">
+              <label>Approved Qualification</label>
+              <input type="text" id="fAcad" placeholder="GRADUATE / POST GRADUATE" />
+            </div>
+            <div class="form-group">
+              <label>Professional Qualification</label>
+              <input type="text" id="fProf" placeholder="D.El.Ed. / B.ED. / NONE" />
+            </div>
+            <div class="form-group">
+              <label>Contact Mobile</label>
+              <input type="text" id="fPhone" placeholder="10-digit mobile number" />
+            </div>
+            <div class="form-group">
+              <label>PDF Filename</label>
+              <input type="text" id="fPdf" placeholder="RINKU.pdf" />
+            </div>
+            <div class="form-group full">
+              <label>Full Permanent Address</label>
+              <input type="text" id="fAddress" placeholder="Village, P.O., P.S., Block, District, Pin Code" />
+            </div>
+          </div>
+          <div style="margin-top:1.25rem; display:flex; justify-content:flex-end; gap:0.6rem;">
+            <button type="button" class="btn-tool" onclick="closeEditModal()">Cancel</button>
+            <button type="submit" class="btn-tool primary">💾 Save Teacher Profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Complete Extracted Data from the 7 Uploaded Banglar Shiksha PDFs
+    // Verified Banglar Shiksha Data from the 7 Uploaded PDFs
     const initialParaTeachers = [
       {
         id: "KNUB5393",
@@ -941,17 +1708,17 @@
       }
     ];
 
-    const STORAGE_KEY = "tfhs_para_teachers_v2";
+    const STORAGE_KEY = "tfhs_full_website_para_v3";
     let paraTeachers = JSON.parse(localStorage.getItem(STORAGE_KEY)) || initialParaTeachers;
 
     let activeMedium = "ALL";
     let searchQuery = "";
 
     function getInitials(name) {
-      return name.split(" ").map(n => n[0]).join("").substring(0, 2);
+      return name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
     }
 
-    function buildCardHTML(t) {
+    function createCardHTML(t) {
       const isSanthali = t.medium === "Santhali";
       return `
         <article class="profile-card ${isSanthali ? 'santhali-card' : ''}">
@@ -976,19 +1743,19 @@
                 <span class="data-val">${t.appointedSubject}</span>
               </div>
               <div class="data-item">
-                <span class="data-label">Subjects Taught (1 & 2)</span>
+                <span class="data-label">Main Subjects (1 & 2)</span>
                 <span class="data-val">${t.mainSubject1}, ${t.mainSubject2}</span>
               </div>
               <div class="data-item">
-                <span class="data-label">Academic / Prof. Qual</span>
+                <span class="data-label">Qualification</span>
                 <span class="data-val">${t.academicQual} (${t.profQual})</span>
               </div>
               <div class="data-item">
-                <span class="data-label">Joining Date (School)</span>
+                <span class="data-label">Joining (In School)</span>
                 <span class="data-val">${t.joiningDate} (${t.presentSchoolSince})</span>
               </div>
               <div class="data-item">
-                <span class="data-label">Date of Birth</span>
+                <span class="data-label">DOB & Gender</span>
                 <span class="data-val">${t.dob} (${t.gender})</span>
               </div>
               <div class="data-item">
@@ -1003,14 +1770,17 @@
           </div>
 
           <div class="card-actions">
-            <a href="${t.pdfFile}" target="_blank" class="btn-sm">📄 Open ${t.pdfFile}</a>
-            <button class="btn-sm btn-primary-sm" onclick="openProfileModal('${t.id}')">🔍 View Full Datasheet</button>
+            <div style="display:flex; gap:0.4rem;">
+              <a href="${t.pdfFile}" target="_blank" class="btn-sm">📄 PDF</a>
+              <button class="btn-sm" onclick="openEditModal('${t.id}')">✎ Edit</button>
+            </div>
+            <button class="btn-sm btn-primary-sm" onclick="openProfileModal('${t.id}')">🔍 Full Datasheet</button>
           </div>
         </article>
       `;
     }
 
-    function renderAll() {
+    function renderPortal() {
       const q = searchQuery.toLowerCase();
       const filtered = paraTeachers.filter(t => {
         const matchMed = activeMedium === "ALL" || t.medium === activeMedium;
@@ -1027,31 +1797,50 @@
       const bnList = filtered.filter(t => t.medium === "Bengali");
       const snList = filtered.filter(t => t.medium === "Santhali");
 
-      document.getElementById("bengaliSection").style.display =
+      document.getElementById("bengaliBlock").style.display =
         activeMedium === "Santhali" ? "none" : "block";
-      document.getElementById("santhaliSection").style.display =
+      document.getElementById("santhaliBlock").style.display =
         activeMedium === "Bengali" ? "none" : "block";
 
       document.getElementById("bengaliGrid").innerHTML =
-        bnList.map(buildCardHTML).join("") ||
-        `<p style="color:#64748b;">No Bengali Medium Para Teacher profiles match your search.</p>`;
+        bnList.map(createCardHTML).join("") ||
+        `<p style="color:#64748b;">No Bengali Medium Para Teacher profiles match your filter.</p>`;
 
       document.getElementById("santhaliGrid").innerHTML =
-        snList.map(buildCardHTML).join("") ||
-        `<p style="color:#64748b;">No Santhali Medium Para Teacher profiles match your search.</p>`;
+        snList.map(createCardHTML).join("") ||
+        `<p style="color:#64748b;">No Santhali Medium Para Teacher profiles match your filter.</p>`;
 
+      // Update Counts
       document.getElementById("bnBadge").textContent = `${bnList.length} Profiles`;
       document.getElementById("snBadge").textContent = `${snList.length} Profiles`;
-      document.getElementById("totalCount").textContent = filtered.length;
-      document.getElementById("bnCount").textContent = paraTeachers.filter(t => t.medium === "Bengali").length;
-      document.getElementById("snCount").textContent = paraTeachers.filter(t => t.medium === "Santhali").length;
+      document.getElementById("statTotal").textContent = paraTeachers.length;
+      document.getElementById("statBengali").textContent = paraTeachers.filter(t => t.medium === "Bengali").length;
+      document.getElementById("statSanthali").textContent = paraTeachers.filter(t => t.medium === "Santhali").length;
+
+      // Render Master Table
+      document.getElementById("masterTableBody").innerHTML = filtered.map(t => `
+        <tr>
+          <td><strong>${t.id}</strong></td>
+          <td><strong>${t.name}</strong></td>
+          <td><span class="pill ${t.medium === 'Santhali' ? 'pill-med-sn' : 'pill-med-bn'}">${t.medium}</span></td>
+          <td>${t.gender} (${t.socialCategory})</td>
+          <td>${t.dob}</td>
+          <td>${t.joiningDate}</td>
+          <td><strong>${t.appointedSubject}</strong> (${t.mainSubject1}, ${t.mainSubject2})</td>
+          <td>${t.academicQual} / ${t.profQual}</td>
+          <td>${t.phone}<br><small style="color:#64748b;">PAN: ${t.pan}</small></td>
+          <td>
+            <button class="btn-sm" onclick="openProfileModal('${t.id}')">Datasheet</button>
+          </td>
+        </tr>
+      `).join("");
     }
 
     function openProfileModal(teacherId) {
       const t = paraTeachers.find(item => item.id === teacherId);
       if (!t) return;
 
-      document.getElementById("modalHeaderTitle").textContent = `${t.name} (${t.id}) — Complete Banglar Shiksha Profile`;
+      document.getElementById("modalHeaderTitle").textContent = `${t.name} (${t.id}) — Official Banglar Shiksha Datasheet`;
       document.getElementById("modalBodyContent").innerHTML = `
         <div class="sheet-section-title">1. Basic Information</div>
         <table class="sheet-table">
@@ -1077,7 +1866,7 @@
           </tr>
         </table>
 
-        <div class="sheet-section-title">2. Professional & Academic Information</div>
+        <div class="sheet-section-title">2. Professional & Qualification Details</div>
         <table class="sheet-table">
           <tr>
             <td class="lbl">Joining in Service</td><td class="val">${t.joiningDate}</td>
@@ -1122,10 +1911,13 @@
         </table>
 
         <div class="medium-switch-bar">
-          <span><strong>Assigned Medium Section:</strong> Currently listed under <strong>${t.medium} Medium</strong></span>
-          <button class="btn-sm btn-primary-sm" onclick="toggleMedium('${t.id}')">
-            ⇄ Switch to ${t.medium === 'Bengali' ? 'Santhali' : 'Bengali'} Medium
-          </button>
+          <span><strong>Assigned Medium Wing:</strong> Currently in <strong>${t.medium} Medium</strong></span>
+          <div style="display:flex; gap:0.5rem;">
+            <a href="${t.pdfFile}" target="_blank" class="btn-sm">📄 Open Original PDF</a>
+            <button class="btn-sm btn-primary-sm" onclick="toggleMedium('${t.id}')">
+              ⇄ Switch to ${t.medium === 'Bengali' ? 'Santhali' : 'Bengali'} Medium
+            </button>
+          </div>
         </div>
       `;
 
@@ -1142,25 +1934,115 @@
       paraTeachers[idx].medium = paraTeachers[idx].medium === "Bengali" ? "Santhali" : "Bengali";
       localStorage.setItem(STORAGE_KEY, JSON.stringify(paraTeachers));
       openProfileModal(teacherId);
-      renderAll();
+      renderPortal();
     }
 
-    // Tab & Search Listeners
+    function openEditModal(teacherId = "") {
+      const form = document.getElementById("teacherForm");
+      form.reset();
+      document.getElementById("editOriginalId").value = teacherId;
+
+      if (teacherId) {
+        const t = paraTeachers.find(item => item.id === teacherId);
+        if (!t) return;
+        document.getElementById("editModalTitle").textContent = `Edit Profile: ${t.name}`;
+        document.getElementById("fId").value = t.id;
+        document.getElementById("fName").value = t.name;
+        document.getElementById("fMedium").value = t.medium;
+        document.getElementById("fDob").value = t.dob;
+        document.getElementById("fPan").value = t.pan;
+        document.getElementById("fGender").value = t.gender;
+        document.getElementById("fCat").value = t.socialCategory;
+        document.getElementById("fBlood").value = t.bloodGroup;
+        document.getElementById("fJoin").value = t.joiningDate;
+        document.getElementById("fSince").value = t.presentSchoolSince;
+        document.getElementById("fAppSub").value = t.appointedSubject;
+        document.getElementById("fMainSubs").value = `${t.mainSubject1}, ${t.mainSubject2}`;
+        document.getElementById("fAcad").value = t.academicQual;
+        document.getElementById("fProf").value = t.profQual;
+        document.getElementById("fPhone").value = t.phone;
+        document.getElementById("fPdf").value = t.pdfFile;
+        document.getElementById("fAddress").value = t.address;
+      } else {
+        document.getElementById("editModalTitle").textContent = "Add New Para Teacher Profile";
+      }
+
+      document.getElementById("editModal").classList.add("active");
+    }
+
+    function closeEditModal() {
+      document.getElementById("editModal").classList.remove("active");
+    }
+
+    function saveTeacherForm(e) {
+      e.preventDefault();
+      const origId = document.getElementById("editOriginalId").value;
+      const mainSubs = document.getElementById("fMainSubs").value.split(",").map(s => s.trim());
+
+      const existing = paraTeachers.find(t => t.id === origId) || {};
+      const updated = {
+        ...existing,
+        id: document.getElementById("fId").value.trim().toUpperCase(),
+        name: document.getElementById("fName").value.trim().toUpperCase(),
+        medium: document.getElementById("fMedium").value,
+        dob: document.getElementById("fDob").value.trim(),
+        pan: document.getElementById("fPan").value.trim().toUpperCase() || "--",
+        gender: document.getElementById("fGender").value,
+        socialCategory: document.getElementById("fCat").value.trim().toUpperCase() || "GENERAL",
+        religion: existing.religion || "HINDU",
+        bloodGroup: document.getElementById("fBlood").value.trim().toUpperCase() || "--",
+        nationality: "INDIAN",
+        joiningDate: document.getElementById("fJoin").value.trim() || "--",
+        presentSchoolSince: document.getElementById("fSince").value.trim() || "--",
+        designation: "PARA TEACHER",
+        classTaught: "UPPER PRIMARY",
+        appointmentNature: "CONTRACT/PARA",
+        appointedSubject: document.getElementById("fAppSub").value.trim().toUpperCase(),
+        mainSubject1: (mainSubs[0] || document.getElementById("fAppSub").value).toUpperCase(),
+        mainSubject2: (mainSubs[1] || mainSubs[0] || "ALL SUBJECTS").toUpperCase(),
+        trainingNeed: existing.trainingNeed || "ICT SKILLS",
+        mathSciUpTo: existing.mathSciUpTo || "SECONDARY",
+        englishUpTo: existing.englishUpTo || "HIGHER SECONDARY",
+        socialStudiesUpTo: existing.socialStudiesUpTo || "GRADUATE",
+        cwsnTrained: "No",
+        computerTrained: "No",
+        attendance: existing.attendance || "185",
+        academicQual: document.getElementById("fAcad").value.trim().toUpperCase() || "GRADUATE",
+        profQual: document.getElementById("fProf").value.trim().toUpperCase() || "NONE",
+        address: document.getElementById("fAddress").value.trim() || "TALDANGRA, BANKURA",
+        email: existing.email || "--",
+        phone: document.getElementById("fPhone").value.trim() || "--",
+        pdfFile: document.getElementById("fPdf").value.trim() || "#"
+      };
+
+      if (origId) {
+        const idx = paraTeachers.findIndex(t => t.id === origId);
+        if (idx > -1) paraTeachers[idx] = updated;
+      } else {
+        paraTeachers.push(updated);
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(paraTeachers));
+      closeEditModal();
+      renderPortal();
+    }
+
+    // Filter Listeners
     document.querySelectorAll("#mediumTabs .tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll("#mediumTabs .tab-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         activeMedium = btn.getAttribute("data-medium");
-        renderAll();
+        renderPortal();
       });
     });
 
     document.getElementById("searchInput").addEventListener("input", e => {
       searchQuery = e.target.value;
-      renderAll();
+      renderPortal();
     });
 
-    renderAll();
+    renderPortal();
   </script>
 </body>
 </html>
