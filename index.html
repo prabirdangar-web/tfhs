@@ -6,7 +6,7 @@
 <title>Taldangra Fulmati High School (H.S.) – Notice Board</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Serif+Bengali:wght@700&display=swap">
 <style>
-:root{--bg:#eef1f6;--ink:#1a2230;--mut:#586274;--card:#fff;--line:#cfd6e2;--mar:#12388a;--navy:#0c2a6b;--gold:#f2a900;--ok:#1d6b4a;--c-notice:#12388a;--c-result:#1d7a46;--c-gallery:#c2410c;--c-staff:#7a1f3d;--c-routine:#0e7490;--c-link:#5b2a86}
+:root{--bg:#eef1f6;--ink:#1a2230;--mut:#586274;--card:#fff;--line:#cfd6e2;--mar:#12388a;--navy:#0c2a6b;--gold:#f2a900;--ok:#1d6b4a;--c-notice:#12388a;--c-result:#1d7a46;--c-gallery:#c2410c;--c-staff:#7a1f3d;--c-routine:#0e7490;--c-link:#5b2a86;--c-mp:#b45309}
 @media(prefers-color-scheme:dark){:root{--bg:#0f151d;--ink:#e8edf1;--mut:#9aa7b3;--card:#18212b;--line:#2b3744;--mar:#7fa6ff;--navy:#0a1d4a;--gold:#f2b93a;--ok:#5fc596}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.45 "Noto Sans Bengali",system-ui,sans-serif}
@@ -117,6 +117,16 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
 #panel .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:560px){#panel .row{grid-template-columns:1fr}#panel .item{flex-direction:column;align-items:flex-start}}
 #msg{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:20px;display:none}
+img.zoom{cursor:zoom-in;max-width:100%}
+.poster-s{display:block;margin-top:6px;max-height:150px;max-width:100%;border:1px solid var(--line);border-radius:3px}
+.mpposter{display:block;max-width:100%;max-height:520px;margin:8px auto;border:1px solid var(--line);border-radius:3px}
+table.t.mp td:last-child{text-align:left;font-weight:400}
+table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left;border:1px solid var(--line);font-size:13px}
+.mpbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}
+.lb{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:10px}
+.lb[hidden]{display:none}
+.lb img{max-width:100%;max-height:100%;object-fit:contain;background:#fff}
+.lb button{position:absolute;top:10px;right:14px;font-size:26px;background:transparent;color:#fff;border:0;cursor:pointer}
 </style>
 </head>
 <body>
@@ -128,7 +138,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
   <a href="#links">দ্রুত লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
-  <a href="#routine">রুটিন ও ছুটি</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
+  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
 
 <main class="wrap" id="site">
@@ -146,6 +156,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
         <button role="tab" data-p="results" aria-selected="false" style="--c:var(--c-result)">🏆 <span>ফলাফল</span><i class="cnt" id="cnt-results"></i></button>
         <button role="tab" data-p="gallery" aria-selected="false" style="--c:var(--c-gallery)">🖼️ <span>গ্যালারি</span><i class="cnt" id="cnt-gallery"></i></button>
         <button role="tab" data-p="staff" aria-selected="false" style="--c:var(--c-staff)">👥 <span>শিক্ষক-শিক্ষাকর্মী</span><i class="cnt" id="cnt-staff"></i></button>
+        <button role="tab" data-p="mptest" aria-selected="false" style="--c:var(--c-mp)">📅 <span>MP টেস্ট প্রোগ্রাম</span><i class="cnt" id="cnt-mptest"></i></button>
       </div>
 
       <section class="pane" id="p-notices" role="tabpanel" style="--c:var(--c-notice)">
@@ -168,6 +179,10 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
 
       <section class="pane" id="p-staff" role="tabpanel" style="--c:var(--c-staff)" hidden>
         <div id="staffBox"></div>
+      </section>
+
+      <section class="pane" id="p-mptest" role="tabpanel" style="--c:var(--c-mp)" hidden>
+        <div id="mpBox"></div>
       </section>
     </div>
 
@@ -229,12 +244,26 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
       <label>Title<input id="nTitle"></label>
       <label>File or page link (optional – Google Drive "anyone with link", PDF, etc.)<input id="nLink" placeholder="https://..."></label>
       <label>Details (optional – full notice text, shown under a "Details" button)<textarea id="nBody" rows="6" placeholder="Paste the full notice text here. Line breaks are kept."></textarea></label>
+      <label>Notice as poster (optional – upload a JPG/PNG image of the notice; it is shrunk automatically and shown under the notice, click to enlarge)<input type="file" id="nPoster" accept="image/*"></label>
       <div class="row">
         <label>For<select id="nFor"><option value="general">General</option><option value="staff">Staff</option><option value="student">Students</option></select></label>
         <label>Date<input id="nDate" type="date"></label>
       </div>
       <p><button class="btn" id="addN">Publish notice</button> <button class="btn alt" id="loadSampleN" type="button">Load sample notice into form</button></p>
       <div id="nList"></div>
+    </fieldset>
+
+    <fieldset><legend>MP (SE) 2027 Selection Test – Programme</legend>
+      <div class="row"><label>Heading<input id="mpTitle" placeholder="Class X MP (SE) 2027 Selection Test – Programme"></label><label>Dates (text)<input id="mpRange" placeholder="20 to 28 November 2026"></label></div>
+      <label>Portal / result link<input id="mpLink" placeholder="https://prabirdangar-web.github.io/xi_mp_test/"></label>
+      <label>Note (optional – e.g. reporting time, instructions)<textarea id="mpNote" rows="3"></textarea></label>
+      <label>Programme as poster (optional – upload image of the programme/notice)<input type="file" id="mpPoster" accept="image/*"></label>
+      <p><button class="btn" id="saveMp" type="button">Save programme details</button> <button class="btn alt" id="rmMpPoster" type="button">Remove poster</button></p>
+      <p class="meta" style="margin:8px 0 0"><b>Add exam row</b> (one row per subject, same as Class X Programme in the exam portal)</p>
+      <div class="row"><label>Date<input id="mpDate" type="date"></label><label>Time<input id="mpTime" placeholder="11:00 AM – 1:30 PM"></label></div>
+      <label>Subject<input id="mpSub" placeholder="Bengali / Santali / English / Mathematics ..."></label>
+      <p><button class="btn" id="addMp" type="button">Add exam row</button></p>
+      <div id="mpList"></div>
     </fieldset>
 
     <fieldset><legend>Add result</legend>
@@ -302,6 +331,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
     <div class="ffoot"><button type="button" class="btn" id="fOk">ঠিক আছে / OK</button></div>
   </div>
 </div>
+<div id="lb" class="lb" hidden><button type="button" aria-label="Close">✕</button><img alt="Poster"></div>
 <div id="msg" role="status"></div>
 <input type="file" id="phFile" accept="image/*" style="display:none">
 
@@ -356,7 +386,8 @@ function render(){
   $("notices").innerHTML = ns.length ? ns.map(n => `<div class="item"><div>
       <b>${esc(n.title)}</b>
       <span class="meta">${isNew(n.date)?'<span class="tag new">NEW</span>':""}<span class="tag">${forLabel[n.for]||"General"}</span>${fmt(n.date)}</span>
-      ${n.body?`<details class="nb"><summary>📄 বিস্তারিত / Details</summary><div class="nbody">${esc(n.body)}</div></details>`:""}</div>
+      ${n.body?`<details class="nb"><summary>📄 বিস্তারিত / Details</summary><div class="nbody">${esc(n.body)}</div></details>`:""}
+      ${imgUrl(n.poster)&&isData(n.poster)?`<img class="zoom poster-s" loading="lazy" src="${imgUrl(n.poster)}" alt="Notice poster">`:""}</div>
       ${safeUrl(n.link)?`<a class="btn sm" href="${safeUrl(n.link)}" target="_blank" rel="noopener">Open</a>`:""}</div>`).join("")
     : `<div class="empty">কোনো বিজ্ঞপ্তি নেই। / No notices yet.</div>`;
   const rs = [...(D.results || [])].sort((x,y) => (y.date||"").localeCompare(x.date||""));
@@ -365,6 +396,7 @@ function render(){
       ${safeUrl(r.link)?`<a class="btn sm" href="${safeUrl(r.link)}" target="_blank" rel="noopener">View</a>`:""}</div>`).join("")
     : `<div class="empty">কোনো ফলাফল প্রকাশিত হয়নি। / No results published yet.</div>`;
   renderExtra();
+  renderMp();
   renderAdminLists();
   paneCounts();
   flashInit();
@@ -376,11 +408,11 @@ function showPane(name, scroll){
   if (scroll) $("ptabs").scrollIntoView({block:"start", behavior:"smooth"});
 }
 document.querySelectorAll("#ptabs button").forEach(b => b.onclick = () => showPane(b.dataset.p));
-const MENU_PANE = {"#notices-top":"notices", "#gallery":"gallery", "#staff":"staff"};
+const MENU_PANE = {"#notices-top":"notices", "#gallery":"gallery", "#staff":"staff", "#mptest":"mptest"};
 document.querySelectorAll("nav.menu a").forEach(a => { const n = MENU_PANE[a.getAttribute("href")];
   if (n) a.onclick = e => { e.preventDefault(); showPane(n, true); }; });
 function paneCounts(){
-  const c = {notices:(D.notices||[]).length, results:(D.results||[]).length, gallery:(D.gallery||[]).length, staff:(D.staff||[]).length};
+  const c = {notices:(D.notices||[]).length, results:(D.results||[]).length, gallery:(D.gallery||[]).length, staff:(D.staff||[]).length, mptest:((D.mpTest||{}).rows||[]).length || ((D.mpTest||{}).poster ? 1 : 0)};
   for (const k in c) { const el = $("cnt-" + k); if (el) el.textContent = c[k] || ""; }
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
@@ -413,20 +445,25 @@ auth.onAuthStateChanged(u => {
   $("who").textContent = u ? (ok ? "Signed in: " + u.email : "Not authorised: " + u.email) : "Not signed in";
   $("login").style.display = u ? "none" : ""; $("logout").style.display = u ? "" : "none";
   $("editor").style.display = ok ? "" : "none";
-  if (ok){ fillFlash(true); $("tk").value = D.ticker || ""; const a = D.admission || {};
+  if (ok){ fillFlash(true); fillMp(); $("tk").value = D.ticker || ""; const a = D.admission || {};
     $("aOpen").checked = !!a.open; $("aTitle").value = a.title||""; $("aLink").value = a.link||"";
     $("aLast").value = a.last||""; $("aNote").value = a.note||""; }
 });
 $("tk").onchange = () => { D.ticker = $("tk").value.trim(); save(); };
 $("saveAdm").onclick = () => { D.admission = { open:$("aOpen").checked, title:$("aTitle").value.trim(),
   link:$("aLink").value.trim(), last:$("aLast").value, note:$("aNote").value.trim() }; save(); };
-$("addN").onclick = () => {
+$("addN").onclick = async () => {
   const t = $("nTitle").value.trim(); if (!t) return toast("Title is required");
   const body = $("nBody").value.trim();
   if (body.length > 6000) return toast("Details too long (max 6000 characters)");
-  if (tooBig(body.length + 300)) return toast("Storage full - delete old items first");
-  (D.notices ||= []).push({ id:uid(), title:t, link:$("nLink").value.trim(), body, for:$("nFor").value, date:$("nDate").value || today() });
-  $("nTitle").value = $("nLink").value = $("nBody").value = ""; save();
+  let poster = ""; const pf = $("nPoster").files[0];
+  if (pf) { try { poster = await shrink(pf, 1200, 170000); } catch(e) { return toast("Could not read the poster image"); }
+    if (poster.length > 260000) return toast("Poster too large even after shrinking - use a smaller image"); }
+  if (tooBig(body.length + poster.length + 300)) return toast("Storage full - delete old items first");
+  const n = { id:uid(), title:t, link:$("nLink").value.trim(), body, for:$("nFor").value, date:$("nDate").value || today() };
+  if (poster) n.poster = poster;
+  (D.notices ||= []).push(n);
+  $("nTitle").value = $("nLink").value = $("nBody").value = $("nPoster").value = ""; save();
 };
 $("addR").onclick = () => {
   const t = $("rTitle").value.trim(); if (!t) return toast("Title is required");
@@ -730,6 +767,46 @@ function renderExtra(){
     : `<div class="empty">কোনো আসন্ন ছুটি নেই। / No upcoming holidays listed.</div>`;
   $("holAll").innerHTML = all.map(h => `<tr><td>${esc(h.name)}${h.obs?" <span class='tag'>Obs.</span>":""}</td><td>${range(h)}</td></tr>`).join("");
 }
+
+/* ---------- MP (SE) 2027 Selection Test programme ---------- */
+const MP_LINK = "https://prabirdangar-web.github.io/xi_mp_test/";
+const dayName = d => { try { return new Date(d + "T00:00:00").toLocaleDateString("en-GB", {weekday:"long"}); } catch(e) { return ""; } };
+function renderMp(){
+  const m = D.mpTest || {}, rows = (m.rows||[]).slice().sort((a,b) => (a.date||"").localeCompare(b.date||"") || (a.time||"").localeCompare(b.time||""));
+  const link = safeUrl(m.link || MP_LINK);
+  const has = m.title || m.range || m.note || m.poster || rows.length;
+  $("mpBox").innerHTML = has ? `<div class="item"><div><b>${esc(m.title || "Class X MP (SE) 2027 Selection Test – Programme")}</b>
+      ${m.range?`<span class="meta">${esc(m.range)}</span>`:""}
+      ${m.note?`<div class="nbody">${esc(m.note)}</div>`:""}</div>
+      ${link?`<a class="btn sm" href="${link}" target="_blank" rel="noopener">Exam portal</a>`:""}</div>
+    ${isData(m.poster)?`<img class="zoom mpposter" src="${esc(m.poster)}" alt="MP Test programme poster">`:""}
+    ${rows.length?`<table class="t mp"><tr><th>তারিখ / Date</th><th>বার / Day</th><th>সময় / Time</th><th>বিষয় / Subject</th></tr>${rows.map(r => `<tr><td>${fmt(r.date)}</td><td>${esc(dayName(r.date))}</td><td>${esc(r.time||"")}</td><td>${esc(r.subject)}</td></tr>`).join("")}</table>`:""}`
+    : `<div class="empty">প্রোগ্রাম শীঘ্রই প্রকাশিত হবে। / Programme will be published soon.</div>`;
+  const al = $("mpList"); if (!al) return;
+  al.innerHTML = rows.map(r => `<div class="item"><div><b>${esc(r.subject)}</b><span class="meta">${fmt(r.date)} ${esc(dayName(r.date))} ${esc(r.time||"")}</span></div><button class="btn alt sm" data-mpdel="${esc(r.id)}">Delete</button></div>`).join("");
+  al.querySelectorAll("[data-mpdel]").forEach(b => b.onclick = () => { if (!confirm("Delete this exam row?")) return;
+    D.mpTest = {...(D.mpTest||{}), rows:((D.mpTest||{}).rows||[]).filter(x => x.id !== b.dataset.mpdel)}; save(); });
+}
+function fillMp(){ const m = D.mpTest || {};
+  $("mpTitle").value = m.title || "Class X MP (SE) 2027 Selection Test – Programme"; $("mpRange").value = m.range || "20 to 28 November 2026";
+  $("mpLink").value = m.link || MP_LINK; $("mpNote").value = m.note || ""; }
+$("saveMp").onclick = async () => {
+  const old = D.mpTest || {}; let poster = old.poster || ""; const f = $("mpPoster").files[0];
+  if (f) { try { poster = await shrink(f, 1200, 170000); } catch(e) { return toast("Could not read the poster image"); }
+    if (poster.length > 260000) return toast("Poster too large even after shrinking - use a smaller image"); }
+  if (tooBig(poster.length - (old.poster||"").length + 600)) return toast("Storage full - delete old gallery photos / posters first");
+  D.mpTest = {...old, title:$("mpTitle").value.trim(), range:$("mpRange").value.trim(), link:$("mpLink").value.trim(), note:$("mpNote").value.trim(), poster};
+  $("mpPoster").value = ""; save(); };
+$("rmMpPoster").onclick = () => { if (!(D.mpTest||{}).poster) return toast("No poster saved"); D.mpTest = {...D.mpTest, poster:""}; save(); };
+$("addMp").onclick = () => { const d = $("mpDate").value, sub = $("mpSub").value.trim(); if (!d || !sub) return toast("Date and subject are required");
+  const old = D.mpTest || {};
+  D.mpTest = {...old, rows:[...(old.rows||[]), {id:uid(), date:d, time:$("mpTime").value.trim(), subject:sub}]};
+  $("mpSub").value = ""; save(); };
+/* click-to-enlarge for posters */
+document.addEventListener("click", e => { const im = e.target.closest && e.target.closest("img.zoom"); if (!im) return;
+  $("lb").querySelector("img").src = im.src; $("lb").hidden = false; });
+$("lb").addEventListener("click", () => { $("lb").hidden = true; });
+addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true; });
 
 </script>
 <script>
