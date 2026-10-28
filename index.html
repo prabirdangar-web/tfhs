@@ -254,6 +254,9 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
     </fieldset>
 
     <fieldset><legend>MP (SE) 2027 Selection Test – Programme</legend>
+      <div class="mpbar"><button class="btn" id="fetchMp" type="button">⬇ Fetch programme from Exam Portal</button>
+        <label style="margin:0;display:flex;gap:6px;align-items:center">Time for all rows<input id="mpFetchTime" placeholder="11:00 AM – 1:30 PM" style="width:190px"></label>
+        <span class="meta" id="fetchMpOut">Reads Class X Programme (xi_mp_test → Programme) and fills the table below.</span></div>
       <div class="row"><label>Heading<input id="mpTitle" placeholder="Class X MP (SE) 2027 Selection Test – Programme"></label><label>Dates (text)<input id="mpRange" placeholder="20 to 28 November 2026"></label></div>
       <label>Portal / result link<input id="mpLink" placeholder="https://prabirdangar-web.github.io/xi_mp_test/"></label>
       <label>Note (optional – e.g. reporting time, instructions)<textarea id="mpNote" rows="3"></textarea></label>
@@ -802,6 +805,34 @@ $("addMp").onclick = () => { const d = $("mpDate").value, sub = $("mpSub").value
   const old = D.mpTest || {};
   D.mpTest = {...old, rows:[...(old.rows||[]), {id:uid(), date:d, time:$("mpTime").value.trim(), subject:sub}]};
   $("mpSub").value = ""; save(); };
+/* ---- Fetch Class X programme from the exam portal (Firestore mpStudents/mpConfig.programme) ---- */
+const niceName = n => String(n||"").toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+const isoFromDmy = d => { const m = /^(\d{2})-(\d{2})-(\d{4})$/.exec(d||""); return m ? `${m[3]}-${m[2]}-${m[1]}` : ""; };
+const rangeText = (a, b) => { const f = (d, full) => new Date(d+"T00:00:00").toLocaleDateString("en-GB", full ? {day:"numeric", month:"long", year:"numeric"} : {day:"numeric"});
+  const A = new Date(a+"T00:00:00"), B = new Date(b+"T00:00:00");
+  if (a === b) return f(a, true);
+  return A.getMonth() === B.getMonth() && A.getFullYear() === B.getFullYear() ? `${f(a)} to ${f(b, true)}` : `${f(a, true)} to ${f(b, true)}`; };
+$("fetchMp").onclick = async () => {
+  const out = $("fetchMpOut"); out.textContent = "Fetching…";
+  try {
+    const snap = await db.collection("mpStudents").doc("mpConfig").get();
+    const P = snap.exists ? (snap.data().programme || {}) : {};
+    const codes = Object.keys(P).filter(c => isoFromDmy(P[c].date));
+    if (!codes.length) { out.textContent = "No programme found in the exam portal."; return toast("No programme found"); }
+    const old = D.mpTest || {}, oldRows = old.rows || [];
+    const manual = oldRows.filter(r => !String(r.id||"").startsWith("mp_"));
+    if (manual.length && !confirm(`Replace ${oldRows.length} existing row(s) with ${codes.length} fetched subject(s)?`)) { out.textContent = "Cancelled."; return; }
+    const t = $("mpFetchTime").value.trim();
+    const rows = codes.map(c => { const prev = oldRows.find(r => r.id === "mp_" + c);
+      return {id:"mp_" + c, code:c, date:isoFromDmy(P[c].date), time: t || (prev && prev.time) || "", subject:niceName(P[c].name)}; })
+      .sort((x,y) => x.date.localeCompare(y.date) || x.subject.localeCompare(y.subject));
+    const ds = rows.map(r => r.date).sort();
+    D.mpTest = {...old, rows, range: rangeText(ds[0], ds[ds.length-1]), fetchedAt: new Date().toISOString()};
+    $("mpRange").value = D.mpTest.range;
+    out.textContent = `Fetched ${rows.length} subjects (${D.mpTest.range}).`;
+    save();
+  } catch(e) { console.error(e); out.textContent = "Fetch failed: " + (e.code || e.message); toast("Fetch failed: " + (e.code || "error")); }
+};
 /* click-to-enlarge for posters */
 document.addEventListener("click", e => { const im = e.target.closest && e.target.closest("img.zoom"); if (!im) return;
   $("lb").querySelector("img").src = im.src; $("lb").hidden = false; });
