@@ -47,12 +47,7 @@ nav.menu a{text-decoration:none;font-weight:600;font-size:14px}
 table.t{width:100%;border-collapse:collapse;background:var(--card)}
 table.t td{border:1px solid var(--line);padding:6px 12px}
 table.t td:last-child{text-align:right;font-weight:600;white-space:nowrap}
-.apply{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 16px 16px}
-.apply label{display:block;font-size:13px;color:var(--mut);margin-top:10px}
-.apply input,.apply select,.apply textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
-.apply .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.hp{position:absolute;left:-9999px}
-@media(max-width:560px){.apply .row{grid-template-columns:1fr}}
+
 #linksBox h3{font-size:15px;margin:14px 0 6px;color:var(--mut)}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
 .tile{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:8px;padding:12px 14px}
@@ -79,7 +74,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar)}
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
   <a href="#links">দ্রুত লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
-  <a href="#routine">রুটিন ও ছুটি</a><a href="#apply">ভর্তির আবেদন</a>
+  <a href="#routine">রুটিন ও ছুটি</a>
 </nav>
 
 <main class="wrap" id="site">
@@ -112,22 +107,6 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar)}
   <h3 style="margin:14px 0 6px;font-size:16px">আসন্ন ছুটি / Upcoming holidays</h3>
   <div id="holidayBox"></div>
   <details style="margin-top:8px"><summary>সারা বছরের তালিকা / Full list</summary><table class="t" id="holAll"></table></details>
-
-  <h2 class="sec" id="apply">অনলাইন ভর্তির আবেদন / Apply Online</h2>
-  <div class="apply">
-    <p class="meta">আবেদন জমা দিলে বিদ্যালয় আপনার সাথে যোগাযোগ করবে। / The school will contact you after you submit.</p>
-    <label>ছাত্র/ছাত্রীর নাম / Student name *<input id="eName" maxlength="80"></label>
-    <label>অভিভাবকের নাম / Guardian name<input id="eGuard" maxlength="80"></label>
-    <div class="row">
-      <label>কোন শ্রেণিতে / Class applying for *<select id="eCls"><option>V</option><option>VI</option><option>VII</option><option>VIII</option><option>IX</option><option>XI</option></select></label>
-      <label>মোবাইল / Mobile *<input id="ePhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10 digits"></label>
-    </div>
-    <label>আগের স্কুল / Previous school<input id="ePrev" maxlength="100"></label>
-    <label>ঠিকানা / Address (village, P.O.)<input id="eAddr" maxlength="150"></label>
-    <label>অন্য তথ্য / Message<textarea id="eNote" rows="2" maxlength="300"></textarea></label>
-    <input class="hp" id="eHp" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <p style="margin:14px 0 0"><button class="btn" id="eSend">আবেদন জমা দিন / Submit</button> <span id="eOut" class="meta"></span></p>
-  </div>
 
   <h2 class="sec">যোগাযোগ / Contact</h2>
   <div class="item"><div>
@@ -192,6 +171,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar)}
       <div class="row"><label>Subject<input id="sSub" placeholder="Mathematics"></label><label>Photo path (optional)<input id="sPhoto" placeholder="blank = images/staff/&lt;name&gt;.jpg"></label></div>
       <p><button class="btn" id="addS">Add staff</button></p>
       <p><button class="btn alt" id="syncS">Sync names from Salary Portal</button> <span id="syncOut" class="meta"></span></p>
+      <div id="photoRep" class="meta"></div>
       <div id="sList"></div>
     </fieldset>
 
@@ -215,10 +195,6 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar)}
       <label>Short description<input id="lDesc"></label>
       <p><button class="btn" id="addL">Add link</button></p>
       <div id="lList"></div>
-    </fieldset>
-
-    <fieldset><legend>Admission enquiries (private)</legend>
-      <div id="enqList"><span class="meta">No enquiries yet.</span></div>
     </fieldset>
   </div>
 </main>
@@ -316,7 +292,6 @@ auth.onAuthStateChanged(u => {
   $("who").textContent = u ? (ok ? "Signed in: " + u.email : "Not authorised: " + u.email) : "Not signed in";
   $("login").style.display = u ? "none" : ""; $("logout").style.display = u ? "" : "none";
   $("editor").style.display = ok ? "" : "none";
-  watchEnq(ok);
   if (ok){ $("tk").value = D.ticker || ""; const a = D.admission || {};
     $("aOpen").checked = !!a.open; $("aTitle").value = a.title||""; $("aLink").value = a.link||"";
     $("aLast").value = a.last||""; $("aNote").value = a.note||""; }
@@ -445,9 +420,27 @@ function findStaff(root){
   return best.map(v => ({name:v.name.trim(), post:String(v.desig || v.designation || v.post || "").trim()}));
 }
 const slug = n => (n||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
-const photoOf = t => t.photo || (slug(t.name) ? "images/staff/" + slug(t.name) + ".jpg" : "");
+let PHOTOS = [], AUTO = new Map();
+fetch("images/staff/photos.json").then(r => r.ok ? r.json() : []).then(a => { PHOTOS = a; render(); }).catch(() => {});
+const toks = n => (n||"").toLowerCase().replace(/\.jpe?g$/, "").split(/[^a-z0-9]+/).filter(Boolean);
+function autoPhotos(){
+  const claims = {}, out = new Map();
+  (D.staff||[]).forEach(t => {
+    if (t.photo) return;
+    const st = new Set(toks(t.name)); let best = null, bs = 0, tie = false;
+    PHOTOS.forEach(f => { const ft = toks(f);
+      if (ft.length && ft.every(x => st.has(x))) { if (ft.length > bs) { best = f; bs = ft.length; tie = false; } else if (ft.length === bs) tie = true; } });
+    if (best && !tie) (claims[best] ||= []).push({t, bs});
+  });
+  for (const [f, c] of Object.entries(claims)) { const m = Math.max(...c.map(x => x.bs)), w = c.filter(x => x.bs === m); if (w.length === 1) out.set(w[0].t.id, f); }
+  return out;
+}
+const photoOf = t => t.photo || (AUTO.get(t.id) ? "images/staff/" + AUTO.get(t.id) : (slug(t.name) ? "images/staff/" + slug(t.name) + ".jpg" : ""));
 function renderExtra(){
   renderLinks();
+  AUTO = autoPhotos();
+  if ($("photoRep")) { const used = new Set(AUTO.values()), left = PHOTOS.filter(f => !used.has(f));
+    $("photoRep").textContent = PHOTOS.length ? `Photos matched by name: ${AUTO.size} of ${(D.staff||[]).length} staff. Unmatched photo files: ${left.length ? left.join(", ") : "none"}` : ""; }
   $("galleryBox").innerHTML = (D.gallery||[]).length ? D.gallery.slice().reverse().map(g => imgUrl(g.url) ?
     `<figure><a href="${imgUrl(g.url)}" target="_blank" rel="noopener"><img loading="lazy" src="${imgUrl(g.url)}" alt="${esc(g.caption||"School photo")}"></a>${g.caption?`<figcaption>${esc(g.caption)}</figcaption>`:""}</figure>`:"").join("")
     : `<div class="empty">শীঘ্রই ছবি যোগ করা হবে। / Photos coming soon.</div>`;
@@ -465,39 +458,6 @@ function renderExtra(){
   $("holAll").innerHTML = all.map(h => `<tr><td>${esc(h.name)}${h.obs?" <span class='tag'>Obs.</span>":""}</td><td>${range(h)}</td></tr>`).join("");
 }
 
-/* ---------- Apply online ---------- */
-$("eSend").onclick = async () => {
-  const name=$("eName").value.trim(), phone=$("ePhone").value.trim(), out=$("eOut");
-  if ($("eHp").value) return;                                  /* bot trap */
-  if (!name) return out.textContent = "ছাত্র/ছাত্রীর নাম লিখুন / Enter student name";
-  if (!/^[6-9]\d{9}$/.test(phone)) return out.textContent = "সঠিক ১০ সংখ্যার মোবাইল নম্বর দিন / Enter a valid 10-digit mobile";
-  try { if (Date.now() - (+localStorage.getItem("enqT")||0) < 60000) return out.textContent = "একটু পরে আবার চেষ্টা করুন / Please wait a minute"; } catch(e){}
-  $("eSend").disabled = true;
-  try {
-    await db.collection("enquiries").add({ name, guardian:$("eGuard").value.trim(), cls:$("eCls").value, phone,
-      prevSchool:$("ePrev").value.trim(), address:$("eAddr").value.trim(), note:$("eNote").value.trim(),
-      ts:firebase.firestore.FieldValue.serverTimestamp() });
-    try { localStorage.setItem("enqT", Date.now()); } catch(e){}
-    ["eName","eGuard","ePhone","ePrev","eAddr","eNote"].forEach(i=>$(i).value="");
-    out.textContent = "✓ আবেদন জমা হয়েছে। / Submitted. The school will contact you.";
-  } catch(e){ out.textContent = "জমা হয়নি, আবার চেষ্টা করুন / Could not submit: " + e.code; }
-  $("eSend").disabled = false;
-};
-
-/* ---------- Enquiries (admin only) ---------- */
-let unsubEnq = null;
-function watchEnq(ok){
-  if (unsubEnq){ unsubEnq(); unsubEnq = null; }
-  if (!ok) return;
-  unsubEnq = db.collection("enquiries").orderBy("ts","desc").limit(100).onSnapshot(q => {
-    $("enqList").innerHTML = q.empty ? '<span class="meta">No enquiries yet.</span>' : q.docs.map(d => { const e=d.data();
-      return `<div class="item"><div><b>${esc(e.name)} — Class ${esc(e.cls)}</b>
-      <span class="meta">Guardian: ${esc(e.guardian)} · <a href="tel:${esc(e.phone)}">${esc(e.phone)}</a><br>${esc(e.prevSchool)} ${esc(e.address)}<br>${esc(e.note)}
-      ${e.ts?fmt(e.ts.toDate()):""}</span></div>
-      <button class="btn alt sm" data-enq="${d.id}">Delete</button></div>`; }).join("");
-    document.querySelectorAll("[data-enq]").forEach(b => b.onclick = () => confirm("Delete this enquiry?") && db.collection("enquiries").doc(b.dataset.enq).delete());
-  }, e => toast("Enquiries: " + e.code));
-}
 </script>
 </body>
 </html>
