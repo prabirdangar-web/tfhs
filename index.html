@@ -147,6 +147,18 @@ table.tt tr.now td{background:var(--gold);color:#1b1400;font-weight:700}
 .duty .dd.today>div{background:color-mix(in srgb,var(--gold) 16%,var(--card))}
 .duty .pt{color:var(--c-staff);font-weight:600}
 .duty .note{padding:5px 10px;font-size:12px;color:var(--mut)}
+/* useful links */
+#resBox{background:var(--card);border:1px solid var(--line);border-top:0}
+#resBox details{border-bottom:1px solid var(--line)}
+#resBox summary{background:color-mix(in srgb,var(--c-link) 10%,var(--card));color:var(--ink);padding:5px 10px}
+#resBox summary i{font-style:normal;color:var(--mut);font-weight:400;font-size:12px}
+.rl{display:block;padding:4px 10px 4px 16px;text-decoration:none;color:var(--ink);border-top:1px dotted var(--line);font-size:13.5px}
+.rl b{color:var(--mar)}.rl span{display:block;font-size:11.5px;color:var(--mut);line-height:1.2}
+.rl:hover{background:color-mix(in srgb,var(--gold) 16%,var(--card))}
+#panel details.more{margin-top:8px;border:1px dashed var(--line);border-radius:6px;padding:2px 8px}
+#officeBox h4{margin:8px 0 3px;font-size:13px;color:var(--mut)}
+#officeBox a.chip{display:inline-block;margin:2px 4px 2px 0;padding:3px 10px;border:1px solid var(--line);border-radius:14px;background:var(--bg);text-decoration:none;font-size:13px}
+#officeBox a.chip:hover{border-color:var(--mar)}
 /* admin */
 #panel{display:none}
 #panel fieldset{border:1px solid var(--line);border-radius:8px;background:var(--card);margin:0 0 14px;padding:12px 14px}
@@ -176,7 +188,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 </header>
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
-  <a href="#links">দ্রুত লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
+  <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
   <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
 
@@ -235,6 +247,9 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <h2 class="sec" id="links" style="--c:var(--c-link)">দ্রুত লিংক / Quick Links</h2>
       <div id="linksBox"></div>
 
+      <h2 class="sec" id="useful" style="--c:var(--c-link)">দরকারি লিংক / Useful Links (WB)</h2>
+      <div id="resBox"></div>
+
       <h2 class="sec" id="routine" style="--c:var(--c-routine)">রুটিন ও ছুটি / Routine &amp; Holidays</h2>
       <table class="t" id="routineBox"></table>
       <h3>আসন্ন ছুটি / Upcoming holidays</h3>
@@ -285,16 +300,19 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <p><button class="btn" id="saveFlash">Save pop-up</button> <button class="btn alt" id="prevFlash" type="button">Preview</button> <button class="btn alt" id="loadFlash" type="button">Load Vijaya/Diwali reopening notice</button> <button class="btn alt" id="offFlash" type="button">Turn off</button></p>
     </fieldset>
 
-    <fieldset><legend>Add notice</legend>
-      <label>Title<input id="nTitle"></label>
-      <label>File or page link (optional – Google Drive "anyone with link", PDF, etc.)<input id="nLink" placeholder="https://..."></label>
-      <label>Details (optional – full notice text, shown under a "Details" button)<textarea id="nBody" rows="6" placeholder="Paste the full notice text here. Line breaks are kept."></textarea></label>
-      <label>Notice as poster (optional – upload a JPG/PNG image of the notice; it is shrunk automatically and shown under the notice, click to enlarge)<input type="file" id="nPoster" accept="image/*"></label>
+    <fieldset><legend>📢 Add notice</legend>
+      <label>Title<input id="nTitle" placeholder="Notice heading"></label>
       <div class="row">
         <label>For<select id="nFor"><option value="general">General</option><option value="staff">Staff</option><option value="student">Students</option></select></label>
         <label>Date<input id="nDate" type="date"></label>
       </div>
-      <p><button class="btn" id="addN">Publish notice</button> <button class="btn alt" id="loadSampleN" type="button">Load sample notice into form</button> <button class="btn alt" id="loadRulesN" type="button">Load WBBSE হাজিরা ও দায়িত্ব নির্দেশিকা</button></p>
+      <label>Details (optional – paste the full text; line breaks are kept)<textarea id="nBody" rows="4"></textarea></label>
+      <details class="more"><summary>More options – file link, poster image, ready-made notices</summary>
+        <label>File or page link (Google Drive “anyone with link”, PDF, etc.)<input id="nLink" placeholder="https://..."></label>
+        <label>Poster image (JPG/PNG – shrunk automatically, click to enlarge on site)<input type="file" id="nPoster" accept="image/*"></label>
+        <p><button class="btn alt sm" id="loadSampleN" type="button">Load sample notice</button> <button class="btn alt sm" id="loadRulesN" type="button">Load WBBSE হাজিরা ও দায়িত্ব নির্দেশিকা</button></p>
+      </details>
+      <p><button class="btn" id="addN">Publish notice</button></p>
       <div id="nList"></div>
     </fieldset>
 
@@ -377,6 +395,26 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <label><input type="checkbox" id="hObs" style="width:auto"> Observation day only (school open)</label>
       <p><button class="btn" id="addH">Add holiday</button> <button class="btn alt" id="impH">Import 2026 holiday list</button></p>
       <div id="hList"></div>
+    </fieldset>
+
+    <fieldset><legend>🗂 Office desk – admin-only links (salary · PF · pension · I-Tax)</legend>
+      <div id="officeBox"></div>
+      <p class="meta">Visible here only. Add more below with “Show on” = Admin panel only.</p>
+    </fieldset>
+
+    <fieldset><legend>🔗 Useful links directory (WBBSE · WBCHSE · WBSCVE&amp;T · Scholarship · SVMCM · Forms · Office)</legend>
+      <div class="row"><label>Title<input id="xTitle"></label><label>Link<input id="xUrl" placeholder="https://..."></label></div>
+      <div class="row">
+        <label>Category<select id="xCat">
+          <option value="wbbse">WBBSE – মাধ্যমিক</option><option value="wbchse">WBCHSE – উচ্চমাধ্যমিক</option>
+          <option value="scvet">WBSCVE&amp;T – বৃত্তিমূলক</option><option value="schol">Scholarship</option>
+          <option value="svmcm">SVMCM</option><option value="forms">Forms (H.S. &amp; below)</option>
+          <option value="office">Salary · PF · Pension · I-Tax</option></select></label>
+        <label>Show on<select id="xVis"><option value="public">Public site</option><option value="admin">Admin panel only</option></select></label>
+      </div>
+      <div class="row"><label>Short description<input id="xDesc"></label><label>…or new category name (optional)<input id="xCustom" placeholder="e.g. Teachers' Training"></label></div>
+      <p><button class="btn" id="addX">Add link</button> <button class="btn alt" id="resetX" type="button">Reset to standard list</button></p>
+      <div id="xList"></div>
     </fieldset>
 
     <fieldset><legend>Quick links (staff / students / everyone)</legend>
@@ -539,7 +577,7 @@ $("addR").onclick = () => {
   (D.results ||= []).push({ id:uid(), title:t, link:$("rLink").value.trim(), date:$("rDate").value || today() });
   $("rTitle").value = $("rLink").value = ""; save();
 };
-const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList", events:"eList"};
+const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList", events:"eList", resources:"xList"};
 let PH_ID = null;
 $("phFile").addEventListener("cancel", () => render());
 $("phFile").onchange = async () => {
@@ -563,7 +601,7 @@ function photoPicker(t){
 function renderAdminLists(){
   for (const [k, id] of Object.entries(LISTS)){
     $(id).innerHTML = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||(isData(x.url)?"Uploaded photo":x.url))}</b>
-      <span class="meta">${esc((x.unit==="voc"?"VOC "+(x.level||"")+" · "+(x.eng||"")+" · ":"")+(x.post||x.time||x.url&&""))} ${fmt(x.date)}</span></div>
+      <span class="meta">${esc((x.unit==="voc"?"VOC "+(x.level||"")+" · "+(x.eng||"")+" · ":"")+(x.post||x.time||(x.cat?catLabel(x.cat)+(x.vis==="admin"?" · admin only":""):"")))} ${fmt(x.date)}</span></div>
       ${k==="staff"?photoPicker(x):""}
       ${k==="holidays"||k==="staff"?`<button class="btn alt sm" data-edit="${x.id}" data-ek="${k}">Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">Delete</button></div>`).join("");
   }
@@ -798,7 +836,7 @@ $("syncS").onclick = async () => {
   } catch(e){ out.textContent = "Failed: " + (e.code || e.message); }
 };
 
-const eff = k => k === "links" ? (D.links ?? DEFAULT_LINKS) : (D[k] || []);
+const eff = k => k === "links" ? (D.links ?? DEFAULT_LINKS) : k === "resources" ? (D.resources ?? DEFAULT_RES) : (D[k] || []);
 const B = "https://prabirdangar-web.github.io/";
 const DEFAULT_LINKS = [
   {id:"l1", group:"general", icon:"📝", title:"Admission & Certificates", desc:"Online admission and certificate portal", url:B+"certificate/"},
@@ -811,6 +849,52 @@ const DEFAULT_LINKS = [
   {id:"l4", group:"staff", icon:"💰", title:"My PF / GPF Statement", desc:"View your individual PF account", url:B+"pf_interest/?staff=1"},
   {id:"l5", group:"staff", icon:"🏖️", title:"Apply for Leave", desc:"Staff e-leave application", url:B+"e-leave-application/"}
 ];
+const RES_CATS = [["wbbse","📘 WBBSE – মাধ্যমিক শিক্ষা পর্ষদ"],["wbchse","📗 WBCHSE – উচ্চমাধ্যমিক সংসদ"],["scvet","🛠️ WBSCVE&T – বৃত্তিমূলক"],
+  ["schol","🎓 Scholarship / বৃত্তি"],["svmcm","🏅 SVMCM"],["forms","📝 Forms (H.S. স্তর পর্যন্ত)"],["office","💼 Salary · PF · Pension · I-Tax"]];
+const catLabel = c => (RES_CATS.find(x => x[0] === c) || [0, c])[1];
+const R = (id,cat,title,url,desc,vis) => ({id:"r_"+id,cat,title,url,desc,vis:vis||"public"});
+const DEFAULT_RES = [
+  R("bbse","wbbse","WBBSE Official Website","https://wbbse.wb.gov.in/","Madhyamik notices, syllabus, circulars, forms"),
+  R("bres","wbbse","Madhyamik / Board Results","https://wbresults.nic.in/","WB board results portal"),
+  R("bs1","wbbse","Banglar Shiksha Portal","https://banglarshiksha.gov.in/","Student database, school login, schemes"),
+  R("chse","wbchse","WBCHSE Official Website","https://wbchse.wb.gov.in/","H.S. notices, syllabus, registration, circulars"),
+  R("cres","wbchse","H.S. Results","https://wbresults.nic.in/","WB board results portal"),
+  R("bs2","wbchse","Banglar Shiksha Portal","https://banglarshiksha.gov.in/","Class XI admission and student data"),
+  R("vet","scvet","WBSCT&VE&SD (Vocational)","https://sctvesd.wb.gov.in/","Vocational courses, notices, results"),
+  R("nsp","schol","National Scholarship Portal","https://scholarships.gov.in/","Central & state scholarships – apply, renew, status"),
+  R("oas","schol","OASIS (SC/ST/OBC scholarships)","https://oasis.gov.in/","Backward Classes Welfare Dept. scholarships"),
+  R("aik","schol","Aikyashree (Minority)","https://wbmdfcscholarship.gov.in/","Minority students pre/post-matric"),
+  R("kan","schol","Kanyashree Prakalpa","https://wbkanyashree.gov.in/","K1 / K2 for girl students"),
+  R("svm","svmcm","SVMCM Portal","https://svmcm.wbhed.gov.in/","Swami Vivekananda Merit-cum-Means Scholarship – apply / renew / status"),
+  R("adm","forms","School Admission & Certificates","https://prabirdangar-web.github.io/certificate/","Online admission and certificate portal"),
+  R("fbb","forms","WBBSE – forms & downloads","https://wbbse.wb.gov.in/","Registration, form fill-up, correction – see Notices"),
+  R("fch","forms","WBCHSE – forms & downloads","https://wbchse.wb.gov.in/","Registration, form fill-up, correction – see Notices"),
+  R("ifm","office","WBIFMS – HRMS / eSE login","https://www.wbifms.gov.in/","Pay slip, yearly salary statement (I-Tax), leave, bills","admin"),
+  R("fin","office","Finance Dept., Govt. of WB","https://wbfin.nic.in/","ROPA, DA orders and finance circulars","admin"),
+  R("epn","office","e-Pension Portal (aided institutions)","https://epension.wb.gov.in/","Pension cases for govt.-aided institutions","admin"),
+  R("dpp","office","DPPG – Pension, PF & Group Insurance","https://dppg.wb.gov.in/","GPF, pension, group insurance directorate","admin"),
+  R("agw","office","Accountant General (A&E), West Bengal","https://cag.gov.in/ae/west-bengal/en","GPF accounts, pension authorisation","admin"),
+  R("itx","office","Income Tax e-Filing","https://www.incometax.gov.in/","Return filing, Form 26AS/AIS","admin"),
+  R("trc","office","TRACES (TDS)","https://www.tdscpc.gov.in/","Form 16 / 16A, TDS statements","admin")
+];
+function renderRes(){
+  const all = eff("resources").filter(x => safeUrl(x.url)), pub = all.filter(x => x.vis !== "admin");
+  const cats = RES_CATS.map(x => x[0]).concat([...new Set(all.map(x => x.cat))].filter(c => !RES_CATS.some(r => r[0] === c)));
+  const tile = x => `<a class="rl" href="${safeUrl(x.url)}" target="_blank" rel="noopener"><b>${esc(x.title)}</b>${x.desc?`<span>${esc(x.desc)}</span>`:""}</a>`;
+  $("resBox").innerHTML = cats.map(c => { const it = pub.filter(x => x.cat === c);
+    return it.length ? `<details><summary>${esc(catLabel(c))} <i>(${it.length})</i></summary>${it.map(tile).join("")}</details>` : ""; }).join("")
+    || `<div class="empty">No links yet.</div>`;
+  const adm = all.filter(x => x.vis === "admin");
+  $("officeBox").innerHTML = cats.map(c => { const it = adm.filter(x => x.cat === c);
+    return it.length ? `<h4>${esc(catLabel(c))}</h4>${it.map(x => `<a class="chip" href="${safeUrl(x.url)}" target="_blank" rel="noopener" title="${esc(x.desc||"")}">${esc(x.title)}</a>`).join("")}` : ""; }).join("")
+    || `<p class="meta">No admin-only links.</p>`;
+}
+$("addX").onclick = () => { const t=$("xTitle").value.trim(), u=$("xUrl").value.trim();
+  if(!t||!/^https?:\/\//i.test(u)) return toast("Title and a full https link are required");
+  addTo("resources",{title:t, url:u, desc:$("xDesc").value.trim(), cat:$("xCustom").value.trim()||$("xCat").value, vis:$("xVis").value});
+  ["xTitle","xUrl","xDesc","xCustom"].forEach(i=>$(i).value=""); };
+$("resetX").onclick = () => { if(!confirm("Replace the whole list with the standard list? Links you added will be removed.")) return;
+  D.resources = DEFAULT_RES.map(x => ({...x})); save(); };
 const GROUPS = [["student","ছাত্রছাত্রীদের জন্য / For Students"],["staff","শিক্ষক-শিক্ষাকর্মীদের জন্য / For Staff"],["general","সবার জন্য / For Everyone"]];
 function renderLinks(){
   $("linksBox").innerHTML = GROUPS.map(([g, label]) => {
@@ -864,7 +948,7 @@ function autoPhotos(){
 }
 const photoOf = t => t.photo || (AUTO.get(t.id) ? "images/staff/" + AUTO.get(t.id) : (slug(t.name) ? "images/staff/" + slug(t.name) + ".jpg" : ""));
 function renderExtra(){
-  renderLinks();
+  renderLinks(); renderRes();
   AUTO = autoPhotos();
   if ($("photoList")) $("photoList").innerHTML = PHOTOS.map(f => `<option value="images/staff/${esc(f)}">`).join("");
   if ($("photoRep")) { const used = new Set(AUTO.values()), left = PHOTOS.filter(f => !used.has(f));
