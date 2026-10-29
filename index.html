@@ -178,6 +178,67 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 .lb[hidden]{display:none}
 .lb img{max-width:100%;max-height:100%;object-fit:contain;background:#fff}
 .lb button{position:absolute;top:10px;right:14px;font-size:26px;background:transparent;color:#fff;border:0;cursor:pointer}
+
+/* ===== calendar + calculators ===== */
+.tools{margin:0 0 10px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:12px;align-items:stretch}
+@media(max-width:860px){.tools{grid-template-columns:1fr}}
+.tcard{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(12,42,107,.08);display:flex;flex-direction:column}
+.thead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;color:#fff;background:linear-gradient(135deg,var(--navy),#1c4db3);border-bottom:3px solid var(--gold)}
+.thead b{font:700 15px "Noto Serif Bengali",serif}
+.thead .nav{display:flex;gap:5px;align-items:center}
+.thead button{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:6px;min-width:30px;height:28px;font:700 15px inherit;font-family:inherit;cursor:pointer;padding:0 8px}
+.thead button:hover{background:var(--gold);color:#1b1400}
+.cal-body{padding:10px 12px 12px}
+.cal-dow,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-dow span{text-align:center;font-size:11.5px;font-weight:700;color:var(--mut);padding:2px 0}
+.cal-dow span:first-child{color:#c0392b}
+.cal-grid{margin-top:2px}
+.cd{position:relative;aspect-ratio:1/.82;min-height:36px;border:1px solid transparent;border-radius:8px;background:color-mix(in srgb,var(--bg) 60%,var(--card));font:600 13.5px inherit;font-family:inherit;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s,box-shadow .12s}
+.cd:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.cd.out{opacity:.32}
+.cd.sun{color:#c0392b}
+.cd.hol{background:linear-gradient(135deg,#ffe3a3,#ffc857);color:#4a3300;border-color:#e6a700}
+.cd.obs{background:color-mix(in srgb,var(--c-routine) 16%,var(--card));border-color:var(--c-routine)}
+.cd.ev::after{content:"";position:absolute;bottom:4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--c-staff)}
+.cd.today{outline:2.5px solid var(--mar);outline-offset:-1px;font-weight:800}
+.cd.sel{box-shadow:0 0 0 2.5px var(--gold) inset}
+@media(prefers-color-scheme:dark){.cd.hol{background:linear-gradient(135deg,#5a4309,#7a5a0c);color:#ffe29a;border-color:#a67c00}.cd.sun{color:#ff8a7a}}
+.cal-leg{display:flex;flex-wrap:wrap;gap:10px;margin:9px 0 6px;font-size:11.5px;color:var(--mut)}
+.cal-leg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px;border:1px solid var(--line)}
+.cal-info{background:var(--bg);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:7px 11px;font-size:13px;min-height:38px}
+.cal-info b{display:block}
+.cal-mlist{margin-top:8px;font-size:12.5px}
+.cal-mlist div{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px dashed var(--line)}
+.cal-mlist div:last-child{border-bottom:0}
+.cal-mlist span:last-child{color:var(--mut);white-space:nowrap}
+.tbtabs{display:flex;background:rgba(255,255,255,.12);border-radius:8px;padding:2px;gap:2px}
+.tbtabs button{height:26px;font:600 12.5px inherit;font-family:inherit;background:transparent}
+.tbtabs button[aria-selected=true]{background:var(--gold);color:#1b1400}
+.tpane{padding:12px;flex:1}
+.tpane[hidden]{display:none}
+.calc-scr{background:linear-gradient(180deg,#0c1a3d,#102a63);color:#fff;border-radius:10px;padding:8px 12px;text-align:right;margin-bottom:9px;border:1px solid #0a1d4a}
+.calc-scr small{display:block;min-height:17px;font-size:12.5px;opacity:.7;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.calc-scr output{display:block;font:700 28px/1.25 ui-monospace,Menlo,Consolas,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.keys button{height:42px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);font:700 16px inherit;font-family:inherit;cursor:pointer;transition:transform .08s,background .12s}
+.keys button:active{transform:scale(.95)}
+.keys button:hover{background:color-mix(in srgb,var(--gold) 22%,var(--bg))}
+.keys .op{background:color-mix(in srgb,var(--mar) 14%,var(--card));color:var(--mar)}
+.keys .fn{background:color-mix(in srgb,var(--c-staff) 10%,var(--card));color:var(--c-staff)}
+.keys .eq{background:linear-gradient(135deg,var(--gold),#ffcf5a);color:#1b1400;border-color:#d99a00}
+.dc-modes{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.dc-modes button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:16px;padding:3px 11px;font:600 12.5px inherit;font-family:inherit;cursor:pointer}
+.dc-modes button[aria-pressed=true]{background:var(--c-routine);color:#fff;border-color:var(--c-routine)}
+.dcf{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dcf label{font-size:12px;color:var(--mut);display:block}
+.dcf input[type=date],.dcf input[type=number],.dcf select{width:100%;margin-top:2px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink);font:inherit;font-size:13.5px}
+.dcf .full{grid-column:1/-1}
+.dcf .chk{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink)}
+.dc-res{margin-top:10px;border-radius:10px;padding:10px 12px;background:linear-gradient(135deg,color-mix(in srgb,var(--c-routine) 14%,var(--card)),var(--card));border:1px solid var(--line);border-left:5px solid var(--c-routine);font-size:13.5px}
+.dc-res .big{font:700 20px/1.3 "Noto Serif Bengali",serif;color:var(--mar)}
+.dc-res .sm{color:var(--mut);font-size:12.5px;margin-top:3px}
+.dc-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+.dc-chips span{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1px 10px;font-size:12.5px}
 </style>
 </head>
 <body>
@@ -200,6 +261,45 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
   </section>
   <div class="adm" id="admBox"></div>
   <section class="today" id="todayBox" aria-label="আজকের বিজ্ঞপ্তি ও আজকের দিনে"></section>
+
+  <section class="tools" id="toolsBox" aria-label="ক্যালেন্ডার ও ক্যালকুলেটর">
+    <div class="tcard" id="calCard">
+      <div class="thead"><b>🗓️ <span id="calTitle"></span></b>
+        <div class="nav"><button type="button" id="calPrev" aria-label="আগের মাস">‹</button><button type="button" id="calToday">আজ</button><button type="button" id="calNext" aria-label="পরের মাস">›</button></div></div>
+      <div class="cal-body">
+        <div class="cal-dow"><span>রবি</span><span>সোম</span><span>মঙ্গল</span><span>বুধ</span><span>বৃহঃ</span><span>শুক্র</span><span>শনি</span></div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-leg"><span><i style="background:#ffc857"></i>ছুটি / Holiday</span><span><i style="background:color-mix(in srgb,var(--c-routine) 30%,var(--card))"></i>Observation day</span><span><i style="background:var(--c-staff)"></i>ইভেন্ট</span><span><i style="outline:2px solid var(--mar);background:var(--card)"></i>আজ</span></div>
+        <div class="cal-info" id="calInfo"></div>
+        <div class="cal-mlist" id="calMonthList"></div>
+      </div>
+    </div>
+    <div class="tcard" id="calcCard">
+      <div class="thead"><b>🧮 ক্যালকুলেটর</b>
+        <div class="tbtabs" role="tablist"><button type="button" role="tab" data-tp="calc" aria-selected="true">Calculator</button><button type="button" role="tab" data-tp="date" aria-selected="false">Date Calc</button></div></div>
+      <div class="tpane" id="tp-calc">
+        <div class="calc-scr"><small id="cExpr"></small><output id="cOut">0</output></div>
+        <div class="keys" id="cKeys">
+          <button class="fn" data-k="C">C</button><button class="fn" data-k="BS">⌫</button><button class="fn" data-k="%">%</button><button class="op" data-k="/">÷</button>
+          <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button class="op" data-k="*">×</button>
+          <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button class="op" data-k="-">−</button>
+          <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button class="op" data-k="+">+</button>
+          <button class="fn" data-k="NEG">±</button><button data-k="0">0</button><button data-k=".">.</button><button class="eq" data-k="=">=</button>
+        </div>
+      </div>
+      <div class="tpane" id="tp-date" hidden>
+        <div class="dc-modes" id="dcModes">
+          <button type="button" data-m="diff" aria-pressed="true">দুই তারিখের ব্যবধান</button>
+          <button type="button" data-m="add" aria-pressed="false">তারিখ যোগ/বিয়োগ</button>
+          <button type="button" data-m="work" aria-pressed="false">কার্যদিবস</button>
+          <button type="button" data-m="age" aria-pressed="false">বয়স</button>
+        </div>
+        <div class="dcf" id="dcForm"></div>
+        <div class="dc-res" id="dcRes"></div>
+      </div>
+    </div>
+  </section>
+
 
   <div class="cols">
     <div class="mainc">
@@ -1212,5 +1312,187 @@ addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true
     if (bad.length) { bad.forEach(m => m.remove()); imgs = imgs.filter(x => !bad.includes(x)); build(); } });
 })();
 </script>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const pad=n=>String(n).padStart(2,"0");
+  const iso=(y,m,d)=>y+"-"+pad(m+1)+"-"+pad(d);
+  const todayIso=()=>{const n=new Date();return iso(n.getFullYear(),n.getMonth(),n.getDate())};
+  const parse=s=>{const[a,b,c]=s.split("-").map(Number);return new Date(Date.UTC(a,b-1,c))};
+  const toIso=d=>d.getUTCFullYear()+"-"+pad(d.getUTCMonth()+1)+"-"+pad(d.getUTCDate());
+  const fmtD=s=>parse(s).toLocaleDateString("en-GB",{weekday:"short",day:"2-digit",month:"short",year:"numeric",timeZone:"UTC"});
+  const E=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const BNm=["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
+  const BNd=s=>String(s).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+  const now=new Date();let vy=now.getFullYear(),vm=now.getMonth(),sel=todayIso();
+
+  /* ---- holiday/event lookup built from the portal data (D.holidays, D.events) ---- */
+  function maps(){
+    const H={},O={},V={};
+    const add=(map,k,name)=>{(map[k]=map[k]||[]).push(name)};
+    (typeof D!=="undefined"&&D.holidays||[]).forEach(h=>{
+      if(!h.date)return;
+      const end=h.to&&h.to>h.date?h.to:h.date;
+      for(let d=parse(h.date),e=parse(end),n=0;d<=e&&n<60;d=new Date(d.getTime()+864e5),n++) add(h.obs?O:H,toIso(d),h.name);
+    });
+    (typeof D!=="undefined"&&D.events||[]).forEach(e=>{if(e.date)add(V,e.date,e.title||e.name||"Event")});
+    return{H,O,V};
+  }
+
+  function renderCal(){
+    const{H,O,V}=maps();
+    $("calTitle").textContent=BNm[vm]+" "+BNd(vy);
+    const first=new Date(vy,vm,1).getDay(),dim=new Date(vy,vm+1,0).getDate(),prevDim=new Date(vy,vm,0).getDate();
+    let h="";const t=todayIso();
+    for(let i=0;i<42;i++){
+      let d,m=vm,y=vy,out=false;
+      if(i<first){d=prevDim-first+i+1;m=vm-1;out=true}
+      else if(i>=first+dim){d=i-first-dim+1;m=vm+1;out=true}
+      else d=i-first+1;
+      if(m<0){m=11;y=vy-1}else if(m>11){m=0;y=vy+1}
+      const k=iso(y,m,d),dow=i%7;
+      const cls=["cd"];
+      if(out)cls.push("out");if(dow===0)cls.push("sun");
+      if(H[k])cls.push("hol");else if(O[k])cls.push("obs");
+      if(V[k])cls.push("ev");if(k===t)cls.push("today");if(k===sel)cls.push("sel");
+      const tip=[].concat(H[k]||[],O[k]||[],V[k]||[]).join(" · ");
+      h+=`<button type="button" class="${cls.join(" ")}" data-d="${k}"${tip?` title="${E(tip)}"`:""}>${d}</button>`;
+      if(i===34&&first+dim<=35)break;
+    }
+    $("calGrid").innerHTML=h;
+    $("calGrid").querySelectorAll(".cd").forEach(b=>b.onclick=()=>{sel=b.dataset.d;const p=parse(sel);if(p.getUTCMonth()!==vm||p.getUTCFullYear()!==vy){vm=p.getUTCMonth();vy=p.getUTCFullYear()}renderCal()});
+    // selected day info
+    const items=[].concat((H[sel]||[]).map(n=>"🏖️ ছুটি: "+n),(O[sel]||[]).map(n=>"👁️ "+n+" (Observation – স্কুল খোলা)"),(V[sel]||[]).map(n=>"⭐ "+n));
+    const dow=parse(sel).getUTCDay();
+    $("calInfo").innerHTML=`<b>${E(fmtD(sel))}</b>`+(items.length?items.map(E).join("<br>"):(dow===0?"রবিবার – সাপ্তাহিক ছুটি":"কার্যদিবস / Working day"));
+    // month holiday list
+    const pre=vy+"-"+pad(vm+1)+"-",rows=[];
+    (typeof D!=="undefined"&&D.holidays||[]).forEach(x=>{
+      const end=x.to&&x.to>x.date?x.to:x.date;
+      if(x.date&&x.date.slice(0,7)<=pre.slice(0,7)&&end.slice(0,7)>=pre.slice(0,7)){
+        const f=x.date<pre+"01"?pre+"01":x.date;
+        rows.push([f,x.name+(x.obs?" (Obs.)":""),end>x.date?fmtShort(x.date)+" – "+fmtShort(end):fmtShort(x.date)]);
+      }
+    });
+    rows.sort((a,b)=>a[0].localeCompare(b[0]));
+    $("calMonthList").innerHTML=rows.length?`<b style="font-size:12.5px;color:var(--mar)">এই মাসের ছুটি / Holidays this month</b>`+rows.map(r=>`<div><span>${E(r[1])}</span><span>${E(r[2])}</span></div>`).join(""):`<span class="meta">এই মাসে কোনো ছুটি তালিকাভুক্ত নেই।</span>`;
+  }
+  const fmtShort=s=>parse(s).toLocaleDateString("en-GB",{day:"2-digit",month:"short",timeZone:"UTC"});
+  $("calPrev").onclick=()=>{vm--;if(vm<0){vm=11;vy--}renderCal()};
+  $("calNext").onclick=()=>{vm++;if(vm>11){vm=0;vy++}renderCal()};
+  $("calToday").onclick=()=>{const n=new Date();vy=n.getFullYear();vm=n.getMonth();sel=todayIso();renderCal()};
+
+  /* ---- tabs ---- */
+  document.querySelectorAll("#calcCard .tbtabs button").forEach(b=>b.onclick=()=>{
+    document.querySelectorAll("#calcCard .tbtabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
+    $("tp-calc").hidden=b.dataset.tp!=="calc";$("tp-date").hidden=b.dataset.tp!=="date";
+  });
+
+  /* ---- calculator (no eval) ---- */
+  let cur="0",acc=null,op=null,fresh=true,expr="";
+  const sym={"+":"+","-":"−","*":"×","/":"÷"};
+  const cal=(a,o,b)=>o==="+"?a+b:o==="-"?a-b:o==="*"?a*b:o==="/"?(b===0?NaN:a/b):b;
+  const show=v=>{let s=typeof v==="number"?(Number.isFinite(v)?String(+v.toPrecision(12)):"Error"):v;$("cOut").textContent=s;$("cExpr").textContent=expr};
+  function key(k){
+    if(cur==="Error"&&k!=="C")cur="0";
+    if(/^\d$/.test(k)){cur=fresh||cur==="0"?k:cur+k;fresh=false}
+    else if(k==="."){if(fresh){cur="0.";fresh=false}else if(!cur.includes("."))cur+="."}
+    else if(k==="C"){cur="0";acc=null;op=null;fresh=true;expr=""}
+    else if(k==="BS"){if(!fresh){cur=cur.length>1?cur.slice(0,-1):"0";if(cur==="-")cur="0"}}
+    else if(k==="NEG"){if(cur!=="0")cur=cur[0]==="-"?cur.slice(1):"-"+cur}
+    else if(k==="%"){cur=String(+(parseFloat(cur)/100).toPrecision(12));fresh=false}
+    else if("+-*/".includes(k)){
+      const v=parseFloat(cur);
+      if(op&&!fresh){acc=cal(acc,op,v);cur=Number.isFinite(acc)?String(+acc.toPrecision(12)):"Error"}else acc=v;
+      op=k;fresh=true;expr=(Number.isFinite(acc)?+acc.toPrecision(12):"Error")+" "+sym[k];
+    }
+    else if(k==="="){
+      if(op!==null){const b=parseFloat(cur),r=cal(acc,op,b);expr=(+acc.toPrecision(12))+" "+sym[op]+" "+b+" =";cur=Number.isFinite(r)?String(+r.toPrecision(12)):"Error";acc=null;op=null;fresh=true}
+    }
+    show(cur);
+  }
+  $("cKeys").addEventListener("click",e=>{const b=e.target.closest("button");if(b)key(b.dataset.k)});
+  $("calcCard").addEventListener("keydown",e=>{
+    if(e.target.closest("input,select,textarea")||$("tp-calc").hidden)return;
+    const k=e.key;
+    if(/^[0-9.+\-*/%]$/.test(k)){e.preventDefault();key(k)}
+    else if(k==="Enter"||k==="="){e.preventDefault();key("=")}
+    else if(k==="Backspace"){key("BS")}else if(k==="Escape"||k==="Delete"){key("C")}
+  });
+  $("calcCard").tabIndex=-1;
+
+  /* ---- date calculator ---- */
+  let mode="diff";
+  const T=todayIso();
+  const forms={
+    diff:`<label>শুরুর তারিখ<input type="date" id="d1" value="${T}"></label><label>শেষ তারিখ<input type="date" id="d2" value="${T}"></label>
+          <label class="chk full"><input type="checkbox" id="dInc"> শেষ দিন গণনায় ধরুন (inclusive)</label>`,
+    add:`<label class="full">শুরুর তারিখ<input type="date" id="d1" value="${T}"></label>
+         <label>বছর<input type="number" id="aY" value="0"></label><label>মাস<input type="number" id="aM" value="0"></label>
+         <label>দিন<input type="number" id="aD" value="0"></label><label>ক্রিয়া<select id="aS"><option value="1">যোগ (+)</option><option value="-1">বিয়োগ (−)</option></select></label>`,
+    work:`<label>শুরুর তারিখ<input type="date" id="d1" value="${T}"></label><label>শেষ তারিখ<input type="date" id="d2" value="${T}"></label>
+          <label class="chk"><input type="checkbox" id="wSun" checked> রবিবার বাদ</label><label class="chk"><input type="checkbox" id="wHol" checked> স্কুলের ছুটি বাদ</label>`,
+    age:`<label>জন্ম তারিখ<input type="date" id="d1"></label><label>হিসাবের তারিখ<input type="date" id="d2" value="${T}"></label>`
+  };
+  function ymd(a,b){ // a<=b, returns y,m,d
+    let y=b.getUTCFullYear()-a.getUTCFullYear(),m=b.getUTCMonth()-a.getUTCMonth(),d=b.getUTCDate()-a.getUTCDate();
+    if(d<0){m--;d+=new Date(Date.UTC(b.getUTCFullYear(),b.getUTCMonth(),0)).getUTCDate()}
+    if(m<0){y--;m+=12}return[y,m,d];
+  }
+  function addYMD(s,y,m,d){
+    const p=parse(s);let yy=p.getUTCFullYear()+y,mm=p.getUTCMonth()+m,dd=p.getUTCDate();
+    yy+=Math.floor(mm/12);mm=((mm%12)+12)%12;
+    const last=new Date(Date.UTC(yy,mm+1,0)).getUTCDate();
+    return new Date(Date.UTC(yy,mm,Math.min(dd,last)+d));
+  }
+  function dcCalc(){
+    const g=id=>$(id)?$(id).value:"",res=$("dcRes");
+    const d1=g("d1");
+    if(!d1){res.innerHTML='<span class="meta">তারিখ বেছে নিন।</span>';return}
+    if(mode==="add"){
+      const s=+g("aS"),r=addYMD(d1,s*(+g("aY")||0),s*(+g("aM")||0),s*(+g("aD")||0)),ri=toIso(r);
+      const{H}=maps();
+      res.innerHTML=`<div class="big">${E(fmtD(ri))}</div><div class="sm">${H[ri]?"🏖️ ছুটি: "+E(H[ri].join(", ")):r.getUTCDay()===0?"রবিবার":"কার্যদিবস"}</div>`;return;
+    }
+    const d2=g("d2");
+    if(!d2){res.innerHTML='<span class="meta">তারিখ বেছে নিন।</span>';return}
+    let a=d1,b=d2,neg=false;if(a>b){[a,b]=[b,a];neg=true}
+    const A=parse(a),B=parse(b),days=Math.round((B-A)/864e5);
+    if(mode==="diff"){
+      const inc=$("dInc").checked,[y,m,d]=ymd(A,inc?new Date(B.getTime()+864e5):B),tot=days+(inc?1:0);
+      res.innerHTML=`<div class="big">${tot} দিন</div><div class="sm">${y} বছর ${m} মাস ${d} দিন${neg?" (শুরু তারিখ শেষের পরে)":""}</div>
+        <div class="dc-chips"><span>${(tot/7).toFixed(1)} সপ্তাহ</span><span>${y*12+m} মাস ${d} দিন</span></div>`;
+    }else if(mode==="work"){
+      const{H}=maps(),sun=$("wSun").checked,hol=$("wHol").checked;let w=0,s=0,h=0;
+      for(let d=new Date(A);d<=B;d=new Date(d.getTime()+864e5)){
+        const k=toIso(d),isS=d.getUTCDay()===0,isH=!!H[k];
+        if(sun&&isS){s++;continue}if(hol&&isH){h++;continue}w++;
+      }
+      res.innerHTML=`<div class="big">${w} কার্যদিবস</div><div class="sm">মোট ${days+1} দিন (উভয় প্রান্ত সহ)</div>
+        <div class="dc-chips"><span>রবিবার বাদ: ${s}</span><span>ছুটি বাদ: ${h}</span></div>`;
+    }else{
+      if(neg){res.innerHTML='<span class="meta">জন্ম তারিখ হিসাবের তারিখের আগে হতে হবে।</span>';return}
+      const[y,m,d]=ymd(A,B);
+      const nb=addYMD(a,y+1,0,0),nbd=new Date(Date.UTC(B.getUTCFullYear(),A.getUTCMonth(),A.getUTCDate()));
+      let nx=nbd<B?new Date(Date.UTC(B.getUTCFullYear()+1,A.getUTCMonth(),A.getUTCDate())):nbd;
+      res.innerHTML=`<div class="big">${y} বছর ${m} মাস ${d} দিন</div><div class="sm">মোট ${days} দিন · পরবর্তী জন্মদিন ${Math.round((nx-B)/864e5)} দিন পরে</div>`;
+    }
+  }
+  function dcBuild(){
+    $("dcForm").innerHTML=forms[mode];
+    $("dcForm").querySelectorAll("input,select").forEach(i=>i.addEventListener("input",dcCalc));
+    dcCalc();
+  }
+  $("dcModes").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;mode=b.dataset.m;
+    $("dcModes").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));dcBuild()});
+
+  /* ---- hook into the portal's render so the calendar updates when holidays load/change ---- */
+  const prev=window.render;
+  if(typeof prev==="function"){window.render=function(){const r=prev.apply(this,arguments);try{renderCal();dcCalc()}catch(e){console.error(e)}return r}}
+  renderCal();dcBuild();show("0");
+  setInterval(()=>{if(todayIso()!==T)renderCal()},60000);
+})();
+</script>
+
 </body>
 </html>
