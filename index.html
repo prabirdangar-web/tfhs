@@ -569,12 +569,12 @@ $("addN").onclick = async () => {
   if (tooBig(body.length + poster.length + 300)) return toast("Storage full - delete old items first");
   const n = { id:uid(), title:t, link:$("nLink").value.trim(), body, for:$("nFor").value, date:$("nDate").value || today() };
   if (poster) n.poster = poster;
-  (D.notices ||= []).push(n);
+  upsert("notices", n, true);
   $("nTitle").value = $("nLink").value = $("nBody").value = $("nPoster").value = ""; save();
 };
 $("addR").onclick = () => {
   const t = $("rTitle").value.trim(); if (!t) return toast("Title is required");
-  (D.results ||= []).push({ id:uid(), title:t, link:$("rLink").value.trim(), date:$("rDate").value || today() });
+  upsert("results",{ title:t, link:$("rLink").value.trim(), date:$("rDate").value || today() }, true);
   $("rTitle").value = $("rLink").value = ""; save();
 };
 const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList", events:"eList", resources:"xList"};
@@ -603,7 +603,7 @@ function renderAdminLists(){
     $(id).innerHTML = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||(isData(x.url)?"Uploaded photo":x.url))}</b>
       <span class="meta">${esc((x.unit==="voc"?"VOC "+(x.level||"")+" · "+(x.eng||"")+" · ":"")+(x.post||x.time||(x.cat?catLabel(x.cat)+(x.vis==="admin"?" · admin only":""):"")))} ${fmt(x.date)}</span></div>
       ${k==="staff"?photoPicker(x):""}
-      ${k==="holidays"||k==="staff"?`<button class="btn alt sm" data-edit="${x.id}" data-ek="${k}">Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">Delete</button></div>`).join("");
+      ${["holidays","staff","links","resources","notices","results"].includes(k)?`<button class="btn alt sm" data-edit="${x.id}" data-ek="${k}">Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">Delete</button></div>`).join("");
   }
   document.querySelectorAll("#panel [data-id]").forEach(b => b.onclick = () => {
     if (!confirm("Delete this item?")) return;
@@ -618,6 +618,7 @@ function renderAdminLists(){
     t.photo = v; save();
   });
   document.querySelectorAll("#panel [data-edit]").forEach(b => b.onclick = () => {
+    if (["links","resources","notices","results"].includes(b.dataset.ek)) { startEdit(b.dataset.ek, b.dataset.edit); return; }
     if (b.dataset.ek === "staff") { const t = (D.staff||[]).find(x => x.id === b.dataset.edit); if (t) loadStaff(t); return; }
     const h = (D.holidays||[]).find(x => x.id === b.dataset.edit); if (!h) return;
     const n = prompt("Holiday name", h.name); if (n === null) return;
@@ -744,7 +745,7 @@ $("addT").onclick = () => { const l=$("tLabel").value.trim(); if(!l) return toas
 $("addH").onclick = () => { const n=$("hName").value.trim(), d=$("hDate").value; if(!n||!d) return toast("Date and name are required");
   addTo("holidays",{name:n, date:d, to:$("hTo").value, obs:$("hObs").checked}); $("hName").value=$("hDate").value=$("hTo").value=""; $("hObs").checked=false; };
 $("addL").onclick = () => { const t=$("lTitle").value.trim(), u=$("lUrl").value.trim(); if(!t||!/^https?:\/\//i.test(u)) return toast("Title and a full https link are required");
-  addTo("links",{title:t, url:u, group:$("lGroup").value, icon:$("lIcon").value.trim(), desc:$("lDesc").value.trim()});
+  upsert("links",{title:t, url:u, group:$("lGroup").value, icon:$("lIcon").value.trim(), desc:$("lDesc").value.trim()});
   ["lTitle","lUrl","lIcon","lDesc"].forEach(i=>$(i).value=""); };
 $("impH").onclick = () => {
   const have = new Set((D.holidays||[]).map(h => h.name.toLowerCase()+h.date));
@@ -891,10 +892,28 @@ function renderRes(){
 }
 $("addX").onclick = () => { const t=$("xTitle").value.trim(), u=$("xUrl").value.trim();
   if(!t||!/^https?:\/\//i.test(u)) return toast("Title and a full https link are required");
-  addTo("resources",{title:t, url:u, desc:$("xDesc").value.trim(), cat:$("xCustom").value.trim()||$("xCat").value, vis:$("xVis").value});
+  upsert("resources",{title:t, url:u, desc:$("xDesc").value.trim(), cat:$("xCustom").value.trim()||$("xCat").value, vis:$("xVis").value});
   ["xTitle","xUrl","xDesc","xCustom"].forEach(i=>$(i).value=""); };
 $("resetX").onclick = () => { if(!confirm("Replace the whole list with the standard list? Links you added will be removed.")) return;
   D.resources = DEFAULT_RES.map(x => ({...x})); save(); };
+/* ---------- Edit published items (links, notices, results) ---------- */
+const EDITS = {}, EBTN = {notices:["addN","Publish notice"], results:["addR","Publish result"], links:["addL","Add link"], resources:["addX","Add link"]};
+function editUi(k, on){ const [id, txt] = EBTN[k]; $(id).textContent = on ? "Save changes" : txt;
+  let c = $("cx_" + k); if (!c) { $(id).insertAdjacentHTML("afterend", ` <button class="btn alt" type="button" id="cx_${k}" style="display:none">Cancel edit</button>`); c = $("cx_" + k);
+    c.onclick = () => { EDITS[k] = null; editUi(k, false); ({notices:["nTitle","nLink","nBody"], results:["rTitle","rLink"], links:["lTitle","lUrl","lIcon","lDesc"], resources:["xTitle","xUrl","xDesc","xCustom"]})[k].forEach(i => $(i).value = ""); }; }
+  c.style.display = on ? "" : "none"; }
+function upsert(k, obj, nosave){ delete obj.id; D[k] = eff(k).slice(); const id = EDITS[k], o = id && D[k].find(x => x.id === id);
+  if (o) Object.assign(o, obj); else D[k].push({id:uid(), ...obj});
+  EDITS[k] = null; editUi(k, false); if (!nosave) save(); }
+function startEdit(k, id){ const o = eff(k).find(x => x.id === id); if (!o) return; EDITS[k] = id; let first;
+  if (k === "resources") { $("xTitle").value = o.title||""; $("xUrl").value = o.url||""; $("xDesc").value = o.desc||"";
+    const known = [...$("xCat").options].some(op => op.value === o.cat); $("xCat").value = known ? o.cat : "wbbse"; $("xCustom").value = known ? "" : (o.cat||"");
+    $("xVis").value = o.vis === "admin" ? "admin" : "public"; first = $("xTitle"); }
+  else if (k === "links") { $("lTitle").value = o.title||""; $("lUrl").value = o.url||""; $("lGroup").value = o.group||"general"; $("lIcon").value = o.icon||""; $("lDesc").value = o.desc||""; first = $("lTitle"); }
+  else if (k === "notices") { $("nTitle").value = o.title||""; $("nLink").value = o.link||""; $("nBody").value = o.body||""; $("nFor").value = o.for||"general"; $("nDate").value = o.date||today();
+    $("nPoster").value = ""; document.querySelector("#panel details.more").open = true; first = $("nTitle"); }
+  else { $("rTitle").value = o.title||""; $("rLink").value = o.link||""; $("rDate").value = o.date||today(); first = $("rTitle"); }
+  editUi(k, true); toast("Editing - change it, then click Save changes"); first.scrollIntoView({block:"center"}); first.focus(); }
 const GROUPS = [["student","ছাত্রছাত্রীদের জন্য / For Students"],["staff","শিক্ষক-শিক্ষাকর্মীদের জন্য / For Staff"],["general","সবার জন্য / For Everyone"]];
 function renderLinks(){
   $("linksBox").innerHTML = GROUPS.map(([g, label]) => {
