@@ -108,6 +108,26 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
 .hero .dots button{width:9px;height:9px;border-radius:50%;border:1px solid #fff;background:transparent;padding:0;cursor:pointer}
 .hero .dots button[aria-current=true]{background:var(--gold);border-color:var(--gold)}
 @media(prefers-reduced-motion:reduce){.hero img{transition:none}}
+/* today box */
+.today{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--gold);margin:0 0 10px}
+.today .th{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;background:var(--navy);color:#fff;padding:6px 12px}
+.today .th b{font:700 15px "Noto Serif Bengali",serif}
+.today .th span{font-size:13px;opacity:.92}
+.today .tc{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:0}
+@media(max-width:760px){.today .tc{grid-template-columns:1fr}}
+.today .tcol{padding:8px 12px;min-width:0}
+.today .tcol+.tcol{border-left:1px solid var(--line)}
+@media(max-width:760px){.today .tcol+.tcol{border-left:0;border-top:1px solid var(--line)}}
+.today h3{margin:0 0 6px;font-size:14px;color:var(--mar)}
+.today .tn{border-left:4px solid var(--c-notice);background:var(--bg);padding:6px 10px;margin-bottom:6px}
+.today .tn b{display:block}
+.today .tn .nbody{margin-top:4px}
+.today .hol{background:#fff3d6;color:#4a3300;border-left:4px solid var(--gold);padding:5px 10px;margin-bottom:6px;font-weight:600}
+@media(prefers-color-scheme:dark){.today .hol{background:#3a2d08;color:#ffe29a}}
+.today .ev{padding:4px 0;border-bottom:1px dashed var(--line)}
+.today .ev:last-child{border-bottom:0}
+.today .ev .yr{display:inline-block;background:var(--c-mp);color:#fff;font-size:12px;font-weight:700;padding:0 7px;border-radius:3px;margin-right:6px}
+.today .none{color:var(--mut)}
 /* admin */
 #panel{display:none}
 #panel fieldset{border:1px solid var(--line);border-radius:8px;background:var(--card);margin:0 0 14px;padding:12px 14px}
@@ -148,6 +168,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
     <div class="cap" id="heroCap"></div><div class="dots" id="heroDots"></div>
   </section>
   <div class="adm" id="admBox"></div>
+  <section class="today" id="todayBox" aria-label="আজকের বিজ্ঞপ্তি ও আজকের দিনে"></section>
 
   <div class="cols">
     <div class="mainc">
@@ -267,6 +288,13 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <label>Subject<input id="mpSub" placeholder="Bengali / Santali / English / Mathematics ..."></label>
       <p><button class="btn" id="addMp" type="button">Add exam row</button></p>
       <div id="mpList"></div>
+    </fieldset>
+
+    <fieldset><legend>আজকের দিনে – ঐতিহাসিক ঘটনা (প্রতি বছর ওই তারিখে নিজে থেকে দেখাবে)</legend>
+      <p class="meta" style="margin:0">ঘটনার আসল তারিখ দিন (যেমন ১৮৬১-০৫-০৭)। প্রতি বছর একই দিন-মাসে সাইটে স্বয়ংক্রিয়ভাবে যুক্ত হবে এবং ডিফল্ট তালিকার সঙ্গে মিলে যাবে।</p>
+      <div class="row"><label>ঘটনার তারিখ<input id="eDate" type="date"></label><label>ঘটনা (বাংলায়)<input id="eText" placeholder="যেমন: রবীন্দ্রনাথ ঠাকুরের জন্ম"></label></div>
+      <p><button class="btn" id="addE" type="button">ঘটনা যোগ করুন</button></p>
+      <div id="eList"></div>
     </fieldset>
 
     <fieldset><legend>Add result</legend>
@@ -400,6 +428,7 @@ function render(){
     : `<div class="empty">কোনো ফলাফল প্রকাশিত হয়নি। / No results published yet.</div>`;
   renderExtra();
   renderMp();
+  renderToday();
   renderAdminLists();
   paneCounts();
   flashInit();
@@ -473,7 +502,7 @@ $("addR").onclick = () => {
   (D.results ||= []).push({ id:uid(), title:t, link:$("rLink").value.trim(), date:$("rDate").value || today() });
   $("rTitle").value = $("rLink").value = ""; save();
 };
-const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList"};
+const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList", events:"eList"};
 let PH_ID = null;
 $("phFile").addEventListener("cancel", () => render());
 $("phFile").onchange = async () => {
@@ -821,6 +850,71 @@ function renderExtra(){
     : `<div class="empty">কোনো আসন্ন ছুটি নেই। / No upcoming holidays listed.</div>`;
   $("holAll").innerHTML = all.map(h => `<tr><td>${esc(h.name)}${h.obs?" <span class='tag'>Obs.</span>":""}</td><td>${range(h)}</td></tr>`).join("");
 }
+
+/* ---------- আজকের বিজ্ঞপ্তি ও আজকের দিনে ---------- */
+const BN = s => String(s).replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
+const localToday = () => new Date(Date.now() - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0,10);
+const HIST = [
+ ["01-12",1863,"স্বামী বিবেকানন্দের জন্ম। দিনটি জাতীয় যুব দিবস হিসেবে পালিত হয়।"],
+ ["01-23",1897,"নেতাজি সুভাষচন্দ্র বসুর জন্ম (কটক)।"],
+ ["01-26",1950,"ভারতের সংবিধান কার্যকর হয় – প্রজাতন্ত্র দিবস।"],
+ ["01-30",1948,"মহাত্মা গান্ধীর মৃত্যু – শহিদ দিবস।"],
+ ["02-21",1952,"ঢাকায় বাংলা ভাষার দাবিতে ভাষা আন্দোলন; আজ আন্তর্জাতিক মাতৃভাষা দিবস।"],
+ ["02-28",1928,"সি. ভি. রমন 'রমন ইফেক্ট' আবিষ্কার করেন – জাতীয় বিজ্ঞান দিবস।"],
+ ["03-14",1879,"বিজ্ঞানী আলবার্ট আইনস্টাইনের জন্ম।"],
+ ["03-23",1931,"ভগৎ সিং, সুখদেব ও রাজগুরুর ফাঁসি – শহিদ দিবস।"],
+ ["04-12",1961,"ইউরি গ্যাগারিন প্রথম মানুষ হিসেবে মহাকাশে যান।"],
+ ["04-13",1919,"জালিয়ানওয়ালাবাগ হত্যাকাণ্ড।"],
+ ["04-14",1891,"ড. বি. আর. আম্বেদকরের জন্ম।"],
+ ["05-07",1861,"বিশ্বকবি রবীন্দ্রনাথ ঠাকুরের জন্ম (২৫ বৈশাখ)।"],
+ ["06-23",1757,"পলাশির যুদ্ধ – বাংলার স্বাধীন নবাবির পতন।"],
+ ["06-30",1855,"সাঁওতাল হুল (বিদ্রোহ) শুরু – হুল দিবস।"],
+ ["07-20",1969,"অ্যাপোলো ১১-র নভোচারীরা প্রথমবার চাঁদে পা রাখেন।"],
+ ["08-07",1941,"রবীন্দ্রনাথ ঠাকুরের প্রয়াণ (২২ শ্রাবণ)।"],
+ ["08-08",1942,"ভারত ছাড়ো প্রস্তাব গৃহীত হয়।"],
+ ["08-11",1908,"ক্ষুদিরাম বসুর ফাঁসি।"],
+ ["08-15",1947,"ভারতের স্বাধীনতা লাভ।"],
+ ["09-05",1888,"ড. সর্বপল্লী রাধাকৃষ্ণণের জন্ম – শিক্ষক দিবস।"],
+ ["09-26",1820,"ঈশ্বরচন্দ্র বিদ্যাসাগরের জন্ম।"],
+ ["10-02",1869,"মহাত্মা গান্ধীর জন্ম – গান্ধী জয়ন্তী।"],
+ ["10-15",1931,"ড. এ. পি. জে. আব্দুল কালামের জন্ম।"],
+ ["10-29",1969,"ইন্টারনেটের পূর্বসূরি ARPANET-এ প্রথম বার্তা পাঠানো হয়।"],
+ ["10-31",1875,"সর্দার বল্লভভাই প্যাটেলের জন্ম – জাতীয় ঐক্য দিবস।"],
+ ["11-07",1888,"বিজ্ঞানী সি. ভি. রমনের জন্ম।"],
+ ["11-14",1889,"জওহরলাল নেহরুর জন্ম – শিশু দিবস।"],
+ ["11-15",1875,"বীর বিরসা মুণ্ডার জন্ম।"],
+ ["11-19",1917,"ইন্দিরা গান্ধীর জন্ম।"],
+ ["11-26",1949,"ভারতের সংবিধান গৃহীত হয় – সংবিধান দিবস।"],
+ ["12-03",1884,"ড. রাজেন্দ্র প্রসাদের জন্ম।"]
+];
+function eventsFor(md){
+  const a = HIST.filter(h => h[0] === md).map(h => ({year:h[1], text:h[2]}));
+  (D.events||[]).filter(e => (e.date||"").slice(5) === md).forEach(e => a.push({year:+(e.date||"").slice(0,4), text:e.title}));
+  return a.sort((x,y) => x.year - y.year);
+}
+function renderToday(){
+  const box = $("todayBox"); if (!box) return;
+  const t = localToday(), md = t.slice(5);
+  const dateBn = new Date(t + "T00:00:00").toLocaleDateString("bn-IN", {weekday:"long", day:"numeric", month:"long", year:"numeric"});
+  const ns = (D.notices||[]).filter(n => n.date === t);
+  const hol = (D.holidays||[]).filter(h => !h.obs && h.date <= t && (h.to || h.date) >= t);
+  const evs = eventsFor(md);
+  const nHtml = ns.length ? ns.map(n => `<div class="tn"><b>${esc(n.title)}</b>
+      ${n.body?`<div class="nbody">${esc(n.body)}</div>`:""}
+      ${imgUrl(n.poster)&&isData(n.poster)?`<img class="zoom poster-s" loading="lazy" src="${imgUrl(n.poster)}" alt="বিজ্ঞপ্তির পোস্টার">`:""}
+      ${safeUrl(n.link)?`<p style="margin:6px 0 0"><a class="btn sm" href="${safeUrl(n.link)}" target="_blank" rel="noopener">খুলুন</a></p>`:""}</div>`).join("")
+    : `<div class="none">আজ নতুন কোনো বিজ্ঞপ্তি নেই।</div>`;
+  const hHtml = hol.map(h => `<div class="hol">🏖️ আজ ছুটি: ${esc(h.name)}</div>`).join("");
+  const eHtml = evs.length ? evs.map(e => `<div class="ev"><span class="yr">${BN(e.year)}</span>${esc(e.text)}</div>`).join("")
+    : `<div class="none">আজকের তারিখে কোনো উল্লেখযোগ্য ঘটনা তালিকাভুক্ত নেই।</div>`;
+  box.innerHTML = `<div class="th"><b>📅 আজকের বিজ্ঞপ্তি ও আজকের দিনে</b><span>${esc(dateBn)}</span></div>
+    <div class="tc"><div class="tcol"><h3>📢 আজকের বিজ্ঞপ্তি</h3>${hHtml}${nHtml}</div>
+    <div class="tcol"><h3>📜 ইতিহাসে আজকের দিনে</h3>${eHtml}</div></div>`;
+}
+setInterval(renderToday, 60000);
+$("addE").onclick = () => { const d = $("eDate").value, x = $("eText").value.trim();
+  if (!d || !x) return toast("তারিখ ও ঘটনা দুটিই দিন");
+  addTo("events", {title:x, date:d}); $("eText").value = $("eDate").value = ""; };
 
 /* ---------- MP (SE) 2027 Selection Test programme ---------- */
 const MP_LINK = "https://prabirdangar-web.github.io/xi_mp_test/";
