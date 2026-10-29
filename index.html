@@ -128,6 +128,25 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
 .today .ev:last-child{border-bottom:0}
 .today .ev .yr{display:inline-block;background:var(--c-mp);color:#fff;font-size:12px;font-weight:700;padding:0 7px;border-radius:3px;margin-right:6px}
 .today .none{color:var(--mut)}
+/* corners: timetable + MDM duty */
+.corners{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-top:12px;align-items:start}
+@media(max-width:760px){.corners{grid-template-columns:1fr}}
+.cc{background:var(--card);border:1px solid var(--line)}
+.cc h2{margin:0;padding:6px 12px;font:700 14.5px "Noto Sans Bengali",sans-serif;color:#fff;background:var(--c)}
+table.tt{width:100%;border-collapse:collapse;font-size:13.5px}
+table.tt td{border-bottom:1px solid var(--line);padding:4px 10px}
+table.tt td:first-child{white-space:nowrap;color:var(--mut);width:1%}
+table.tt tr.brk td{background:#fff3d6;color:#4a3300;font-weight:600}
+table.tt tr.now td{background:var(--gold);color:#1b1400;font-weight:700}
+@media(prefers-color-scheme:dark){table.tt tr.brk td{background:#3a2d08;color:#ffe29a}}
+.duty .dd{display:grid;grid-template-columns:78px 1fr;gap:0;border-bottom:1px solid var(--line)}
+.duty .dd:last-child{border-bottom:0}
+.duty .dd>b{padding:5px 10px;background:color-mix(in srgb,var(--c-mp) 14%,var(--card));font-size:13px}
+.duty .dd>div{padding:5px 10px;font-size:13px;line-height:1.5}
+.duty .dd.today>b{background:var(--gold);color:#1b1400}
+.duty .dd.today>div{background:color-mix(in srgb,var(--gold) 16%,var(--card))}
+.duty .pt{color:var(--c-staff);font-weight:600}
+.duty .note{padding:5px 10px;font-size:12px;color:var(--mut)}
 /* admin */
 #panel{display:none}
 #panel fieldset{border:1px solid var(--line);border-radius:8px;background:var(--card);margin:0 0 14px;padding:12px 14px}
@@ -205,6 +224,11 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <section class="pane" id="p-mptest" role="tabpanel" style="--c:var(--c-mp)" hidden>
         <div id="mpBox"></div>
       </section>
+
+      <div class="corners">
+        <section class="cc" style="--c:var(--c-routine)" aria-label="বিদ্যালয়ের সময়সূচি"><h2>🕘 বিদ্যালয়ের সময়সূচি</h2><table class="tt" id="ttBox"></table></section>
+        <section class="cc duty" style="--c:var(--c-mp)" aria-label="MDM তদারকি রোস্টার"><h2>🍱 MDM তদারকি রোস্টার (সপ্তাহের দিন অনুযায়ী)</h2><div id="dutyBox"></div></section>
+      </div>
     </div>
 
     <aside class="side">
@@ -295,6 +319,18 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <div class="row"><label>ঘটনার তারিখ<input id="eDate" type="date"></label><label>ঘটনা (বাংলায়)<input id="eText" placeholder="যেমন: রবীন্দ্রনাথ ঠাকুরের জন্ম"></label></div>
       <p><button class="btn" id="addE" type="button">ঘটনা যোগ করুন</button></p>
       <div id="eList"></div>
+    </fieldset>
+
+    <fieldset><legend>সময়সূচি (Time table)</legend>
+      <p class="meta" style="margin:0">প্রতি লাইনে একটি: <code>10:30-10:45 | প্রার্থনা সভা</code> (২৪ ঘণ্টার সময়)। ফাঁকা রাখলে ডিফল্ট পশ্চিমবঙ্গ সময়সূচি দেখাবে।</p>
+      <textarea id="ttText" rows="11"></textarea>
+      <p><button class="btn" id="saveTT" type="button">সময়সূচি সংরক্ষণ</button> <button class="btn alt" id="defTT" type="button">ডিফল্টে ফিরুন</button></p>
+    </fieldset>
+
+    <fieldset><legend>MDM তদারকি রোস্টার</legend>
+      <p class="meta" style="margin:0">নিয়মিত শিক্ষক ও ৭ জন প্যারা শিক্ষককে সোম–শনি ভাগ করে স্বয়ংক্রিয়ভাবে দেওয়া আছে। কারও দিন বদলাতে নিচের তালিকা থেকে দিন বেছে নিন।</p>
+      <p><button class="btn alt" id="resetDuty" type="button">স্বয়ংক্রিয় ভাগে ফিরুন</button></p>
+      <div id="dutyAdmin"></div>
     </fieldset>
 
     <fieldset><legend>Add result</legend>
@@ -429,6 +465,7 @@ function render(){
   renderExtra();
   renderMp();
   renderToday();
+  renderCorners();
   renderAdminLists();
   paneCounts();
   flashInit();
@@ -915,6 +952,63 @@ setInterval(renderToday, 60000);
 $("addE").onclick = () => { const d = $("eDate").value, x = $("eText").value.trim();
   if (!d || !x) return toast("তারিখ ও ঘটনা দুটিই দিন");
   addTo("events", {title:x, date:d}); $("eText").value = $("eDate").value = ""; };
+
+/* ---------- সময়সূচি ও MDM তদারকি রোস্টার ---------- */
+const DAYS_BN = ["সোমবার","মঙ্গলবার","বুধবার","বৃহস্পতিবার","শুক্রবার","শনিবার"];
+const DEF_TT = `10:30-10:45 | প্রার্থনা সভা ও 'বন্দে মাতরম্'
+10:45-11:25 | ১ম পিরিয়ড
+11:25-12:05 | ২য় পিরিয়ড
+12:05-12:45 | ৩য় পিরিয়ড
+12:45-13:15 | টিফিন / মিড-ডে মিল বিরতি
+13:15-13:55 | ৪র্থ পিরিয়ড
+13:55-14:35 | ৫ম পিরিয়ড
+14:35-15:15 | ৬ষ্ঠ পিরিয়ড
+15:15-15:55 | ৭ম পিরিয়ড
+15:55-16:00 | ছুটির প্রস্তুতি ও জাতীয় সঙ্গীত`;
+const tkey = n => String(n||"").toLowerCase().replace(/[^\p{L}]/gu, "");
+const t12 = hm => { let [h,m] = hm.split(":").map(Number); h = h % 12 || 12; return BN(h + ":" + String(m).padStart(2,"0")); };
+function ttRows(){
+  return String(D.timetable || DEF_TT).split("\n").map(l => { const m = /^\s*(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})\s*\|\s*(.+)$/.exec(l); return m ? {a:m[1], b:m[2], t:m[3].trim()} : null; }).filter(Boolean);
+}
+function dutyPeople(){
+  const st = D.staff || [];
+  let reg = st.filter(t => t.unit !== "voc" && /assistant teacher/i.test(t.post||"")).map(t => t.name);
+  if (!reg.length) reg = SEED_REG.filter(r => /assistant teacher/i.test(r[1])).map(r => r[0]);
+  let para = st.filter(t => t.unit === "voc" && /para/i.test(t.post||"") ).map(t => t.name);
+  if (!para.length) para = SEED_VOC.filter(r => r[3] === "Para").map(r => r[0]);
+  const out = []; let pi = 0;
+  reg.forEach((n, i) => { out.push({name:n, para:false}); if ((i + 1) % 4 === 0 && pi < para.length) out.push({name:para[pi++], para:true}); });
+  while (pi < para.length) out.push({name:para[pi++], para:true});
+  return out;
+}
+function dutyMap(){
+  const ppl = dutyPeople(), ov = D.duty || {}, days = DAYS_BN.map(() => []);
+  ppl.forEach((p, i) => { const d = ov[tkey(p.name)]; days[(d >= 0 && d < 6) ? d : i % 6].push(p); });
+  return {ppl, days};
+}
+let TT_FILLED = false;
+function renderCorners(){
+  const rows = ttRows(), now = new Date(), nm = now.getHours() * 60 + now.getMinutes(), mm = x => { const [h,m] = x.split(":").map(Number); return h*60+m; };
+  $("ttBox").innerHTML = rows.map(r => { const on = nm >= mm(r.a) && nm < mm(r.b), brk = /টিফিন|বিরতি|মিড/.test(r.t);
+    return `<tr class="${on?"now":brk?"brk":""}"><td>${t12(r.a)} – ${t12(r.b)}</td><td>${esc(r.t)}</td></tr>`; }).join("");
+  const {days} = dutyMap(), wd = (now.getDay() + 6) % 7;
+  $("dutyBox").innerHTML = days.map((g, i) => `<div class="dd${i===wd?" today":""}"><b>${DAYS_BN[i]}${i===wd?"<br><small>আজ</small>":""}</b>
+    <div>${g.length ? g.map(p => p.para ? `<span class="pt">${esc(p.name)} (প্যারা)</span>` : esc(p.name)).join(" · ") : "—"}</div></div>`).join("")
+    + `<div class="note">প্রতিদিন মিড-ডে মিলের সময় ওই দিনের তালিকার শিক্ষক-শিক্ষিকারা তদারকি করবেন। রবিবার বিদ্যালয় বন্ধ।</div>`;
+  const ed = $("editor");
+  if (ed && ed.style.display !== "none") {
+    if (!TT_FILLED) { $("ttText").value = D.timetable || DEF_TT; TT_FILLED = true; }
+    const {ppl} = dutyMap(), ov = D.duty || {};
+    $("dutyAdmin").innerHTML = ppl.map(p => { const cur = dutyMap().days.findIndex(g => g.includes(p));
+      return `<div class="item"><div><b>${esc(p.name)}</b><span class="meta">${p.para?"প্যারা শিক্ষক":"নিয়মিত শিক্ষক"}</span></div>
+      <select data-duty="${esc(tkey(p.name))}" style="max-width:150px">${DAYS_BN.map((d,i) => `<option value="${i}"${i===cur?" selected":""}>${d}</option>`).join("")}</select></div>`; }).join("");
+    $("dutyAdmin").querySelectorAll("select[data-duty]").forEach(sel => sel.onchange = () => { D.duty = {...(D.duty||{}), [sel.dataset.duty]: +sel.value}; save(); });
+  }
+}
+$("saveTT").onclick = () => { const v = $("ttText").value.trim(); D.timetable = v === DEF_TT ? "" : v; TT_FILLED = false; save(); };
+$("defTT").onclick = () => { D.timetable = ""; TT_FILLED = false; save(); };
+$("resetDuty").onclick = () => { D.duty = {}; save(); };
+setInterval(renderCorners, 60000);
 
 /* ---------- MP (SE) 2027 Selection Test programme ---------- */
 const MP_LINK = "https://prabirdangar-web.github.io/xi_mp_test/";
