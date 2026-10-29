@@ -1042,10 +1042,7 @@ function renderToday(){
   const ns = (D.notices||[]).filter(n => n.date === t);
   const hol = (D.holidays||[]).filter(h => !h.obs && h.date <= t && (h.to || h.date) >= t);
   const evs = eventsFor(md);
-  const nHtml = ns.length ? ns.map(n => `<div class="tn"><b>${esc(n.title)}</b>
-      ${n.body?`<div class="nbody">${esc(n.body)}</div>`:""}
-      ${imgUrl(n.poster)&&isData(n.poster)?`<img class="zoom poster-s" loading="lazy" src="${imgUrl(n.poster)}" alt="বিজ্ঞপ্তির পোস্টার">`:""}
-      ${safeUrl(n.link)?`<p style="margin:6px 0 0"><a class="btn sm" href="${safeUrl(n.link)}" target="_blank" rel="noopener">খুলুন</a></p>`:""}</div>`).join("")
+  const nHtml = ns.length ? ns.map(n => `<div class="tn"><b>${esc(n.title)}</b> <a href="#notices-top" class="btn sm" data-goto="notices">বিস্তারিত / Details ↓</a></div>`).join("")
     : `<div class="none">আজ নতুন কোনো বিজ্ঞপ্তি নেই।</div>`;
   const hHtml = hol.map(h => `<div class="hol">🏖️ আজ ছুটি: ${esc(h.name)}</div>`).join("");
   const eHtml = evs.length ? evs.map(e => `<div class="ev"><span class="yr">${BN(e.year)}</span>${esc(e.text)}</div>`).join("")
@@ -1053,6 +1050,7 @@ function renderToday(){
   box.innerHTML = `<div class="th"><b>📅 আজকের বিজ্ঞপ্তি ও আজকের দিনে</b><span>${esc(dateBn)}</span></div>
     <div class="tc"><div class="tcol"><h3>📢 আজকের বিজ্ঞপ্তি</h3>${hHtml}${nHtml}</div>
     <div class="tcol"><h3>📜 ইতিহাসে আজকের দিনে</h3>${eHtml}</div></div>`;
+  box.querySelectorAll("[data-goto]").forEach(a => a.onclick = e => { e.preventDefault(); showPane(a.dataset.goto, true); });
 }
 setInterval(renderToday, 60000);
 $("addE").onclick = () => { const d = $("eDate").value, x = $("eText").value.trim();
