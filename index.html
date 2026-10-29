@@ -3,14 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0c2a6b">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="TFHS">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="icon" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Taldangra Fulmati High School (H.S.) – Notice Board</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Serif+Bengali:wght@700&display=swap">
 <style>
@@ -50,7 +42,7 @@ h2.sec:first-child{margin-top:0}
 .pp{display:flex;align-items:center;gap:8px;margin-left:auto}.pp img{width:40px;height:40px;border-radius:50%;object-fit:cover}.pp label{margin:0;font-size:12px}.pp .addph{display:none;background:#b3261e}.pp.miss .addph{display:inline-block}.pp select{max-width:190px}
 .meta{font-size:12px;color:var(--mut)}
 .tag{display:inline-block;font-size:11px;border-radius:3px;padding:0 6px;background:var(--line);color:var(--ink);margin-right:4px}
-.tag.new{background:#d62828;color:#fff;font-weight:700}
+.tag.new{background:#b3121b;color:#fff;font-weight:700}
 .empty{color:var(--mut);padding:8px 10px}
 footer{text-align:center;background:var(--navy);color:#dbe4ff;font-size:12.5px;padding:12px 16px;margin-top:14px;border-top:3px solid var(--gold)}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
@@ -199,12 +191,12 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 .cal-body{padding:10px 12px 12px}
 .cal-dow,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .cal-dow span{text-align:center;font-size:11.5px;font-weight:700;color:var(--mut);padding:2px 0}
-.cal-dow span:first-child{color:#c0392b}
+.cal-dow span:first-child{color:#9b0d0d;font-weight:800}
 .cal-grid{margin-top:2px}
 .cd{position:relative;aspect-ratio:1/.82;min-height:36px;border:1px solid transparent;border-radius:8px;background:color-mix(in srgb,var(--bg) 60%,var(--card));font:600 13.5px inherit;font-family:inherit;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s,box-shadow .12s}
 .cd:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .cd.out{opacity:.32}
-.cd.sun{color:#c0392b}
+.cd.sun{color:#9b0d0d;font-weight:800}
 .cd.hol{background:linear-gradient(135deg,#ffe3a3,#ffc857);color:#4a3300;border-color:#e6a700}
 .cd.obs{background:color-mix(in srgb,var(--c-routine) 16%,var(--card));border-color:var(--c-routine)}
 .cd.ev::after{content:"";position:absolute;bottom:4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--c-staff)}
@@ -248,10 +240,27 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 .dc-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
 .dc-chips span{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1px 10px;font-size:12.5px}
 
-#installBtn{display:none;background:var(--gold);color:#1b1400!important;cursor:pointer;border:0;font-family:inherit}
-#installBtn.show{display:inline-block}
-#iosHint{display:none;position:fixed;left:10px;right:10px;bottom:10px;z-index:70;background:var(--navy);color:#fff;border:2px solid var(--gold);border-radius:10px;padding:10px 14px;font-size:13.5px;box-shadow:0 4px 18px rgba(0,0,0,.4)}
-#iosHint button{float:right;background:transparent;border:0;color:#fff;font-size:18px;cursor:pointer}
+/* compact placement below timetable + MDM */
+.tools.small{margin:12px 0 0;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px;font-size:13px}
+.tools.small .thead{padding:6px 10px}.tools.small .thead b{font-size:13.5px}
+.tools.small .thead button{height:24px;min-width:26px;font-size:13px}
+.tools.small .cal-body{padding:8px 10px 10px}
+.tools.small .cd{aspect-ratio:auto;min-height:27px;height:27px;font-size:12px;border-radius:6px}
+.tools.small .cal-dow span{font-size:10.5px}
+.tools.small .cal-grid,.tools.small .cal-dow{gap:3px}
+.tools.small .cal-leg{font-size:10.5px;margin:6px 0 4px;gap:8px}
+.tools.small .cal-info{font-size:12px;padding:5px 9px;min-height:32px}
+.tools.small .cal-mlist{font-size:11.5px;margin-top:5px}
+.tools.small .tpane{padding:9px}
+.tools.small .calc-scr{padding:5px 10px;margin-bottom:7px}.tools.small .calc-scr output{font-size:22px}
+.tools.small .keys{gap:5px}.tools.small .keys button{height:34px;font-size:14px;border-radius:8px}
+.tools.small .dc-modes button{font-size:11.5px;padding:2px 9px}
+.tools.small .dcf input,.tools.small .dcf select{padding:4px 7px;font-size:12.5px}
+.tools.small .dc-res{padding:8px 10px;font-size:12.5px}.tools.small .dc-res .big{font-size:17px}
+
+/* readable Sundays on every cell background */
+.cd.sun.hol,.cd.sun.obs{color:#4a1200}
+@media(prefers-color-scheme:dark){.cal-dow span:first-child,.cd.sun{color:#ff9d90}.cd.sun.hol{color:#ffe29a}.cd.sun.obs{color:#ffd0c8}}
 </style>
 </head>
 <body>
@@ -263,7 +272,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
   <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
-  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><button type="button" id="installBtn">📲 অ্যাপ ইন্সটল করুন</button><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
+  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
 
 <main class="wrap" id="site">
@@ -275,43 +284,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
   <div class="adm" id="admBox"></div>
   <section class="today" id="todayBox" aria-label="আজকের বিজ্ঞপ্তি ও আজকের দিনে"></section>
 
-  <section class="tools" id="toolsBox" aria-label="ক্যালেন্ডার ও ক্যালকুলেটর">
-    <div class="tcard" id="calCard">
-      <div class="thead"><b>🗓️ <span id="calTitle"></span></b>
-        <div class="nav"><button type="button" id="calPrev" aria-label="আগের মাস">‹</button><button type="button" id="calToday">আজ</button><button type="button" id="calNext" aria-label="পরের মাস">›</button></div></div>
-      <div class="cal-body">
-        <div class="cal-dow"><span>রবি</span><span>সোম</span><span>মঙ্গল</span><span>বুধ</span><span>বৃহঃ</span><span>শুক্র</span><span>শনি</span></div>
-        <div class="cal-grid" id="calGrid"></div>
-        <div class="cal-leg"><span><i style="background:#ffc857"></i>ছুটি / Holiday</span><span><i style="background:color-mix(in srgb,var(--c-routine) 30%,var(--card))"></i>Observation day</span><span><i style="background:var(--c-staff)"></i>ইভেন্ট</span><span><i style="outline:2px solid var(--mar);background:var(--card)"></i>আজ</span></div>
-        <div class="cal-info" id="calInfo"></div>
-        <div class="cal-mlist" id="calMonthList"></div>
-      </div>
-    </div>
-    <div class="tcard" id="calcCard">
-      <div class="thead"><b>🧮 ক্যালকুলেটর</b>
-        <div class="tbtabs" role="tablist"><button type="button" role="tab" data-tp="calc" aria-selected="true">Calculator</button><button type="button" role="tab" data-tp="date" aria-selected="false">Date Calc</button></div></div>
-      <div class="tpane" id="tp-calc">
-        <div class="calc-scr"><small id="cExpr"></small><output id="cOut">0</output></div>
-        <div class="keys" id="cKeys">
-          <button class="fn" data-k="C">C</button><button class="fn" data-k="BS">⌫</button><button class="fn" data-k="%">%</button><button class="op" data-k="/">÷</button>
-          <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button class="op" data-k="*">×</button>
-          <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button class="op" data-k="-">−</button>
-          <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button class="op" data-k="+">+</button>
-          <button class="fn" data-k="NEG">±</button><button data-k="0">0</button><button data-k=".">.</button><button class="eq" data-k="=">=</button>
-        </div>
-      </div>
-      <div class="tpane" id="tp-date" hidden>
-        <div class="dc-modes" id="dcModes">
-          <button type="button" data-m="diff" aria-pressed="true">দুই তারিখের ব্যবধান</button>
-          <button type="button" data-m="add" aria-pressed="false">তারিখ যোগ/বিয়োগ</button>
-          <button type="button" data-m="work" aria-pressed="false">কার্যদিবস</button>
-          <button type="button" data-m="age" aria-pressed="false">বয়স</button>
-        </div>
-        <div class="dcf" id="dcForm"></div>
-        <div class="dc-res" id="dcRes"></div>
-      </div>
-    </div>
-  </section>
+
 
 
   <div class="cols">
@@ -354,6 +327,44 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
         <section class="cc" style="--c:var(--c-routine)" aria-label="বিদ্যালয়ের সময়সূচি"><h2>🕘 বিদ্যালয়ের সময়সূচি</h2><table class="tt" id="ttBox"></table></section>
         <section class="cc duty" style="--c:var(--c-mp)" aria-label="MDM তদারকি রোস্টার"><h2>🍱 MDM তদারকি রোস্টার (সপ্তাহের দিন অনুযায়ী)</h2><div id="dutyBox"></div></section>
       </div>
+    
+  <section class="tools small" id="toolsBox" aria-label="ক্যালেন্ডার ও ক্যালকুলেটর">
+    <div class="tcard" id="calCard">
+      <div class="thead"><b>🗓️ <span id="calTitle"></span></b>
+        <div class="nav"><button type="button" id="calPrev" aria-label="আগের মাস">‹</button><button type="button" id="calToday">আজ</button><button type="button" id="calNext" aria-label="পরের মাস">›</button></div></div>
+      <div class="cal-body">
+        <div class="cal-dow"><span>রবি</span><span>সোম</span><span>মঙ্গল</span><span>বুধ</span><span>বৃহঃ</span><span>শুক্র</span><span>শনি</span></div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-leg"><span><i style="background:#ffc857"></i>ছুটি / Holiday</span><span><i style="background:color-mix(in srgb,var(--c-routine) 30%,var(--card))"></i>Observation day</span><span><i style="background:var(--c-staff)"></i>ইভেন্ট</span><span><i style="outline:2px solid var(--mar);background:var(--card)"></i>আজ</span></div>
+        <div class="cal-info" id="calInfo"></div>
+        <div class="cal-mlist" id="calMonthList"></div>
+      </div>
+    </div>
+    <div class="tcard" id="calcCard">
+      <div class="thead"><b>🧮 ক্যালকুলেটর</b>
+        <div class="tbtabs" role="tablist"><button type="button" role="tab" data-tp="calc" aria-selected="true">Calculator</button><button type="button" role="tab" data-tp="date" aria-selected="false">Date Calc</button></div></div>
+      <div class="tpane" id="tp-calc">
+        <div class="calc-scr"><small id="cExpr"></small><output id="cOut">0</output></div>
+        <div class="keys" id="cKeys">
+          <button class="fn" data-k="C">C</button><button class="fn" data-k="BS">⌫</button><button class="fn" data-k="%">%</button><button class="op" data-k="/">÷</button>
+          <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button class="op" data-k="*">×</button>
+          <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button class="op" data-k="-">−</button>
+          <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button class="op" data-k="+">+</button>
+          <button class="fn" data-k="NEG">±</button><button data-k="0">0</button><button data-k=".">.</button><button class="eq" data-k="=">=</button>
+        </div>
+      </div>
+      <div class="tpane" id="tp-date" hidden>
+        <div class="dc-modes" id="dcModes">
+          <button type="button" data-m="diff" aria-pressed="true">দুই তারিখের ব্যবধান</button>
+          <button type="button" data-m="add" aria-pressed="false">তারিখ যোগ/বিয়োগ</button>
+          <button type="button" data-m="work" aria-pressed="false">কার্যদিবস</button>
+          <button type="button" data-m="age" aria-pressed="false">বয়স</button>
+        </div>
+        <div class="dcf" id="dcForm"></div>
+        <div class="dc-res" id="dcRes"></div>
+      </div>
+    </div>
+  </section>
     </div>
 
     <aside class="side">
@@ -1507,22 +1518,5 @@ addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true
 })();
 </script>
 
-
-<div id="iosHint"><button type="button" aria-label="Close" id="iosClose">&times;</button>📲 iPhone/iPad: Safari-র <b>Share</b> বোতাম চেপে <b>“Add to Home Screen”</b> বেছে নিন।</div>
-<script>
-(function(){
-  if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){
-    addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(e=>console.warn("SW",e)));
-  }
-  const btn=document.getElementById("installBtn");let dp=null;
-  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
-  addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;if(!standalone)btn.classList.add("show")});
-  btn.onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;btn.classList.remove("show")};
-  addEventListener("appinstalled",()=>btn.classList.remove("show"));
-  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!standalone;
-  if(ios&&!localStorage.getItem("iosHintSeen")){document.getElementById("iosHint").style.display="block";
-    document.getElementById("iosClose").onclick=()=>{document.getElementById("iosHint").style.display="none";try{localStorage.setItem("iosHintSeen","1")}catch(e){}}}
-})();
-</script>
 </body>
 </html>
