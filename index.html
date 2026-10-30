@@ -93,9 +93,19 @@ nav.menu a:hover{background:var(--gold);color:#1b1400}
 .flang button[aria-pressed=true]{background:var(--mar);color:#fff;border-color:var(--mar)}
 .flang.one{display:none}
 .fbody{padding:8px 16px;overflow:auto}
-.fbody h2{font-size:17px;margin:4px 0 4px;color:var(--mar);line-height:1.35}
-.fmeta{font-size:13px;color:var(--mut);padding-bottom:6px;border-bottom:1px solid var(--line);margin-bottom:8px;white-space:pre-line}
-.ftext{white-space:pre-line;font-size:15px;line-height:1.6}
+.fbody h2{font-size:18px;font-weight:800;margin:4px 0 8px;line-height:1.4}
+.fbody h2 span{font-weight:800}
+.fmeta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.fmeta:empty{display:none}
+.fchip{flex:1 1 220px;border-radius:6px;padding:6px 10px;font-size:14px;font-weight:800;line-height:1.4;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.fchip small{display:block;font-size:11px;font-weight:700;opacity:.85;letter-spacing:.03em}
+.fchip.d{background:linear-gradient(135deg,#b3121b,#e8590c)}
+.fchip.p{background:linear-gradient(135deg,#0e7490,#1d7a46)}
+.ftext{font-size:15.5px;line-height:1.6;font-weight:700;cursor:pointer}
+.ftext .fp{margin:0 0 9px;padding:5px 10px;border-left:4px solid var(--pc);background:color-mix(in srgb,var(--pc) 7%,#fff);color:var(--pc);border-radius:0 4px 4px 0;min-height:1.2em}
+.ftext .fp.cur::after{content:"|";margin-left:1px;animation:fblink .7s steps(2,start) infinite}
+@keyframes fblink{50%{opacity:0}}
+.fhint{font-size:11px;color:var(--mut);font-weight:400;margin-top:2px}
 .ffoot{padding:8px 16px;text-align:right;border-top:1px solid var(--line)}
 .ptabs{display:flex;gap:2px;overflow-x:auto;background:var(--navy);padding:4px 4px 0}
 .ptabs button{flex:1 1 auto;border:0;background:rgba(255,255,255,.12);color:#fff;font:600 13.5px inherit;font-family:inherit;padding:7px 12px;border-radius:5px 5px 0 0;cursor:pointer;white-space:nowrap}
@@ -744,7 +754,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
   <div class="fbox" role="dialog" aria-modal="true" aria-labelledby="fTitle">
     <div class="fhead"><span>📢 বিজ্ঞপ্তি / NOTICE</span><button type="button" id="fClose" aria-label="Close">✕</button></div>
     <div class="flang" id="fLang"><button type="button" data-l="bn" aria-pressed="true">বাংলা</button><button type="button" data-l="en" aria-pressed="false">English</button></div>
-    <div class="fbody"><h2 id="fTitle"></h2><div class="fmeta" id="fMeta"></div><div class="ftext" id="fText"></div></div>
+    <div class="fbody"><h2 id="fTitle"></h2><div class="fmeta" id="fMeta"></div><div class="ftext" id="fText" title="Tap to show full text"></div></div>
     <div class="ffoot"><button type="button" class="btn" id="fOk">ঠিক আছে / OK</button></div>
   </div>
 </div>
@@ -1001,13 +1011,39 @@ function openFlash(){
   $("fLang").classList.toggle("one", !hasEn);
   if (!hasEn) FLASH_LANG = "bn";
   const bn = FLASH_LANG === "bn";
-  $("fTitle").textContent = bn ? f.title : (f.titleEn || f.title);
-  $("fMeta").textContent = [f.date ? (bn ? "তারিখ: " : "Date: ") + f.date : "", f.place ? (bn ? "স্থান: " : "Place: ") + f.place : ""].filter(Boolean).join("\n");
-  $("fText").textContent = bn ? (f.body || "") : (f.bodyEn || f.body || "");
+  const FPAL = ["#12388a","#b3121b","#1d7a46","#7a1f3d","#5b2a86","#c2410c","#0e7490"];
+  const ft = $("fTitle"); ft.textContent = "";
+  (bn ? f.title : (f.titleEn || f.title)).split(/\s+/).forEach((w, i) => { const sp = document.createElement("span"); sp.textContent = w + " "; sp.style.color = FPAL[i % FPAL.length]; ft.appendChild(sp); });
+  const fm = $("fMeta"); fm.textContent = "";
+  [[f.date, bn ? "তারিখ" : "DATE", "d"], [f.place, bn ? "স্থান" : "PLACE", "p"]].forEach(([v, lab, c]) => { if (!v) return;
+    const d = document.createElement("div"); d.className = "fchip " + c; const sm = document.createElement("small"); sm.textContent = lab;
+    d.appendChild(sm); d.appendChild(document.createTextNode(v)); fm.appendChild(d); });
+  typeFlash(bn ? (f.body || "") : (f.bodyEn || f.body || ""), FPAL);
   document.querySelectorAll("#fLang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.l === FLASH_LANG));
   $("flash").hidden = false; document.body.style.overflow = "hidden"; $("fOk").focus();
 }
-function closeFlash(){ $("flash").hidden = true; document.body.style.overflow = ""; }
+let FT_TOK = 0, FT_SKIP = null;
+function typeFlash(text, pal){
+  const box = $("fText"), tok = ++FT_TOK; box.textContent = "";
+  const seg = window.Intl && Intl.Segmenter ? new Intl.Segmenter("bn", {granularity:"grapheme"}) : null;
+  const split = t => seg ? Array.from(seg.segment(t), x => x.segment) : Array.from(t);
+  const paras = text.split(/\n+/).map(t => t.trim()).filter(Boolean).map((t, i) => {
+    const el = document.createElement("div"); el.className = "fp"; el.style.setProperty("--pc", pal[(i + 1) % pal.length]); box.appendChild(el); return {el, t, g: split(t)}; });
+  const finish = () => { paras.forEach(x => { x.el.textContent = x.t; x.el.classList.remove("cur"); }); FT_SKIP = null; };
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return finish();
+  FT_SKIP = () => { FT_TOK++; finish(); };
+  let pi = 0, ci = 0;
+  (function tick(){
+    if (tok !== FT_TOK) return;
+    if (pi >= paras.length) { FT_SKIP = null; return; }
+    const x = paras[pi]; x.el.classList.add("cur");
+    ci = Math.min(x.g.length, ci + 2); x.el.textContent = x.g.slice(0, ci).join("");
+    const sc = $("fText").parentNode; sc.scrollTop = sc.scrollHeight;
+    if (ci >= x.g.length) { x.el.classList.remove("cur"); pi++; ci = 0; setTimeout(tick, 220); } else setTimeout(tick, 28);
+  })();
+}
+$("fText").addEventListener("click", () => { if (FT_SKIP) FT_SKIP(); });
+function closeFlash(){ FT_TOK++; $("flash").hidden = true; document.body.style.overflow = ""; }
 document.querySelectorAll("#fLang button").forEach(b => b.onclick = () => { FLASH_LANG = b.dataset.l; openFlash(); });
 $("fClose").onclick = $("fOk").onclick = closeFlash;
 $("flash").addEventListener("click", e => { if (e.target === $("flash")) closeFlash(); });
