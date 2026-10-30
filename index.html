@@ -331,6 +331,33 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
   .tools.small #calcCard .tbtabs button{font-size:12px;padding:0 9px}
 }
 @media(prefers-reduced-motion:reduce){.keys .spot{animation-duration:.01s}}
+
+/* ===== final mobile fit: roster, calendar, holiday list ===== */
+.duty .dd>div{display:flex;flex-wrap:wrap;gap:2px 12px;align-items:baseline;min-width:0}
+.duty .nm{white-space:nowrap}
+.tools.small .tcard{min-width:0;max-width:100%}
+.tools.small .cd{min-width:0;padding:0}
+.cal-mlist div>span:first-child{min-width:0;overflow-wrap:anywhere;text-align:left}
+.cal-info{text-align:left}
+@media(max-width:700px){
+  .tools.small #calcCard{justify-self:start}
+  .tools.small .cal-body{padding:8px 8px 10px}
+  .tools.small .cal-grid,.tools.small .cal-dow{gap:2px}
+  .tools.small .cd{height:30px;min-height:30px;font-size:12.5px;border-radius:5px}
+  .tools.small .cal-dow span{font-size:10px}
+  .tools.small .cal-leg{gap:3px 9px;font-size:10.5px}
+  .tools.small .cal-mlist{font-size:12px}
+  .tools.small .cal-mlist div{gap:6px;align-items:flex-start}
+  .tools.small .cal-mlist span:last-child{font-size:11.5px}
+}
+@media(max-width:480px){
+  .duty .dd{grid-template-columns:58px 1fr}
+  .duty .dd>b,.duty .dd>div{padding:5px 7px;font-size:12.5px;line-height:1.45}
+  .duty .dd>b small{font-size:10.5px}
+  .duty .note{font-size:11.5px}
+  table.tt{font-size:12.5px}table.tt td{padding:4px 7px}
+  #holAll{font-size:11.5px}
+}
 </style>
 </head>
 <body>
@@ -1328,7 +1355,7 @@ function renderCorners(){
     + `<tr><td colspan="2" class="meta">সূত্র: WBBSE বিজ্ঞপ্তি D.S.(Aca)/940/A/25/6, ২৯.১২.২০২৫। সোম–শুক্র ৮টি পিরিয়ড; শনিবার ৪টি পিরিয়ড (১০:৫০–১:৩০)। ১০:৪০-এর পর এলে লেট।</td></tr>`;
   const {days} = dutyMap(), wd = (now.getDay() + 6) % 7;
   $("dutyBox").innerHTML = days.map((g, i) => `<div class="dd${i===wd?" today":""}"><b>${DAYS_BN[i]}${i===wd?"<br><small>আজ</small>":""}</b>
-    <div>${g.length ? g.map(p => p.para ? `<span class="pt">${esc(p.name)} (প্যারা)</span>` : esc(p.name)).join(" · ") : "—"}</div></div>`).join("")
+    <div>${g.length ? g.map(p => p.para ? `<span class="nm pt">${esc(p.name)} (প্যারা)</span>` : `<span class="nm">${esc(p.name)}</span>`).join("") : "—"}</div></div>`).join("")
     + `<div class="note">প্রতিদিন মিড-ডে মিলের সময় ওই দিনের তালিকার শিক্ষক-শিক্ষিকারা তদারকি করবেন। রবিবার বিদ্যালয় বন্ধ।</div>`;
   const ed = $("editor");
   if (ed && ed.style.display !== "none") {
