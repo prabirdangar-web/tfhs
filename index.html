@@ -358,6 +358,60 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
   table.tt{font-size:12.5px}table.tt td{padding:4px 7px}
   #holAll{font-size:11.5px}
 }
+
+/* ===== v2: compact mobile, no-wrap fixes, remarks, PDF buttons, calculator polish ===== */
+.mainc{min-width:0}
+.corners{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.cc{min-width:0;max-width:100%}
+/* MDM roster: names wrap inside a 2-column grid, never sideways scroll */
+.duty .dd{grid-template-columns:78px minmax(0,1fr)}
+.duty .dd>div{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:3px 12px;align-items:start;min-width:0}
+.duty .nm{white-space:normal;overflow-wrap:anywhere;line-height:1.35;min-width:0}
+.duty .nm::before{content:"•";color:var(--c-mp);margin-right:5px;font-weight:700}
+@media(max-width:560px){.duty .dd>div{grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 8px}}
+@media(max-width:480px){.duty .dd{grid-template-columns:58px minmax(0,1fr)}}
+/* action buttons (PDF / Open) */
+.acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center;flex:none}
+.btn.pdf{background:#0f766e}
+.btn.pdf:hover{filter:brightness(1.1)}
+/* blinking remark (result / admission not ready) */
+.rem{display:flex;gap:9px;align-items:flex-start;margin:0;padding:8px 12px;border:1px solid #e0a100;border-left:5px solid #d97706;background:#fff4d1;color:#4a3300;font-weight:600;font-size:13.5px;animation:remblink 1.2s steps(2,start) infinite}
+.rem .rd{display:block;font-weight:700;font-size:12.5px;margin-top:2px}
+@keyframes remblink{50%{opacity:.35}}
+@media(prefers-color-scheme:dark){.rem{background:#3a2d08;color:#ffe29a;border-color:#a67c00;border-left-color:#f2b93a}}
+@media(prefers-reduced-motion:reduce){.rem{animation:none}}
+.adm .rem{margin:6px 0}
+/* calendar: day cell just fits the number */
+.tools.small .cd{height:26px;min-height:26px;font-size:12px;line-height:1;border-radius:5px}
+.tools.small .cd.ev::after{bottom:2px;width:4px;height:4px;margin-left:-2px}
+.tools.small .cal-grid,.tools.small .cal-dow{gap:2px}
+.tools.small .cd:hover{transform:none}
+@media(max-width:700px){
+  .tools.small .cal-body{padding:6px 6px 8px}
+  .tools.small .cd{height:24px;min-height:24px;font-size:11.5px;border-radius:4px}
+  .tools.small .cal-dow span{font-size:9.5px;padding:0}
+  .tools.small .cal-leg{margin:5px 0 4px;gap:2px 8px;font-size:10px}
+  .tools.small .cal-leg i{width:9px;height:9px;margin-right:3px}
+  .tools.small .cal-info{padding:4px 8px;min-height:0;font-size:11.5px}
+  .tools.small .thead{padding:5px 8px}
+}
+/* calculator: professional frame, no red lettering */
+#calcCard{border:1px solid #8ea3c9;border-radius:12px;box-shadow:0 4px 16px rgba(12,42,107,.18)}
+#calcCard .tpane{background:linear-gradient(180deg,var(--card),color-mix(in srgb,var(--bg) 70%,var(--card)))}
+.calc-scr{border:1px solid #0a1d4a;border-radius:8px;box-shadow:inset 0 2px 7px rgba(0,0,0,.4),0 0 0 3px color-mix(in srgb,var(--navy) 14%,transparent)}
+.keys{padding:6px;border:1px solid #b7c3da;border-radius:10px;background:color-mix(in srgb,var(--bg) 80%,var(--card))}
+.keys button{background:var(--card);color:var(--ink);border:1px solid #c0cadc;border-bottom-width:2px;border-radius:7px;box-shadow:none}
+.keys .op{background:#e5ecfa;color:var(--navy);border-color:#a3b7e0}
+.keys .fn{background:#e8ecf2;color:#334155;border-color:#b9c3d2}
+.keys .eq{background:linear-gradient(180deg,#ffd366,var(--gold));color:#1b1400;border-color:#d99a00}
+.keys button:hover{background:color-mix(in srgb,var(--gold) 20%,var(--card))}
+@media(prefers-color-scheme:dark){
+  #calcCard{border-color:#33507f}
+  .keys{border-color:#2f3d4d}
+  .keys button{border-color:#33414f}
+  .keys .op{background:#1d2d52;color:#cfe0ff;border-color:#3a5694}
+  .keys .fn{background:#222d39;color:#cbd5e1;border-color:#3b4a5a}
+}
 </style>
 </head>
 <body>
@@ -507,6 +561,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <label><input type="checkbox" id="aOpen" style="width:auto"> Admission open</label>
       <label>Heading<input id="aTitle" placeholder="Admission 2027 – Class V / IX / XI"></label>
       <label>Form / notice link<input id="aLink" placeholder="https://..."></label>
+      <label>📄 PDF file (optional – shows a PDF button)<input type="file" id="aPdf" accept="application/pdf,.pdf"></label><label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="aPdfRm" style="width:auto"> Remove existing PDF</label>
       <div class="row">
         <label>Last date<input id="aLast" type="date"></label>
         <label>Short note<input id="aNote"></label>
@@ -531,6 +586,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
         <label>Date<input id="nDate" type="date"></label>
       </div>
       <label>Details (optional – paste the full text; line breaks are kept)<textarea id="nBody" rows="4"></textarea></label>
+      <label>📄 PDF file (optional – shows a PDF button)<input type="file" id="nPdf" accept="application/pdf,.pdf"></label><label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="nPdfRm" style="width:auto"> Remove existing PDF</label>
       <details class="more"><summary>More options – file link, poster image, ready-made notices</summary>
         <label>File or page link (Google Drive “anyone with link”, PDF, etc.)<input id="nLink" placeholder="https://..."></label>
         <label>Poster image (JPG/PNG – shrunk automatically, click to enlarge on site)<input type="file" id="nPoster" accept="image/*"></label>
@@ -548,6 +604,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <label>Portal / result link<input id="mpLink" placeholder="https://prabirdangar-web.github.io/xi_mp_test/"></label>
       <label>Note (optional – e.g. reporting time, instructions)<textarea id="mpNote" rows="3"></textarea></label>
       <label>Programme as poster (optional – upload image of the programme/notice)<input type="file" id="mpPoster" accept="image/*"></label>
+      <label>📄 PDF file (optional – shows a PDF button)<input type="file" id="mpPdf" accept="application/pdf,.pdf"></label><label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="mpPdfRm" style="width:auto"> Remove existing PDF</label>
       <p><button class="btn" id="saveMp" type="button">Save programme details</button> <button class="btn alt" id="rmMpPoster" type="button">Remove poster</button></p>
       <p class="meta" style="margin:8px 0 0"><b>Add exam row</b> (one row per subject, same as Class X Programme in the exam portal)</p>
       <div class="row"><label>Date<input id="mpDate" type="date"></label><label>Time<input id="mpTime" placeholder="11:00 AM – 1:30 PM"></label></div>
@@ -593,10 +650,23 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <div id="dutyAdmin"></div>
     </fieldset>
 
+    <fieldset><legend>🔔 Result &amp; Admission remarks (blinking note for visitors)</legend>
+      <p class="meta" style="margin:0">When the result or admission is not ready, pick a ready note (or type your own) and add the probable date. It blinks on the site until you press Clear.</p>
+      <p style="margin:10px 0 0"><b>🏆 Result</b></p>
+      <div class="row"><label>Note<select id="resPre"></select></label><label>Probable date<input type="date" id="resDt"></label></div>
+      <label>Own note (optional – used instead of the list)<input id="resTx" placeholder="e.g. পরীক্ষা শেষ হলে ফলাফল প্রকাশিত হবে"></label>
+      <p><button class="btn" id="saveRes" type="button">Save result remark</button> <button class="btn alt" id="clrRes" type="button">Clear</button></p>
+      <p style="margin:10px 0 0"><b>📝 Admission</b></p>
+      <div class="row"><label>Note<select id="admPre"></select></label><label>Probable date<input type="date" id="admDt"></label></div>
+      <label>Own note (optional – used instead of the list)<input id="admTx" placeholder="e.g. ভর্তির বিজ্ঞপ্তি শীঘ্রই প্রকাশিত হবে"></label>
+      <p><button class="btn" id="saveAdmRem" type="button">Save admission remark</button> <button class="btn alt" id="clrAdmRem" type="button">Clear</button></p>
+    </fieldset>
+
     <fieldset><legend>Add result</legend>
       <label>Title<input id="rTitle" placeholder="Class IX Annual Examination 2026 – Result"></label>
       <label>Result link<input id="rLink" placeholder="https://..."></label>
       <label>Date<input id="rDate" type="date"></label>
+      <label>📄 PDF file (optional – shows a PDF button)<input type="file" id="rPdf" accept="application/pdf,.pdf"></label><label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="rPdfRm" style="width:auto"> Remove existing PDF</label>
       <p><button class="btn" id="addR">Publish result</button></p>
       <div id="rList"></div>
     </fieldset>
@@ -685,6 +755,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 <script>
 /* ===== Firebase config (tfhs-portal) ===== */
 const firebaseConfig = {
@@ -714,6 +785,41 @@ const isNew = d => { if (!d) return false; const a = (Date.now() - new Date(d)) 
 const forLabel = {general:"General", staff:"Staff", student:"Students"};
 function toast(t){const m=$("msg");m.textContent=t;m.style.display="block";setTimeout(()=>m.style.display="none",2200)}
 
+/* ---------- remarks, PDF helpers ---------- */
+const remHtml = r => (r && r.text) ? `<div class="rem" role="status"><span aria-hidden="true">🔔</span><div>${esc(r.text)}${r.date?`<span class="rd">সম্ভাব্য তারিখ / Probable date: ${fmt(r.date)}</span>`:""}</div></div>` : "";
+const pdfBtn = (u, l) => safeUrl(u) ? `<a class="btn sm pdf" href="${safeUrl(u)}" target="_blank" rel="noopener">📄 ${l || "PDF"}</a>` : "";
+async function uploadPdf(file){
+  if (!/pdf$/i.test(file.type) && !/\.pdf$/i.test(file.name)) throw new Error("Only PDF files are allowed");
+  if (file.size > 10 * 1024 * 1024) throw new Error("PDF too large (max 10 MB)");
+  try {
+    const r = firebase.storage().ref("website/pdf/" + uid() + ".pdf");
+    await r.put(file, {contentType:"application/pdf"});
+    return await r.getDownloadURL();
+  } catch(e) { throw new Error("PDF upload failed (" + (e.code || e.message) + ") – check Storage rules, or paste a Drive link instead"); }
+}
+/* returns undefined = no change, "" = remove, url = new file */
+async function pdfFrom(fid, rid){
+  const f = $(fid).files[0], rm = $(rid) && $(rid).checked; let out;
+  if (f) { toast("Uploading PDF…"); out = await uploadPdf(f); } else if (rm) out = "";
+  $(fid).value = ""; if ($(rid)) $(rid).checked = false;
+  return out;
+}
+const REM_RES = ["ফলাফল শীঘ্রই প্রকাশিত হবে / Result coming soon", "পরীক্ষা এখনও শেষ হয়নি / Exam not yet over", "ফলাফল প্রস্তুতির কাজ চলছে / Result under preparation", "ফলাফল প্রকাশের তারিখ পরে জানানো হবে / Date will be announced"];
+const REM_ADM = ["ভর্তি শীঘ্রই শুরু হবে / Admission coming soon", "ভর্তির বিজ্ঞপ্তি এখনও প্রকাশিত হয়নি / Admission notice not yet published", "ভর্তির তারিখ পরে জানানো হবে / Date will be announced", "আপাতত ভর্তি বন্ধ / Admission closed for now"];
+[["resPre", REM_RES], ["admPre", REM_ADM]].forEach(([id, l]) => $(id).innerHTML = `<option value="">— none —</option>` + l.map(x => `<option>${esc(x)}</option>`).join(""));
+function loadRem(){
+  const set = (pre, tx, dt, o, list) => { o = o || {}; const inl = list.includes(o.text); $(pre).value = inl ? o.text : ""; $(tx).value = inl ? "" : (o.text || ""); $(dt).value = o.date || ""; };
+  set("resPre", "resTx", "resDt", D.resRem, REM_RES); set("admPre", "admTx", "admDt", D.admRem, REM_ADM);
+}
+let REM_SIG = "";
+function syncRem(){ const s = JSON.stringify([D.resRem || null, D.admRem || null]); if (s === REM_SIG) return; REM_SIG = s; loadRem(); }
+const saveRem = (key, pre, tx, dt) => { const t = $(tx).value.trim() || $(pre).value; if (!t) return toast("Pick a note or type one");
+  D[key] = {text:t, date:$(dt).value, at:today()}; save(); };
+$("saveRes").onclick = () => saveRem("resRem", "resPre", "resTx", "resDt");
+$("saveAdmRem").onclick = () => saveRem("admRem", "admPre", "admTx", "admDt");
+$("clrRes").onclick = () => { D.resRem = null; save(); };
+$("clrAdmRem").onclick = () => { D.admRem = null; save(); };
+
 /* ---------- Public view ---------- */
 function render(){
   $("ticker").textContent = D.ticker || "";
@@ -721,12 +827,12 @@ function render(){
   const box = $("admBox");
   if (a.open && a.title){
     box.className = "adm";
-    box.innerHTML = `<h2>${esc(a.title)}</h2>${a.note?`<div>${esc(a.note)}</div>`:""}
+    box.innerHTML = `<h2>${esc(a.title)}</h2>${remHtml(D.admRem)}${a.note?`<div>${esc(a.note)}</div>`:""}
       ${a.last?`<div class="meta">শেষ তারিখ / Last date: ${fmt(a.last)}</div>`:""}
-      ${safeUrl(a.link)?`<p style="margin:10px 0 0"><a class="btn" href="${safeUrl(a.link)}" target="_blank" rel="noopener">ভর্তির ফর্ম / Admission form</a></p>`:""}`;
+      ${(safeUrl(a.link)||safeUrl(a.pdf))?`<p style="margin:10px 0 0">${safeUrl(a.link)?`<a class="btn" href="${safeUrl(a.link)}" target="_blank" rel="noopener">ভর্তির ফর্ম / Admission form</a> `:""}${pdfBtn(a.pdf, "Admission PDF")}</p>`:""}`;
   } else {
     box.className = "adm closed";
-    box.innerHTML = `<h2>ভর্তি / Admission</h2><div>এখন কোনো ভর্তি চলছে না। / Admission is not open right now.</div>`;
+    box.innerHTML = `<h2>ভর্তি / Admission</h2>${remHtml(D.admRem) || `<div>এখন কোনো ভর্তি চলছে না। / Admission is not open right now.</div>`}${a.pdf?`<p style="margin:8px 0 0">${pdfBtn(a.pdf, "Admission PDF")}</p>`:""}`;
   }
   const ns = (D.notices || []).filter(n => filter === "all" || n.for === filter || n.for === "general")
     .sort((x,y) => (y.date||"").localeCompare(x.date||""));
@@ -735,13 +841,13 @@ function render(){
       <span class="meta">${isNew(n.date)?'<span class="tag new">NEW</span>':""}<span class="tag">${forLabel[n.for]||"General"}</span>${fmt(n.date)}</span>
       ${n.body?`<details class="nb"><summary>📄 বিস্তারিত / Details</summary><div class="nbody">${esc(n.body)}</div></details>`:""}
       ${imgUrl(n.poster)&&isData(n.poster)?`<img class="zoom poster-s" loading="lazy" src="${imgUrl(n.poster)}" alt="Notice poster">`:""}</div>
-      ${safeUrl(n.link)?`<a class="btn sm" href="${safeUrl(n.link)}" target="_blank" rel="noopener">Open</a>`:""}</div>`).join("")
+      ${(n.pdf||safeUrl(n.link))?`<div class="acts">${pdfBtn(n.pdf)}${safeUrl(n.link)?`<a class="btn sm" href="${safeUrl(n.link)}" target="_blank" rel="noopener">Open</a>`:""}</div>`:""}</div>`).join("")
     : `<div class="empty">কোনো বিজ্ঞপ্তি নেই। / No notices yet.</div>`;
   const rs = [...(D.results || [])].sort((x,y) => (y.date||"").localeCompare(x.date||""));
-  $("results").innerHTML = rs.length ? rs.map(r => `<div class="item"><div><b>${esc(r.title)}</b>
+  $("results").innerHTML = remHtml(D.resRem) + (rs.length ? rs.map(r => `<div class="item"><div><b>${esc(r.title)}</b>
       <span class="meta">${isNew(r.date)?'<span class="tag new">NEW</span>':""}${fmt(r.date)}</span></div>
-      ${safeUrl(r.link)?`<a class="btn sm" href="${safeUrl(r.link)}" target="_blank" rel="noopener">View</a>`:""}</div>`).join("")
-    : `<div class="empty">কোনো ফলাফল প্রকাশিত হয়নি। / No results published yet.</div>`;
+      ${(r.pdf||safeUrl(r.link))?`<div class="acts">${pdfBtn(r.pdf)}${safeUrl(r.link)?`<a class="btn sm" href="${safeUrl(r.link)}" target="_blank" rel="noopener">View</a>`:""}</div>`:""}</div>`).join("")
+    : (remHtml(D.resRem) ? "" : `<div class="empty">কোনো ফলাফল প্রকাশিত হয়নি। / No results published yet.</div>`));
   renderExtra();
   renderMp();
   renderToday();
@@ -751,7 +857,7 @@ function render(){
   renderAdminLists();
   paneCounts();
   flashInit();
-  if ($("editor").style.display !== "none") fillFlash();
+  if ($("editor").style.display !== "none") { fillFlash(); syncRem(); }
 }
 function showPane(name, scroll){
   document.querySelectorAll("#ptabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.p === name));
@@ -766,6 +872,7 @@ function paneCounts(){
   const c = {notices:(D.notices||[]).length, results:(D.results||[]).length, gallery:(D.gallery||[]).length, staff:(D.staff||[]).length, mptest:((D.mpTest||{}).rows||[]).length || ((D.mpTest||{}).poster ? 1 : 0)};
   for (const k in c) { const el = $("cnt-" + k); if (el) el.textContent = c[k] || ""; }
   const nn = $("cnt-notices"); if (nn) nn.classList.toggle("hasnew", (D.notices||[]).some(n => isNew(n.date)));
+  const rc = $("cnt-results"); if (rc) { const rem = !!(D.resRem && D.resRem.text); if (rem && !(D.results||[]).length) rc.textContent = "🔔"; rc.classList.toggle("hasnew", rem || (D.results||[]).some(r => isNew(r.date))); }
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
   filter = b.dataset.f;
@@ -798,13 +905,15 @@ auth.onAuthStateChanged(u => {
   $("who").textContent = u ? (ok ? "Signed in: " + u.email : "Not authorised: " + u.email) : "Not signed in";
   $("login").style.display = u ? "none" : ""; $("logout").style.display = u ? "" : "none";
   $("editor").style.display = ok ? "" : "none";
-  if (ok){ fillFlash(true); fillMp(); $("tk").value = D.ticker || ""; const a = D.admission || {};
+  if (ok){ fillFlash(true); fillMp(); REM_SIG = ""; syncRem(); $("tk").value = D.ticker || ""; const a = D.admission || {};
     $("aOpen").checked = !!a.open; $("aTitle").value = a.title||""; $("aLink").value = a.link||"";
     $("aLast").value = a.last||""; $("aNote").value = a.note||""; }
 });
 $("tk").onchange = () => { D.ticker = $("tk").value.trim(); save(); };
-$("saveAdm").onclick = () => { D.admission = { open:$("aOpen").checked, title:$("aTitle").value.trim(),
-  link:$("aLink").value.trim(), last:$("aLast").value, note:$("aNote").value.trim() }; save(); };
+$("saveAdm").onclick = async () => { let pdf = (D.admission||{}).pdf || "";
+  try { const pu = await pdfFrom("aPdf", "aPdfRm"); if (pu !== undefined) pdf = pu; } catch(e) { return toast(e.message || "PDF upload failed"); }
+  D.admission = { open:$("aOpen").checked, title:$("aTitle").value.trim(),
+  link:$("aLink").value.trim(), last:$("aLast").value, note:$("aNote").value.trim(), pdf }; save(); };
 $("addN").onclick = async () => {
   const t = $("nTitle").value.trim(); if (!t) return toast("Title is required");
   const body = $("nBody").value.trim();
@@ -812,15 +921,19 @@ $("addN").onclick = async () => {
   let poster = ""; const pf = $("nPoster").files[0];
   if (pf) { try { poster = await shrink(pf, 1200, 170000); } catch(e) { return toast("Could not read the poster image"); }
     if (poster.length > 260000) return toast("Poster too large even after shrinking - use a smaller image"); }
+  let pdf; try { pdf = await pdfFrom("nPdf", "nPdfRm"); } catch(e) { return toast(e.message || "PDF upload failed"); }
   if (tooBig(body.length + poster.length + 300)) return toast("Storage full - delete old items first");
   const n = { id:uid(), title:t, link:$("nLink").value.trim(), body, for:$("nFor").value, date:$("nDate").value || today() };
   if (poster) n.poster = poster;
+  if (pdf !== undefined) n.pdf = pdf;
   upsert("notices", n, true);
   $("nTitle").value = $("nLink").value = $("nBody").value = $("nPoster").value = ""; save();
 };
-$("addR").onclick = () => {
+$("addR").onclick = async () => {
   const t = $("rTitle").value.trim(); if (!t) return toast("Title is required");
-  upsert("results",{ title:t, link:$("rLink").value.trim(), date:$("rDate").value || today() }, true);
+  let pdf; try { pdf = await pdfFrom("rPdf", "rPdfRm"); } catch(e) { return toast(e.message || "PDF upload failed"); }
+  const r = { title:t, link:$("rLink").value.trim(), date:$("rDate").value || today() }; if (pdf !== undefined) r.pdf = pdf;
+  upsert("results", r, true);
   $("rTitle").value = $("rLink").value = ""; save();
 };
 const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList", events:"eList", resources:"xList"};
@@ -847,7 +960,7 @@ function photoPicker(t){
 function renderAdminLists(){
   for (const [k, id] of Object.entries(LISTS)){
     $(id).innerHTML = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||(isData(x.url)?"Uploaded photo":x.url))}</b>
-      <span class="meta">${esc((x.unit==="voc"?"VOC "+(x.level||"")+" · "+(x.eng||"")+" · ":"")+(x.post||x.time||(x.cat?catLabel(x.cat)+(x.vis==="admin"?" · admin only":""):"")))} ${fmt(x.date)}</span></div>
+      <span class="meta">${esc((x.unit==="voc"?"VOC "+(x.level||"")+" · "+(x.eng||"")+" · ":"")+(x.post||x.time||(x.cat?catLabel(x.cat)+(x.vis==="admin"?" · admin only":""):"")))} ${fmt(x.date)}${x.pdf?" · 📄 PDF":""}</span></div>
       ${k==="staff"?photoPicker(x):""}
       ${["holidays","staff","links","resources","notices","results"].includes(k)?`<button class="btn alt sm" data-edit="${x.id}" data-ek="${k}">Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">Delete</button></div>`).join("");
   }
@@ -1407,13 +1520,15 @@ $("defMn").onclick = () => { $("mnText").value = DEF_MN; toast("Default loaded �
 setInterval(renderMorning, 60000);
 
 const VIEWS = [["morning","🌅","সকালের সময়সূচি","mo"],["tt","🕘","নিয়মিত সময়সূচি"],["duty","🍱","MDM রোস্টার"],["cal","🗓️","ক্যালেন্ডার"],["calc","🧮","ক্যালকুলেটর"],["useful","🔗","দরকারি লিংক"],["hero","🏫","স্কুলের ছবি"],["contact","☎️","যোগাযোগ"]];
-const VSTD = {duty:false, cal:false, calc:false, useful:true, hero:true, contact:true};
-let PREF = {}; try { PREF = JSON.parse(localStorage.getItem("tfhs_views") || "{}") || {}; } catch(e) { PREF = {}; }
+const VSTD = {duty:true, cal:false, calc:false, useful:false, hero:false, contact:false};
+/* admin-saved defaults count only if saved with the new rules (_v:2), so the new standard applies at once */
+const adminViews = () => (D.views && D.views._v === 2) ? D.views : {};
+let PREF = {}; try { PREF = JSON.parse(localStorage.getItem("tfhs_views2") || "{}") || {}; } catch(e) { PREF = {}; }
 const viewAvail = k => k !== "morning" || !MN().off;
 function viewOn(k){
   if (!viewAvail(k)) return false;
   if (k in PREF) return !!PREF[k];
-  const a = D.views || {}; if (k in a) return !!a[k];
+  const a = adminViews(); if (k in a) return !!a[k];
   if (k === "morning") return !!MN().active;
   if (k === "tt") return !MN().active;
   return VSTD[k];
@@ -1424,17 +1539,17 @@ function applyViews(){
   $("optBar").innerHTML = `<b>👁 আরও দেখুন / More views:</b>` + VIEWS.filter(v => viewAvail(v[0])).map(v =>
     `<button type="button" class="${v[3]||""}" data-v="${v[0]}" aria-pressed="${viewOn(v[0])}">${v[1]} ${v[2]}</button>`).join("") + `<button type="button" class="rs" id="vReset">রিসেট</button>`;
   $("optBar").querySelectorAll("button[data-v]").forEach(b => b.onclick = () => setView(b.dataset.v, !viewOn(b.dataset.v)));
-  $("vReset").onclick = () => { PREF = {}; try { localStorage.removeItem("tfhs_views"); } catch(e) {} applyViews(); };
+  $("vReset").onclick = () => { PREF = {}; try { localStorage.removeItem("tfhs_views2"); } catch(e) {} applyViews(); };
 }
-function setView(k, on){ PREF[k] = !!on; try { localStorage.setItem("tfhs_views", JSON.stringify(PREF)); } catch(e) {} applyViews(); }
+function setView(k, on){ PREF[k] = !!on; try { localStorage.setItem("tfhs_views2", JSON.stringify(PREF)); } catch(e) {} applyViews(); }
 document.querySelectorAll('nav.menu a[href="#useful"]').forEach(a => a.addEventListener("click", () => { if (!viewOn("useful")) setView("useful", true); }));
 function fillViewDefs(){
   const box = $("viewDefs"); if (!box || box.dataset.f) return; box.dataset.f = 1;
   box.innerHTML = VIEWS.map(v => `<label><input type="checkbox" data-vd="${v[0]}"> ${v[1]} ${v[2]}</label>`).join("");
-  const cur = {}; VIEWS.forEach(v => { cur[v[0]] = (D.views && v[0] in D.views) ? !!D.views[v[0]] : (v[0]==="morning" ? !!MN().active : v[0]==="tt" ? !MN().active : VSTD[v[0]]); });
+  const cur = {}; VIEWS.forEach(v => { cur[v[0]] = (v[0] in adminViews()) ? !!adminViews()[v[0]] : (v[0]==="morning" ? !!MN().active : v[0]==="tt" ? !MN().active : VSTD[v[0]]); });
   box.querySelectorAll("input").forEach(i => i.checked = cur[i.dataset.vd]);
 }
-$("saveViews").onclick = () => { const v = {}; $("viewDefs").querySelectorAll("input").forEach(i => v[i.dataset.vd] = i.checked); D.views = v; save(); };
+$("saveViews").onclick = () => { const v = {}; $("viewDefs").querySelectorAll("input").forEach(i => v[i.dataset.vd] = i.checked); v._v = 2; D.views = v; save(); };
 $("resetViews").onclick = () => { D.views = {}; $("viewDefs").dataset.f = ""; save(); };
 
 /* ---------- MP (SE) 2027 Selection Test programme ---------- */
@@ -1443,11 +1558,11 @@ const dayName = d => { try { return new Date(d + "T00:00:00").toLocaleDateString
 function renderMp(){
   const m = D.mpTest || {}, rows = (m.rows||[]).slice().sort((a,b) => (a.date||"").localeCompare(b.date||"") || (a.time||"").localeCompare(b.time||""));
   const link = safeUrl(m.link || MP_LINK);
-  const has = m.title || m.range || m.note || m.poster || rows.length;
+  const has = m.title || m.range || m.note || m.poster || m.pdf || rows.length;
   $("mpBox").innerHTML = has ? `<div class="item"><div><b>${esc(m.title || "Class X MP (SE) 2027 Selection Test – Programme")}</b>
       ${m.range?`<span class="meta">${esc(m.range)}</span>`:""}
       ${m.note?`<div class="nbody">${esc(m.note)}</div>`:""}</div>
-</div>
+${safeUrl(m.pdf)?`<div class="acts">${pdfBtn(m.pdf, "Programme PDF")}</div>`:""}</div>
     ${isData(m.poster)?`<img class="zoom mpposter" src="${esc(m.poster)}" alt="MP Test programme poster">`:""}
     ${rows.length?`<table class="t mp"><tr><th>তারিখ / Date</th><th>বার / Day</th><th>সময় / Time</th><th>বিষয় / Subject</th></tr>${rows.map(r => `<tr><td>${fmt(r.date)}</td><td>${esc(dayName(r.date))}</td><td>${esc(r.time||"")}</td><td>${esc(r.subject)}</td></tr>`).join("")}</table>`:""}`
     : `<div class="empty">প্রোগ্রাম শীঘ্রই প্রকাশিত হবে। / Programme will be published soon.</div>`;
@@ -1463,8 +1578,9 @@ $("saveMp").onclick = async () => {
   const old = D.mpTest || {}; let poster = old.poster || ""; const f = $("mpPoster").files[0];
   if (f) { try { poster = await shrink(f, 1200, 170000); } catch(e) { return toast("Could not read the poster image"); }
     if (poster.length > 260000) return toast("Poster too large even after shrinking - use a smaller image"); }
+  let pdf = old.pdf || ""; try { const pu = await pdfFrom("mpPdf", "mpPdfRm"); if (pu !== undefined) pdf = pu; } catch(e) { return toast(e.message || "PDF upload failed"); }
   if (tooBig(poster.length - (old.poster||"").length + 600)) return toast("Storage full - delete old gallery photos / posters first");
-  D.mpTest = {...old, title:$("mpTitle").value.trim(), range:$("mpRange").value.trim(), link:$("mpLink").value.trim(), note:$("mpNote").value.trim(), poster};
+  D.mpTest = {...old, title:$("mpTitle").value.trim(), range:$("mpRange").value.trim(), link:$("mpLink").value.trim(), note:$("mpNote").value.trim(), poster, pdf};
   $("mpPoster").value = ""; save(); };
 $("rmMpPoster").onclick = () => { if (!(D.mpTest||{}).poster) return toast("No poster saved"); D.mpTest = {...D.mpTest, poster:""}; save(); };
 $("addMp").onclick = () => { const d = $("mpDate").value, sub = $("mpSub").value.trim(); if (!d || !sub) return toast("Date and subject are required");
