@@ -60,7 +60,13 @@ h2.sec:first-child{margin-top:0}
 .pp{display:flex;align-items:center;gap:8px;margin-left:auto}.pp img{width:40px;height:40px;border-radius:50%;object-fit:cover}.pp label{margin:0;font-size:12px}.pp .addph{display:none;background:#b3261e}.pp.miss .addph{display:inline-block}.pp select{max-width:190px}
 .meta{font-size:12px;color:var(--mut)}
 .tag{display:inline-block;font-size:11px;border-radius:3px;padding:0 6px;background:var(--line);color:var(--ink);margin-right:4px}
-.tag.new{background:#b3121b;color:#fff;font-weight:700}
+#holAll{font-size:12px;line-height:1.25}#holAll td{padding:2px 7px;vertical-align:top}#holAll td:first-child{overflow-wrap:anywhere}#holAll td:last-child{font-weight:600;font-size:11.5px}
+#holAll tr:nth-child(even) td{background:color-mix(in srgb,var(--bg) 55%,var(--card))}
+#holAll tr.mh td{background:var(--mar);color:#fff;font-weight:700;padding:2px 7px;font-size:11.5px;text-align:left}
+.tag.new{background:#b3121b;color:#fff;font-weight:700;animation:newflash 1s steps(2,start) infinite}
+@keyframes newflash{50%{background:#ffd23a;color:#5a0006}}
+@media(prefers-reduced-motion:reduce){.tag.new{animation:none}}
+.ptabs .cnt.hasnew{animation:newflash 1s steps(2,start) infinite;background:#b3121b;color:#fff}
 .empty{color:var(--mut);padding:8px 10px}
 footer{text-align:center;background:var(--navy);color:#dbe4ff;font-size:12.5px;padding:12px 16px;margin-top:14px;border-top:3px solid var(--gold)}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
@@ -260,7 +266,9 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 .dc-chips span{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1px 10px;font-size:12.5px}
 
 /* compact placement below timetable + MDM */
-.tools.small{margin:12px 0 0;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px;font-size:13px}
+.tools.small{margin:12px 0 0;grid-template-columns:minmax(0,1fr) minmax(0,250px);gap:10px;font-size:13px}
+.tools.small #calcCard{max-width:250px;width:100%}
+@media(max-width:700px){.tools.small{grid-template-columns:1fr}.tools.small #calcCard{max-width:270px;justify-self:center}}
 .tools.small .thead{padding:6px 10px}.tools.small .thead b{font-size:13.5px}
 .tools.small .thead button{height:24px;min-width:26px;font-size:13px}
 .tools.small .cal-body{padding:8px 10px 10px}
@@ -271,8 +279,11 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 .tools.small .cal-info{font-size:12px;padding:5px 9px;min-height:32px}
 .tools.small .cal-mlist{font-size:11.5px;margin-top:5px}
 .tools.small .tpane{padding:9px}
-.tools.small .calc-scr{padding:5px 10px;margin-bottom:7px}.tools.small .calc-scr output{font-size:22px}
-.tools.small .keys{gap:5px}.tools.small .keys button{height:34px;font-size:14px;border-radius:8px}
+.tools.small .calc-scr{padding:4px 9px;margin-bottom:6px}.tools.small .calc-scr output{font-size:19px}
+.tools.small .keys{gap:4px}.tools.small .keys button{height:30px;font-size:13.5px;border-radius:7px}
+.tools.small #calcCard .thead{padding:5px 8px}.tools.small #calcCard .tbtabs button{font-size:11px;padding:0 6px}
+.tools.small #calcCard .tpane{padding:7px}
+.tools.small #calcCard .dcf{grid-template-columns:1fr}.tools.small #calcCard .dc-modes button{font-size:11px;padding:2px 7px}
 .tools.small .dc-modes button{font-size:11.5px;padding:2px 9px}
 .tools.small .dcf input,.tools.small .dcf select{padding:4px 7px;font-size:12.5px}
 .tools.small .dc-res{padding:8px 10px;font-size:12.5px}.tools.small .dc-res .big{font-size:17px}
@@ -646,7 +657,7 @@ const safeUrl = u => /^https?:\/\//i.test(u || "") ? esc(u) : "";
 const isData = u => /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(u || "");
 const imgUrl = u => isData(u) || (/^(https?:\/\/|[\w\-][\w\-.\/ ]*$)/i.test(u || "") && !/\.\./.test(u)) ? esc(u) : "";
 const fmt = d => d ? new Date(d).toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"}) : "";
-const isNew = d => d && (Date.now() - new Date(d)) < 7 * 864e5;
+const isNew = d => { if (!d) return false; const a = (Date.now() - new Date(d)) / 864e5; return a > -1 && a < 7; };
 const forLabel = {general:"General", staff:"Staff", student:"Students"};
 function toast(t){const m=$("msg");m.textContent=t;m.style.display="block";setTimeout(()=>m.style.display="none",2200)}
 
@@ -701,6 +712,7 @@ document.querySelectorAll("nav.menu a").forEach(a => { const n = MENU_PANE[a.get
 function paneCounts(){
   const c = {notices:(D.notices||[]).length, results:(D.results||[]).length, gallery:(D.gallery||[]).length, staff:(D.staff||[]).length, mptest:((D.mpTest||{}).rows||[]).length || ((D.mpTest||{}).poster ? 1 : 0)};
   for (const k in c) { const el = $("cnt-" + k); if (el) el.textContent = c[k] || ""; }
+  const nn = $("cnt-notices"); if (nn) nn.classList.toggle("hasnew", (D.notices||[]).some(n => isNew(n.date)));
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
   filter = b.dataset.f;
@@ -1172,7 +1184,11 @@ function renderExtra(){
   $("holidayBox").innerHTML = hs.length ? hs.map(h => `<div class="item"><div><b>${esc(h.name)}</b>
     <span class="meta">${!h.obs && h.date <= t0 ? '<span class="tag new">চলছে / Ongoing</span>' : ""}${h.obs?'<span class="tag">Observation day · school open</span>':""}${range(h)}</span></div></div>`).join("")
     : `<div class="empty">কোনো আসন্ন ছুটি নেই। / No upcoming holidays listed.</div>`;
-  $("holAll").innerHTML = all.map(h => `<tr><td>${esc(h.name)}${h.obs?" <span class='tag'>Obs.</span>":""}</td><td>${range(h)}</td></tr>`).join("");
+  const sh = d => new Date(d).toLocaleDateString("en-GB", {day:"2-digit", month:"short"}), sy = d => new Date(d).getFullYear();
+  const crange = h => h.to && h.to !== h.date ? sh(h.date) + "–" + sh(h.to) : sh(h.date);
+  let lastY = "";
+  $("holAll").innerHTML = all.map(h => { const y = sy(h.date); const head = y !== lastY ? (lastY = y, `<tr class="mh"><td colspan="2">${y}</td></tr>`) : "";
+    return head + `<tr><td>${esc(h.name)}${h.obs?" <span class='tag'>Obs.</span>":""}</td><td>${crange(h)}</td></tr>`; }).join("");
 }
 
 /* ---------- আজকের বিজ্ঞপ্তি ও আজকের দিনে ---------- */
