@@ -305,6 +305,32 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 /* readable Sundays on every cell background */
 .cd.sun.hol,.cd.sun.obs{color:#4a1200}
 @media(prefers-color-scheme:dark){.cal-dow span:first-child,.cd.sun{color:#ff9d90}.cd.sun.hol{color:#ffe29a}.cd.sun.obs{color:#ffd0c8}}
+
+/* ===== calculator polish: matching font/colours, mobile columns, key spot ===== */
+.thead button{font-weight:700;font-size:15px;font-family:inherit}
+.tbtabs button{font-weight:600;font-size:12.5px;font-family:inherit}
+.dc-modes button{font-weight:600;font-size:12.5px;font-family:inherit}
+.keys button{font-weight:700;font-size:16px;font-family:inherit;position:relative;overflow:hidden;min-width:0;padding:0;background:color-mix(in srgb,var(--bg) 75%,var(--card));box-shadow:0 1px 0 var(--line);-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.keys .op{background:color-mix(in srgb,var(--mar) 14%,var(--card))}
+.keys .fn{background:color-mix(in srgb,var(--c-staff) 10%,var(--card))}
+.keys .eq{background:linear-gradient(135deg,var(--gold),#ffcf5a)}
+#calcCard .tpane{background:var(--card)}
+.calc-scr{position:relative;background:linear-gradient(135deg,var(--navy),#1c4db3);border:1px solid #0a1d4a;color:#fff}
+.calc-scr .snd{position:absolute;left:5px;top:4px;border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:6px;font-size:12px;line-height:1;padding:3px 6px;cursor:pointer}
+.keys .spot{position:absolute;border-radius:50%;background:rgba(255,190,40,.7);pointer-events:none;animation:keyspot .45s ease-out forwards}
+.keys .eq .spot{background:rgba(255,255,255,.75)}
+@keyframes keyspot{from{transform:scale(0);opacity:.85}to{transform:scale(1);opacity:0}}
+.keys button.hit{background:color-mix(in srgb,var(--gold) 38%,var(--bg))}
+@media(max-width:700px){
+  .tools.small #calcCard{max-width:300px}
+  .tools.small .keys{gap:6px}
+  .tools.small .keys button{height:40px;font-size:16px}
+  .tools.small .calc-scr output{font-size:24px}
+  .tools.small .calc-scr small{font-size:12px}
+  .tools.small #calcCard .tpane{padding:9px}
+  .tools.small #calcCard .tbtabs button{font-size:12px;padding:0 9px}
+}
+@media(prefers-reduced-motion:reduce){.keys .spot{animation-duration:.01s}}
 </style>
 </head>
 <body>
@@ -391,7 +417,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <div class="thead"><b>🧮 ক্যালকুলেটর</b>
         <div class="tbtabs" role="tablist"><button type="button" role="tab" data-tp="calc" aria-selected="true">Calculator</button><button type="button" role="tab" data-tp="date" aria-selected="false">Date Calc</button></div></div>
       <div class="tpane" id="tp-calc">
-        <div class="calc-scr"><small id="cExpr"></small><output id="cOut">0</output></div>
+        <div class="calc-scr"><button type="button" class="snd" id="calSnd" aria-label="Key sound on/off" title="Sound on/off">🔊</button><small id="cExpr"></small><output id="cOut">0</output></div>
         <div class="keys" id="cKeys">
           <button class="fn" data-k="C">C</button><button class="fn" data-k="BS">⌫</button><button class="fn" data-k="%">%</button><button class="op" data-k="/">÷</button>
           <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button class="op" data-k="*">×</button>
@@ -1574,12 +1600,37 @@ addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true
     show(cur);
   }
   $("cKeys").addEventListener("click",e=>{const b=e.target.closest("button");if(b)key(b.dataset.k)});
+  /* key sound + spot */
+  let AC=null,snd=true;try{snd=localStorage.getItem("calcSnd")!=="0"}catch(e){}
+  const sb=$("calSnd");sb.textContent=snd?"🔊":"🔇";
+  sb.onclick=()=>{snd=!snd;sb.textContent=snd?"🔊":"🔇";try{localStorage.setItem("calcSnd",snd?"1":"0")}catch(e){}if(snd)beep("5")};
+  function beep(k){
+    try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}
+    if(!snd)return;
+    try{
+      AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();
+      const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime;
+      o.type="sine";o.frequency.value=k==="="?880:(k==="C"||k==="BS")?330:/^\d$/.test(k)?420+(+k)*28:560;
+      g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.2,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+.09);
+      o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.1);
+    }catch(e){}
+  }
+  function spot(b,x,y){
+    const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)*1.7,i=document.createElement("i");
+    i.className="spot";i.style.cssText="width:"+d+"px;height:"+d+"px;left:"+(x-r.left-d/2)+"px;top:"+(y-r.top-d/2)+"px";
+    b.appendChild(i);setTimeout(()=>i.remove(),480);
+  }
+  $("cKeys").addEventListener("pointerdown",e=>{const b=e.target.closest("button");if(!b)return;spot(b,e.clientX,e.clientY);beep(b.dataset.k)});
+  function kbFlash(k){
+    const b=[...document.querySelectorAll("#cKeys button")].find(x=>x.dataset.k===k);if(!b)return;
+    const r=b.getBoundingClientRect();spot(b,r.left+r.width/2,r.top+r.height/2);b.classList.add("hit");setTimeout(()=>b.classList.remove("hit"),140);beep(k);
+  }
   $("calcCard").addEventListener("keydown",e=>{
     if(e.target.closest("input,select,textarea")||$("tp-calc").hidden)return;
     const k=e.key;
-    if(/^[0-9.+\-*/%]$/.test(k)){e.preventDefault();key(k)}
-    else if(k==="Enter"||k==="="){e.preventDefault();key("=")}
-    else if(k==="Backspace"){key("BS")}else if(k==="Escape"||k==="Delete"){key("C")}
+    if(/^[0-9.+\-*/%]$/.test(k)){e.preventDefault();kbFlash(k);key(k)}
+    else if(k==="Enter"||k==="="){e.preventDefault();kbFlash("=");key("=")}
+    else if(k==="Backspace"){kbFlash("BS");key("BS")}else if(k==="Escape"||k==="Delete"){kbFlash("C");key("C")}
   });
   $("calcCard").tabIndex=-1;
 
