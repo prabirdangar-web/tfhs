@@ -1525,6 +1525,13 @@ addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true
   setInterval(()=>{if(todayIso()!==T)renderCal()},60000);
 })();
 </script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW Registered:', reg.scope))
+      .catch(err => console.error('SW Registration Failed:', err));
+  });
+}
 
 <script>
 if ("serviceWorker" in navigator) {
