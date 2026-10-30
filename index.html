@@ -2,6 +2,17 @@
 <html lang="bn">
 <head>
 <meta charset="utf-8">
+<script>
+/* GitHub -> Firebase auto-switch: old github.io links forward to the Firebase site.
+   Set TARGET to your Firebase Hosting address. Add ?noredirect=1 to stay on GitHub (testing). */
+(function(){
+  var TARGET = "https://tfhs-portal.web.app/";
+  if (/\.github\.io$/i.test(location.hostname) && !/[?&]noredirect=1/.test(location.search)) {
+    location.replace(TARGET + location.search + location.hash);
+  }
+})();
+</script>
+<noscript><meta http-equiv="refresh" content="0;url=https://tfhs-portal.web.app/"></noscript>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0c2a6b">
 <link rel="manifest" href="manifest.json">
@@ -136,7 +147,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px
 .today .ev .yr{display:inline-block;background:var(--c-mp);color:#fff;font-size:12px;font-weight:700;padding:0 7px;border-radius:3px;margin-right:6px}
 .today .none{color:var(--mut)}
 /* corners: timetable + MDM duty */
-.corners{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-top:12px;align-items:start}
+.corners{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px;align-items:start}
 @media(max-width:760px){.corners{grid-template-columns:1fr}}
 .cc{background:var(--card);border:1px solid var(--line)}
 .cc h2{margin:0;padding:6px 12px;font:700 14.5px "Noto Sans Bengali",sans-serif;color:#fff;background:var(--c)}
@@ -266,6 +277,20 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 .tools.small .dcf input,.tools.small .dcf select{padding:4px 7px;font-size:12.5px}
 .tools.small .dc-res{padding:8px 10px;font-size:12.5px}.tools.small .dc-res .big{font-size:17px}
 
+/* optional view bar */
+.optbar{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:0 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;box-shadow:0 1px 6px rgba(12,42,107,.07)}
+.optbar>b{font-size:13px;color:var(--mut);margin-right:2px}
+.optbar button{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:18px;padding:3px 12px;font:600 12.5px inherit;font-family:inherit;cursor:pointer;transition:background .12s,border-color .12s}
+.optbar button:hover{border-color:var(--mar)}
+.optbar button[aria-pressed=true]{background:var(--mar);color:#fff;border-color:var(--mar)}
+.optbar button.mo[aria-pressed=true]{background:#0f766e;border-color:#0f766e}
+.optbar .rs{margin-left:auto;background:transparent;border:0;color:var(--mut);font-weight:400;text-decoration:underline;padding:3px 4px}
+.cc.mornc{border-top:4px solid #0f766e}
+.cc .shiftnote{padding:6px 10px;font-size:12px;color:var(--mut)}
+.cc .sbadge{float:right;font-size:11px;background:var(--gold);color:#1b1400;border-radius:9px;padding:0 8px;font-weight:700}
+#panel .chkrow{display:flex;flex-wrap:wrap;gap:6px 16px}
+#panel .chkrow label{display:flex;gap:6px;align-items:center;margin:0;color:var(--ink)}
+#panel .chkrow input{width:auto}
 /* readable Sundays on every cell background */
 .cd.sun.hol,.cd.sun.obs{color:#4a1200}
 @media(prefers-color-scheme:dark){.cal-dow span:first-child,.cd.sun{color:#ff9d90}.cd.sun.hol{color:#ffe29a}.cd.sun.obs{color:#ffd0c8}}
@@ -284,7 +309,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 </nav>
 
 <main class="wrap" id="site">
-  <section class="hero" id="hero" aria-label="School photos">
+  <section class="hero" id="hero" data-opt="hero" aria-label="School photos">
     <img src="images/school-gate.jpg" alt="তালডাংরা ফুলমতি উচ্চ বিদ্যালয়ের প্রবেশদ্বার / School main gate" data-cap="প্রবেশদ্বার / School Gate">
     <img src="images/school-campus.jpg" alt="বিদ্যালয় প্রাঙ্গণ ও ভবন / School campus and building" data-cap="বিদ্যালয় প্রাঙ্গণ / School Campus">
     <div class="cap" id="heroCap"></div><div class="dots" id="heroDots"></div>
@@ -294,6 +319,8 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 
 
 
+
+  <nav class="optbar" id="optBar" aria-label="Optional views"></nav>
 
   <div class="cols">
     <div class="mainc">
@@ -331,13 +358,14 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
         <div id="mpBox"></div>
       </section>
 
-      <div class="corners">
-        <section class="cc" style="--c:var(--c-routine)" aria-label="বিদ্যালয়ের সময়সূচি"><h2>🕘 বিদ্যালয়ের সময়সূচি</h2><table class="tt" id="ttBox"></table></section>
-        <section class="cc duty" style="--c:var(--c-mp)" aria-label="MDM তদারকি রোস্টার"><h2>🍱 MDM তদারকি রোস্টার (সপ্তাহের দিন অনুযায়ী)</h2><div id="dutyBox"></div></section>
+      <div class="corners" id="corners">
+        <section class="cc mornc" id="morningCard" data-opt="morning" style="--c:#0f766e" aria-label="সকালের শিফটের সময়সূচি"><h2>🌅 <span id="mnTitle">সকালের শিফটের সময়সূচি</span><span class="sbadge" id="mnBadge" hidden>চলছে</span></h2><table class="tt" id="mnBox"></table><div class="shiftnote" id="mnNote"></div></section>
+        <section class="cc" data-opt="tt" style="--c:var(--c-routine)" aria-label="বিদ্যালয়ের সময়সূচি"><h2>🕘 বিদ্যালয়ের সময়সূচি</h2><table class="tt" id="ttBox"></table></section>
+        <section class="cc duty" data-opt="duty" style="--c:var(--c-mp)" aria-label="MDM তদারকি রোস্টার"><h2>🍱 MDM তদারকি রোস্টার (সপ্তাহের দিন অনুযায়ী)</h2><div id="dutyBox"></div></section>
       </div>
     
   <section class="tools small" id="toolsBox" aria-label="ক্যালেন্ডার ও ক্যালকুলেটর">
-    <div class="tcard" id="calCard">
+    <div class="tcard" id="calCard" data-opt="cal">
       <div class="thead"><b>🗓️ <span id="calTitle"></span></b>
         <div class="nav"><button type="button" id="calPrev" aria-label="আগের মাস">‹</button><button type="button" id="calToday">আজ</button><button type="button" id="calNext" aria-label="পরের মাস">›</button></div></div>
       <div class="cal-body">
@@ -348,7 +376,7 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
         <div class="cal-mlist" id="calMonthList"></div>
       </div>
     </div>
-    <div class="tcard" id="calcCard">
+    <div class="tcard" id="calcCard" data-opt="calc">
       <div class="thead"><b>🧮 ক্যালকুলেটর</b>
         <div class="tbtabs" role="tablist"><button type="button" role="tab" data-tp="calc" aria-selected="true">Calculator</button><button type="button" role="tab" data-tp="date" aria-selected="false">Date Calc</button></div></div>
       <div class="tpane" id="tp-calc">
@@ -379,8 +407,8 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <h2 class="sec" id="links" style="--c:var(--c-link)">দ্রুত লিংক / Quick Links</h2>
       <div id="linksBox"></div>
 
-      <h2 class="sec" id="useful" style="--c:var(--c-link)">দরকারি লিংক / Useful Links (WB)</h2>
-      <div id="resBox"></div>
+      <h2 class="sec" id="useful" data-opt="useful" style="--c:var(--c-link)">দরকারি লিংক / Useful Links (WB)</h2>
+      <div id="resBox" data-opt="useful"></div>
 
       <h2 class="sec" id="routine" style="--c:var(--c-routine)">রুটিন ও ছুটি / Routine &amp; Holidays</h2>
       <table class="t" id="routineBox"></table>
@@ -388,8 +416,8 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <div class="list" id="holidayBox" style="--c:var(--c-routine)"></div>
       <details class="box" style="padding:0"><summary>সারা বছরের তালিকা / Full list</summary><table class="t" id="holAll"></table></details>
 
-      <h2 class="sec" style="--c:var(--navy)">যোগাযোগ / Contact</h2>
-      <div class="box contact">
+      <h2 class="sec" data-opt="contact" style="--c:var(--navy)">যোগাযোগ / Contact</h2>
+      <div class="box contact" data-opt="contact">
         Landline: 03243-265114<br>
         H.M.: 9434654678, 9933035811<br>
         <a href="mailto:highschooltaldangrafulmati@gmail.com">highschooltaldangrafulmati@gmail.com</a><br>
@@ -469,6 +497,24 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
       <div class="row"><label>ঘটনার তারিখ<input id="eDate" type="date"></label><label>ঘটনা (বাংলায়)<input id="eText" placeholder="যেমন: রবীন্দ্রনাথ ঠাকুরের জন্ম"></label></div>
       <p><button class="btn" id="addE" type="button">ঘটনা যোগ করুন</button></p>
       <div id="eList"></div>
+    </fieldset>
+
+    <fieldset><legend>🌅 Morning shift time table (সকালের শিফট)</legend>
+      <p class="meta" style="margin:0">Each line: <code>06:40-06:50 | প্রার্থনা সভা</code> (24-hour time). Saving publishes it live on the site at once. Leave empty = default morning table.</p>
+      <div class="chkrow">
+        <label><input type="checkbox" id="mnOn" checked> Show “সকালের সময়সূচি” in the optional view list</label>
+        <label><input type="checkbox" id="mnActive"> Morning shift is running now (show it first, hide the regular table by default)</label>
+      </div>
+      <label>Heading (optional)<input id="mnHead" placeholder="সকালের শিফটের সময়সূচি"></label>
+      <label>Note under the table (optional – e.g. “১ নভেম্বর থেকে ২৮ ফেব্রুয়ারি পর্যন্ত”)<input id="mnNoteIn"></label>
+      <textarea id="mnText" rows="11" style="margin-top:8px"></textarea>
+      <p><button class="btn" id="saveMn" type="button">Save morning time table</button> <button class="btn alt" id="defMn" type="button">Load default (from timetable image)</button></p>
+    </fieldset>
+
+    <fieldset><legend>👁 Optional views – what visitors see first</legend>
+      <p class="meta" style="margin:0">Visitors can still switch any item on/off from the “More views” bar. Tick what should be open by default.</p>
+      <div class="chkrow" id="viewDefs"></div>
+      <p><button class="btn" id="saveViews" type="button">Save default views</button> <button class="btn alt" id="resetViews" type="button">Reset to standard</button></p>
     </fieldset>
 
     <fieldset><legend>সময়সূচি (Time table)</legend>
@@ -636,6 +682,8 @@ function render(){
   renderMp();
   renderToday();
   renderCorners();
+  renderMorning();
+  applyViews();
   renderAdminLists();
   paneCounts();
   flashInit();
@@ -1253,6 +1301,71 @@ $("saveTT").onclick = () => { const v = $("ttText").value.trim(); D.timetable = 
 $("defTT").onclick = () => { D.timetable = ""; TT_FILLED = false; save(); };
 $("resetDuty").onclick = () => { D.duty = {}; save(); };
 setInterval(renderCorners, 60000);
+
+
+/* ---------- সকালের শিফট + Optional views ---------- */
+const DEF_MN = `06:40-06:50 | প্রার্থনা সভা
+06:50-07:30 | ১ম পিরিয়ড
+07:30-08:00 | ২য় পিরিয়ড
+08:00-08:30 | ৩য় পিরিয়ড
+08:30-08:55 | ৪র্থ পিরিয়ড
+08:55-09:20 | ৫ম পিরিয়ড
+09:20-09:45 | টিফিন বিরতি
+09:45-10:10 | ৬ষ্ঠ পিরিয়ড
+10:10-10:35 | ৭ম পিরিয়ড
+10:35-11:00 | ৮ম পিরিয়ড`;
+const parseTT = txt => String(txt||"").split("\n").map(l => { const m = /^\s*(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})\s*\|\s*(.+)$/.exec(l); return m ? {a:m[1], b:m[2], t:m[3].trim()} : null; }).filter(Boolean);
+const MN = () => D.morning || {};
+function renderMorning(){
+  const m = MN(), rows = parseTT(m.text || DEF_MN), now = new Date(), nm = now.getHours()*60 + now.getMinutes(), mm = x => { const [h,k] = x.split(":").map(Number); return h*60+k; };
+  $("mnTitle").textContent = m.title || "সকালের শিফটের সময়সূচি";
+  $("mnBadge").hidden = !m.active;
+  $("mnBox").innerHTML = rows.map(r => { const on = nm >= mm(r.a) && nm < mm(r.b), brk = /টিফিন|বিরতি|মিড/.test(r.t);
+    return `<tr class="${on?"now":brk?"brk":""}"><td>${t12(r.a)} – ${t12(r.b)}</td><td>${esc(r.t)}</td></tr>`; }).join("");
+  $("mnNote").textContent = m.note || "";
+  const ed = $("editor");
+  if (ed && ed.style.display !== "none" && !MN_FILLED) { MN_FILLED = true;
+    $("mnOn").checked = !m.off; $("mnActive").checked = !!m.active; $("mnHead").value = m.title || ""; $("mnNoteIn").value = m.note || ""; $("mnText").value = m.text || DEF_MN; }
+  if (ed && ed.style.display !== "none") fillViewDefs();
+}
+let MN_FILLED = false;
+$("saveMn").onclick = () => { const t = $("mnText").value.trim();
+  if (t && !parseTT(t).length) return toast("Format: 06:40-06:50 | নাম");
+  D.morning = { off: !$("mnOn").checked, active: $("mnActive").checked, title: $("mnHead").value.trim(), note: $("mnNoteIn").value.trim(), text: t === DEF_MN ? "" : t };
+  MN_FILLED = false; save(); };
+$("defMn").onclick = () => { $("mnText").value = DEF_MN; toast("Default loaded – press Save"); };
+setInterval(renderMorning, 60000);
+
+const VIEWS = [["morning","🌅","সকালের সময়সূচি","mo"],["tt","🕘","নিয়মিত সময়সূচি"],["duty","🍱","MDM রোস্টার"],["cal","🗓️","ক্যালেন্ডার"],["calc","🧮","ক্যালকুলেটর"],["useful","🔗","দরকারি লিংক"],["hero","🏫","স্কুলের ছবি"],["contact","☎️","যোগাযোগ"]];
+const VSTD = {duty:false, cal:false, calc:false, useful:true, hero:true, contact:true};
+let PREF = {}; try { PREF = JSON.parse(localStorage.getItem("tfhs_views") || "{}") || {}; } catch(e) { PREF = {}; }
+const viewAvail = k => k !== "morning" || !MN().off;
+function viewOn(k){
+  if (!viewAvail(k)) return false;
+  if (k in PREF) return !!PREF[k];
+  const a = D.views || {}; if (k in a) return !!a[k];
+  if (k === "morning") return !!MN().active;
+  if (k === "tt") return !MN().active;
+  return VSTD[k];
+}
+function applyViews(){
+  document.querySelectorAll("[data-opt]").forEach(el => { el.style.display = viewOn(el.dataset.opt) ? "" : "none"; });
+  ["corners","toolsBox"].forEach(id => { const w = $(id); if (!w) return; w.style.display = [...w.children].some(c => c.style.display !== "none") ? "" : "none"; });
+  $("optBar").innerHTML = `<b>👁 আরও দেখুন / More views:</b>` + VIEWS.filter(v => viewAvail(v[0])).map(v =>
+    `<button type="button" class="${v[3]||""}" data-v="${v[0]}" aria-pressed="${viewOn(v[0])}">${v[1]} ${v[2]}</button>`).join("") + `<button type="button" class="rs" id="vReset">রিসেট</button>`;
+  $("optBar").querySelectorAll("button[data-v]").forEach(b => b.onclick = () => setView(b.dataset.v, !viewOn(b.dataset.v)));
+  $("vReset").onclick = () => { PREF = {}; try { localStorage.removeItem("tfhs_views"); } catch(e) {} applyViews(); };
+}
+function setView(k, on){ PREF[k] = !!on; try { localStorage.setItem("tfhs_views", JSON.stringify(PREF)); } catch(e) {} applyViews(); }
+document.querySelectorAll('nav.menu a[href="#useful"]').forEach(a => a.addEventListener("click", () => { if (!viewOn("useful")) setView("useful", true); }));
+function fillViewDefs(){
+  const box = $("viewDefs"); if (!box || box.dataset.f) return; box.dataset.f = 1;
+  box.innerHTML = VIEWS.map(v => `<label><input type="checkbox" data-vd="${v[0]}"> ${v[1]} ${v[2]}</label>`).join("");
+  const cur = {}; VIEWS.forEach(v => { cur[v[0]] = (D.views && v[0] in D.views) ? !!D.views[v[0]] : (v[0]==="morning" ? !!MN().active : v[0]==="tt" ? !MN().active : VSTD[v[0]]); });
+  box.querySelectorAll("input").forEach(i => i.checked = cur[i.dataset.vd]);
+}
+$("saveViews").onclick = () => { const v = {}; $("viewDefs").querySelectorAll("input").forEach(i => v[i.dataset.vd] = i.checked); D.views = v; save(); };
+$("resetViews").onclick = () => { D.views = {}; $("viewDefs").dataset.f = ""; save(); };
 
 /* ---------- MP (SE) 2027 Selection Test programme ---------- */
 const MP_LINK = "https://prabirdangar-web.github.io/xi_mp_test/";
