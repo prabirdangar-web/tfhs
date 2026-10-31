@@ -473,6 +473,19 @@ table.tt,table.t{table-layout:auto;max-width:100%}
   header h1{font-size:clamp(17px,5.4vw,24px)}
   nav.menu a{padding:8px clamp(8px,2.6vw,14px);font-size:clamp(12.5px,3.7vw,14.5px)}
 }
+
+/* ===== v5: new colour scheme for the pop-up ===== */
+.fbox{border-top:0;border-image:none;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(90deg,#6d28d9,#0369a1,#047857,#b45309,#be123c) border-box;border:3px solid transparent;border-radius:10px}
+.fhead{background:linear-gradient(90deg,#4c1d95,#0369a1 55%,#047857)}
+.fbody h2{border-bottom:2px dashed #c4b5fd;padding-bottom:6px}
+.fchip.d{background:linear-gradient(135deg,#be123c,#b45309)}
+.fchip.p{background:linear-gradient(135deg,#0369a1,#047857)}
+.flang button[aria-pressed=true]{background:#6d28d9;border-color:#6d28d9}
+.ffoot .btn{background:linear-gradient(90deg,#6d28d9,#0369a1);color:#fff;border-color:transparent}
+@media(max-width:700px),(max-height:520px){.fbox{border-radius:0;border-width:0;border-top:4px solid #6d28d9}}
+@media(prefers-color-scheme:dark){.fbox{background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(90deg,#8b5cf6,#38bdf8,#34d399,#fbbf24,#fb7185) border-box}
+.ftext .fp{background:color-mix(in srgb,var(--pc) 12%,var(--card));color:color-mix(in srgb,var(--pc) 55%,#fff)}
+.fbody h2 span{filter:brightness(1.5)}}
 </style>
 </head>
 <body>
@@ -484,7 +497,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
   <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
-  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
+  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="guideLink" class="nb" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
 
 <main class="wrap" id="site">
@@ -637,7 +650,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <label>Show until (optional – pop-up stops automatically after this date)<input id="fiUntil" type="date"></label>
       <label>Full notice text (Bengali)<textarea id="fiBody" rows="9"></textarea></label>
       <label>Full notice text (English, optional – adds an English button)<textarea id="fiBodyEn" rows="7"></textarea></label>
-      <p><button class="btn" id="saveFlash">Save pop-up</button> <button class="btn alt" id="prevFlash" type="button">Preview</button> <button class="btn alt" id="loadFlash" type="button">Load Vijaya/Diwali reopening notice</button> <button class="btn alt" id="offFlash" type="button">Turn off</button></p>
+      <p><button class="btn" id="saveFlash">Save pop-up</button> <button class="btn alt" id="prevFlash" type="button">Preview</button> <button class="btn alt" id="loadFlash" type="button">Load Vijaya/Diwali reopening notice</button> <button class="btn alt" id="loadGuide" type="button">Load portal user guide (2 months)</button> <button class="btn alt" id="offFlash" type="button">Turn off</button></p>
     </fieldset>
 
     <fieldset><legend>📢 Add notice</legend>
@@ -1064,12 +1077,14 @@ $("loadRulesN").onclick = () => { $("nTitle").value = RULES_NOTICE.title; $("nBo
 const SAMPLE_FLASH = {"title": "বিজয়া ও দীপাবলীর শুভেচ্ছা এবং বিদ্যালয় পুনর্সূচনা সংক্রান্ত বিজ্ঞপ্তি", "titleEn": "Vijaya & Diwali Greetings and Notice on Reopening of the School", "date": "১৩ নভেম্বর, ২০২৬ / 13 November, 2026", "place": "বিদ্যালয় প্রাঙ্গণ / School Premises", "body": "সকল ছাত্রছাত্রী, শিক্ষক-শিক্ষিকা, শিক্ষাকর্মী ও অভিভাবকবৃন্দের অবগতির জন্য জানানো যাচ্ছে যে—\n\nদীর্ঘ পূজা ও দীপাবলী উৎসবের আনন্দঘন ছুটি শেষে আগামী ১৩ নভেম্বর, ২০২৬ (বৃহস্পতিবার) থেকে আমাদের বিদ্যালয়ের ডে সেকশন (Day Section)-এর পঠন-পাঠন ও নিয়মিত কার্যক্রম পুনরায় যথারীতি শুরু হতে চলেছে।\n\nশারদীয়া দুর্গোৎসব, কালীপূজা ও ভাইফোঁটার এই শুভ লগ্নে বিদ্যালয় পরিবারের পক্ষ থেকে আপনাদের সকলকে জানাই আন্তরিক বিজয়া সম্মিলনীর প্রীতি ও শুভেচ্ছা এবং দীপাবলীর হার্দিক শুভকামনা। আশা করি আপনাদের সকলের পুজো অত্যন্ত আনন্দের মধ্য দিয়ে কেটেছে।\n\nআসুন, নতুন উদ্যম ও উৎসাহ নিয়ে আমরা সকলে আবার বিদ্যালয়মুখী হই এবং পড়াশোনা ও অন্যান্য কার্যক্রমে মনোনিবেশ করি। নির্দিষ্ট দিনে নির্ধারিত সময়ে সকল ছাত্রছাত্রীকে সঠিক ইউনিফর্মে উপস্থিত থাকার জন্য নির্দেশ দেওয়া হচ্ছে।\n\nআপনাদের সকলের সর্বাঙ্গীন মঙ্গল কামনা করি।\n\nআদেশানুসারে,\nপ্রধান শিক্ষক / ভারপ্রাপ্ত প্রধান শিক্ষক\nতালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)", "bodyEn": "For the information of all students, teachers, non-teaching staff and guardians:\n\nAfter the joyous long holidays of Puja and Diwali, teaching-learning and regular activities of the Day Section of our school will resume as usual from 13 November, 2026 (Thursday).\n\nOn this auspicious occasion of Sharadiya Durgotsav, Kali Puja and Bhai Phonta, the school family extends its heartfelt Vijaya greetings and warm Diwali wishes to all of you. We hope you all had a very joyful Puja.\n\nLet us all return to school with fresh energy and enthusiasm and focus on our studies and other activities. All students are directed to be present on the appointed day, at the appointed time, in the proper uniform.\n\nWe wish you all the very best.\n\nBy order,\nHeadmaster / Teacher-in-Charge\nTaldangra Fulmati High School (H.S.)"};
 let FLASH_DONE = false, FLASH_LANG = "bn";
 const flashActive = () => { const f = D.flash; return !!(f && f.on && f.title && (!f.until || today() <= f.until)); };
-function openFlash(){
-  const f = D.flash || {}, hasEn = !!(f.bodyEn && f.bodyEn.trim());
+let FCUR = null, FQUEUE = [];
+function openFlash(nf){
+  if (nf) FCUR = nf;
+  const f = FCUR || D.flash || {}, hasEn = !!(f.bodyEn && f.bodyEn.trim());
   $("fLang").classList.toggle("one", !hasEn);
   if (!hasEn) FLASH_LANG = "bn";
   const bn = FLASH_LANG === "bn";
-  const FPAL = ["#12388a","#b3121b","#1d7a46","#7a1f3d","#5b2a86","#c2410c","#0e7490"];
+  const FPAL = ["#6d28d9","#0369a1","#be123c","#047857","#b45309","#c026d3","#1d4ed8"];
   const ft = $("fTitle"); ft.textContent = "";
   (bn ? f.title : (f.titleEn || f.title)).split(/\s+/).forEach((w, i) => { const sp = document.createElement("span"); sp.textContent = w + " "; sp.style.color = FPAL[i % FPAL.length]; ft.appendChild(sp); });
   const fm = $("fMeta"); fm.textContent = "";
@@ -1090,31 +1105,37 @@ function typeFlash(text, pal){
   const finish = () => { paras.forEach(x => { x.el.textContent = x.t; x.el.classList.remove("cur"); }); FT_SKIP = null; };
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return finish();
   FT_SKIP = () => { FT_TOK++; finish(); };
+  const tot = paras.reduce((n, x) => n + x.g.length, 0), STEP = tot > 900 ? 5 : tot > 500 ? 3 : 2;
   let pi = 0, ci = 0;
   (function tick(){
     if (tok !== FT_TOK) return;
     if (pi >= paras.length) { FT_SKIP = null; return; }
     const x = paras[pi]; x.el.classList.add("cur");
-    ci = Math.min(x.g.length, ci + 2); x.el.textContent = x.g.slice(0, ci).join("");
+    ci = Math.min(x.g.length, ci + STEP); x.el.textContent = x.g.slice(0, ci).join("");
     const sc = $("fText").parentNode; sc.scrollTop = sc.scrollHeight;
     if (ci >= x.g.length) { x.el.classList.remove("cur"); pi++; ci = 0; setTimeout(tick, 220); } else setTimeout(tick, 28);
   })();
 }
 $("fText").addEventListener("click", () => { if (FT_SKIP) FT_SKIP(); });
-function closeFlash(){ FT_TOK++; $("flash").hidden = true; document.body.style.overflow = ""; }
+function closeFlash(){ FT_TOK++; $("flash").hidden = true; document.body.style.overflow = ""; FCUR = null;
+  const nx = FQUEUE.shift(); if (nx) setTimeout(() => { FLASH_LANG = "bn"; openFlash(nx); }, 250); }
 document.querySelectorAll("#fLang button").forEach(b => b.onclick = () => { FLASH_LANG = b.dataset.l; openFlash(); });
 $("fClose").onclick = $("fOk").onclick = closeFlash;
 $("flash").addEventListener("click", e => { if (e.target === $("flash")) closeFlash(); });
 addEventListener("keydown", e => { if (e.key === "Escape" && !$("flash").hidden) closeFlash(); });
-$("flashLink").onclick = e => { e.preventDefault(); if (flashActive()) openFlash(); };
+const GUIDE = {"id": "guide-20261031", "on": true, "title": "পোর্টাল ব্যবহার নির্দেশিকা — কোন অংশ কীভাবে দেখবেন ও ব্যবহার করবেন", "titleEn": "Portal User Guide – How to View and Use Every Section", "date": "৩১ অক্টোবর, ২০২৬ থেকে ৩১ ডিসেম্বর, ২০২৬", "place": "তালডাংরা ফুলমতি উচ্চ বিদ্যালয় ওয়েব পোর্টাল", "until": "2026-12-31", "body": "📢 বিজ্ঞপ্তি: মেনুর “বিজ্ঞপ্তি” চাপুন। নতুন বা সম্প্রতি বদলানো প্রতিটি আইটেমে লাল-কমলা ব্লিঙ্ক করা NEW চিহ্ন থাকে (৭ দিন)। “বিস্তারিত” চাপলে পুরো লেখা খুলবে। উপরের বোতামে সবার জন্য / শিক্ষক / ছাত্রছাত্রী / সাধারণ বেছে নিয়ে বিজ্ঞপ্তি ছাঁকনি করা যায়।\n\n🏆 ফলাফল: “ফলাফল” ট্যাবে রেজাল্ট ও ভর্তির তথ্য থাকে। PDF বা লিংকের বোতাম চাপলেই ফাইলটি খুলবে।\n\n🖼️ গ্যালারি ও 👥 শিক্ষকবৃন্দ: ছবিতে চাপলে বড় করে খুলবে। শিক্ষকবৃন্দ ট্যাবে শিক্ষক-শিক্ষিকা, শিক্ষাকর্মী ও ভোকেশনাল ইউনিটের নাম, পদ ও ছবি পাবেন।\n\n📅 MP টেস্ট প্রোগ্রাম: পরীক্ষার তারিখ, বার, সময় ও বিষয় এক নজরে দেখা যায়। নতুন বা বদলানো সারিতে NEW চিহ্ন জ্বলে।\n\n🕘 সময়সূচি: চলতি পিরিয়ড হলুদ রঙে জ্বলজ্বল করে। “রুটিন ও ছুটি” অংশে সারা বছরের ছুটির তালিকা আছে।\n\n👁 আরও দেখুন: ক্যালেন্ডার, ক্যালকুলেটর, MDM রোস্টার, দরকারি লিংক, স্কুলের ছবি, যোগাযোগ, সকালের ও নিয়মিত সময়সূচি—যেটি চান সেটির বোতাম চাপুন, পেজ নিজেই সেখানে চলে যাবে। আবার চাপলে লুকাবে, “রিসেট” চাপলে আগের অবস্থায় ফিরবে।\n\n🗓️ ক্যালেন্ডার ও 🧮 ক্যালকুলেটর: তারিখে চাপলে সেই দিনের ছুটি বা ঘটনা দেখাবে; ‹ › দিয়ে মাস বদলান, “আজ” চাপলে আজকের তারিখে ফেরা যায়। “Date Calc” ট্যাবে দুই তারিখের হিসাব করা যায়।\n\n🔗 দরকারি লিংক: WBBSE, WBCHSE, বৃত্তি, ফর্ম ইত্যাদি সরকারি সাইটের লিংক বিভাগ অনুযায়ী সাজানো আছে।\n\n🔔 এই বিজ্ঞপ্তি আবার দেখতে মেনুর উপরের লিংকে চাপুন। লেখার ওপর ট্যাপ করলে পুরোটা একসঙ্গে দেখাবে। বাংলা / English বোতামে ভাষা বদলানো যায়।\n\n📱 মোবাইলে: আঙুলে জুম করে লেখা বড়-ছোট করা যায়; ফোন আড়াআড়ি ধরলেও পেজ স্ক্রিনের মাপে বসে যাবে।\n\n🔐 লগইন লাগে এমন অংশ (অ্যাডমিন/স্টাফ) শুধু স্কুলের অনুমোদিত ব্যক্তির জন্য। কোনো সমস্যা হলে স্কুল অফিসে যোগাযোগ করুন।\n\nআদেশানুসারে,\n\nপ্রধান শিক্ষক / ভারপ্রাপ্ত প্রধান শিক্ষক\n\nতালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)", "bodyEn": "📢 Notices: tap “বিজ্ঞপ্তি” in the menu. Every new or recently changed item carries a blinking red-orange NEW tag (for 7 days). Tap “Details” for the full text, and use the buttons on top to filter by All / Staff / Students / General.\n\n🏆 Results: the Results tab shows results and admission information. Tap the PDF or link button to open the file.\n\n🖼️ Gallery & 👥 Staff: tap a photo to enlarge it. The Staff tab lists teachers, non-teaching staff and the vocational unit with post and photo.\n\n📅 MP Test Programme: dates, days, times and subjects at a glance. New or changed rows show a NEW tag.\n\n🕘 Timetable: the running period glows yellow. “রুটিন ও ছুটি” holds the full holiday list.\n\n👁 More views: Calendar, Calculator, MDM roster, Useful Links, School Photos, Contact and the timetables — tap a button and the page scrolls straight to it. Tap again to hide, or “রিসেট” to restore the default.\n\n🗓️ Calendar & 🧮 Calculator: tap a date for its holiday or event; use ‹ › to change month and “আজ” to return to today. The “Date Calc” tab calculates between two dates.\n\n🔗 Useful Links: WBBSE, WBCHSE, scholarships, forms and other official sites, grouped by category.\n\n🔔 To see this notice again, tap its link in the menu. Tap the text to show it all at once. Use the বাংলা / English buttons to change language.\n\n📱 On mobile: pinch to zoom; the page also fits when the phone is turned sideways.\n\n🔐 Login areas (admin/staff) are only for authorised school personnel. For any problem please contact the school office.\n\nBy order,\n\nHeadmaster / Teacher-in-Charge\n\nTaldangra Fulmati High School (H.S.)"};
+const guideActive = () => today() <= GUIDE.until;
+$("flashLink").onclick = e => { e.preventDefault(); if (flashActive()) { FQUEUE = []; FLASH_LANG = "bn"; openFlash(D.flash); } };
+$("guideLink").onclick = e => { e.preventDefault(); FQUEUE = []; FLASH_LANG = "bn"; openFlash(GUIDE); };
+let GUIDE_DONE = false;
+const flashSeenOf = (key, id) => { let seen = false; try { seen = sessionStorage.getItem(key) === id; sessionStorage.setItem(key, id); } catch(e) {} return seen; };
+const showQ = f => { if ($("flash").hidden) { FLASH_LANG = "bn"; openFlash(f); } else FQUEUE.push(f); };
 function flashInit(){
   $("flashLink").style.display = flashActive() ? "" : "none";
-  if (FLASH_DONE || location.hash === "#admin" || !flashActive()) return;
-  FLASH_DONE = true;
-  let seen = false; try { seen = sessionStorage.getItem("flashSeen") === D.flash.id; } catch(e) {}
-  if (seen) return;
-  try { sessionStorage.setItem("flashSeen", D.flash.id); } catch(e) {}
-  openFlash();
+  $("guideLink").style.display = guideActive() ? "" : "none";
+  if (location.hash === "#admin") return;
+  if (!FLASH_DONE && flashActive()) { FLASH_DONE = true; if (!flashSeenOf("flashSeen", D.flash.id)) showQ(D.flash); }
+  if (!GUIDE_DONE && guideActive()) { GUIDE_DONE = true; if (!flashSeenOf("guideSeen", GUIDE.id)) setTimeout(() => showQ(GUIDE), 1500); }
 }
 let FF_ID = null;
 function fillFlash(force){
@@ -1127,10 +1148,12 @@ const flashFromForm = () => ({ id:uid(), on:$("fOn").checked, title:$("fiTitle")
 $("saveFlash").onclick = () => { const f = flashFromForm(); if (!f.title || !f.body) return toast("Title and Bengali text are required");
   if (tooBig(f.body.length + f.bodyEn.length + 500)) return toast("Storage full - delete old gallery photos first");
   D.flash = f; FF_ID = f.id; save(); };
-$("prevFlash").onclick = () => { const keep = D.flash; D.flash = flashFromForm(); if (!D.flash.title) { D.flash = keep; return toast("Enter a title first"); } FLASH_LANG = "bn"; openFlash(); D.flash = keep; };
+$("prevFlash").onclick = () => { const keep = D.flash; D.flash = flashFromForm(); if (!D.flash.title) { D.flash = keep; return toast("Enter a title first"); } FLASH_LANG = "bn"; FQUEUE = []; openFlash(D.flash); D.flash = keep; };
 $("loadFlash").onclick = () => { const x = SAMPLE_FLASH; $("fOn").checked = true; $("fiTitle").value = x.title; $("fiTitleEn").value = x.titleEn; $("fiDate").value = x.date;
   $("fiPlace").value = x.place; $("fiBody").value = x.body; $("fiBodyEn").value = x.bodyEn; $("fiUntil").value = "";
   toast("Loaded - check the text, then click Save pop-up"); $("fiTitle").scrollIntoView({block:"center"}); };
+$("loadGuide").onclick = () => { const x = GUIDE; $("fOn").checked = true; $("fiTitle").value = x.title; $("fiTitleEn").value = x.titleEn; $("fiDate").value = x.date;
+  $("fiPlace").value = x.place; $("fiBody").value = x.body; $("fiBodyEn").value = x.bodyEn; $("fiUntil").value = x.until; toast("Loaded - click Save pop-up"); $("fiTitle").scrollIntoView({block:"center"}); };
 $("offFlash").onclick = () => { if (!D.flash) return toast("No pop-up saved"); D.flash = {...D.flash, on:false, id:uid()}; fillFlash(true); save(); };
 const addTo = (k, obj) => { D[k] = eff(k).slice(); D[k].push({id:uid(), ...obj}); save(); };
 function shrink(file, maxDim, maxBytes){
