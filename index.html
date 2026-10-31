@@ -512,6 +512,10 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 @keyframes tkbadge{50%{background:#fff;color:#7a0f1f}}
 @media(prefers-reduced-motion:reduce){.ticker:not(:empty),.ticker:not(:empty)::before{animation:none}}
 </style>
+<style>
+.nat audio{width:100%;margin:4px 0 8px;height:40px}.nat h3{margin:6px 0 0;font-size:14px}.nat .meta{display:block}
+.nat .btn{width:100%;margin-top:4px}
+</style>
 </head>
 <body>
 <div class="strip"></div>
@@ -627,6 +631,15 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 
       <h2 class="sec" id="useful" data-opt="useful" style="--c:var(--c-link)">দরকারি লিংক / Useful Links (WB)</h2>
       <div id="resBox" data-opt="useful"></div>
+
+      <h2 class="sec" id="national" style="--c:#0b6b3a">🇮🇳 জাতীয় গান ও জাতীয় সংগীত / National Song &amp; Anthem</h2>
+      <div class="box nat">
+        <h3>বন্দে মাতরম্ <span class="meta">Vande Mataram</span></h3>
+        <audio id="natA0" controls preload="none" src="audio/vande_mataram.mp3"></audio>
+        <h3>জনগণমন <span class="meta">Jana Gana Mana — National Anthem</span></h3>
+        <audio id="natA1" controls preload="none" src="audio/jana_gana_mana.mp3"></audio>
+        <button class="btn" id="natAll" type="button">▶ ক্রমানুসারে বাজান / Play both in order</button>
+      </div>
 
       <h2 class="sec" id="routine" style="--c:var(--c-routine)">রুটিন ও ছুটি / Routine &amp; Holidays</h2>
       <table class="t" id="routineBox"></table>
@@ -2085,6 +2098,13 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(function (e) { console.log("SW failed", e); });
   });
 }
+</script>
+<script>
+(function(){var a=[document.getElementById('natA0'),document.getElementById('natA1')],seq=false;if(!a[0]||!a[1])return;
+a.forEach(function(x,i){x.addEventListener('play',function(){a.forEach(function(y,j){if(j!==i)y.pause()})});
+x.addEventListener('ended',function(){if(seq&&i===0){a[1].currentTime=0;a[1].play()}else seq=false})});
+document.getElementById('natAll').addEventListener('click',function(){seq=true;a[1].pause();a[0].currentTime=0;a[0].play()});
+a.forEach(function(x){x.addEventListener('pause',function(){if(!x.ended&&document.activeElement===x)seq=false})})})();
 </script>
 </body>
 </html>
