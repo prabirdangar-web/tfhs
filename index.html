@@ -1198,9 +1198,10 @@ function waBuild(aud){
   else if (src === "latest") { const n = (D.notices||[]).slice().sort((x,y) => (y.date||"").localeCompare(x.date||""))[0]; if (!n) { toast("No notice published yet"); return ""; } title = n.title; hash = "#notices-top"; }
   else { const f = D.flash || {}; if (!f.title) { toast("Save a pop-up notice first, or pick another notice"); return ""; } title = f.title; }
   if (title.length > 90) title = title.slice(0, 88).trim() + "…";
-  const link = waSite() + hash;
-  let t = `📢 ${WA_GREET[aud]}, তালডাংরা ফুলমতি উচ্চ বিদ্যালয়ের একটি নতুন বিজ্ঞপ্তি প্রকাশিত হয়েছে।\n📌 ${title}\n👉 বিস্তারিত দেখতে এই লিংকে ক্লিক করুন: ${link}`;
-  if ($("waInst").checked) t += `\n📲 বিদ্যালয়ের যেকোনো বিষয়ে নিয়মিত এই ওয়েবসাইট দেখুন। ভালো ফলাফলের জন্য লিংকটি খুলে মেনুর “📲 অ্যাপ ইনস্টল” চেপে মোবাইলে অ্যাপ হিসেবে ইনস্টল করে নিন।`;
+  const link = waSite() + hash, ttl = title.replace(/[*_~`]/g, "").trim();
+  /* plain text + WhatsApp bold only (no emoji) so nothing turns into "?" boxes on any phone */
+  let t = `*${WA_GREET[aud]}*, তালডাংরা ফুলমতি উচ্চ বিদ্যালয়ের একটি নতুন বিজ্ঞপ্তি প্রকাশিত হয়েছে।\nবিষয়: *${ttl}*\nবিস্তারিত দেখতে এই লিংকে ক্লিক করুন: ${link}`;
+  if ($("waInst").checked) t += `\nবিদ্যালয়ের যেকোনো বিষয়ে নিয়মিত এই ওয়েবসাইট দেখুন। ভালো ফলাফলের জন্য লিংকটি খুলে মেনুর “অ্যাপ ইনস্টল” চেপে মোবাইলে অ্যাপ হিসেবে ইনস্টল করে নিন।`;
   return t;
 }
 const waOpen = txt => window.open("https://wa.me/?text=" + encodeURIComponent(txt), "_blank", "noopener");
