@@ -64,7 +64,7 @@ h2.sec:first-child{margin-top:0}
 #holAll tr:nth-child(even) td{background:color-mix(in srgb,var(--bg) 55%,var(--card))}
 #holAll tr.mh td{background:var(--mar);color:#fff;font-weight:700;padding:2px 7px;font-size:11.5px;text-align:left}
 .tag.new{background:#b3121b;color:#fff;font-weight:700;animation:newflash 1s steps(2,start) infinite}
-@keyframes newflash{50%{background:#ffd23a;color:#5a0006}}
+@keyframes newflash{50%{background:#c2410c;color:#fff}}
 @media(prefers-reduced-motion:reduce){.tag.new{animation:none}}
 .ptabs .cnt.hasnew{animation:newflash 1s steps(2,start) infinite;background:#b3121b;color:#fff}
 .empty{color:var(--mut);padding:8px 10px}
@@ -459,6 +459,20 @@ nav.menu a.nb{background:#b3121b;color:#fff;animation:newflash 1s steps(2,start)
 [data-opt]{scroll-margin-top:92px}
 @keyframes vpulse{0%,100%{box-shadow:0 0 0 0 rgba(242,169,0,0)}30%{box-shadow:0 0 0 4px rgba(242,169,0,.9)}}
 .vpulse{animation:vpulse 1.4s ease-out 1}
+
+/* ===== v4: phone fit – nothing may be wider than the screen ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{max-width:100%;overflow-x:clip}
+body *{min-width:0}
+img,video,iframe,canvas{max-width:100%}
+table.tt td[colspan],table.t td[colspan],table td.meta[colspan]{white-space:normal!important;width:auto!important;overflow-wrap:anywhere;font-size:12px;line-height:1.4}
+table.tt,table.t{table-layout:auto;max-width:100%}
+.tag.new,.ptabs .cnt.hasnew,nav.menu a.nb{color:#fff!important}
+@media(max-width:700px){
+  .wrap,main,.cc,.box,.pane{max-width:100%}
+  header h1{font-size:clamp(17px,5.4vw,24px)}
+  nav.menu a{padding:8px clamp(8px,2.6vw,14px);font-size:clamp(12.5px,3.7vw,14.5px)}
+}
 </style>
 </head>
 <body>
