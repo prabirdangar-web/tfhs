@@ -529,6 +529,15 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 .fbi{border:1px solid var(--line);border-left:4px solid var(--mar);border-radius:6px;padding:8px 10px;margin:8px 0;background:var(--card)}
 .fbi.new{border-left-color:#c0182b}.fbi p{margin:3px 0;font-size:13.5px}.fbi .meta{font-size:12px}
 </style>
+<style>
+.fbm{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:14px}
+.fbm[hidden]{display:none}
+.fbm-box{position:relative;background:var(--card);color:var(--ink);border-radius:10px;max-width:520px;width:100%;margin:auto;padding:14px 12px 10px;box-shadow:0 12px 40px rgba(0,0,0,.45)}
+.fbm-box h2{margin:0 30px 6px 0;font-size:17px}
+.fbm-box .box.fb{border:0;background:transparent;padding:0}
+.fbm-x{position:absolute;top:8px;right:8px;width:30px;height:30px;border:0;border-radius:50%;background:var(--bg);color:var(--ink);font-size:15px;cursor:pointer}
+#fbLink{font-size:17px;padding-left:8px;padding-right:8px}
+</style>
 </head>
 <body>
 <div class="strip"></div>
@@ -539,7 +548,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
   <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
-  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
+  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="#" id="fbLink" title="মতামত ও পরামর্শ / Feedback &amp; Suggestion" aria-label="মতামত ও পরামর্শ / Feedback">✉️</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
 <a href="#" id="flashBar" class="flbar" hidden></a>
 
@@ -644,30 +653,6 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 
       <h2 class="sec" id="useful" data-opt="useful" style="--c:var(--c-link)">দরকারি লিংক / Useful Links (WB)</h2>
       <div id="resBox" data-opt="useful"></div>
-
-      <h2 class="sec" id="feedback" style="--c:#b3261e">✉️ মতামত ও পরামর্শ / Feedback &amp; Suggestion</h2>
-      <div class="box fb">
-        <p class="meta" style="margin:0 0 4px">সব ঘর আবশ্যিক (<span class="req">*</span>)। সঠিক নাম, ঠিকানা ও মোবাইল নম্বর দিন — ভুয়া তথ্য দিলে মতামত গ্রহণ করা হবে না। / All fields marked * are compulsory; please give genuine details.</p>
-        <form id="fbForm" novalidate autocomplete="off">
-          <label>নাম / Full name <span class="req">*</span><input id="fbName" maxlength="60" autocomplete="name" placeholder="আপনার পূর্ণ নাম"></label>
-          <div class="row2">
-            <label>মোবাইল / Mobile (10 digits) <span class="req">*</span><input id="fbMob" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="9XXXXXXXXX"></label>
-            <label>ইমেল / Email <small>(optional)</small><input id="fbMail" type="email" maxlength="80" autocomplete="email"></label>
-          </div>
-          <label>ঠিকানা / Address (village, post office, police station) <span class="req">*</span><textarea id="fbAddr" maxlength="200" style="min-height:62px" placeholder="গ্রাম, ডাকঘর, থানা, জেলা"></textarea></label>
-          <div class="row2">
-            <label>পিন কোড / PIN code <span class="req">*</span><input id="fbPin" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="722XXX"></label>
-            <label>আপনি / You are <span class="req">*</span><select id="fbRel"><option value="">— বাছুন / Select —</option><option value="Parent / Guardian">Parent / Guardian — অভিভাবক</option><option value="Student">Student — ছাত্র/ছাত্রী</option><option value="Ex-student">Ex-student — প্রাক্তন ছাত্র/ছাত্রী</option><option value="Teacher / Staff">Teacher / Staff — শিক্ষক / কর্মী</option><option value="Local resident">Local resident — স্থানীয় বাসিন্দা</option><option value="Other">Other — অন্যান্য</option></select></label>
-          </div>
-          <label>বিষয় / Subject <span class="req">*</span><select id="fbCat"><option value="">— বাছুন / Select —</option><option value="Teaching & Studies">Teaching & Studies — পড়াশোনা</option><option value="Facilities & Cleanliness">Facilities & Cleanliness — পরিকাঠামো ও পরিচ্ছন্নতা</option><option value="Mid Day Meal">Mid Day Meal — মিড ডে মিল</option><option value="Admission / Office service">Admission / Office service — ভর্তি / অফিস পরিষেবা</option><option value="Safety & Discipline">Safety & Discipline — নিরাপত্তা ও শৃঙ্খলা</option><option value="Website / Other">Website / Other — ওয়েবসাইট / অন্যান্য</option></select></label>
-          <label>আপনার মতামত / পরামর্শ / Your feedback <span class="req">*</span> <span class="cnt" id="fbCnt">0/500</span><textarea id="fbMsg" maxlength="500" placeholder="কমপক্ষে ১৫ অক্ষর লিখুন / at least 15 characters"></textarea></label>
-          <label>নিরাপত্তা প্রশ্ন / Human check: <b id="fbQ"></b> <span class="req">*</span><input id="fbAns" inputmode="numeric" maxlength="2" style="max-width:90px"></label>
-          <input class="hp" id="fbHp" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <label class="chk"><input type="checkbox" id="fbOk"><span>আমি ঘোষণা করছি যে উপরের সব তথ্য সত্য। / I declare that the details above are true. <span class="req">*</span></span></label>
-          <p style="margin:10px 0 0"><button class="btn" id="fbSend" type="submit" style="width:100%;padding:10px;font-size:15px">📨 জমা দিন / Submit</button></p>
-          <p class="st" id="fbSt" role="status" aria-live="polite"></p>
-        </form>
-      </div>
 
       <h2 class="sec" id="national" style="--c:#0b6b3a">🎵 জাতীয় গান ও জাতীয় সংগীত / National Song &amp; Anthem</h2>
       <div class="box nat">
@@ -2148,11 +2133,39 @@ x.addEventListener('ended',function(){if(seq&&i===0){a[1].currentTime=0;a[1].pla
 document.getElementById('natAll').addEventListener('click',function(){seq=true;a[1].pause();a[0].currentTime=0;a[0].play()});
 a.forEach(function(x){x.addEventListener('pause',function(){if(!x.ended&&document.activeElement===x)seq=false})})})();
 </script>
+<div id="fbModal" class="fbm" hidden>
+  <div class="fbm-box" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
+    <button type="button" class="fbm-x" id="fbClose" aria-label="Close">✕</button>
+    <h2 id="fbTitle">✉️ মতামত ও পরামর্শ / Feedback &amp; Suggestion</h2>
+    <div class="box fb">
+        <p class="meta" style="margin:0 0 4px">সব ঘর আবশ্যিক (<span class="req">*</span>)। সঠিক নাম, ঠিকানা ও মোবাইল নম্বর দিন — ভুয়া তথ্য দিলে মতামত গ্রহণ করা হবে না। / All fields marked * are compulsory; please give genuine details.</p>
+        <form id="fbForm" novalidate autocomplete="off">
+          <label>নাম / Full name <span class="req">*</span><input id="fbName" maxlength="60" autocomplete="name" placeholder="আপনার পূর্ণ নাম"></label>
+          <div class="row2">
+            <label>মোবাইল / Mobile (10 digits) <span class="req">*</span><input id="fbMob" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="9XXXXXXXXX"></label>
+            <label>ইমেল / Email <small>(optional)</small><input id="fbMail" type="email" maxlength="80" autocomplete="email"></label>
+          </div>
+          <label>ঠিকানা / Address (village, post office, police station) <span class="req">*</span><textarea id="fbAddr" maxlength="200" style="min-height:62px" placeholder="গ্রাম, ডাকঘর, থানা, জেলা"></textarea></label>
+          <div class="row2">
+            <label>পিন কোড / PIN code <span class="req">*</span><input id="fbPin" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="722XXX"></label>
+            <label>আপনি / You are <span class="req">*</span><select id="fbRel"><option value="">— বাছুন / Select —</option><option value="Parent / Guardian">Parent / Guardian — অভিভাবক</option><option value="Student">Student — ছাত্র/ছাত্রী</option><option value="Ex-student">Ex-student — প্রাক্তন ছাত্র/ছাত্রী</option><option value="Teacher / Staff">Teacher / Staff — শিক্ষক / কর্মী</option><option value="Local resident">Local resident — স্থানীয় বাসিন্দা</option><option value="Other">Other — অন্যান্য</option></select></label>
+          </div>
+          <label>বিষয় / Subject <span class="req">*</span><select id="fbCat"><option value="">— বাছুন / Select —</option><option value="Teaching & Studies">Teaching & Studies — পড়াশোনা</option><option value="Facilities & Cleanliness">Facilities & Cleanliness — পরিকাঠামো ও পরিচ্ছন্নতা</option><option value="Mid Day Meal">Mid Day Meal — মিড ডে মিল</option><option value="Admission / Office service">Admission / Office service — ভর্তি / অফিস পরিষেবা</option><option value="Safety & Discipline">Safety & Discipline — নিরাপত্তা ও শৃঙ্খলা</option><option value="Website / Other">Website / Other — ওয়েবসাইট / অন্যান্য</option></select></label>
+          <label>আপনার মতামত / পরামর্শ / Your feedback <span class="req">*</span> <span class="cnt" id="fbCnt">0/500</span><textarea id="fbMsg" maxlength="500" placeholder="কমপক্ষে ১৫ অক্ষর লিখুন / at least 15 characters"></textarea></label>
+          <label>নিরাপত্তা প্রশ্ন / Human check: <b id="fbQ"></b> <span class="req">*</span><input id="fbAns" inputmode="numeric" maxlength="2" style="max-width:90px"></label>
+          <input class="hp" id="fbHp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label class="chk"><input type="checkbox" id="fbOk"><span>আমি ঘোষণা করছি যে উপরের সব তথ্য সত্য। / I declare that the details above are true. <span class="req">*</span></span></label>
+          <p style="margin:10px 0 0"><button class="btn" id="fbSend" type="submit" style="width:100%;padding:10px;font-size:15px">📨 জমা দিন / Submit</button></p>
+          <p class="st" id="fbSt" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+  </div>
+</div>
 <script>
 /* ===== Feedback & suggestion box (collection "feedback"; read only by admin) ===== */
 (function(){
  var f=document.getElementById('fbForm');if(!f)return;
- var T0=Date.now(),a=2+Math.floor(Math.random()*8),b=2+Math.floor(Math.random()*8),g=function(i){return document.getElementById(i)};
+ document.addEventListener('fbopen',function(){T0=Date.now()});var T0=Date.now(),a=2+Math.floor(Math.random()*8),b=2+Math.floor(Math.random()*8),g=function(i){return document.getElementById(i)};
  g('fbQ').textContent=a+' + '+b+' = ?';
  var v=function(i){return (g(i).value||'').trim().replace(/\s+/g,' ')};
  g('fbMsg').addEventListener('input',function(){g('fbCnt').textContent=g('fbMsg').value.length+'/500'});
@@ -2186,7 +2199,7 @@ a.forEach(function(x){x.addEventListener('pause',function(){if(!x.ended&&documen
   g('fbSend').disabled=true;st('পাঠানো হচ্ছে… / Sending…');
   db.collection('feedback').add({name:v('fbName'),mobile:v('fbMob'),pin:v('fbPin'),address:v('fbAddr'),email:v('fbMail'),relation:g('fbRel').value,category:g('fbCat').value,message:v('fbMsg'),status:'new',ts:firebase.firestore.FieldValue.serverTimestamp()})
   .then(function(){log.push(Date.now());try{localStorage.setItem('fbLog',JSON.stringify(log))}catch(e){}
-   f.reset();g('fbCnt').textContent='0/500';st('ধন্যবাদ! আপনার মতামত গৃহীত হয়েছে। / Thank you! Your feedback has been received.','ok');setTimeout(function(){g('fbSend').disabled=false},4000)})
+   f.reset();g('fbCnt').textContent='0/500';st('ধন্যবাদ! আপনার মতামত গৃহীত হয়েছে। / Thank you! Your feedback has been received.','ok');document.dispatchEvent(new Event('fbdone'));setTimeout(function(){g('fbSend').disabled=false},4000)})
   .catch(function(e){g('fbSend').disabled=false;st('জমা হয়নি, আবার চেষ্টা করুন / Could not submit, please try again. ('+(e.code||'error')+')','err')})});
 })();
 
@@ -2211,6 +2224,15 @@ document.addEventListener('click',function(e){var t=e.target;
  if(act==='read')db.collection('feedback').doc(id).update({status:'read'}).then(loadFb).catch(function(er){alert('Failed: '+er.code)});
  if(act==='del'&&confirm('Delete this feedback permanently?'))db.collection('feedback').doc(id).delete().then(loadFb).catch(function(er){alert('Failed: '+er.code)})});
 document.addEventListener('change',function(e){if(e.target.id==='fbOnlyNew')fbDraw()});
+</script>
+<script>
+(function(){var m=document.getElementById('fbModal'),l=document.getElementById('fbLink');if(!m||!l)return;
+function open(e){if(e)e.preventDefault();m.hidden=false;document.body.style.overflow='hidden';document.dispatchEvent(new Event('fbopen'));setTimeout(function(){var n=document.getElementById('fbName');if(n)n.focus()},50)}
+function close(){m.hidden=true;document.body.style.overflow=''}
+l.addEventListener('click',open);document.getElementById('fbClose').addEventListener('click',close);
+m.addEventListener('click',function(e){if(e.target===m)close()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});
+document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
 </script>
 </body>
 </html>
