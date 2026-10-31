@@ -648,6 +648,8 @@ table.tt,table.t{table-layout:auto;max-width:100%}
   <div id="editor" style="display:none">
     <fieldset><legend>Top ticker (one-line alert)</legend>
       <input id="tk" placeholder="e.g. School closed on 31 October">
+      <p><button class="btn" id="tkSave" type="button">Save / Update ticker</button> <button class="btn alt" id="tkDel" type="button">Delete ticker</button></p>
+      <p class="meta" id="tkNow" style="margin:0"></p>
     </fieldset>
 
     <fieldset><legend>Admission</legend>
@@ -928,6 +930,7 @@ $("clrAdmRem").onclick = () => { D.admRem = null; save(); };
 /* ---------- Public view ---------- */
 function render(){
   $("ticker").textContent = D.ticker || "";
+  if ($("tkNow")) $("tkNow").textContent = D.ticker ? "Showing now on the site: " + D.ticker : "No ticker is showing now.";
   const a = D.admission || {};
   const box = $("admBox");
   if (a.open && a.title){
@@ -1017,6 +1020,8 @@ auth.onAuthStateChanged(u => {
     $("aLast").value = a.last||""; $("aNote").value = a.note||""; }
 });
 $("tk").onchange = () => { D.ticker = $("tk").value.trim(); save(); };
+$("tkSave").onclick = () => { D.ticker = $("tk").value.trim(); if (!D.ticker) return toast("Type the ticker text first, or use Delete ticker"); save(); };
+$("tkDel").onclick = () => { if (!D.ticker && !$("tk").value.trim()) return toast("No ticker to delete"); if (!confirm("Delete the top ticker?")) return; D.ticker = ""; $("tk").value = ""; save(); };
 $("saveAdm").onclick = async () => { let pdf = (D.admission||{}).pdf || "";
   try { const pu = await pdfFrom("aPdf", "aPdfRm"); if (pu !== undefined) pdf = pu; } catch(e) { return toast(e.message || "PDF upload failed"); }
   D.admission = { open:$("aOpen").checked, title:$("aTitle").value.trim(),
