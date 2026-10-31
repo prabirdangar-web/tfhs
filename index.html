@@ -486,6 +486,11 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 @media(prefers-color-scheme:dark){.fbox{background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(90deg,#8b5cf6,#38bdf8,#34d399,#fbbf24,#fb7185) border-box}
 .ftext .fp{background:color-mix(in srgb,var(--pc) 12%,var(--card));color:color-mix(in srgb,var(--pc) 55%,#fff)}
 .fbody h2 span{filter:brightness(1.5)}}
+
+/* ===== v6: blinking notice bar until the link is tapped ===== */
+.flbar{display:block;text-align:center;padding:9px 12px;font-weight:800;font-size:clamp(13px,3.8vw,15px);line-height:1.4;color:#fff!important;background:#b3121b;text-decoration:underline;animation:newflash 1s steps(2,start) infinite;cursor:pointer;overflow-wrap:anywhere}
+.flbar[hidden]{display:none}
+@media(prefers-reduced-motion:reduce){.flbar{animation:none}}
 </style>
 </head>
 <body>
@@ -497,8 +502,9 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
   <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
-  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="guideLink" class="nb" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
+  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
+<a href="#" id="flashBar" class="flbar" hidden></a>
 
 <main class="wrap" id="site">
   <section class="hero" id="hero" data-opt="hero" aria-label="School photos">
@@ -653,6 +659,13 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <p><button class="btn" id="saveFlash">Save pop-up</button> <button class="btn alt" id="prevFlash" type="button">Preview</button> <button class="btn alt" id="loadFlash" type="button">Load Vijaya/Diwali reopening notice</button> <button class="btn alt" id="loadGuide" type="button">Load portal user guide (2 months)</button> <button class="btn alt" id="offFlash" type="button">Turn off</button></p>
     </fieldset>
 
+    <fieldset><legend>📲 WhatsApp share (student · teacher · guardian groups)</legend>
+      <label>Which notice<select id="waSrc"><option value="popup">বিশেষ বিজ্ঞপ্তি (pop-up)</option><option value="guide">পোর্টাল ব্যবহার নির্দেশিকা</option><option value="latest">সর্বশেষ বিজ্ঞপ্তি (Notice board)</option></select></label>
+      <p><button class="btn" type="button" data-wa="student">👦 ছাত্রছাত্রী গ্রুপ</button> <button class="btn" type="button" data-wa="teacher">🧑‍🏫 শিক্ষক-কর্মী গ্রুপ</button> <button class="btn" type="button" data-wa="guardian">👪 অভিভাবক গ্রুপ</button> <button class="btn alt" type="button" data-wa="all">🌐 সকলের জন্য</button></p>
+      <label>Message (2-3 lines, you can edit before sending)<textarea id="waMsg" rows="5"></textarea></label>
+      <p><button class="btn" type="button" id="waSend">WhatsApp-এ পাঠান</button> <button class="btn alt" type="button" id="waCopy">Copy</button> <button class="btn alt" type="button" id="waShare">Share…</button></p>
+      <p class="meta" style="margin:0">Whoever opens the link sees the notice pop-up at once. Until a visitor taps the blinking notice link on the site, it keeps blinking on that phone.</p>
+    </fieldset>
     <fieldset><legend>📢 Add notice</legend>
       <label>Title<input id="nTitle" placeholder="Notice heading"></label>
       <div class="row">
@@ -952,8 +965,7 @@ function paneCounts(){
   const nn = $("cnt-notices"); if (nn) nn.classList.toggle("hasnew", (D.notices||[]).some(n => isNew(n.date) || isFresh(n)));
   const rc = $("cnt-results"); if (rc) { const rem = !!(D.resRem && D.resRem.text); if (rem && !(D.results||[]).length) rc.textContent = "🔔"; rc.classList.toggle("hasnew", rem || (D.results||[]).some(r => isNew(r.date) || isFresh(r)));
   const tg = (id, on) => { const el = $("cnt-" + id); if (el) el.classList.toggle("hasnew", !!on); };
-  tg("gallery", (D.gallery||[]).some(isFresh)); tg("staff", (D.staff||[]).some(isFresh)); tg("mptest", ((D.mpTest||{}).rows||[]).some(isFresh) || isFresh({upd:Date.parse((D.mpTest||{}).fetchedAt||"")||0}));
-  const fl = $("flashLink"); if (fl) fl.classList.toggle("nb", flashActive() && isFresh({id:D.flash.id})); }
+  tg("gallery", (D.gallery||[]).some(isFresh)); tg("staff", (D.staff||[]).some(isFresh)); tg("mptest", ((D.mpTest||{}).rows||[]).some(isFresh) || isFresh({upd:Date.parse((D.mpTest||{}).fetchedAt||"")||0})); }
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
   filter = b.dataset.f;
@@ -1128,15 +1140,61 @@ const guideActive = () => today() <= GUIDE.until;
 $("flashLink").onclick = e => { e.preventDefault(); if (flashActive()) { FQUEUE = []; FLASH_LANG = "bn"; openFlash(D.flash); } };
 $("guideLink").onclick = e => { e.preventDefault(); FQUEUE = []; FLASH_LANG = "bn"; openFlash(GUIDE); };
 let GUIDE_DONE = false;
+
 const flashSeenOf = (key, id) => { let seen = false; try { seen = sessionStorage.getItem(key) === id; sessionStorage.setItem(key, id); } catch(e) {} return seen; };
 const showQ = f => { if ($("flash").hidden) { FLASH_LANG = "bn"; openFlash(f); } else FQUEUE.push(f); };
 function flashInit(){
   $("flashLink").style.display = flashActive() ? "" : "none";
   $("guideLink").style.display = guideActive() ? "" : "none";
   if (location.hash === "#admin") return;
+  updateBar();
+  if (openByHash()) return;
   if (!FLASH_DONE && flashActive()) { FLASH_DONE = true; if (!flashSeenOf("flashSeen", D.flash.id)) showQ(D.flash); }
   if (!GUIDE_DONE && guideActive()) { GUIDE_DONE = true; if (!flashSeenOf("guideSeen", GUIDE.id)) setTimeout(() => showQ(GUIDE), 1500); }
 }
+
+/* ---------- unread blinking + WhatsApp share ---------- */
+const readSet = () => { try { return JSON.parse(localStorage.getItem("tfhs_read") || "{}") || {}; } catch(e) { return {}; } };
+const isRead = id => !!readSet()[id];
+const markRead = id => { try { const r = readSet(); r[id] = Date.now(); localStorage.setItem("tfhs_read", JSON.stringify(r)); } catch(e) {} updateBar(); };
+const unreadList = () => { const a = []; if (flashActive() && !isRead(D.flash.id)) a.push(D.flash); if (guideActive() && !isRead(GUIDE.id)) a.push(GUIDE); return a; };
+function updateBar(){
+  const bar = $("flashBar"), ul = unreadList();
+  $("flashLink").classList.toggle("nb", flashActive() && !isRead(D.flash.id));
+  $("guideLink").classList.toggle("nb", guideActive() && !isRead(GUIDE.id));
+  if (!bar) return;
+  bar.hidden = !ul.length;
+  if (ul.length) bar.textContent = "📢 নতুন বিজ্ঞপ্তি: " + ul[0].title + " — দেখতে এখানে ক্লিক করুন";
+}
+$("flashBar").onclick = e => { e.preventDefault(); const f = unreadList()[0]; if (!f) return; FQUEUE = []; FLASH_LANG = "bn"; markRead(f.id); openFlash(f); };
+const _fl = $("flashLink").onclick, _gl = $("guideLink").onclick;
+$("flashLink").onclick = e => { if (flashActive()) markRead(D.flash.id); _fl(e); };
+$("guideLink").onclick = e => { markRead(GUIDE.id); _gl(e); };
+let NOTICE_DONE = false;
+function openByHash(){
+  if (NOTICE_DONE) return false; const h = location.hash;
+  const go = f => { NOTICE_DONE = FLASH_DONE = GUIDE_DONE = true; markRead(f.id); showQ(f); try { flashSeenOf("flashSeen", D.flash ? D.flash.id : ""); flashSeenOf("guideSeen", GUIDE.id); } catch(e) {} return true; };
+  if (h === "#guide" && guideActive()) return go(GUIDE);
+  if (h === "#notice") { if (flashActive()) return go(D.flash); if (!openByHash.t) openByHash.t = setTimeout(() => { if (!NOTICE_DONE && guideActive()) go(GUIDE); }, 3000); }
+  return false;
+}
+const waSite = () => (location.protocol === "file:" ? location.href.split("#")[0] : location.origin + location.pathname);
+const WA_GREET = {student:"প্রিয় ছাত্রছাত্রীরা", teacher:"সম্মানীয় শিক্ষক-শিক্ষিকা ও শিক্ষাকর্মীবৃন্দ", guardian:"সম্মানীয় অভিভাবক-অভিভাবিকাগণ", all:"সকলের অবগতির জন্য"};
+function waBuild(aud){
+  const src = $("waSrc").value; let title = "", hash = "#notice";
+  if (src === "guide") { title = "পোর্টাল ব্যবহার নির্দেশিকা – কোন অংশ কীভাবে দেখবেন"; hash = "#guide"; }
+  else if (src === "latest") { const n = (D.notices||[]).slice().sort((x,y) => (y.date||"").localeCompare(x.date||""))[0]; if (!n) { toast("No notice published yet"); return ""; } title = n.title; hash = "#notices-top"; }
+  else { const f = D.flash || {}; if (!f.title) { toast("Save a pop-up notice first, or pick another notice"); return ""; } title = f.title; }
+  if (title.length > 90) title = title.slice(0, 88).trim() + "…";
+  return `📢 ${WA_GREET[aud]}, বিদ্যালয়ের নতুন বিজ্ঞপ্তি প্রকাশিত হয়েছে।\n📌 ${title}\n👉 দেখতে এই লিংকে ক্লিক করুন: ${waSite()}${hash}`;
+}
+const waOpen = txt => window.open("https://wa.me/?text=" + encodeURIComponent(txt), "_blank", "noopener");
+document.querySelectorAll("[data-wa]").forEach(b => b.onclick = () => { const t = waBuild(b.dataset.wa); if (!t) return; $("waMsg").value = t; waOpen(t); });
+$("waSrc").onchange = () => { $("waMsg").value = ""; };
+$("waSend").onclick = () => { const t = $("waMsg").value.trim(); if (!t) return toast("Tap a group button first"); waOpen(t); };
+$("waCopy").onclick = async () => { const t = $("waMsg").value.trim(); if (!t) return toast("Tap a group button first"); try { await navigator.clipboard.writeText(t); toast("Copied"); } catch(e) { $("waMsg").select(); toast("Select and copy"); } };
+$("waShare").onclick = async () => { const t = $("waMsg").value.trim(); if (!t) return toast("Tap a group button first"); if (navigator.share) { try { await navigator.share({text:t}); } catch(e) {} } else waOpen(t); };
+addEventListener("hashchange", () => { NOTICE_DONE = false; openByHash(); });
 let FF_ID = null;
 function fillFlash(force){
   const f = D.flash || {}; if (!force && FF_ID === (f.id || "none")) return; FF_ID = f.id || "none";
