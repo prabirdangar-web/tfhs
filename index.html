@@ -516,6 +516,19 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 .nat audio{width:100%;margin:4px 0 8px;height:40px}.nat h3{margin:6px 0 0;font-size:14px}.nat .meta{display:block}
 .nat .btn{width:100%;margin-top:4px}
 </style>
+<style>
+.fb{padding:10px 12px}.fb label{display:block;font-size:12.5px;font-weight:700;margin:8px 0 0}
+.fb label small{font-weight:500;color:var(--mut)}.fb .req{color:#c0182b}
+.fb input,.fb select,.fb textarea{width:100%;max-width:none;margin-top:3px;padding:8px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px}
+.fb textarea{min-height:92px;resize:vertical}.fb .bad{border-color:#c0182b;background:color-mix(in srgb,#c0182b 8%,var(--bg))}
+.fb .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.fb .chk{display:flex;gap:8px;align-items:flex-start;font-weight:600}.fb .chk input{width:18px;height:18px;margin:2px 0 0;flex:none}
+.fb .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media(max-width:420px){.fb .row2{grid-template-columns:1fr}}
+.fb .st{margin:8px 0 0;font-size:13px;font-weight:700}.fb .st.err{color:#c0182b}.fb .st.ok{color:#0b6b3a}
+.fb .cnt{float:right;font-weight:500;color:var(--mut)}
+.fbi{border:1px solid var(--line);border-left:4px solid var(--mar);border-radius:6px;padding:8px 10px;margin:8px 0;background:var(--card)}
+.fbi.new{border-left-color:#c0182b}.fbi p{margin:3px 0;font-size:13.5px}.fbi .meta{font-size:12px}
+</style>
 </head>
 <body>
 <div class="strip"></div>
@@ -632,6 +645,30 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <h2 class="sec" id="useful" data-opt="useful" style="--c:var(--c-link)">দরকারি লিংক / Useful Links (WB)</h2>
       <div id="resBox" data-opt="useful"></div>
 
+      <h2 class="sec" id="feedback" style="--c:#b3261e">✉️ মতামত ও পরামর্শ / Feedback &amp; Suggestion</h2>
+      <div class="box fb">
+        <p class="meta" style="margin:0 0 4px">সব ঘর আবশ্যিক (<span class="req">*</span>)। সঠিক নাম, ঠিকানা ও মোবাইল নম্বর দিন — ভুয়া তথ্য দিলে মতামত গ্রহণ করা হবে না। / All fields marked * are compulsory; please give genuine details.</p>
+        <form id="fbForm" novalidate autocomplete="off">
+          <label>নাম / Full name <span class="req">*</span><input id="fbName" maxlength="60" autocomplete="name" placeholder="আপনার পূর্ণ নাম"></label>
+          <div class="row2">
+            <label>মোবাইল / Mobile (10 digits) <span class="req">*</span><input id="fbMob" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="9XXXXXXXXX"></label>
+            <label>ইমেল / Email <small>(optional)</small><input id="fbMail" type="email" maxlength="80" autocomplete="email"></label>
+          </div>
+          <label>ঠিকানা / Address (village, post office, police station) <span class="req">*</span><textarea id="fbAddr" maxlength="200" style="min-height:62px" placeholder="গ্রাম, ডাকঘর, থানা, জেলা"></textarea></label>
+          <div class="row2">
+            <label>পিন কোড / PIN code <span class="req">*</span><input id="fbPin" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="722XXX"></label>
+            <label>আপনি / You are <span class="req">*</span><select id="fbRel"><option value="">— বাছুন / Select —</option><option value="Parent / Guardian">Parent / Guardian — অভিভাবক</option><option value="Student">Student — ছাত্র/ছাত্রী</option><option value="Ex-student">Ex-student — প্রাক্তন ছাত্র/ছাত্রী</option><option value="Teacher / Staff">Teacher / Staff — শিক্ষক / কর্মী</option><option value="Local resident">Local resident — স্থানীয় বাসিন্দা</option><option value="Other">Other — অন্যান্য</option></select></label>
+          </div>
+          <label>বিষয় / Subject <span class="req">*</span><select id="fbCat"><option value="">— বাছুন / Select —</option><option value="Teaching & Studies">Teaching & Studies — পড়াশোনা</option><option value="Facilities & Cleanliness">Facilities & Cleanliness — পরিকাঠামো ও পরিচ্ছন্নতা</option><option value="Mid Day Meal">Mid Day Meal — মিড ডে মিল</option><option value="Admission / Office service">Admission / Office service — ভর্তি / অফিস পরিষেবা</option><option value="Safety & Discipline">Safety & Discipline — নিরাপত্তা ও শৃঙ্খলা</option><option value="Website / Other">Website / Other — ওয়েবসাইট / অন্যান্য</option></select></label>
+          <label>আপনার মতামত / পরামর্শ / Your feedback <span class="req">*</span> <span class="cnt" id="fbCnt">0/500</span><textarea id="fbMsg" maxlength="500" placeholder="কমপক্ষে ১৫ অক্ষর লিখুন / at least 15 characters"></textarea></label>
+          <label>নিরাপত্তা প্রশ্ন / Human check: <b id="fbQ"></b> <span class="req">*</span><input id="fbAns" inputmode="numeric" maxlength="2" style="max-width:90px"></label>
+          <input class="hp" id="fbHp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label class="chk"><input type="checkbox" id="fbOk"><span>আমি ঘোষণা করছি যে উপরের সব তথ্য সত্য। / I declare that the details above are true. <span class="req">*</span></span></label>
+          <p style="margin:10px 0 0"><button class="btn" id="fbSend" type="submit" style="width:100%;padding:10px;font-size:15px">📨 জমা দিন / Submit</button></p>
+          <p class="st" id="fbSt" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
       <h2 class="sec" id="national" style="--c:#0b6b3a">🎵 জাতীয় গান ও জাতীয় সংগীত / National Song &amp; Anthem</h2>
       <div class="box nat">
         <h3>বন্দে মাতরম্ <span class="meta">Vande Mataram</span></h3>
@@ -682,6 +719,11 @@ table.tt,table.t{table-layout:auto;max-width:100%}
         <label>Short note<input id="aNote"></label>
       </div>
       <p><button class="btn" id="saveAdm">Save admission</button></p>
+    </fieldset>
+
+    <fieldset><legend>Feedback &amp; suggestions received <span id="fbBadge"></span></legend>
+      <p class="row" style="gap:6px;margin:0 0 6px"><button class="btn sm" id="fbReload" type="button">↻ Refresh</button> <label style="display:flex;gap:6px;align-items:center;font-weight:600"><input type="checkbox" id="fbOnlyNew" style="width:auto"> Show unread only</label></p>
+      <div id="fbList"><p class="meta">Loading…</p></div>
     </fieldset>
 
     <fieldset><legend>Pop-up notice (opens in front when the site is visited)</legend>
@@ -1035,7 +1077,7 @@ auth.onAuthStateChanged(u => {
   $("who").textContent = u ? (ok ? "Signed in: " + u.email : "Not authorised: " + u.email) : "Not signed in";
   $("login").style.display = u ? "none" : ""; $("logout").style.display = u ? "" : "none";
   $("editor").style.display = ok ? "" : "none";
-  if (ok){ fillFlash(true); fillMp(); REM_SIG = ""; syncRem(); $("tk").value = D.ticker || ""; const a = D.admission || {};
+  if (ok){ try{loadFb()}catch(e){} fillFlash(true); fillMp(); REM_SIG = ""; syncRem(); $("tk").value = D.ticker || ""; const a = D.admission || {};
     $("aOpen").checked = !!a.open; $("aTitle").value = a.title||""; $("aLink").value = a.link||"";
     $("aLast").value = a.last||""; $("aNote").value = a.note||""; }
 });
@@ -2105,6 +2147,70 @@ a.forEach(function(x,i){x.addEventListener('play',function(){a.forEach(function(
 x.addEventListener('ended',function(){if(seq&&i===0){a[1].currentTime=0;a[1].play()}else seq=false})});
 document.getElementById('natAll').addEventListener('click',function(){seq=true;a[1].pause();a[0].currentTime=0;a[0].play()});
 a.forEach(function(x){x.addEventListener('pause',function(){if(!x.ended&&document.activeElement===x)seq=false})})})();
+</script>
+<script>
+/* ===== Feedback & suggestion box (collection "feedback"; read only by admin) ===== */
+(function(){
+ var f=document.getElementById('fbForm');if(!f)return;
+ var T0=Date.now(),a=2+Math.floor(Math.random()*8),b=2+Math.floor(Math.random()*8),g=function(i){return document.getElementById(i)};
+ g('fbQ').textContent=a+' + '+b+' = ?';
+ var v=function(i){return (g(i).value||'').trim().replace(/\s+/g,' ')};
+ g('fbMsg').addEventListener('input',function(){g('fbCnt').textContent=g('fbMsg').value.length+'/500'});
+ g('fbMob').addEventListener('input',function(){this.value=this.value.replace(/\D/g,'')});
+ g('fbPin').addEventListener('input',function(){this.value=this.value.replace(/\D/g,'')});
+ g('fbAns').addEventListener('input',function(){this.value=this.value.replace(/\D/g,'')});
+ function st(t,c){var e=g('fbSt');e.textContent=t;e.className='st '+(c||'')}
+ function check(){
+  var bad=[],E=function(id,m){bad.push([id,m])},name=v('fbName'),mob=v('fbMob'),addr=v('fbAddr'),pin=v('fbPin'),mail=v('fbMail'),msg=v('fbMsg');
+  if(!/^[A-Za-z\u0980-\u09FF][A-Za-z\u0980-\u09FF .'\-]{2,59}$/.test(name)||/(.)\1{3,}/.test(name))E('fbName','সঠিক নাম লিখুন (শুধু অক্ষর) / Enter your real name (letters only).');
+  if(!/^[6-9]\d{9}$/.test(mob)||/(\d)\1{6,}/.test(mob))E('fbMob','সঠিক ১০ সংখ্যার মোবাইল নম্বর দিন / Enter a valid 10-digit mobile number.');
+  if(mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail))E('fbMail','ইমেল ঠিক নয় / Email is not valid.');
+  if(addr.length<12||addr.split(' ').length<2||!/[A-Za-z\u0980-\u09FF]/.test(addr))E('fbAddr','পুরো ঠিকানা লিখুন (গ্রাম, ডাকঘর, থানা) / Enter the full address.');
+  if(!/^[1-9]\d{5}$/.test(pin))E('fbPin','সঠিক ৬ সংখ্যার পিন কোড দিন / Enter a valid 6-digit PIN code.');
+  if(!g('fbRel').value)E('fbRel','আপনি কে তা বাছুন / Select who you are.');
+  if(!g('fbCat').value)E('fbCat','বিষয় বাছুন / Select a subject.');
+  if(msg.length<15||/(.)\1{9,}/.test(msg))E('fbMsg','কমপক্ষে ১৫ অক্ষরের অর্থপূর্ণ মতামত লিখুন / Write at least 15 meaningful characters.');
+  if(+g('fbAns').value!==a+b)E('fbAns','নিরাপত্তা প্রশ্নের উত্তর ভুল / Wrong answer to the human check.');
+  if(!g('fbOk').checked)E('fbOk','ঘোষণায় টিক দিন / Tick the declaration.');
+  return bad}
+ f.addEventListener('submit',function(ev){
+  ev.preventDefault();
+  f.querySelectorAll('.bad').forEach(function(x){x.classList.remove('bad')});
+  if(g('fbHp').value)return;
+  var bad=check();
+  if(bad.length){bad.forEach(function(x){g(x[0]).classList.add('bad')});st(bad[0][1],'err');g(bad[0][0]).focus();return}
+  if(Date.now()-T0<10000){st('একটু অপেক্ষা করে আবার জমা দিন / Please wait a few seconds and submit again.','err');return}
+  var log=[];try{log=JSON.parse(localStorage.getItem('fbLog')||'[]').filter(function(t){return Date.now()-t<864e5})}catch(e){}
+  if(log.length>=3||(log.length&&Date.now()-log[log.length-1]<60000)){st('আপনি সম্প্রতি মতামত পাঠিয়েছেন; পরে আবার চেষ্টা করুন / You have sent feedback recently; please try later.','err');return}
+  if(typeof db==='undefined'){st('সংযোগ নেই / Cannot connect.','err');return}
+  g('fbSend').disabled=true;st('পাঠানো হচ্ছে… / Sending…');
+  db.collection('feedback').add({name:v('fbName'),mobile:v('fbMob'),pin:v('fbPin'),address:v('fbAddr'),email:v('fbMail'),relation:g('fbRel').value,category:g('fbCat').value,message:v('fbMsg'),status:'new',ts:firebase.firestore.FieldValue.serverTimestamp()})
+  .then(function(){log.push(Date.now());try{localStorage.setItem('fbLog',JSON.stringify(log))}catch(e){}
+   f.reset();g('fbCnt').textContent='0/500';st('ধন্যবাদ! আপনার মতামত গৃহীত হয়েছে। / Thank you! Your feedback has been received.','ok');setTimeout(function(){g('fbSend').disabled=false},4000)})
+  .catch(function(e){g('fbSend').disabled=false;st('জমা হয়নি, আবার চেষ্টা করুন / Could not submit, please try again. ('+(e.code||'error')+')','err')})});
+})();
+
+/* ===== Admin: read / mark read / delete feedback ===== */
+var FBL=[];
+function fbDraw(){
+ var only=document.getElementById('fbOnlyNew')&&document.getElementById('fbOnlyNew').checked,box=document.getElementById('fbList');if(!box)return;
+ var n=FBL.filter(function(x){return x.status==='new'}).length;document.getElementById('fbBadge').textContent=FBL.length?'('+n+' unread / '+FBL.length+')':'';
+ var L=FBL.filter(function(x){return !only||x.status==='new'});
+ box.innerHTML=L.length?L.map(function(x){var d=x.ts&&x.ts.toDate?x.ts.toDate().toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'';
+  return '<div class="fbi '+(x.status==='new'?'new':'')+'"><p><b>'+esc(x.name)+'</b> · <a href="tel:'+esc(String(x.mobile).replace(/\D/g,''))+'">'+esc(x.mobile)+'</a>'+(x.email?' · '+esc(x.email):'')+'</p>'+
+  '<p class="meta">'+esc(x.relation)+' · '+esc(x.category)+' · '+esc(d)+'</p><p>'+esc(x.message)+'</p><p class="meta">📍 '+esc(x.address)+' — PIN '+esc(x.pin)+'</p>'+
+  '<p style="margin:4px 0 0">'+(x.status==='new'?'<button class="btn sm" data-fb="read" data-id="'+esc(x.id)+'">✔ Mark read</button> ':'')+'<button class="btn alt sm" data-fb="del" data-id="'+esc(x.id)+'">🗑 Delete</button></p></div>'}).join(''):'<p class="meta">No feedback.</p>'}
+function loadFb(){
+ var box=document.getElementById('fbList');if(box)box.innerHTML='<p class="meta">Loading…</p>';
+ db.collection('feedback').orderBy('ts','desc').limit(100).get().then(function(q){FBL=q.docs.map(function(d){var o=d.data();o.id=d.id;return o});fbDraw()})
+ .catch(function(e){if(box)box.innerHTML='<p class="meta">Could not load ('+esc(e.code||e.message)+'). Publish the feedback rule in firestore.rules first.</p>'})}
+document.addEventListener('click',function(e){var t=e.target;
+ if(t.id==='fbReload')return loadFb();
+ if(t.id==='fbOnlyNew')return;
+ var act=t.getAttribute&&t.getAttribute('data-fb');if(!act)return;var id=t.getAttribute('data-id');
+ if(act==='read')db.collection('feedback').doc(id).update({status:'read'}).then(loadFb).catch(function(er){alert('Failed: '+er.code)});
+ if(act==='del'&&confirm('Delete this feedback permanently?'))db.collection('feedback').doc(id).delete().then(loadFb).catch(function(er){alert('Failed: '+er.code)})});
+document.addEventListener('change',function(e){if(e.target.id==='fbOnlyNew')fbDraw()});
 </script>
 </body>
 </html>
