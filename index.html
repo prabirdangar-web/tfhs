@@ -504,6 +504,13 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 @media(max-width:700px),(max-height:520px){.flash.tri .fbox{border-width:0;border-top:4px solid #ff9933}}
 @media(prefers-reduced-motion:reduce){.flash.tri .fhead{animation:none}}
 @media(prefers-color-scheme:dark){.flash.tri .fbox{background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(90deg,#ff9933 33%,#fff 33% 66%,#138808 66%) border-box}}
+
+/* ===== v8: top ticker blinks ===== */
+.ticker:not(:empty){animation:tkblink 1s steps(2,start) infinite;line-height:1.45;padding:7px 14px;box-sizing:border-box}
+.ticker:not(:empty)::before{flex:0 0 auto;animation:tkbadge 1s steps(2,start) infinite}
+@keyframes tkblink{50%{background:#d9480f}}
+@keyframes tkbadge{50%{background:#fff;color:#7a0f1f}}
+@media(prefers-reduced-motion:reduce){.ticker:not(:empty),.ticker:not(:empty)::before{animation:none}}
 </style>
 </head>
 <body>
