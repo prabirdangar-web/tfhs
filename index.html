@@ -515,13 +515,13 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 /* ===== Hover notice: floating icon, card opens when the mouse touches it ===== */
 #hvWrap{position:fixed;right:16px;bottom:18px;z-index:900}
 #hvWrap[hidden]{display:none}
-#hvBtn{width:54px;height:54px;border-radius:50%;border:3px solid #fff;background:var(--c-link,#12388a);color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);animation:hvPulse 1.6s infinite;padding:0;line-height:1}
+#hvBtn{width:54px;height:54px;border-radius:50%;border:3px solid #fff;background:#5b2a86;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);animation:hvPulse 1.6s infinite;padding:0;line-height:1}
 @keyframes hvPulse{0%{box-shadow:0 0 0 0 rgba(242,169,0,.8)}70%{box-shadow:0 0 0 16px rgba(242,169,0,0)}100%{box-shadow:0 0 0 0 rgba(242,169,0,0)}}
-#hvCard{position:absolute;right:0;bottom:66px;width:min(340px,86vw);max-height:60vh;overflow:auto;background:#fff;border:2px solid var(--gold,#f2a900);border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.35);padding:10px 12px;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .18s,transform .18s,visibility .18s}
+#hvCard{position:absolute;right:0;bottom:66px;width:min(340px,86vw);max-height:60vh;overflow:auto;background:#fff!important;color:#1a2230!important;border:2px solid #f2a900;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.35);padding:10px 12px;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .18s,transform .18s,visibility .18s}
 #hvWrap.open #hvCard{opacity:1;visibility:visible;transform:none}
-#hvCard h4{margin:-10px -12px 8px;padding:9px 12px;font-size:16px;line-height:1.35;font-weight:700;color:#fff;background:var(--navy,#0c2a6b);border-radius:8px 8px 0 0;word-break:break-word}
+#hvCard h4{margin:-10px -12px 8px;padding:9px 12px;font-size:16px;line-height:1.35;font-weight:700;color:#fff!important;background:#0c2a6b!important;border-radius:8px 8px 0 0;word-break:break-word}
 @media (max-width:600px){#hvCard{width:calc(100vw - 32px);max-height:65vh}#hvCard h4{font-size:17px}#hvCard .hvt{font-size:14.5px;line-height:1.6}}
-#hvCard .hvt{white-space:pre-line;font-size:13px;line-height:1.5;color:var(--ink,#1a2230)}
+#hvCard .hvt{white-space:pre-line;font-size:13px;line-height:1.5;color:#1a2230!important}
 @media (prefers-reduced-motion:reduce){#hvBtn{animation:none}}
 </style>
 <style>
