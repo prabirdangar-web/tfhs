@@ -511,6 +511,17 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 @keyframes tkblink{50%{background:#d9480f}}
 @keyframes tkbadge{50%{background:#fff;color:#7a0f1f}}
 @media(prefers-reduced-motion:reduce){.ticker:not(:empty),.ticker:not(:empty)::before{animation:none}}
+
+/* ===== Hover notice: floating icon, card opens when the mouse touches it ===== */
+#hvWrap{position:fixed;right:16px;bottom:18px;z-index:900}
+#hvWrap[hidden]{display:none}
+#hvBtn{width:54px;height:54px;border-radius:50%;border:3px solid #fff;background:var(--c-link,#12388a);color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);animation:hvPulse 1.6s infinite;padding:0;line-height:1}
+@keyframes hvPulse{0%{box-shadow:0 0 0 0 rgba(242,169,0,.8)}70%{box-shadow:0 0 0 16px rgba(242,169,0,0)}100%{box-shadow:0 0 0 0 rgba(242,169,0,0)}}
+#hvCard{position:absolute;right:0;bottom:66px;width:min(340px,86vw);max-height:60vh;overflow:auto;background:#fff;border:2px solid var(--gold,#f2a900);border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.35);padding:10px 12px;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .18s,transform .18s,visibility .18s}
+#hvWrap.open #hvCard{opacity:1;visibility:visible;transform:none}
+#hvCard h4{margin:0 0 6px;font-size:14.5px;color:var(--navy,#0c2a6b)}
+#hvCard .hvt{white-space:pre-line;font-size:13px;line-height:1.5;color:var(--ink,#1a2230)}
+@media (prefers-reduced-motion:reduce){#hvBtn{animation:none}}
 </style>
 <style>
 .nat audio{width:100%;margin:4px 0 8px;height:40px}.nat h3{margin:6px 0 0;font-size:14px}.nat .meta{display:block}
@@ -711,6 +722,14 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <div id="fbList"><p class="meta">Loading…</p></div>
     </fieldset>
 
+    <fieldset><legend>🔔 Hover notice (floating icon – card opens when the mouse touches it)</legend>
+      <label><input type="checkbox" id="hvOn" style="width:auto"> Show floating notice icon on the site</label>
+      <label>Title<input id="hvTi" placeholder="বিজ্ঞপ্তি"></label>
+      <label>Notice text<textarea id="hvBo" rows="8"></textarea></label>
+      <label>Show until (optional – icon disappears after this date)<input id="hvUn" type="date"></label>
+      <p><button class="btn" id="hvSave" type="button">Save hover notice</button> <button class="btn alt" id="hvShort" type="button">Load short notice (Science Olympiad)</button> <button class="btn alt" id="hvSyn" type="button">Load synopsis (Science Olympiad)</button> <button class="btn alt" id="hvOff" type="button">Turn off</button></p>
+    </fieldset>
+
     <fieldset><legend>Pop-up notice (opens in front when the site is visited)</legend>
       <label><input type="checkbox" id="fOn" style="width:auto"> Show pop-up on the site</label>
       <div class="row"><label>Title (Bengali)<input id="fiTitle"></label><label>Title (English, optional)<input id="fiTitleEn"></label></div>
@@ -890,6 +909,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 </main>
 
 <footer>© Taldangra Fulmati High School (H.S.) · Updated by the school administration · <a href="#admin" id="admLink" style="color:inherit;opacity:.75">🔒 Admin</a></footer>
+<div id="hvWrap" hidden><button id="hvBtn" type="button" aria-label="বিজ্ঞপ্তি / Notice" aria-expanded="false">🔔</button><div id="hvCard" role="tooltip"><h4 id="hvTitle"></h4><div class="hvt" id="hvText"></div></div></div>
 <div id="flash" class="flash" hidden>
   <div class="fbox" role="dialog" aria-modal="true" aria-labelledby="fTitle">
     <div class="fhead"><span>📢 বিজ্ঞপ্তি / NOTICE</span><button type="button" id="fClose" aria-label="Close">✕</button></div>
@@ -2840,6 +2860,45 @@ l.addEventListener('click',open);document.getElementById('fbClose').addEventList
 m.addEventListener('click',function(e){if(e.target===m)close()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});
 document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
+</script>
+
+<script>
+/* ===== Hover notice (floating icon) ===== */
+(function(){
+  var SHORT="এতদ্বারা জানানো যাচ্ছে যে, আগামী ২২/১১/২০২৬ (রবিবার) বিদ্যালয়ে 'বিদ্যাসাগর সায়েন্স অলিম্পিয়াড ২০২৬ (লেয়ার-১)' পরীক্ষা অনুষ্ঠিত হবে, যেখানে আমাদের বিদ্যালয়-সহ তালডাংরা ব্লকের বিভিন্ন স্কুলের মোট ১০৬ জন শিক্ষার্থী অংশগ্রহণ করবে।\nসুষ্ঠুভাবে পরীক্ষা পরিচালনার স্বার্থে বিদ্যালয়ের সমস্ত শিক্ষক-শিক্ষিকা ও শিক্ষাকর্মীদের উক্ত দিনে নির্দিষ্ট সময়ে উপস্থিত থাকার নির্দেশ দেওয়া হচ্ছে।\nপরীক্ষার্থীদের স্বাস্থ্য ও সুরক্ষাবিধি মেনে যথাসময়ে পরীক্ষা কেন্দ্রে উপস্থিত হতে অনুরোধ করা হচ্ছে।", SYN="• পরীক্ষার নাম: বিদ্যাসাগর সায়েন্স অলিম্পিয়াড ২০২৬ (লেয়ার-১)\n• পরীক্ষার তারিখ ও দিন: ২২ নভেম্বর, ২০২৬ (রবিবার)\n• পরীক্ষা কেন্দ্র: তালডাংরা ফুলমতী হাই স্কুল (উঃ মাঃ), তালডাংরা, বাঁকুড়া\n• মোট পরীক্ষার্থীর সংখ্যা: ১০৬ জন\n• অংশগ্রহণকারী: তালডাংরা ব্লকের বিভিন্ন বিদ্যালয় ও এই বিদ্যালয়ের নির্ধারিত ছাত্র-ছাত্রীবৃন্দ\n• নির্দেশনা: পরীক্ষার দিন বিদ্যালয়ের সমস্ত শিক্ষক-শিক্ষিকা ও শিক্ষাকর্মীদের উপস্থিত থেকে সহায়তা প্রদান করতে এবং পরীক্ষার্থীদের স্বাস্থ্য ও সুরক্ষা নিশ্চিত করার যথাযথ ব্যবস্থা নিতে নির্দেশ দেওয়া হয়েছে।";
+  var g=function(i){return document.getElementById(i)};
+  var active=function(){var h=D.hover;return !!(h&&h.on&&h.body&&(!h.until||today()<=h.until))};
+  function hvDraw(){
+    var w=g("hvWrap"); if(!w) return;
+    if(!active()){w.hidden=true;w.classList.remove("open");return}
+    g("hvTitle").textContent=D.hover.title||"বিজ্ঞপ্তি";
+    g("hvText").textContent=D.hover.body;
+    w.hidden=(location.hash==="#admin");
+  }
+  var w=g("hvWrap"),b=g("hvBtn");
+  function open(v){w.classList.toggle("open",v);b.setAttribute("aria-expanded",v)}
+  w.addEventListener("mouseenter",function(){open(true)});
+  w.addEventListener("mouseleave",function(){open(false)});
+  b.addEventListener("focus",function(){open(true)});
+  b.addEventListener("click",function(e){e.stopPropagation();open(!w.classList.contains("open"))});
+  document.addEventListener("click",function(e){if(!w.contains(e.target))open(false)});
+  addEventListener("keydown",function(e){if(e.key==="Escape")open(false)});
+  addEventListener("hashchange",hvDraw);
+  var _r=window.render; window.render=function(){var r=_r.apply(this,arguments); try{hvDraw();hvFill()}catch(e){} return r};
+  var HV_ID=null;
+  function hvFill(force){var h=D.hover||{}; if(!force&&HV_ID===(h.id||"none"))return; HV_ID=h.id||"none";
+    g("hvOn").checked=!!h.on; g("hvTi").value=h.title||""; g("hvBo").value=h.body||""; g("hvUn").value=h.until||""}
+  g("hvSave").onclick=function(){
+    var h={id:uid(),on:g("hvOn").checked,title:g("hvTi").value.trim(),body:g("hvBo").value.trim(),until:g("hvUn").value};
+    if(!h.body) return toast("Notice text is required");
+    if(tooBig(h.body.length+500)) return toast("Storage full - delete old gallery photos first");
+    D.hover=h; HV_ID=h.id; save(); hvDraw();
+  };
+  g("hvOff").onclick=function(){ if(!D.hover) return toast("No hover notice saved"); D.hover=Object.assign({},D.hover,{on:false,id:uid()}); hvFill(true); save(); hvDraw(); };
+  g("hvShort").onclick=function(){g("hvOn").checked=true;g("hvTi").value="বিজ্ঞপ্তি";g("hvBo").value=SHORT;g("hvUn").value="2026-11-22";toast("Loaded - click Save hover notice")};
+  g("hvSyn").onclick=function(){g("hvOn").checked=true;g("hvTi").value="পরীক্ষার বিজ্ঞপ্তি সারাংশ";g("hvBo").value=SYN;g("hvUn").value="2026-11-22";toast("Loaded - click Save hover notice")};
+  hvDraw(); hvFill();
+})();
 </script>
 </body>
 </html>
