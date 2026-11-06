@@ -680,7 +680,8 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       </section>
 
       <section class="pane" id="p-routine" role="tabpanel" style="--c:var(--c-routine)" hidden>
-        <div class="list" id="routineBox" style="--c:var(--c-routine)"></div>
+        <h3 data-opt="provr" style="margin:12px 0 6px">🗓️ অস্থায়ী রুটিন / Provisional routine</h3>
+        <div class="list" id="routineBox" data-opt="provr" style="--c:var(--c-routine)"></div>
       </section>
 
       <div class="corners" id="corners">
@@ -753,9 +754,9 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 
       <h2 class="sec" id="routine" style="--c:var(--c-routine)">রুটিন ও ছুটি / Routine &amp; Holidays</h2>
       <table class="t" id="routineTbl"></table>
-      <h3>আসন্ন ছুটি / Upcoming holidays</h3>
+      <div data-opt="hol"><h3>আসন্ন ছুটি / Upcoming holidays</h3>
       <div class="list" id="holidayBox" style="--c:var(--c-routine)"></div>
-      <details class="box" style="padding:0"><summary>সারা বছরের তালিকা / Full list</summary><table class="t" id="holAll"></table></details>
+      <details class="box" style="padding:0"><summary>সারা বছরের তালিকা / Full list</summary><table class="t" id="holAll"></table></details></div>
 
       <h2 class="sec" data-opt="contact" style="--c:var(--navy)">যোগাযোগ / Contact</h2>
       <div class="box contact" data-opt="contact">
@@ -955,6 +956,19 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <div id="hList"></div>
     </fieldset>
 
+    <fieldset id="rdSet"><legend>📅 Day-wise: Today's routine by AHM (auto-clears at midnight)</legend>
+      <p class="meta" style="margin-top:0"><b id="rdDate"></b> — only today is active; yesterday's routine is removed automatically at 12 midnight. No sharing needed.</p>
+      <h4 style="margin:6px 0 2px">① Absent staff today <span id="rdAbsOk" class="meta"></span></h4>
+      <div id="rdAbs" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:2px 10px"></div>
+      <label>Other absentee (comma separated, optional)<input id="rdOther" placeholder="e.g. Guest teacher"></label>
+      <p><button class="btn" id="rdAbsSave" type="button">Save absentees</button></p>
+      <h4 style="margin:10px 0 2px">② Prepare today's routine</h4>
+      <p class="meta" style="margin:0">One line per period: <b>Time | Class – Subject – Teacher</b> e.g. <i>10:40-11:20 | VI – Bengali – A. Das</i></p>
+      <label>Heading (optional)<input id="rdHead" placeholder="e.g. Adjustment routine"></label>
+      <label>Routine lines<textarea id="rdText" rows="9" placeholder="10:40-11:20 | VI – Bengali – A. Das"></textarea></label>
+      <p><button class="btn" id="rdSave" type="button">Publish today's routine</button> <button class="btn alt" id="rdClear" type="button">Clear today</button></p>
+    </fieldset>
+
     <fieldset><legend>🗓️ Provisional Routine – Prepare → Share to AHM → Publish</legend>
       <p class="meta" style="margin-top:0">① Prepare the routine in the routine tool &nbsp;→&nbsp; ② Share the link with the AHM for checking &nbsp;→&nbsp; ③ Publish. Only <b>Published</b> routines appear on the public site (🗓️ tab), as a simple list.</p>
       <p><a class="btn" id="rtTool" href="https://prabirdangar-web.github.io/provisional_routine/" target="_blank" rel="noopener">🛠 Open Provisional Routine tool</a></p>
@@ -964,13 +978,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <p><button class="btn" id="rtAdd" type="button">Add routine (as Prepared)</button> <button class="btn alt" id="rtCancel" type="button" style="display:none">Cancel edit</button></p>
       <div id="rtList"></div>
     </fieldset>
-    <fieldset><legend>📅 Day-wise routine (main site shows only that day, in list view)</legend>
-      <p class="meta" style="margin-top:0">One line per period: <b>Time or Period | Class – Subject – Teacher</b> (e.g. <i>10:40-11:20 | VI – Bengali – A. Das</i>). Pick a day, type its lines, press Save.</p>
-      <div class="row"><label>Day<select id="rdDay"><option value="0">Monday</option><option value="1">Tuesday</option><option value="2">Wednesday</option><option value="3">Thursday</option><option value="4">Friday</option><option value="5">Saturday</option></select></label>
-      <label>Heading (optional)<input id="rdHead" placeholder="e.g. Provisional Routine – Session 2027"></label></div>
-      <label>Routine lines<textarea id="rdText" rows="9" placeholder="10:40-11:20 | VI – Bengali – A. Das"></textarea></label>
-      <p><button class="btn" id="rdSave" type="button">Save this day</button> <button class="btn alt" id="rdClear" type="button">Clear this day</button></p>
-    </fieldset>
+    
 
     <fieldset><legend>🗂 Office desk – admin-only links (salary · PF · pension · I-Tax)</legend>
       <div id="officeBox"></div>
@@ -2508,8 +2516,8 @@ $("saveMn").onclick = () => { const t = $("mnText").value.trim();
 $("defMn").onclick = () => { $("mnText").value = DEF_MN; toast("Default loaded – press Save"); };
 setInterval(renderMorning, 60000);
 
-const VIEWS = [["morning","🌅","সকালের সময়সূচি","mo"],["tt","🕘","নিয়মিত সময়সূচি"],["duty","🍱","MDM রোস্টার"],["cal","🗓️","ক্যালেন্ডার"],["calc","🧮","ক্যালকুলেটর"],["useful","🔗","দরকারি লিংক"],["hero","🏫","স্কুলের ছবি"],["contact","☎️","যোগাযোগ"]];
-const VSTD = {duty:true, cal:false, calc:false, useful:false, hero:false, contact:false};
+const VIEWS = [["morning","🌅","সকালের সময়সূচি","mo"],["tt","🕘","নিয়মিত সময়সূচি"],["duty","🍱","MDM রোস্টার"],["cal","🗓️","ক্যালেন্ডার"],["calc","🧮","ক্যালকুলেটর"],["useful","🔗","দরকারি লিংক"],["hero","🏫","স্কুলের ছবি"],["contact","☎️","যোগাযোগ"],["hol","🏖","ছুটির তালিকা / Holidays"],["provr","🗓️","অস্থায়ী রুটিন / Prov. Routine"]];
+const VSTD = {hol:true, provr:true, duty:true, cal:false, calc:false, useful:false, hero:false, contact:false};
 /* admin-saved defaults count only if saved with the new rules (_v:2), so the new standard applies at once */
 const adminViews = () => (D.views && D.views._v === 2) ? D.views : {};
 let PREF = {}; try { PREF = JSON.parse(localStorage.getItem("tfhs_views2") || "{}") || {}; } catch(e) { PREF = {}; }
@@ -2671,34 +2679,50 @@ $("rtList").onclick = e => { const b = e.target.closest("[data-rt]"); if (!b) re
     case "del": if (confirm("Delete this routine?")) { D.routines = rtAll().filter(r => r.id !== id); save(); } break;
   } };
 
-/* ===== Day-wise routine: main site shows only that day's list ===== */
-let RD_DAY = null;
-const rdMap = () => D.rtDays || {};
+/* ===== Today's routine (AHM): absentees first, then routine; auto-clears at midnight ===== */
+const ld = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); };
+const rdCur = () => (D.rtDay && D.rtDay.date === ld()) ? D.rtDay : null;
 function rdLines(t){ return String(t||"").split("\n").map(l => l.trim()).filter(Boolean).map(l => { const i = l.indexOf("|"); return i < 0 ? {a:"", b:l} : {a:l.slice(0,i).trim(), b:l.slice(i+1).trim()}; }); }
 function renderRtDay(){
   const pane = $("p-routine"); if (!pane) return;
-  let box = $("rtToday"); if (!box) { box = document.createElement("div"); box.id = "rtToday"; pane.insertBefore(box, pane.firstChild);
-    box.addEventListener("click", e => { const b = e.target.closest("[data-rd]"); if (b) { RD_DAY = +b.dataset.rd; renderRtDay(); } }); }
-  const now = new Date(), wd = (now.getDay() + 6) % 7, day = RD_DAY == null ? wd : RD_DAY, names = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  const nm = now.getHours()*60 + now.getMinutes(), mmin = x => { const m = /^(\d{1,2}):(\d{2})$/.exec(x); return m ? +m[1]*60 + +m[2] : -1; };
-  const chips = names.map((n,i) => `<button type="button" class="btn sm ${i===day?"":"alt"}" data-rd="${i}" style="padding:2px 9px">${n.slice(0,3)}${i===wd?" •":""}</button>`).join(" ");
-  const rows = day > 5 ? [] : rdLines(rdMap()[day]);
-  const head = esc(rdMap().head || "");
+  let box = $("rtToday"); if (!box) { box = document.createElement("div"); box.id = "rtToday"; pane.insertBefore(box, pane.firstChild); }
+  const now = new Date(), wd = now.getDay(), nm = now.getHours()*60 + now.getMinutes(), mmin = x => { const m = /^(\d{1,2}):(\d{2})$/.exec(x); return m ? +m[1]*60 + +m[2] : -1; };
+  const dn = now.toLocaleDateString("en-GB", {weekday:"long", day:"2-digit", month:"short", year:"numeric"}), c = rdCur();
   let body;
-  if (day > 5) body = `<div class="empty">Sunday – no classes.</div>`;
-  else if (!rows.length) body = `<div class="empty">${names[day]}'s routine will be published soon.</div>`;
-  else body = rows.map(r => { const m = /^(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})$/.exec(r.a), on = day === wd && m && nm >= mmin(m[1]) && nm < mmin(m[2]);
+  if (wd === 0) body = `<div class="empty">Sunday – no classes.</div>`;
+  else if (!c || !rdLines(c.text).length) body = `<div class="empty">আজকের রুটিন শীঘ্রই প্রকাশিত হবে। / Today's routine will be published soon.</div>`;
+  else body = rdLines(c.text).map(r => { const m = /^(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})$/.exec(r.a), on = m && nm >= mmin(m[1]) && nm < mmin(m[2]);
     return `<div class="item" style="${on?"background:var(--gold);color:#1b1400;font-weight:700":""}"><div>${r.a?`<span class="meta" style="margin-right:8px;${on?"color:inherit":""}">${esc(r.a)}</span>`:""}${esc(r.b)}</div></div>`; }).join("");
-  box.innerHTML = `<h3 style="margin:0 0 6px">📅 ${names[day] || "Sunday"}${day===wd?" (Today)":""} ${head?`<span class="meta">· ${head}</span>`:""}</h3><div style="margin:0 0 8px">${chips}</div><div class="list">${body}</div><h3 style="margin:12px 0 6px">🗓️ Full routine</h3>`;
+  const abs = (wd !== 0 && c && c.absent && c.absent.length) ? `<div class="box" style="margin:0 0 8px;border-left:4px solid #b3121b">🚫 <b>আজ অনুপস্থিত / Absent today:</b> ${c.absent.map(esc).join(", ")}</div>` : "";
+  box.innerHTML = `<h3 style="margin:0 0 6px">📅 ${esc(dn)} ${c && c.head ? `<span class="meta">· ${esc(c.head)}</span>` : ""}</h3>${abs}<div class="list">${body}</div>`;
 }
+setInterval(() => { try { renderRtDay(); } catch(e) {} }, 60000);
 (function(){
   const g = id => document.getElementById(id); if (!g("rdSave")) return;
-  const fill = () => { g("rdText").value = rdMap()[g("rdDay").value] || ""; g("rdHead").value = rdMap().head || ""; };
-  g("rdDay").onchange = fill;
-  g("rdSave").onclick = () => { const m = {...rdMap()}; m[g("rdDay").value] = g("rdText").value.trim(); m.head = g("rdHead").value.trim(); D.rtDays = m; save(); renderRtDay(); toast("Saved"); };
-  g("rdClear").onclick = () => { if (!confirm("Clear this day's routine?")) return; const m = {...rdMap()}; delete m[g("rdDay").value]; D.rtDays = m; g("rdText").value = ""; save(); renderRtDay(); };
+  const names = () => { const st = (D.staff||[]).map(t => t.name); const a = st.length ? st : SEED_REG.map(r => r[0]); return [...new Set(a.filter(Boolean))]; };
+  function paint(){
+    const c = rdCur(), sun = new Date().getDay() === 0;
+    g("rdDate").textContent = "Today: " + new Date().toLocaleDateString("en-GB", {weekday:"long", day:"2-digit", month:"short", year:"numeric"}) + (sun ? " (Sunday – no routine)" : "");
+    const sel = new Set((c && c.absent) || []);
+    if (!g("rdAbs").dataset.f || g("rdAbs").dataset.d !== ld()) { g("rdAbs").dataset.f = 1; g("rdAbs").dataset.d = ld();
+      g("rdAbs").innerHTML = names().map(n => `<label style="display:flex;gap:6px;align-items:center;margin:0"><input type="checkbox" style="width:auto" value="${esc(n)}"> ${esc(n)}</label>`).join("");
+      g("rdAbs").querySelectorAll("input").forEach(i => i.checked = sel.has(i.value));
+      const known = new Set(names()); g("rdOther").value = [...sel].filter(n => !known.has(n)).join(", ");
+      g("rdText").value = (c && c.text) || ""; g("rdHead").value = (c && c.head) || ""; }
+    const ok = !!(c && c.absSaved);
+    g("rdAbsOk").textContent = ok ? "✔ saved" : "(required first)";
+    g("rdText").disabled = g("rdHead").disabled = g("rdSave").disabled = !ok || sun;
+    g("rdAbsSave").disabled = sun;
+  }
+  g("rdAbsSave").onclick = () => { const ab = [...g("rdAbs").querySelectorAll("input:checked")].map(i => i.value).concat(g("rdOther").value.split(",").map(x => x.trim()).filter(Boolean));
+    const c = rdCur() || {}; D.rtDay = {date: ld(), absent: ab, absSaved: true, text: c.text || "", head: c.head || ""}; save(); paint(); renderRtDay(); };
+  g("rdSave").onclick = () => { const c = rdCur(); if (!c || !c.absSaved) return toast("Save absent staff first");
+    D.rtDay = {...c, text: g("rdText").value.trim(), head: g("rdHead").value.trim()}; save(); renderRtDay(); };
+  g("rdClear").onclick = () => { if (!confirm("Clear today's absentees and routine?")) return; D.rtDay = null; g("rdAbs").dataset.f = ""; save(); paint(); renderRtDay(); };
   const ed = g("editor"); let done = false;
-  new MutationObserver(() => { if (!done && ed.style.display !== "none") { done = true; fill(); } }).observe(ed, {attributes:true, attributeFilter:["style"]});
+  new MutationObserver(() => { if (!done && ed.style.display !== "none") { done = true;
+    if (D.rtDay && D.rtDay.date !== ld()) { D.rtDay = null; save(); }   /* midnight clean-up: yesterday's data removed */
+    paint(); } }).observe(ed, {attributes:true, attributeFilter:["style"]});
 })();
 </script>
 <script>
