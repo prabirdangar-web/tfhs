@@ -2643,16 +2643,17 @@ function renderRoutines(){
   const al = $("rtList"); if (!al) return;
   if ($("rtPhone") && document.activeElement !== $("rtPhone")) $("rtPhone").value = rtLs("tfhs_ahm_phone");
   if ($("rtLink") && !$("rtLink").value && !RT_EDIT) $("rtLink").value = PR_URL;
-  al.innerHTML = rtAll().slice().reverse().map(x => { const s = PR_ST[x.status] || PR_ST.draft, st = x.status || "draft", L = safeUrl(x.link) || PR_URL;
+  al.innerHTML = rtAll().slice().reverse().map(x => { const s = PR_ST[x.status] || PR_ST.draft, st = x.status || "draft", L = safeUrl(x.link) || PR_URL, locked = st === "published" && !x.unlocked;
     return `<div class="item"><div><b>${esc(x.title)}</b>
-      <span class="meta"><span class="tag" style="background:${s[1]};color:#fff">${s[0]}</span>${x.from?"From " + fmt(x.from) + " · ":""}${x.sharedAt?"Shared " + fmt(new Date(x.sharedAt).toISOString().slice(0,10)) + " · ":""}${x.pubAt?"Published " + fmt(new Date(x.pubAt).toISOString().slice(0,10)):""}</span>
+      <span class="meta"><span class="tag" style="background:${s[1]};color:#fff">${s[0]}${locked?" 🔒 Locked":(st==="published"?" 🔓 Unlocked":"")}</span>${x.from?"From " + fmt(x.from) + " · ":""}${x.sharedAt?"Shared " + fmt(new Date(x.sharedAt).toISOString().slice(0,10)) + " · ":""}${x.pubAt?"Published " + fmt(new Date(x.pubAt).toISOString().slice(0,10)):""}</span>
       ${x.note?`<div class="meta">${esc(x.note)}</div>`:""}</div>
       <div class="acts"><a class="btn alt sm" href="${L}" target="_blank" rel="noopener">Open</a>
       ${st !== "published" ? `<button class="btn alt sm" data-rt="share" data-id="${esc(x.id)}">📤 Share to AHM</button><button class="btn alt sm" data-rt="copy" data-id="${esc(x.id)}">Copy message</button>` : ""}
       ${st === "draft" ? `<button class="btn alt sm" data-rt="shared" data-id="${esc(x.id)}">Mark shared</button>` : ""}
       ${st === "shared" ? `<button class="btn sm" data-rt="pub" data-id="${esc(x.id)}">✅ Publish (AHM approved)</button><button class="btn alt sm" data-rt="draft" data-id="${esc(x.id)}">↩ Back to Prepared</button>` : ""}
-      ${st === "published" ? `<button class="btn alt sm" data-rt="unpub" data-id="${esc(x.id)}">Unpublish</button>` : ""}
-      <button class="btn alt sm" data-rt="edit" data-id="${esc(x.id)}">Edit</button><button class="btn alt sm" data-rt="del" data-id="${esc(x.id)}">Delete</button></div></div>`; }).join("")
+      ${locked ? `<button class="btn sm" data-rt="unlock" data-id="${esc(x.id)}">🔓 Unlock to modify / delete</button>` : ""}
+      ${st === "published" && !locked ? `<button class="btn alt sm" data-rt="unpub" data-id="${esc(x.id)}">Unpublish</button><button class="btn alt sm" data-rt="lock" data-id="${esc(x.id)}">🔒 Lock again</button>` : ""}
+      ${!locked ? `<button class="btn alt sm" data-rt="edit" data-id="${esc(x.id)}">Edit</button><button class="btn alt sm" data-rt="del" data-id="${esc(x.id)}">Delete</button>` : ""}</div></div>`; }).join("")
     || `<p class="meta">No routine yet. Prepare it in the tool, then add it here.</p>`;
 }
 function rtClear(){ RT_EDIT = null; ["rtTitle","rtFrom","rtNote"].forEach(i => $(i).value = ""); $("rtLink").value = PR_URL; $("rtAdd").textContent = "Add routine (as Prepared)"; $("rtCancel").style.display = "none"; }
@@ -2660,7 +2661,7 @@ $("rtAdd").onclick = () => { const t = $("rtTitle").value.trim(), l = $("rtLink"
   if (!t) return toast("Routine title is required");
   if (!/^https?:\/\//i.test(l)) return toast("Link must start with https://");
   const o = {title:t, from:$("rtFrom").value, note:$("rtNote").value.trim(), link:l};
-  if (RT_EDIT) D.routines = rtAll().map(x => x.id === RT_EDIT ? {...x, ...o, upd: Date.now()} : x);
+  if (RT_EDIT) D.routines = rtAll().map(x => x.id === RT_EDIT ? {...x, ...o, unlocked:false, upd: Date.now()} : x);
   else D.routines = [...rtAll(), {id:uid(), ...o, status:"draft", upd: Date.now()}];
   rtClear(); save(); };
 $("rtCancel").onclick = rtClear;
@@ -2672,11 +2673,13 @@ $("rtList").onclick = e => { const b = e.target.closest("[data-rt]"); if (!b) re
     case "copy": (navigator.clipboard ? navigator.clipboard.writeText(rtMsg(x)).then(() => toast("Message copied"), () => toast("Copy failed")) : toast("Copy not supported")); break;
     case "shared": rtPatch(id, {status:"shared", sharedAt:Date.now()}); break;
     case "pub": if (confirm("Publish this routine on the public site? (Confirm that the AHM has approved it)")) rtPatch(id, {status:"published", pubAt:Date.now()}); break;
-    case "unpub": if (confirm("Remove from the public site?")) rtPatch(id, {status:"shared", pubAt:null}); break;
+    case "unlock": if (confirm("This routine is approved by the AHM and live. Unlock it to modify or delete?")) rtPatch(id, {unlocked:true}); break;
+    case "lock": rtPatch(id, {unlocked:false}); break;
+    case "unpub": if (confirm("Remove from the public site?")) rtPatch(id, {status:"shared", pubAt:null, unlocked:false}); break;
     case "draft": rtPatch(id, {status:"draft", sharedAt:null}); break;
-    case "edit": RT_EDIT = id; $("rtTitle").value = x.title||""; $("rtFrom").value = x.from||""; $("rtNote").value = x.note||""; $("rtLink").value = x.link||PR_URL;
+    case "edit": if (x.status === "published" && !x.unlocked) return toast("Locked – press Unlock first"); RT_EDIT = id; $("rtTitle").value = x.title||""; $("rtFrom").value = x.from||""; $("rtNote").value = x.note||""; $("rtLink").value = x.link||PR_URL;
       $("rtAdd").textContent = "Save changes"; $("rtCancel").style.display = ""; $("rtTitle").scrollIntoView({block:"center"}); $("rtTitle").focus(); break;
-    case "del": if (confirm("Delete this routine?")) { D.routines = rtAll().filter(r => r.id !== id); save(); } break;
+    case "del": if (x.status === "published" && !x.unlocked) return toast("Locked – press Unlock first"); if (confirm("Delete this routine?")) { D.routines = rtAll().filter(r => r.id !== id); save(); } break;
   } };
 
 /* ===== Today's routine (AHM): absentees first, then routine; auto-clears at midnight ===== */
