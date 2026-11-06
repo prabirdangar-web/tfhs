@@ -568,6 +568,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 #panel .adm-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:6px 12px;background:var(--navy);color:#fff;flex:0 0 auto}
 #panel .adm-top h2{margin:0;font-size:16px;color:#fff}
 #panel .adm-top .meta{color:#dbe4ff}
+#panel .adm-top .btn{background:#fff;color:var(--navy);border-color:#fff}
 #panel .adm-top p{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 #panel #editor{flex:1 1 auto;min-height:0;display:none;flex-direction:row}
 #panel #editor.adm-show{display:flex!important}
@@ -962,6 +963,13 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <label>Note for the list (optional)<input id="rtNote" placeholder="e.g. Class V–X · valid until final routine"></label>
       <p><button class="btn" id="rtAdd" type="button">Add routine (as Prepared)</button> <button class="btn alt" id="rtCancel" type="button" style="display:none">Cancel edit</button></p>
       <div id="rtList"></div>
+    </fieldset>
+    <fieldset><legend>📅 Day-wise routine (main site shows only that day, in list view)</legend>
+      <p class="meta" style="margin-top:0">One line per period: <b>Time or Period | Class – Subject – Teacher</b> (e.g. <i>10:40-11:20 | VI – Bengali – A. Das</i>). Pick a day, type its lines, press Save.</p>
+      <div class="row"><label>Day<select id="rdDay"><option value="0">Monday</option><option value="1">Tuesday</option><option value="2">Wednesday</option><option value="3">Thursday</option><option value="4">Friday</option><option value="5">Saturday</option></select></label>
+      <label>Heading (optional)<input id="rdHead" placeholder="e.g. Provisional Routine – Session 2027"></label></div>
+      <label>Routine lines<textarea id="rdText" rows="9" placeholder="10:40-11:20 | VI – Bengali – A. Das"></textarea></label>
+      <p><button class="btn" id="rdSave" type="button">Save this day</button> <button class="btn alt" id="rdClear" type="button">Clear this day</button></p>
     </fieldset>
 
     <fieldset><legend>🗂 Office desk – admin-only links (salary · PF · pension · I-Tax)</legend>
@@ -2616,6 +2624,7 @@ const rtLs = (k, v) => { try { if (v === undefined) return localStorage.getItem(
 const rtMsg = x => `Respected AHM Sir/Madam,\n\nThe provisional routine "${x.title}"${x.from ? " (effective from " + fmt(x.from) + ")" : ""} has been prepared. Please check it and let me know if any change is needed:\n${x.link || PR_URL}\n\nAfter your approval it will be published on the school portal.\n\n– Headmaster, Taldangra Fulmati High School (H.S.)`;
 function rtPatch(id, p){ D.routines = rtAll().map(x => x.id === id ? {...x, ...p, upd: Date.now()} : x); save(); }
 function renderRoutines(){
+  try{ renderRtDay(); }catch(e){}
   const pub = rtAll().filter(x => x.status === "published").sort((a,b) => (b.pubAt||0) - (a.pubAt||0));
   const pb = $("routineBox");
   if (pb) pb.innerHTML = pub.length ? pub.map(x => `<div class="item"><div><b>${esc(x.title)}</b>
@@ -2661,6 +2670,36 @@ $("rtList").onclick = e => { const b = e.target.closest("[data-rt]"); if (!b) re
       $("rtAdd").textContent = "Save changes"; $("rtCancel").style.display = ""; $("rtTitle").scrollIntoView({block:"center"}); $("rtTitle").focus(); break;
     case "del": if (confirm("Delete this routine?")) { D.routines = rtAll().filter(r => r.id !== id); save(); } break;
   } };
+
+/* ===== Day-wise routine: main site shows only that day's list ===== */
+let RD_DAY = null;
+const rdMap = () => D.rtDays || {};
+function rdLines(t){ return String(t||"").split("\n").map(l => l.trim()).filter(Boolean).map(l => { const i = l.indexOf("|"); return i < 0 ? {a:"", b:l} : {a:l.slice(0,i).trim(), b:l.slice(i+1).trim()}; }); }
+function renderRtDay(){
+  const pane = $("p-routine"); if (!pane) return;
+  let box = $("rtToday"); if (!box) { box = document.createElement("div"); box.id = "rtToday"; pane.insertBefore(box, pane.firstChild);
+    box.addEventListener("click", e => { const b = e.target.closest("[data-rd]"); if (b) { RD_DAY = +b.dataset.rd; renderRtDay(); } }); }
+  const now = new Date(), wd = (now.getDay() + 6) % 7, day = RD_DAY == null ? wd : RD_DAY, names = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const nm = now.getHours()*60 + now.getMinutes(), mmin = x => { const m = /^(\d{1,2}):(\d{2})$/.exec(x); return m ? +m[1]*60 + +m[2] : -1; };
+  const chips = names.map((n,i) => `<button type="button" class="btn sm ${i===day?"":"alt"}" data-rd="${i}" style="padding:2px 9px">${n.slice(0,3)}${i===wd?" •":""}</button>`).join(" ");
+  const rows = day > 5 ? [] : rdLines(rdMap()[day]);
+  const head = esc(rdMap().head || "");
+  let body;
+  if (day > 5) body = `<div class="empty">Sunday – no classes.</div>`;
+  else if (!rows.length) body = `<div class="empty">${names[day]}'s routine will be published soon.</div>`;
+  else body = rows.map(r => { const m = /^(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})$/.exec(r.a), on = day === wd && m && nm >= mmin(m[1]) && nm < mmin(m[2]);
+    return `<div class="item" style="${on?"background:var(--gold);color:#1b1400;font-weight:700":""}"><div>${r.a?`<span class="meta" style="margin-right:8px;${on?"color:inherit":""}">${esc(r.a)}</span>`:""}${esc(r.b)}</div></div>`; }).join("");
+  box.innerHTML = `<h3 style="margin:0 0 6px">📅 ${names[day] || "Sunday"}${day===wd?" (Today)":""} ${head?`<span class="meta">· ${head}</span>`:""}</h3><div style="margin:0 0 8px">${chips}</div><div class="list">${body}</div><h3 style="margin:12px 0 6px">🗓️ Full routine</h3>`;
+}
+(function(){
+  const g = id => document.getElementById(id); if (!g("rdSave")) return;
+  const fill = () => { g("rdText").value = rdMap()[g("rdDay").value] || ""; g("rdHead").value = rdMap().head || ""; };
+  g("rdDay").onchange = fill;
+  g("rdSave").onclick = () => { const m = {...rdMap()}; m[g("rdDay").value] = g("rdText").value.trim(); m.head = g("rdHead").value.trim(); D.rtDays = m; save(); renderRtDay(); toast("Saved"); };
+  g("rdClear").onclick = () => { if (!confirm("Clear this day's routine?")) return; const m = {...rdMap()}; delete m[g("rdDay").value]; D.rtDays = m; g("rdText").value = ""; save(); renderRtDay(); };
+  const ed = g("editor"); let done = false;
+  new MutationObserver(() => { if (!done && ed.style.display !== "none") { done = true; fill(); } }).observe(ed, {attributes:true, attributeFilter:["style"]});
+})();
 </script>
 <script>
 (function(){
@@ -3030,7 +3069,10 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
   w.addEventListener("mouseenter",function(){open(true)});
   w.addEventListener("mouseleave",function(){open(false)});
   b.addEventListener("focus",function(){open(true)});
-  b.addEventListener("click",function(e){e.stopPropagation();open(!w.classList.contains("open"))});
+  var hvT=0;
+  w.addEventListener("mouseenter",function(){hvT=Date.now()});
+  b.addEventListener("touchstart",function(){hvT=0},{passive:true});
+  b.addEventListener("click",function(e){e.stopPropagation(); if(Date.now()-hvT<450 && w.classList.contains("open")) return; open(!w.classList.contains("open"))});
   document.addEventListener("click",function(e){if(!w.contains(e.target))open(false)});
   addEventListener("keydown",function(e){if(e.key==="Escape")open(false)});
   addEventListener("hashchange",hvDraw);
@@ -3048,6 +3090,9 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
   g("hvShort").onclick=function(){g("hvOn").checked=true;g("hvTi").value="বিজ্ঞপ্তি";g("hvBo").value=SHORT;g("hvUn").value="2026-11-22";toast("Loaded - click Save hover notice")};
   g("hvSyn").onclick=function(){g("hvOn").checked=true;g("hvTi").value="পরীক্ষার বিজ্ঞপ্তি সারাংশ";g("hvBo").value=SYN;g("hvUn").value="2026-11-22";toast("Loaded - click Save hover notice")};
   hvDraw(); hvFill();
+  /* auto-open once per visit for each new hover notice, then close after a few seconds */
+  var hvAuto=function(){ try{ if(!active()||location.hash==="#admin") return; var id=D.hover.id||"x"; if(sessionStorage.getItem("hvSeen")===id) return; sessionStorage.setItem("hvSeen",id); open(true); setTimeout(function(){ if(!w.matches(":hover")) open(false); },7000); }catch(e){} };
+  var _r2=window.render; window.render=function(){var r=_r2.apply(this,arguments); try{hvAuto()}catch(e){} return r};
 })();
 </script>
 <style>
@@ -3191,7 +3236,7 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
    ["notice","📢","Notices",/Add notice|WhatsApp|MP \(SE\)|আজকের দিনে/i],
    ["result","🎓","Results",/Add result|Gallery/i],
    ["staff","👥","Staff",/Teacher|MDM/i],
-   ["routine","🗓️","Routine",/Provisional|Daily routine|Time table|Morning shift|Holiday|সময়সূচি/i],
+   ["routine","🗓️","Routine",/Provisional|Day-wise|Daily routine|Time table|Morning shift|Holiday|সময়সূচি/i],
    ["views","👁","Views",/Optional views/i],
    ["links","🔗","Links",/Office desk|Useful links|Quick links/i],
    ["fb","💬","Feedback",/Feedback/i]
@@ -3208,6 +3253,7 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
     try{sessionStorage.setItem("admTab",k)}catch(e){} }
   G.forEach(function(g){ var b=document.createElement("button"); b.type="button"; b.title=g[2]; b.setAttribute("role","tab");
     b.innerHTML='<span class="ic">'+g[1]+'</span><span>'+g[2]+'</span>'; b.onclick=function(){show(g[0])}; nav.appendChild(b); });
+  var vs=document.createElement("button"); vs.type="button"; vs.title="View site"; vs.style.marginTop="auto"; vs.innerHTML='<span class="ic">🌐</span><span>View site</span>'; vs.onclick=function(){location.hash=""; scrollTo(0,0)}; nav.appendChild(vs);
   ed.appendChild(nav); ed.appendChild(body);
   var top=document.createElement("div"); top.className="adm-top";
   while(panel.firstChild!==ed){ top.appendChild(panel.firstChild); } panel.insertBefore(top,ed);
