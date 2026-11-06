@@ -561,6 +561,31 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 @media (max-width:600px){#hvCard{width:calc(100vw - 32px);max-height:65vh}#hvCard h4{font-size:17px}#hvCard .hvt{font-size:14.5px;line-height:1.6}}
 #hvCard .hvt{white-space:pre-line;font-size:13px;line-height:1.5;color:#1a2230!important}
 @media (prefers-reduced-motion:reduce){#hvBtn{animation:none}}
+
+/* ===== Admin: icon tabs, one section at a time, full-screen fit ===== */
+#panel{max-width:none!important;width:100%;margin:0!important;padding:0!important}
+#panel.adm-on{display:flex!important;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+#panel .adm-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:6px 12px;background:var(--navy);color:#fff;flex:0 0 auto}
+#panel .adm-top h2{margin:0;font-size:16px;color:#fff}
+#panel .adm-top .meta{color:#dbe4ff}
+#panel .adm-top p{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+#panel #editor{flex:1 1 auto;min-height:0;display:none;flex-direction:row}
+#panel #editor.adm-show{display:flex!important}
+#admNav{flex:0 0 74px;display:flex;flex-direction:column;gap:4px;padding:6px 4px;background:#e4e9f4;border-right:1px solid var(--line);overflow-y:auto}
+#admNav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 2px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--ink);cursor:pointer;font:600 10px/1.1 inherit;font-family:inherit}
+#admNav button .ic{font-size:22px;line-height:1}
+#admNav button:hover{background:#fff}
+#admNav button[aria-selected=true]{background:var(--mar);color:#fff;border-color:var(--navy);box-shadow:0 2px 6px rgba(12,42,107,.3)}
+#admBody{flex:1 1 auto;min-width:0;overflow-y:auto;padding:10px 12px 40px;-webkit-overflow-scrolling:touch}
+#admBody fieldset{max-width:1100px;margin-left:auto;margin-right:auto}
+#admBody fieldset.adm-hide{display:none!important}
+#admBody .adm-h{max-width:1100px;margin:0 auto 8px;font-size:15px;color:var(--navy)}
+@media(max-width:700px){
+  #panel #editor.adm-show{flex-direction:column}
+  #admNav{flex:0 0 auto;flex-direction:row;overflow-x:auto;overflow-y:hidden;border-right:0;border-bottom:1px solid var(--line);padding:4px}
+  #admNav button{flex:0 0 58px}
+  #admBody{padding:8px 8px 40px}
+}
 </style>
 <style>
 .nat audio{width:100%;margin:4px 0 8px;height:40px}.nat h3{margin:6px 0 0;font-size:14px}.nat .meta{display:block}
@@ -726,7 +751,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       </div>
 
       <h2 class="sec" id="routine" style="--c:var(--c-routine)">রুটিন ও ছুটি / Routine &amp; Holidays</h2>
-      <table class="t" id="routineBox"></table>
+      <table class="t" id="routineTbl"></table>
       <h3>আসন্ন ছুটি / Upcoming holidays</h3>
       <div class="list" id="holidayBox" style="--c:var(--c-routine)"></div>
       <details class="box" style="padding:0"><summary>সারা বছরের তালিকা / Full list</summary><table class="t" id="holAll"></table></details>
@@ -1691,7 +1716,7 @@ function renderExtra(){
     ? (reg.length ? `<div class="staff">${reg.map(card).join("")}</div>` : "")
       + (voc.length ? `<h3 class="sub vh">ভোকেশনাল ইউনিট / Vocational Unit (WBSCTVE&amp;SD)</h3>` + vl("VIII+","VIII+ Level") + vl("X+2","X+2 Level") + vl("Para","Para Teachers") + vl("Support","Support Staff") : "")
     : `<div class="empty">তালিকা শীঘ্রই। / List coming soon.</div>`;
-  $("routineBox").innerHTML = (D.routine||[]).map(r => `<tr><td>${esc(r.label)}</td><td>${esc(r.time)}</td></tr>`).join("");
+  $("routineTbl").innerHTML = (D.routine||[]).map(r => `<tr><td>${esc(r.label)}</td><td>${esc(r.time)}</td></tr>`).join("");
   const all = (D.holidays||[]).slice().sort((a,b) => a.date.localeCompare(b.date)), t0 = today();
   const range = h => fmt(h.date) + (h.to && h.to !== h.date ? " – " + fmt(h.to) : "");
   const hs = all.filter(h => (h.to || h.date) >= t0);
@@ -3154,6 +3179,43 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
   ui();schedule();setInterval(tick,5000);
   document.addEventListener("visibilitychange",function(){if(!document.hidden){tick();schedule()}});
   document.addEventListener("click",function(){if(P.on)ctx()},{once:true});
+})();
+</script>
+
+<script>
+/* ===== Admin icon tabs (groups fieldsets by legend; click icon -> only that section shows) ===== */
+(function(){
+  var panel=document.getElementById("panel"), ed=document.getElementById("editor"); if(!panel||!ed) return;
+  var G=[
+   ["home","🏠","Home",/ticker|^Admission|Hover notice|Pop-up|Result &|remarks/i],
+   ["notice","📢","Notices",/Add notice|WhatsApp|MP \(SE\)|আজকের দিনে/i],
+   ["result","🎓","Results",/Add result|Gallery/i],
+   ["staff","👥","Staff",/Teacher|MDM/i],
+   ["routine","🗓️","Routine",/Provisional|Daily routine|Time table|Morning shift|Holiday|সময়সূচি/i],
+   ["views","👁","Views",/Optional views/i],
+   ["links","🔗","Links",/Office desk|Useful links|Quick links/i],
+   ["fb","💬","Feedback",/Feedback/i]
+  ];
+  var nav=document.createElement("div"); nav.id="admNav"; nav.setAttribute("role","tablist");
+  var body=document.createElement("div"); body.id="admBody";
+  var fs=[].slice.call(ed.children).filter(function(e){return e.tagName==="FIELDSET"});
+  fs.forEach(function(f){var l=(f.querySelector("legend")||{}).textContent||"",k="home";
+    for(var i=0;i<G.length;i++){ if(G[i][3].test(l.trim())){k=G[i][0];break;} } f.dataset.g=k; body.appendChild(f); });
+  var title=document.createElement("h3"); title.className="adm-h"; body.insertBefore(title,body.firstChild);
+  function show(k){ G.forEach(function(g,i){nav.children[i].setAttribute("aria-selected",g[0]===k);});
+    [].forEach.call(body.querySelectorAll("fieldset"),function(f){f.classList.toggle("adm-hide",f.dataset.g!==k);});
+    var g=G.filter(function(x){return x[0]===k})[0]; title.textContent=g[1]+" "+g[2]; body.scrollTop=0;
+    try{sessionStorage.setItem("admTab",k)}catch(e){} }
+  G.forEach(function(g){ var b=document.createElement("button"); b.type="button"; b.title=g[2]; b.setAttribute("role","tab");
+    b.innerHTML='<span class="ic">'+g[1]+'</span><span>'+g[2]+'</span>'; b.onclick=function(){show(g[0])}; nav.appendChild(b); });
+  ed.appendChild(nav); ed.appendChild(body);
+  var top=document.createElement("div"); top.className="adm-top";
+  while(panel.firstChild!==ed){ top.appendChild(panel.firstChild); } panel.insertBefore(top,ed);
+  var saved="home"; try{saved=sessionStorage.getItem("admTab")||"home"}catch(e){}
+  show(G.some(function(g){return g[0]===saved})?saved:"home");
+  function sync(){ panel.classList.toggle("adm-on",location.hash==="#admin"); ed.classList.toggle("adm-show",ed.style.display!=="none"); }
+  new MutationObserver(sync).observe(ed,{attributes:true,attributeFilter:["style"]});
+  addEventListener("hashchange",sync); sync();
 })();
 </script>
 </body>
