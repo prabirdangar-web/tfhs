@@ -270,6 +270,9 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 .cd.hol{background:linear-gradient(135deg,#ffe3a3,#ffc857);color:#4a3300;border-color:#e6a700}
 .cd.obs{background:color-mix(in srgb,var(--c-routine) 16%,var(--card));border-color:var(--c-routine)}
 .cd.ev::after{content:"";position:absolute;bottom:4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--c-staff)}
+.cd.exm{background:linear-gradient(135deg,#ffd9d6,#ffb4ab);color:#5c0b05;border-color:#d93025;font-weight:800}
+.cd.exm::before{content:"📝";position:absolute;top:0;right:2px;font-size:8px;line-height:1}
+@media(prefers-color-scheme:dark){.cd.exm{background:linear-gradient(135deg,#6b1b14,#8a2a20);color:#ffe0dc;border-color:#ff8a7a}}
 .cd.today{outline:2.5px solid var(--mar);outline-offset:-1px;font-weight:800}
 .cd.sel{box-shadow:0 0 0 2.5px var(--gold) inset}
 @media(prefers-color-scheme:dark){.cd.hol{background:linear-gradient(135deg,#5a4309,#7a5a0c);color:#ffe29a;border-color:#a67c00}.cd.sun{color:#ff8a7a}}
@@ -2592,7 +2595,7 @@ addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true
 
   /* ---- holiday/event lookup built from the portal data (D.holidays, D.events) ---- */
   function maps(){
-    const H={},O={},V={};
+    const H={},O={},V={},X={};
     const add=(map,k,name)=>{(map[k]=map[k]||[]).push(name)};
     (typeof D!=="undefined"&&D.holidays||[]).forEach(h=>{
       if(!h.date)return;
@@ -2600,11 +2603,16 @@ addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true
       for(let d=parse(h.date),e=parse(end),n=0;d<=e&&n<60;d=new Date(d.getTime()+864e5),n++) add(h.obs?O:H,toIso(d),h.name);
     });
     (typeof D!=="undefined"&&D.events||[]).forEach(e=>{if(e.date)add(V,e.date,e.title||e.name||"Event")});
-    return{H,O,V};
+    /* Class X Test Exam (MP programme) - shown to every visitor */
+    ((typeof D!=="undefined"&&(D.mpTest||{}).rows)||[]).forEach(r=>{
+      if(!r.date)return;
+      add(X,r.date,"Class X Test Exam: "+(r.subject||"")+(r.time?" ("+String(r.time).replace(/\s*([–-])\s*/g,"$1")+")":""));
+    });
+    return{H,O,V,X};
   }
 
   function renderCal(){
-    const{H,O,V}=maps();
+    const{H,O,V,X}=maps();
     $("calTitle").textContent=BNm[vm]+" "+BNd(vy);
     const first=new Date(vy,vm,1).getDay(),dim=new Date(vy,vm+1,0).getDate(),prevDim=new Date(vy,vm,0).getDate();
     let h="";const t=todayIso();
@@ -2618,15 +2626,15 @@ addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true
       const cls=["cd"];
       if(out)cls.push("out");if(dow===0)cls.push("sun");
       if(H[k])cls.push("hol");else if(O[k])cls.push("obs");
-      if(V[k])cls.push("ev");if(k===t)cls.push("today");if(k===sel)cls.push("sel");
-      const tip=[].concat(H[k]||[],O[k]||[],V[k]||[]).join(" · ");
+      if(V[k])cls.push("ev");if(X[k])cls.push("exm");if(k===t)cls.push("today");if(k===sel)cls.push("sel");
+      const tip=[].concat(H[k]||[],O[k]||[],V[k]||[],X[k]||[]).join(" · ");
       h+=`<button type="button" class="${cls.join(" ")}" data-d="${k}"${tip?` title="${E(tip)}"`:""}>${d}</button>`;
       if(i===34&&first+dim<=35)break;
     }
     $("calGrid").innerHTML=h;
     $("calGrid").querySelectorAll(".cd").forEach(b=>b.onclick=()=>{sel=b.dataset.d;const p=parse(sel);if(p.getUTCMonth()!==vm||p.getUTCFullYear()!==vy){vm=p.getUTCMonth();vy=p.getUTCFullYear()}renderCal()});
     // selected day info
-    const items=[].concat((H[sel]||[]).map(n=>"🏖️ ছুটি: "+n),(O[sel]||[]).map(n=>"👁️ "+n+" (Observation – স্কুল খোলা)"),(V[sel]||[]).map(n=>"⭐ "+n));
+    const items=[].concat((H[sel]||[]).map(n=>"🏖️ ছুটি: "+n),(O[sel]||[]).map(n=>"👁️ "+n+" (Observation – স্কুল খোলা)"),(V[sel]||[]).map(n=>"⭐ "+n),(X[sel]||[]).map(n=>"📝 "+n));
     const dow=parse(sel).getUTCDay();
     $("calInfo").innerHTML=`<b>${E(fmtD(sel))}</b>`+(items.length?items.map(E).join("<br>"):(dow===0?"রবিবার – সাপ্তাহিক ছুটি":"কার্যদিবস / Working day"));
     // month holiday list
@@ -2639,7 +2647,9 @@ addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true
       }
     });
     rows.sort((a,b)=>a[0].localeCompare(b[0]));
-    $("calMonthList").innerHTML=rows.length?`<b style="font-size:12.5px;color:var(--mar)">এই মাসের ছুটি / Holidays this month</b>`+rows.map(r=>`<div><span>${E(r[1])}</span><span>${E(r[2])}</span></div>`).join(""):`<span class="meta">এই মাসে কোনো ছুটি তালিকাভুক্ত নেই।</span>`;
+    const exr=Object.keys(X).filter(k=>k.slice(0,7)===pre.slice(0,7)).sort();
+    const exHtml=exr.length?`<b style="font-size:12.5px;color:#b3261e;display:block;margin-top:8px">📝 Class X Test Exam এই মাসে / This month</b>`+exr.map(k=>`<div><span>${E(X[k].map(n=>n.replace("Class X Test Exam: ","")).join(", "))}</span><span>${E(fmtShort(k))}</span></div>`).join(""):"";
+    $("calMonthList").innerHTML=exHtml+(rows.length?`<b style="font-size:12.5px;color:var(--mar)">এই মাসের ছুটি / Holidays this month</b>`+rows.map(r=>`<div><span>${E(r[1])}</span><span>${E(r[2])}</span></div>`).join(""):(exr.length?"":`<span class="meta">এই মাসে কোনো ছুটি তালিকাভুক্ত নেই।</span>`));
   }
   const fmtShort=s=>parse(s).toLocaleDateString("en-GB",{day:"2-digit",month:"short",timeZone:"UTC"});
   $("calPrev").onclick=()=>{vm--;if(vm<0){vm=11;vy--}renderCal()};
