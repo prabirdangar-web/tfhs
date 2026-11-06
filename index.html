@@ -624,6 +624,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
         <button role="tab" data-p="gallery" aria-selected="false" style="--c:var(--c-gallery)">🖼️ <span>গ্যালারি</span><i class="cnt" id="cnt-gallery"></i></button>
         <button role="tab" data-p="staff" aria-selected="false" style="--c:var(--c-staff)">👥 <span>শিক্ষক-শিক্ষাকর্মী</span><i class="cnt" id="cnt-staff"></i></button>
         <button role="tab" data-p="mptest" aria-selected="false" style="--c:var(--c-mp)">📅 <span>MP টেস্ট প্রোগ্রাম</span><i class="cnt" id="cnt-mptest"></i></button>
+        <button role="tab" data-p="routine" aria-selected="false" style="--c:var(--c-routine)">🗓️ <span>অস্থায়ী রুটিন</span><i class="cnt" id="cnt-routine"></i></button>
       </div>
 
       <section class="pane" id="p-notices" role="tabpanel" style="--c:var(--c-notice)">
@@ -650,6 +651,10 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 
       <section class="pane" id="p-mptest" role="tabpanel" style="--c:var(--c-mp)" hidden>
         <div id="mpBox"></div>
+      </section>
+
+      <section class="pane" id="p-routine" role="tabpanel" style="--c:var(--c-routine)" hidden>
+        <div class="list" id="routineBox" style="--c:var(--c-routine)"></div>
       </section>
 
       <div class="corners" id="corners">
@@ -924,6 +929,16 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <div id="hList"></div>
     </fieldset>
 
+    <fieldset><legend>🗓️ Provisional Routine – Prepare → Share to AHM → Publish</legend>
+      <p class="meta" style="margin-top:0">① Prepare the routine in the routine tool &nbsp;→&nbsp; ② Share the link with the AHM for checking &nbsp;→&nbsp; ③ Publish. Only <b>Published</b> routines appear on the public site (🗓️ tab), as a simple list.</p>
+      <p><a class="btn" id="rtTool" href="https://prabirdangar-web.github.io/provisional_routine/" target="_blank" rel="noopener">🛠 Open Provisional Routine tool</a></p>
+      <div class="row"><label>Routine title<input id="rtTitle" placeholder="e.g. Provisional Class Routine – Session 2027"></label><label>Effective from<input id="rtFrom" type="date"></label></div>
+      <div class="row"><label>Link (routine page)<input id="rtLink" placeholder="https://prabirdangar-web.github.io/provisional_routine/"></label><label>AHM WhatsApp no. (optional, kept on this device only)<input id="rtPhone" inputmode="tel" placeholder="10-digit mobile"></label></div>
+      <label>Note for the list (optional)<input id="rtNote" placeholder="e.g. Class V–X · valid until final routine"></label>
+      <p><button class="btn" id="rtAdd" type="button">Add routine (as Prepared)</button> <button class="btn alt" id="rtCancel" type="button" style="display:none">Cancel edit</button></p>
+      <div id="rtList"></div>
+    </fieldset>
+
     <fieldset><legend>🗂 Office desk – admin-only links (salary · PF · pension · I-Tax)</legend>
       <div id="officeBox"></div>
       <p class="meta">Visible here only. Add more below with “Show on” = Admin panel only.</p>
@@ -1071,6 +1086,7 @@ function render(){
     : (remHtml(D.resRem) ? "" : `<div class="empty">কোনো ফলাফল প্রকাশিত হয়নি। / No results published yet.</div>`));
   renderExtra();
   renderMp();
+  renderRoutines();
   renderToday();
   renderCorners();
   renderMorning();
@@ -1090,12 +1106,12 @@ const MENU_PANE = {"#notices-top":"notices", "#gallery":"gallery", "#staff":"sta
 document.querySelectorAll("nav.menu a").forEach(a => { const n = MENU_PANE[a.getAttribute("href")];
   if (n) a.onclick = e => { e.preventDefault(); showPane(n, true); }; });
 function paneCounts(){
-  const c = {notices:(D.notices||[]).length, results:(D.results||[]).length, gallery:(D.gallery||[]).length, staff:(D.staff||[]).length, mptest:((D.mpTest||{}).rows||[]).length || ((D.mpTest||{}).poster ? 1 : 0)};
+  const c = {routine:(D.routines||[]).filter(x => x.status === "published").length, notices:(D.notices||[]).length, results:(D.results||[]).length, gallery:(D.gallery||[]).length, staff:(D.staff||[]).length, mptest:((D.mpTest||{}).rows||[]).length || ((D.mpTest||{}).poster ? 1 : 0)};
   for (const k in c) { const el = $("cnt-" + k); if (el) el.textContent = c[k] || ""; }
   const nn = $("cnt-notices"); if (nn) nn.classList.toggle("hasnew", (D.notices||[]).some(n => isNew(n.date) || isFresh(n)));
   const rc = $("cnt-results"); if (rc) { const rem = !!(D.resRem && D.resRem.text); if (rem && !(D.results||[]).length) rc.textContent = "🔔"; rc.classList.toggle("hasnew", rem || (D.results||[]).some(r => isNew(r.date) || isFresh(r)));
   const tg = (id, on) => { const el = $("cnt-" + id); if (el) el.classList.toggle("hasnew", !!on); };
-  tg("gallery", (D.gallery||[]).some(isFresh)); tg("staff", (D.staff||[]).some(isFresh)); tg("mptest", ((D.mpTest||{}).rows||[]).some(isFresh) || isFresh({upd:Date.parse((D.mpTest||{}).fetchedAt||"")||0})); }
+  tg("routine", (D.routines||[]).some(x => x.status === "published" && isFresh(x))); tg("gallery", (D.gallery||[]).some(isFresh)); tg("staff", (D.staff||[]).some(isFresh)); tg("mptest", ((D.mpTest||{}).rows||[]).some(isFresh) || isFresh({upd:Date.parse((D.mpTest||{}).fetchedAt||"")||0})); }
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
   filter = b.dataset.f;
@@ -1579,6 +1595,7 @@ function renderRes(){
   $("officeBox").innerHTML = cats.map(c => { const it = adm.filter(x => x.cat === c);
     return it.length ? `<h4>${esc(catLabel(c))}</h4>${it.map(x => `<a class="chip" href="${safeUrl(x.url)}" target="_blank" rel="noopener" title="${esc(x.desc||"")}">${esc(x.title)}</a>`).join("")}` : ""; }).join("")
     || `<p class="meta">No admin-only links.</p>`;
+  if (!adm.some(x => /provisional_routine/.test(x.url||""))) $("officeBox").insertAdjacentHTML("afterbegin", `<h4>🗓️ Routine</h4><a class="chip" href="${PR_URL}" target="_blank" rel="noopener" title="Prepare the provisional routine, share with AHM, then publish">Provisional Routine tool</a>`);
 }
 $("addX").onclick = () => { const t=$("xTitle").value.trim(), u=$("xUrl").value.trim();
   if(!t||!/^https?:\/\//i.test(u)) return toast("Title and a full https link are required");
@@ -2564,6 +2581,61 @@ document.addEventListener("click", e => { const im = e.target.closest && e.targe
 $("lb").addEventListener("click", () => { $("lb").hidden = true; });
 addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true; });
 
+
+/* ===== Provisional Routine: Prepare -> Share to AHM -> Publish (list shown on public site once Published) ===== */
+const PR_URL = "https://prabirdangar-web.github.io/provisional_routine/";
+const PR_ST = {draft:["① Prepared","#586274"], shared:["② With AHM","#b45309"], published:["③ Published","#1d6b4a"]};
+let RT_EDIT = null;
+const rtAll = () => D.routines || [];
+const rtLs = (k, v) => { try { if (v === undefined) return localStorage.getItem(k) || ""; localStorage.setItem(k, v); } catch(e) { return ""; } };
+const rtMsg = x => `Respected AHM Sir/Madam,\n\nThe provisional routine "${x.title}"${x.from ? " (effective from " + fmt(x.from) + ")" : ""} has been prepared. Please check it and let me know if any change is needed:\n${x.link || PR_URL}\n\nAfter your approval it will be published on the school portal.\n\n– Headmaster, Taldangra Fulmati High School (H.S.)`;
+function rtPatch(id, p){ D.routines = rtAll().map(x => x.id === id ? {...x, ...p, upd: Date.now()} : x); save(); }
+function renderRoutines(){
+  const pub = rtAll().filter(x => x.status === "published").sort((a,b) => (b.pubAt||0) - (a.pubAt||0));
+  const pb = $("routineBox");
+  if (pb) pb.innerHTML = pub.length ? pub.map(x => `<div class="item"><div><b>${esc(x.title)}</b>
+      <span class="meta">${isFresh(x)?NEWT:""}${x.from?"কার্যকর / From: " + fmt(x.from) + " · ":""}প্রকাশিত / Published: ${fmt(new Date(x.pubAt||Date.now()).toISOString().slice(0,10))}</span>
+      ${x.note?`<div class="nbody">${esc(x.note)}</div>`:""}</div>
+      ${safeUrl(x.link)?`<div class="acts"><a class="btn sm" href="${safeUrl(x.link)}" target="_blank" rel="noopener">রুটিন দেখুন / View</a></div>`:""}</div>`).join("")
+    : `<div class="empty">অস্থায়ী রুটিন শীঘ্রই প্রকাশিত হবে। / Provisional routine will be published soon.</div>`;
+  const al = $("rtList"); if (!al) return;
+  if ($("rtPhone") && document.activeElement !== $("rtPhone")) $("rtPhone").value = rtLs("tfhs_ahm_phone");
+  if ($("rtLink") && !$("rtLink").value && !RT_EDIT) $("rtLink").value = PR_URL;
+  al.innerHTML = rtAll().slice().reverse().map(x => { const s = PR_ST[x.status] || PR_ST.draft, st = x.status || "draft", L = safeUrl(x.link) || PR_URL;
+    return `<div class="item"><div><b>${esc(x.title)}</b>
+      <span class="meta"><span class="tag" style="background:${s[1]};color:#fff">${s[0]}</span>${x.from?"From " + fmt(x.from) + " · ":""}${x.sharedAt?"Shared " + fmt(new Date(x.sharedAt).toISOString().slice(0,10)) + " · ":""}${x.pubAt?"Published " + fmt(new Date(x.pubAt).toISOString().slice(0,10)):""}</span>
+      ${x.note?`<div class="meta">${esc(x.note)}</div>`:""}</div>
+      <div class="acts"><a class="btn alt sm" href="${L}" target="_blank" rel="noopener">Open</a>
+      ${st !== "published" ? `<button class="btn alt sm" data-rt="share" data-id="${esc(x.id)}">📤 Share to AHM</button><button class="btn alt sm" data-rt="copy" data-id="${esc(x.id)}">Copy message</button>` : ""}
+      ${st === "draft" ? `<button class="btn alt sm" data-rt="shared" data-id="${esc(x.id)}">Mark shared</button>` : ""}
+      ${st === "shared" ? `<button class="btn sm" data-rt="pub" data-id="${esc(x.id)}">✅ Publish (AHM approved)</button><button class="btn alt sm" data-rt="draft" data-id="${esc(x.id)}">↩ Back to Prepared</button>` : ""}
+      ${st === "published" ? `<button class="btn alt sm" data-rt="unpub" data-id="${esc(x.id)}">Unpublish</button>` : ""}
+      <button class="btn alt sm" data-rt="edit" data-id="${esc(x.id)}">Edit</button><button class="btn alt sm" data-rt="del" data-id="${esc(x.id)}">Delete</button></div></div>`; }).join("")
+    || `<p class="meta">No routine yet. Prepare it in the tool, then add it here.</p>`;
+}
+function rtClear(){ RT_EDIT = null; ["rtTitle","rtFrom","rtNote"].forEach(i => $(i).value = ""); $("rtLink").value = PR_URL; $("rtAdd").textContent = "Add routine (as Prepared)"; $("rtCancel").style.display = "none"; }
+$("rtAdd").onclick = () => { const t = $("rtTitle").value.trim(), l = $("rtLink").value.trim() || PR_URL;
+  if (!t) return toast("Routine title is required");
+  if (!/^https?:\/\//i.test(l)) return toast("Link must start with https://");
+  const o = {title:t, from:$("rtFrom").value, note:$("rtNote").value.trim(), link:l};
+  if (RT_EDIT) D.routines = rtAll().map(x => x.id === RT_EDIT ? {...x, ...o, upd: Date.now()} : x);
+  else D.routines = [...rtAll(), {id:uid(), ...o, status:"draft", upd: Date.now()}];
+  rtClear(); save(); };
+$("rtCancel").onclick = rtClear;
+$("rtPhone").onchange = () => rtLs("tfhs_ahm_phone", $("rtPhone").value.replace(/\D/g, "").slice(-10));
+$("rtList").onclick = e => { const b = e.target.closest("[data-rt]"); if (!b) return; const id = b.dataset.id, x = rtAll().find(r => r.id === id); if (!x) return;
+  switch (b.dataset.rt) {
+    case "share": { const ph = rtLs("tfhs_ahm_phone"); window.open("https://wa.me/" + (ph ? "91" + ph : "") + "?text=" + encodeURIComponent(rtMsg(x)), "_blank", "noopener");
+      if (x.status !== "shared") rtPatch(id, {status:"shared", sharedAt:Date.now()}); break; }
+    case "copy": (navigator.clipboard ? navigator.clipboard.writeText(rtMsg(x)).then(() => toast("Message copied"), () => toast("Copy failed")) : toast("Copy not supported")); break;
+    case "shared": rtPatch(id, {status:"shared", sharedAt:Date.now()}); break;
+    case "pub": if (confirm("Publish this routine on the public site? (Confirm that the AHM has approved it)")) rtPatch(id, {status:"published", pubAt:Date.now()}); break;
+    case "unpub": if (confirm("Remove from the public site?")) rtPatch(id, {status:"shared", pubAt:null}); break;
+    case "draft": rtPatch(id, {status:"draft", sharedAt:null}); break;
+    case "edit": RT_EDIT = id; $("rtTitle").value = x.title||""; $("rtFrom").value = x.from||""; $("rtNote").value = x.note||""; $("rtLink").value = x.link||PR_URL;
+      $("rtAdd").textContent = "Save changes"; $("rtCancel").style.display = ""; $("rtTitle").scrollIntoView({block:"center"}); $("rtTitle").focus(); break;
+    case "del": if (confirm("Delete this routine?")) { D.routines = rtAll().filter(r => r.id !== id); save(); } break;
+  } };
 </script>
 <script>
 (function(){
