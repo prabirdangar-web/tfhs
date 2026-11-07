@@ -994,7 +994,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <div id="rgPick"></div>
       <div class="row"><label>Title (shown to the public)<input id="rgTitle" placeholder="e.g. Regular Class Routine – Session 2027"></label><label>Note (optional)<input id="rgNote" placeholder="e.g. Effective from 1 January 2027"></label></div>
       <p class="meta" id="rgPrev"></p>
-      <p><button class="btn" id="rgPub" type="button">✅ Publish / Update regular routine</button> <button class="btn alt" id="rgUnpub" type="button">Unpublish</button></p>
+      <p><button class="btn" id="rgPub" type="button">✅ Publish / Update regular routine</button> <button class="btn alt" id="rgUnpub" type="button">Unpublish</button> <button class="btn" id="rgUnlock" type="button">🔓 Unlock to update / unpublish</button> <button class="btn alt" id="rgLock" type="button">🔒 Lock again</button></p>
       <div id="rgState" class="meta"></div>
     </fieldset>
 
@@ -2773,8 +2773,12 @@ function renderRegular(){
   function setCand(c, label){ CAND = c; g("rgPrev").textContent = c ? `Ready: ${c.classes.length} classes · ${c.filled} periods filled${label ? " · " + label : ""}` : ""; }
   function paint(){
     const R = D.regRoutine;
-    g("rgState").innerHTML = R ? `<b>Currently published:</b> ${esc(R.title||"")} · ${R.classes.length} classes · ${fmt(new Date(R.pubAt||Date.now()).toISOString().slice(0,10))}${R.upd ? " (updated " + fmt(new Date(R.upd).toISOString().slice(0,10)) + ")" : ""}` : "Nothing published yet.";
-    g("rgUnpub").disabled = !R; g("rgPub").textContent = R ? "✅ Update published regular routine" : "✅ Publish regular routine";
+    g("rgState").innerHTML = R ? `<b>Currently published${R.locked !== false ? " 🔒 Locked" : " 🔓 Unlocked"}:</b> ${esc(R.title||"")} · ${R.classes.length} classes · ${fmt(new Date(R.pubAt||Date.now()).toISOString().slice(0,10))}${R.upd ? " (updated " + fmt(new Date(R.upd).toISOString().slice(0,10)) + ")" : ""}` : "Nothing published yet.";
+    const lk = !!R && R.locked !== false;
+    g("rgUnpub").disabled = !R || lk; g("rgPub").disabled = lk; ["rgLoad","rgFile","rgTitle","rgNote"].forEach(i => g(i).disabled = lk);
+    g("rgUnlock").style.display = lk ? "" : "none"; g("rgLock").style.display = (R && !lk) ? "" : "none";
+    g("rgState").dataset.lk = lk ? 1 : "";
+    g("rgPub").textContent = R ? "✅ Update published regular routine" : "✅ Publish regular routine";
     if (R && !g("rgTitle").dataset.f) { g("rgTitle").value = R.title || ""; g("rgNote").value = R.note || ""; g("rgTitle").dataset.f = 1; }
   }
   setInterval(paint, 1500);
@@ -2796,11 +2800,13 @@ function renderRegular(){
     if (!CAND && !old) return toast("Pick a submitted routine or load the file first");
     if (!title) return toast("Title is required");
     const base = CAND || old, now = Date.now();
-    const R = {title, note: g("rgNote").value.trim(), classes: base.classes, g: base.g, session: base.session || "", ahm: base.ahm || "", pubAt: (old && old.pubAt) || now, upd: now};
+    const R = {title, note: g("rgNote").value.trim(), classes: base.classes, g: base.g, session: base.session || "", ahm: base.ahm || "", pubAt: (old && old.pubAt) || now, upd: now, locked: true};
     if (tooBig(JSON.stringify(R).length)) return toast("Storage full – delete old items first");
     if (!confirm(old ? "Update the published regular routine? Everyone will see the new version at once." : "Publish the regular routine on the public site?")) return;
     D.regRoutine = R; CAND = null; g("rgPrev").textContent = ""; g("rgFile").value = ""; save(); };
-  g("rgUnpub").onclick = () => { if (!D.regRoutine || !confirm("Remove the regular routine from the public site?")) return; D.regRoutine = null; g("rgTitle").value = g("rgNote").value = ""; delete g("rgTitle").dataset.f; save(); };
+  g("rgUnlock").onclick = () => { if (!D.regRoutine || !confirm("The permanent routine is live and locked. Unlock it so you can update or unpublish? (The public still sees the current version until you press Update.)")) return; D.regRoutine = {...D.regRoutine, locked:false}; save(); };
+  g("rgLock").onclick = () => { if (!D.regRoutine) return; D.regRoutine = {...D.regRoutine, locked:true}; save(); };
+  g("rgUnpub").onclick = () => { if (!D.regRoutine || D.regRoutine.locked !== false || !confirm("Remove the regular routine from the public site?")) return; D.regRoutine = null; g("rgTitle").value = g("rgNote").value = ""; delete g("rgTitle").dataset.f; save(); };
   paint();
 })();
 
