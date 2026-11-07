@@ -34,6 +34,8 @@
 <meta property="og:title" content="Taldangra Fulmati High School (H.S.) – তালডাংরা ফুলমতি উচ্চ বিদ্যালয়">
 <meta property="og:description" content="Official notice board and portal – Taldangra, Khatra, Bankura (Estd. 1956)">
 <meta property="og:url" content="https://tfhs-portal.web.app/">
+<meta property="og:locale" content="bn_IN">
+<meta property="og:image:alt" content="তালডাংরা ফুলমতি উচ্চ বিদ্যালয়ের প্রবেশদ্বার / Taldangra Fulmati High School main gate">
 <meta property="og:image" content="https://tfhs-portal.web.app/images/school-gate.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">
@@ -640,18 +642,49 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 .fbm-box .box.fb{border:0;background:transparent;padding:0}
 .fbm-x{position:absolute;top:8px;right:8px;width:30px;height:30px;border:0;border-radius:50%;background:var(--bg);color:var(--ink);font-size:15px;cursor:pointer}
 
+
+/* ===== Professional portal look: one navigation (tab strip), utility links bar, large school name ===== */
+.topbar{background:#071a45;color:#cfdaf5;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:2px 12px;padding:4px 14px;letter-spacing:.2px}
+header{background:linear-gradient(180deg,#0a2a6e 0%,#123c94 100%);padding:16px 14px 14px;border-bottom:4px solid var(--gold);text-align:left}
+header .hd-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:16px}
+header .hd-logo{width:clamp(56px,12vw,92px);height:auto;aspect-ratio:1;border-radius:50%;background:#fff;padding:4px;box-shadow:0 0 0 3px var(--gold),0 3px 10px rgba(0,0,0,.4);flex:0 0 auto;object-fit:contain}
+header .hd-t{text-align:center;min-width:0}
+header .hd-t h1{margin:0;font:800 clamp(22px,5.4vw,42px)/1.25 "Noto Serif Bengali",serif;text-shadow:0 2px 4px rgba(0,0,0,.35)}
+header .hd-en{margin:4px 0 0;font:700 clamp(14px,3.5vw,24px)/1.3 system-ui,"Segoe UI",Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#ffd777}
+header .hd-t p{margin:8px auto 0;display:inline-block;font-size:clamp(12px,2.8vw,14.5px);opacity:1;color:#e6edff;border-top:1px solid rgba(255,255,255,.35);padding-top:6px}
+@media(max-width:520px){header .hd-in{flex-direction:column;gap:8px}}
+nav.menu{position:static;background:var(--card);box-shadow:none;border-bottom:1px solid var(--line);justify-content:center;padding:2px 6px}
+nav.menu a{color:var(--mar);font-size:13px;font-weight:700;padding:8px 12px;border-right:0;border-radius:0}
+nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color:var(--ink)}
+.ptabs{position:sticky;top:0;z-index:30;gap:3px;padding:6px 6px 0;border-bottom:4px solid var(--gold);box-shadow:0 3px 8px rgba(0,0,0,.18);scrollbar-width:thin}
+.ptabs button{font-size:15px;font-weight:700;padding:10px 16px;background:rgba(255,255,255,.14)}
+.ptabs button[aria-selected=true]{background:var(--c);box-shadow:inset 0 4px 0 var(--gold)}
+@media(max-width:520px){.ptabs button{font-size:14px;padding:9px 12px}}
+#shareBox{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:12px}
+#shareBox .sb{background:var(--card);color:var(--ink);width:min(420px,100%);border-top:5px solid var(--gold);border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.5);padding:14px}
+#shareBox h3{margin:0 0 4px;font-size:17px;color:var(--mar)}#shareBox p{margin:0 0 10px;font-size:13px;color:var(--mut)}
+#shareBox .sg{display:grid;gap:8px}
+#shareBox .sg a,#shareBox .sg button{display:block;text-align:center;text-decoration:none;border:0;border-radius:6px;padding:11px;font:700 14.5px inherit;font-family:inherit;color:#fff;cursor:pointer}
+#shareBox .fb{background:#1877f2}#shareBox .wa{background:#1d9c55}#shareBox .cp{background:var(--navy)}#shareBox .xx{background:var(--bg);color:var(--ink)!important;border:1px solid var(--line)!important}
 </style>
 </head>
 <body>
 <div class="strip"></div>
+<div class="topbar"><span>🏫 অফিশিয়াল পোর্টাল / Official School Portal</span><span>তালডাংরা · খাতড়া · বাঁকুড়া · পশ্চিমবঙ্গ</span></div>
 <header>
-  <h1>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)</h1>
-  <p>Taldangra Fulmati High School (H.S.) · Estd. 1956 · Taldangra, Khatra, Bankura</p>
+  <div class="hd-in">
+    <img class="hd-logo" src="icons/icon-192.png" alt="" onerror="this.style.display='none'">
+    <div class="hd-t">
+      <h1>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)</h1>
+      <div class="hd-en">Taldangra Fulmati High School (H.S.)</div>
+      <p>স্থাপিত / Estd. 1956 &nbsp;·&nbsp; Taldangra, Khatra, Bankura, West Bengal</p>
+    </div>
+  </div>
 </header>
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
-  <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
-  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine-types">রুটিন</a><a href="#holidays">ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="#" id="fbLink" title="মতামত ও পরামর্শ / Feedback &amp; Suggestion" aria-label="মতামত ও পরামর্শ / Feedback">✉️ মতামত</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
+  <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a>
+  <a href="#holidays">ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="shareLink" title="Facebook / WhatsApp-এ শেয়ার">📤 শেয়ার</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="#" id="fbLink" title="মতামত ও পরামর্শ / Feedback &amp; Suggestion" aria-label="মতামত ও পরামর্শ / Feedback">✉️ মতামত</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
 <a href="#" id="flashBar" class="flbar" hidden></a>
 
@@ -3538,6 +3571,30 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
   function sync(){ panel.classList.toggle("adm-on",location.hash==="#admin"); ed.classList.toggle("adm-show",ed.style.display!=="none"); }
   new MutationObserver(sync).observe(ed,{attributes:true,attributeFilter:["style"]});
   addEventListener("hashchange",sync); sync();
+})();
+/* ===== Share this portal (Facebook / WhatsApp / copy) ===== */
+(function(){
+  const URL0 = "https://tfhs-portal.web.app/";
+  const TXT = "🏫 তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:) — অফিশিয়াল পোর্টাল\nবিজ্ঞপ্তি, ফলাফল, রুটিন, ছুটি ও গ্যালারি এক জায়গায় দেখুন।\nTaldangra Fulmati High School (H.S.) – Official Portal.";
+  const a = document.getElementById("shareLink"); if (!a) return;
+  const cp = async s => { try { await navigator.clipboard.writeText(s); toast("Copied ✔"); } catch(e) { prompt("Copy:", s); } };
+  a.onclick = e => { e.preventDefault();
+    if (document.getElementById("shareBox")) return;
+    const w = document.createElement("div"); w.id = "shareBox";
+    w.innerHTML = `<div class="sb" role="dialog" aria-label="Share"><h3>📤 পোর্টাল শেয়ার করুন / Share this portal</h3><p>${URL0}</p><div class="sg">
+      <a class="fb" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(URL0)}">Facebook-এ শেয়ার / Share on Facebook</a>
+      <a class="wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(TXT + "\n" + URL0)}">WhatsApp-এ শেয়ার / Share on WhatsApp</a>
+      ${navigator.share ? '<button class="cp" data-s="n" type="button">অন্য অ্যাপে / Other apps…</button>' : ""}
+      <button class="cp" data-s="l" type="button">🔗 লিংক কপি / Copy link</button>
+      <button class="cp" data-s="t" type="button">📝 পোস্টের লেখা কপি / Copy post text</button>
+      <button class="xx" data-s="x" type="button">বন্ধ / Close</button></div></div>`;
+    document.body.appendChild(w);
+    const close = () => { w.remove(); document.removeEventListener("keydown", esc2); }, esc2 = ev => { if (ev.key === "Escape") close(); };
+    document.addEventListener("keydown", esc2);
+    w.onclick = ev => { const b = ev.target.closest("[data-s]"); if (ev.target === w || (b && b.dataset.s === "x")) return close();
+      if (!b) return; if (b.dataset.s === "l") cp(URL0); else if (b.dataset.s === "t") cp(TXT + "\n" + URL0);
+      else if (b.dataset.s === "n") navigator.share({title: document.title, text: TXT, url: URL0}).catch(() => {}); };
+  };
 })();
 </script>
 </body>
