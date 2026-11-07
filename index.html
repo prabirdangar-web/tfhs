@@ -123,6 +123,8 @@ table.rgd td.pn{position:sticky;left:0;z-index:1;width:70px}
 table.rgd td.em{color:var(--mut);opacity:.45}
 table.rgd tr.nowr td{outline:2px solid var(--gold);outline-offset:-2px}
 :root{--tl:86%}@media(prefers-color-scheme:dark){:root{--tl:26%}}
+.rg-box{position:relative}
+.rg-box.uc::after{content:"UNDER CONSTRUCTION";position:absolute;left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center;text-align:center;font:900 clamp(24px,7vw,72px)/1.1 system-ui,sans-serif;letter-spacing:3px;color:rgba(200,0,0,.2);transform:rotate(-18deg);pointer-events:none;z-index:3;text-shadow:0 0 1px rgba(200,0,0,.25)}
 table.rg td.now{outline:3px solid var(--gold);outline-offset:-3px;background:color-mix(in srgb,var(--gold) 28%,var(--card))}
 footer{text-align:center;background:var(--navy);color:#dbe4ff;font-size:12.5px;padding:12px 16px;margin-top:14px;border-top:3px solid var(--gold)}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
@@ -977,6 +979,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <div id="rgPick"></div>
       <div class="row"><label>Title (shown to the public)<input id="rgTitle" placeholder="e.g. Permanent Class Routine – Session 2027"></label><label>Note (optional)<input id="rgNote" placeholder="e.g. Effective from 1 January 2027"></label></div>
       <p class="meta" id="rgPrev"></p>
+      <p style="margin:6px 0"><label style="display:inline-flex;gap:6px;align-items:center;margin:0;color:inherit"><input type="checkbox" id="rgUC" style="width:auto"> Show <b>UNDER CONSTRUCTION</b> watermark on the public routine</label> <button class="btn alt sm" id="rgUCSave" type="button">Save watermark setting</button> <span class="meta">(untick → Save to remove it; tick → Save to bring it back)</span></p>
       <p><button class="btn" id="rgPub" type="button">✅ Publish / Update</button> <button class="btn alt" id="rgUnpub" type="button">Unpublish</button> <button class="btn" id="rgUnlock" type="button">🔓 Unlock</button> <button class="btn alt" id="rgLock" type="button">🔒 Lock again</button></p>
       <div id="rgState" class="meta"></div>
     </fieldset>
@@ -2791,13 +2794,13 @@ function renderRegular(){
     ${R.note ? `<div class="box" style="margin:0 0 8px">${esc(R.note)}</div>` : ""}
     <div class="rg-bar"><span class="rg-m" id="rgModes"><button type="button" data-m="day" aria-pressed="${md === "day"}">📅 দিনভিত্তিক / Day-wise</button> <button type="button" data-m="class" aria-pressed="${md === "class"}">🏫 শ্রেণি / Class-wise</button>${blank ? "" : ` <button type="button" data-m="teacher" aria-pressed="${md === "teacher"}">👤 শিক্ষক / Teacher-wise</button>`}</span>
       ${ctrl}<button type="button" class="btn alt sm" id="rgPrint">🖨 প্রিন্ট / Print</button></div>
-    <div class="rg-wrap">${tbl}</div>`;
+    <div class="rg-box ${D.regUC !== false ? "uc" : ""}"><div class="rg-wrap">${tbl}</div></div>`;
   $("rgModes").querySelectorAll("button").forEach(b => b.onclick = () => { RG_VIEW = {mode:b.dataset.m, sel:""}; renderRegular(); });
   if ($("rgDays")) $("rgDays").querySelectorAll("button").forEach(b => b.onclick = () => { RG_VIEW.sel = +b.dataset.d; renderRegular(); });
   if ($("rgSel")) $("rgSel").onchange = e => { RG_VIEW.sel = e.target.value; renderRegular(); };
   $("rgPrint").onclick = () => { const w = window.open("", "_blank"); if (!w) return toast("Allow pop-ups to print");
     const what = md === "day" ? "Day: " + RG_DAYS[RG_VIEW.sel] : (md === "class" ? "Class " : "Teacher: ") + RG_VIEW.sel;
-    w.document.write(`<!doctype html><meta charset="utf-8"><title>${esc(R.title||"Routine")}</title><style>body{font:14px system-ui,sans-serif;margin:14px}h2,h3{text-align:center;margin:2px 0}table{border-collapse:collapse;width:100%;table-layout:fixed;margin-top:10px}th,td{border:1px solid #888;padding:4px;text-align:center}th{background:#ddd}td.pn{width:80px;font-weight:700}td.pn small{display:block;font-weight:400;font-size:11px}td.brk{background:#f3f3f3;font-weight:700}td.off{background:#eee}td.em{color:#aaa}small.sb{display:block;font-size:10px}table.rgd{font-size:10px}@page{size:A4 landscape;margin:8mm}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style><h2>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ.মা.)</h2><h3>${esc(R.title||"Regular Class Routine")} — ${esc(what)}</h3>${tbl.replace(/ class="now"/g,"").replace(/ class="nowr"/g,"").replace(/var\(--tl\)/g,"85%")}<script>onload=()=>print()<\/script>`);
+    w.document.write(`<!doctype html><meta charset="utf-8"><title>${esc(R.title||"Routine")}</title><style>body{font:14px system-ui,sans-serif;margin:14px}h2,h3{text-align:center;margin:2px 0}table{border-collapse:collapse;width:100%;table-layout:fixed;margin-top:10px}th,td{border:1px solid #888;padding:4px;text-align:center}th{background:#ddd}td.pn{width:80px;font-weight:700}td.pn small{display:block;font-weight:400;font-size:11px}td.brk{background:#f3f3f3;font-weight:700}td.off{background:#eee}td.em{color:#aaa}small.sb{display:block;font-size:10px}table.rgd{font-size:10px}@page{size:A4 landscape;margin:8mm}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}${D.regUC !== false ? "body::after{content:'UNDER CONSTRUCTION';position:fixed;left:0;right:0;top:40%;text-align:center;font:900 70px system-ui;color:rgba(200,0,0,.18);transform:rotate(-18deg);pointer-events:none}" : ""}</style><h2>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ.মা.)</h2><h3>${esc(R.title||"Regular Class Routine")} — ${esc(what)}</h3>${tbl.replace(/ class="now"/g,"").replace(/ class="nowr"/g,"").replace(/var\(--tl\)/g,"85%")}<script>onload=()=>print()<\/script>`);
     w.document.close(); };
 }
 /* ---- admin side: pick a submitted weekly routine (or a downloaded file), publish / update / unpublish ---- */
@@ -2819,6 +2822,7 @@ function renderRegular(){
     g("rgUnpub").disabled = !R || lk; g("rgPub").disabled = lk; ["rgLoad","rgFile","rgTitle","rgNote"].forEach(i => g(i).disabled = lk);
     g("rgUnlock").style.display = lk ? "" : "none"; g("rgLock").style.display = (R && !lk) ? "" : "none";
     g("rgState").dataset.lk = lk ? 1 : "";
+    if (g("rgUC").dataset.dirty !== "1") g("rgUC").checked = D.regUC !== false;
     g("rgPub").textContent = R ? "✅ Update published regular routine" : "✅ Publish regular routine";
     if (R && !g("rgTitle").dataset.f) { g("rgTitle").value = R.title || ""; g("rgNote").value = R.note || ""; g("rgTitle").dataset.f = 1; }
   }
@@ -2858,6 +2862,8 @@ function renderRegular(){
     if (tooBig(JSON.stringify(R).length)) return toast("Storage full – delete old items first");
     if (!confirm(old ? "Update the published regular routine? Everyone will see the new version at once." : "Publish the regular routine on the public site?")) return;
     D.regRoutine = R; CAND = null; g("rgPrev").textContent = ""; g("rgFile").value = ""; save(); };
+  g("rgUC").onchange = () => { g("rgUC").dataset.dirty = "1"; };
+  g("rgUCSave").onclick = () => { D.regUC = g("rgUC").checked; g("rgUC").dataset.dirty = ""; save(); };
   g("rgUnlock").onclick = () => { if (!D.regRoutine || !confirm("The permanent routine is live and locked. Unlock it so you can update or unpublish? (The public still sees the current version until you press Update.)")) return; D.regRoutine = {...D.regRoutine, locked:false}; save(); };
   g("rgLock").onclick = () => { if (!D.regRoutine) return; D.regRoutine = {...D.regRoutine, locked:true}; save(); };
   g("rgUnpub").onclick = () => { if (!D.regRoutine || D.regRoutine.locked !== false || !confirm("Remove the regular routine from the public site?")) return; D.regRoutine = null; g("rgTitle").value = g("rgNote").value = ""; delete g("rgTitle").dataset.f; save(); };
