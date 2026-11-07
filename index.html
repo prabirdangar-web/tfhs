@@ -2867,6 +2867,8 @@ setInterval(() => { try { rtdWatch(); } catch(e) {} }, 60000);
 function renderRtDay(){
   const pane = $("p-routine"); if (!pane) return;
   rtdWatch();
+  /* the public provisional tab shows only the provisional routine list; the daily block is no longer shown there */
+  { const old = $("rtToday"); if (old) old.remove(); return; }
   let box = $("rtToday"); if (!box) { box = document.createElement("div"); box.id = "rtToday"; pane.insertBefore(box, pane.firstChild); }
   const now = new Date(), wd = now.getDay(), nm = now.getHours()*60 + now.getMinutes(), mmin = x => { const m = /^(\d{1,2}):(\d{2})$/.exec(x); return m ? +m[1]*60 + +m[2] : -1; };
   const dn = now.toLocaleDateString("en-GB", {weekday:"long", day:"2-digit", month:"short", year:"numeric"}), c = rdCur();
