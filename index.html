@@ -2866,11 +2866,11 @@ function renderRegular(){
     const R = {title, note: g("rgNote").value.trim(), classes: base.classes, g: base.g, session: base.session || "", ahm: base.ahm || "", pubAt: (old && old.pubAt) || now, upd: now, locked: true};
     if (tooBig(JSON.stringify(R).length)) return toast("Storage full – delete old items first");
     if (!confirm(old ? "Update the published regular routine? Everyone will see the new version at once." : "Publish the regular routine on the public site?")) return;
-    D.regRoutine = R; CAND = null; g("rgPrev").textContent = ""; g("rgFile").value = ""; save(); };
+    D.regRoutine = R; D.regReopen = null; CAND = null; g("rgPrev").textContent = ""; g("rgFile").value = ""; save(); };
   g("rgUC").onchange = () => { g("rgUC").dataset.dirty = "1"; };
   g("rgUCSave").onclick = () => { D.regUC = g("rgUC").checked; g("rgUC").dataset.dirty = ""; save(); };
-  g("rgUnlock").onclick = () => { if (!D.regRoutine || !confirm("The permanent routine is live and locked. Unlock it so you can update or unpublish? (The public still sees the current version until you press Update.)")) return; D.regRoutine = {...D.regRoutine, locked:false}; save(); };
-  g("rgLock").onclick = () => { if (!D.regRoutine) return; D.regRoutine = {...D.regRoutine, locked:true}; save(); };
+  g("rgUnlock").onclick = () => { if (!D.regRoutine || !confirm("The permanent routine is live and locked. Unlock it? The AHM can then edit and re-submit from the routine tool, and you can update or unpublish. (The public still sees the current version until you press Update.)")) return; D.regRoutine = {...D.regRoutine, locked:false}; D.regReopen = Date.now(); save(); };
+  g("rgLock").onclick = () => { if (!D.regRoutine) return; D.regRoutine = {...D.regRoutine, locked:true}; D.regReopen = null; save(); };
   g("rgUnpub").onclick = () => { if (!D.regRoutine || D.regRoutine.locked !== false || !confirm("Remove the regular routine from the public site?")) return; D.regRoutine = null; g("rgTitle").value = g("rgNote").value = ""; delete g("rgTitle").dataset.f; save(); };
   paint();
 })();
