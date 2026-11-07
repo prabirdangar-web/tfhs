@@ -971,8 +971,6 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <div id="sList"></div>
     </fieldset>
 
-    <h3 class="agrp">🗓 Routines — two types only</h3>
-
     <fieldset class="rtype" id="rgSet" style="border-left:5px solid #0f766e"><legend>📚 ১. স্থায়ী রুটিন / Permanent routine <small class="meta">(publish once)</small></legend>
       <p class="meta" style="margin-top:0">Steps: <b>①</b> In the routine tool choose <b>Regular weekly</b> → Submit &nbsp;<b>②</b> Load it here &nbsp;<b>③</b> Publish. Visitors see it all year in <b>📚 স্থায়ী রুটিন</b>. It stays 🔒 locked; to change, <b>Unlock → load new copy → Update</b>. Nothing goes live without you.</p>
       <p><button class="btn alt" id="rgLoad" type="button">⬇ Load submitted routines</button> <label style="display:inline-flex;gap:6px;align-items:center;margin:0">or file <input id="rgFile" type="file" accept=".json,application/json" style="width:auto"></label></p>
@@ -1010,7 +1008,6 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       </details>
     </fieldset>
 
-    <h3 class="agrp">🏖 Holidays — separate</h3>
     <fieldset><legend>🏖 Holiday list</legend>
       <div class="row"><label>From date<input id="hDate" type="date"></label><label>To date (blank = one day)<input id="hTo" type="date"></label></div>
       <label>Holiday name<input id="hName"></label>
@@ -1020,7 +1017,6 @@ table.tt,table.t{table-layout:auto;max-width:100%}
     </fieldset>
 
 
-    <h3 class="agrp">🕘 School day schedule</h3>
     <fieldset><legend>Daily schedule rows (assembly, bell times) – shown in Routine &amp; Holidays</legend>
       <div class="row"><label>Item<input id="tLabel" placeholder="Morning assembly"></label><label>Time<input id="tTime" placeholder="10:30 AM"></label></div>
       <p><button class="btn" id="addT">Add routine row</button></p>
@@ -3487,7 +3483,10 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
    ["notice","📢","Notices",/Add notice|WhatsApp|MP \(SE\)|আজকের দিনে/i],
    ["result","🎓","Results",/Add result|Gallery/i],
    ["staff","👥","Staff",/Teacher|MDM/i],
-   ["routine","🗓️","Routine",/Provisional|Day-wise|Daily routine|Time table|Morning shift|Holiday|সময়সূচি/i],
+   ["perm","📚","Permanent",/Permanent routine/i],
+   ["prov","🗓️","Provisional",/Provisional routine/i],
+   ["hol","🏖","Holiday",/Holiday list/i],
+   ["sched","🕘","Timetable",/Time table|Morning shift|Daily schedule|সময়সূচি/i],
    ["views","👁","Views",/Optional views/i],
    ["links","🔗","Links",/Office desk|Useful links|Quick links/i],
    ["fb","💬","Feedback",/Feedback/i]
