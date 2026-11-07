@@ -2829,8 +2829,21 @@ function renderRegular(){
       const sn = await db.collection("provRoutine").get();
       const rows = sn.docs.map(d => Object.assign({id:d.id}, d.data())).filter(x => x.mode !== "daily" && Array.isArray(x.classes)).sort((a,b) => ((b.ts && b.ts.seconds) || 0) - ((a.ts && a.ts.seconds) || 0));
       if (!rows.length) { g("rgPick").innerHTML = '<span class="meta">No submitted weekly routine found. Submit one from the tool, or load the downloaded file.</span>'; return; }
-      g("rgPick").innerHTML = rows.map(x => `<div class="item"><div><b>${esc(x.ahm||"AHM")}</b> <span class="meta">· session ${esc(x.session||"")} · filled ${x.filled}/${x.total} · clashes ${x.clashes}${x.ts && x.ts.seconds ? " · " + fmt(new Date(x.ts.seconds*1000).toISOString().slice(0,10)) : ""}</span></div><div class="acts"><button class="btn alt sm" data-rg="${esc(x.id)}" type="button">Use this</button></div></div>`).join("");
-      g("rgPick").onclick = e => { const b = e.target.closest("[data-rg]"); if (!b) return; const x = rows.find(r => r.id === b.dataset.rg); try { setCand(compact(x), "submitted copy"); if (!g("rgTitle").value) g("rgTitle").value = "Permanent Class Routine – Session " + (x.session||""); toast("Loaded – press Publish"); } catch(err) { toast(err.message); } };
+      const draw = () => {
+        if (!rows.length) { g("rgPick").innerHTML = '<span class="meta">No submitted weekly routine left.</span>'; return; }
+        g("rgPick").innerHTML = rows.map(x => `<div class="item"><div><b>${esc(x.ahm||"AHM")}</b> <span class="meta">· session ${esc(x.session||"")} · filled ${x.filled}/${x.total} · clashes ${x.clashes}${x.ts && x.ts.seconds ? " · " + fmt(new Date(x.ts.seconds*1000).toISOString().slice(0,10)) : ""}</span></div><div class="acts"><button class="btn alt sm" data-rg="${esc(x.id)}" type="button">Use this</button><button class="btn alt sm" data-rgdel="${esc(x.id)}" type="button" title="Delete this submitted copy">🗑 Delete</button></div></div>`).join("");
+      };
+      draw();
+      g("rgPick").onclick = async e => {
+        const d = e.target.closest("[data-rgdel]");
+        if (d) { const x = rows.find(r => r.id === d.dataset.rgdel); if (!x) return;
+          if (!confirm("Delete this submitted routine (" + (x.ahm || "AHM") + ", " + x.filled + "/" + x.total + " filled)?\nThe routine already published on the site is not affected.")) return;
+          try { await db.collection("provRoutine").doc(x.id).delete(); rows.splice(rows.indexOf(x), 1); draw(); toast("Deleted"); }
+          catch(err) { toast("Delete failed (" + (err.code || err.message) + ")"); }
+          return; }
+        const b = e.target.closest("[data-rg]"); if (!b) return; const x = rows.find(r => r.id === b.dataset.rg);
+        try { setCand(compact(x), "submitted copy"); if (!g("rgTitle").value) g("rgTitle").value = "Permanent Class Routine – Session " + (x.session||""); toast("Loaded – press Publish"); } catch(err) { toast(err.message); }
+      };
     } catch(err) { g("rgPick").innerHTML = '<span class="meta">Could not read submitted routines (' + esc(err.code||err.message) + '). Use the downloaded file instead.</span>'; }
   };
   g("rgFile").onchange = e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader();
