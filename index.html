@@ -2774,6 +2774,7 @@ function rgDayTable(R, d){
 }
 function renderRegular(){
   const box = $("regBox"); if (!box) return;
+  try { if (window.__rgPaint) window.__rgPaint(); } catch(e) {}
   const blank = !(D.regRoutine && D.regRoutine.classes && D.regRoutine.classes.length);
   const R = blank ? {classes: RG_DEF, g: {}} : D.regRoutine;
   if (blank && RG_VIEW.mode === "teacher") RG_VIEW = {mode:"day", sel:""};
@@ -2820,7 +2821,7 @@ function renderRegular(){
     g("rgPub").textContent = R ? "✅ Update published regular routine" : "✅ Publish regular routine";
     if (R && !g("rgTitle").dataset.f) { g("rgTitle").value = R.title || ""; g("rgNote").value = R.note || ""; g("rgTitle").dataset.f = 1; }
   }
-  setInterval(paint, 1500);
+  window.__rgPaint = paint; setInterval(paint, 1500);
   g("rgLoad").onclick = async () => {
     g("rgPick").innerHTML = '<span class="meta">Loading…</span>';
     try {
@@ -2828,11 +2829,11 @@ function renderRegular(){
       const rows = sn.docs.map(d => Object.assign({id:d.id}, d.data())).filter(x => x.mode !== "daily" && Array.isArray(x.classes)).sort((a,b) => ((b.ts && b.ts.seconds) || 0) - ((a.ts && a.ts.seconds) || 0));
       if (!rows.length) { g("rgPick").innerHTML = '<span class="meta">No submitted weekly routine found. Submit one from the tool, or load the downloaded file.</span>'; return; }
       g("rgPick").innerHTML = rows.map(x => `<div class="item"><div><b>${esc(x.ahm||"AHM")}</b> <span class="meta">· session ${esc(x.session||"")} · filled ${x.filled}/${x.total} · clashes ${x.clashes}${x.ts && x.ts.seconds ? " · " + fmt(new Date(x.ts.seconds*1000).toISOString().slice(0,10)) : ""}</span></div><div class="acts"><button class="btn alt sm" data-rg="${esc(x.id)}" type="button">Use this</button></div></div>`).join("");
-      g("rgPick").onclick = e => { const b = e.target.closest("[data-rg]"); if (!b) return; const x = rows.find(r => r.id === b.dataset.rg); try { setCand(compact(x), "submitted copy"); if (!g("rgTitle").value) g("rgTitle").value = "Regular Class Routine – Session " + (x.session||""); toast("Loaded – press Publish"); } catch(err) { toast(err.message); } };
+      g("rgPick").onclick = e => { const b = e.target.closest("[data-rg]"); if (!b) return; const x = rows.find(r => r.id === b.dataset.rg); try { setCand(compact(x), "submitted copy"); if (!g("rgTitle").value) g("rgTitle").value = "Permanent Class Routine – Session " + (x.session||""); toast("Loaded – press Publish"); } catch(err) { toast(err.message); } };
     } catch(err) { g("rgPick").innerHTML = '<span class="meta">Could not read submitted routines (' + esc(err.code||err.message) + '). Use the downloaded file instead.</span>'; }
   };
   g("rgFile").onchange = e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader();
-    r.onload = () => { try { const c = compact(JSON.parse(r.result)); setCand(c, "file"); if (!g("rgTitle").value) g("rgTitle").value = "Regular Class Routine – Session " + c.session; toast("File loaded – press Publish"); } catch(err) { setCand(null); toast("Not a valid routine file"); } };
+    r.onload = () => { try { const c = compact(JSON.parse(r.result)); setCand(c, "file"); if (!g("rgTitle").value) g("rgTitle").value = "Permanent Class Routine – Session " + c.session; toast("File loaded – press Publish"); } catch(err) { setCand(null); toast("Not a valid routine file"); } };
     r.readAsText(f); };
   g("rgPub").onclick = () => {
     const title = g("rgTitle").value.trim(), old = D.regRoutine;
