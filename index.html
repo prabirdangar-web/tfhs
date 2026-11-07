@@ -660,6 +660,9 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
 .ptabs button{font-size:15px;font-weight:700;padding:10px 16px;background:rgba(255,255,255,.14)}
 .ptabs button[aria-selected=true]{background:var(--c);box-shadow:inset 0 4px 0 var(--gold)}
 @media(max-width:520px){.ptabs button{font-size:14px;padding:9px 12px}}
+#ahmAlert{position:fixed;left:8px;right:8px;bottom:8px;z-index:3000;background:#7a0f1f;color:#fff;border-left:6px solid var(--gold);border-radius:6px;padding:10px 12px;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.45);display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+#ahmAlert .btn{margin:0}
+#admNav button.dot .ic::after{content:"";display:inline-block;width:9px;height:9px;margin-left:3px;border-radius:50%;background:#e11;box-shadow:0 0 0 2px #fff;vertical-align:top}
 #shareBox{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:12px}
 #shareBox .sb{background:var(--card);color:var(--ink);width:min(420px,100%);border-top:5px solid var(--gold);border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.5);padding:14px}
 #shareBox h3{margin:0 0 4px;font-size:17px;color:var(--mar)}#shareBox p{margin:0 0 10px;font-size:13px;color:var(--mut)}
@@ -2939,12 +2942,34 @@ function rtdText(r){
     if (parts.length) out.push((pr[p] ? pr[p].a + "-" + pr[p].b : "P" + (p+1)) + " | " + parts.join("; ")); }
   return out.join("\n");
 }
+function rtdNotify(){
+  try {
+    const ed = $("editor"); if (!ed || ed.style.display === "none") return;          /* admin only */
+    const ms = (RTD && RTD.ts && RTD.ts.seconds) ? RTD.ts.seconds*1000 : 0, K = "rtdSeen_" + ld();
+    let seen = 0; try { seen = +localStorage.getItem(K) || 0; } catch(e) {}
+    const unseen = !!ms && ms > seen, nb = document.querySelector('#admNav button[title="Provisional"]');
+    if (nb) nb.classList.toggle("dot", unseen);
+    let bar = $("ahmAlert");
+    if (!unseen) { if (bar) bar.remove(); return; }
+    if (!bar) { bar = document.createElement("div"); bar.id = "ahmAlert"; document.body.appendChild(bar);
+      bar.onclick = e => { const x = e.target.closest("[data-aa]"); if (!x) return;
+        try { localStorage.setItem(K, bar.dataset.ms); } catch(e2) {}
+        bar.remove(); const n2 = document.querySelector('#admNav button[title="Provisional"]'); if (n2) n2.classList.remove("dot");
+        if (x.dataset.aa === "go") { location.hash = "#admin"; if (n2) n2.click(); const fs = $("rdSet"); if (fs) fs.open = true; } }; }
+    bar.dataset.ms = ms;
+    bar.innerHTML = `📥 <b>AHM submitted today's routine</b> at ${new Date(ms).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}${RTD.by ? " (" + esc(RTD.by) + ")" : ""} · filled ${RTD.filled}/${RTD.total} <button class="btn sm" data-aa="go" type="button">Review</button> <button class="btn alt sm" data-aa="x" type="button">Dismiss</button>`;
+  } catch(e) {}
+}
+setInterval(rtdNotify, 20000);
 function rtdAdmin(){
   const b = $("rtdBox"); if (!b) return;
+  rtdNotify();
   const on = rtAuto(), sw = `<p style="margin:0 0 8px"><button class="btn ${on?"":"alt "}sm" data-rda="1" type="button">${on ? "🔁 Daily routine: AUTO-LIVE ON — press to STOP" : "⏸ Daily routine: STOPPED — press to turn AUTO-LIVE ON"}</button> <span class="meta">${on ? "Whatever the AHM submits goes live on the site at once, every day, until you press STOP." : "Stopped: each daily routine needs your approval below."}</span></p>`;
   if (!RTD) { b.innerHTML = sw + `<p class="meta">📅 ${esc(ld())}: AHM has not submitted today's daily routine yet.</p>`; return; }
   const st = on ? "✔ Live automatically" : rtdStale() ? "⚠ AHM changed it after approval — approve again" : RTD.approved ? "✔ Approved by admin" : "⏳ Waiting for your approval", live = rtdLive();
-  b.innerHTML = sw + `<div class="item"><div><b>📅 AHM daily routine — ${esc(ld())}</b><span class="meta">by ${esc(RTD.ahm||"AHM")}${RTD.by ? " (" + esc(RTD.by) + ")" : ""}${RTD.ts && RTD.ts.seconds ? " · " + new Date(RTD.ts.seconds*1000).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}) : ""} · filled ${RTD.filled}/${RTD.total} · clashes ${RTD.clashes} · absent ${(RTD.absent||[]).length} · ${st}${live?" · <b>LIVE on site</b>":""}</span></div>
+  const mc = rdCur(), mineOn = !!(mc && rdLines(mc.text).length), ahmMs = (RTD.ts && RTD.ts.seconds) ? RTD.ts.seconds*1000 : 0;
+  const ovr = (mineOn && ahmMs > (mc.at || 0)) ? `<div class="box" style="margin:0 0 8px;border-left:4px solid #b3121b">⚠ The AHM submitted at <b>${new Date(ahmMs).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}</b>, but the public is showing <b>your</b> routine. <button class="btn sm" data-rd="useahm" type="button">Show the AHM's routine instead</button></div>` : "";
+  b.innerHTML = sw + ovr + `<div class="item"><div><b>📅 AHM daily routine — ${esc(ld())}</b><span class="meta">by ${esc(RTD.ahm||"AHM")}${RTD.by ? " (" + esc(RTD.by) + ")" : ""}${RTD.ts && RTD.ts.seconds ? " · " + new Date(RTD.ts.seconds*1000).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}) : ""} · filled ${RTD.filled}/${RTD.total} · clashes ${RTD.clashes} · absent ${(RTD.absent||[]).length} · ${st}${live?" · <b>LIVE on site</b>":""}</span></div>
     <div class="acts">${on ? "" : ((RTD.approved && !rtdStale()) ? `<button class="btn alt sm" data-rd="unappr">↩ Withdraw approval</button>` : `<button class="btn sm" data-rd="appr">✅ Approve &amp; publish today</button>`)}
     <button class="btn alt sm" data-rd="mod">✏ Modify (load into Day-wise editor)</button><button class="btn alt sm" data-rd="del">🗑 Delete AHM routine</button></div></div>`;
 }
@@ -2955,6 +2980,7 @@ document.addEventListener("click", async e => { const b = e.target.closest && e.
   try {
     if (b.dataset.rd === "appr") { await ref.update({approved:true, approvedTs:firebase.firestore.FieldValue.serverTimestamp()}); toast("Approved – live on site"); }
     else if (b.dataset.rd === "unappr") { await ref.update({approved:false}); toast("Approval withdrawn"); }
+    else if (b.dataset.rd === "useahm") { const c = rdCur() || {date:ld(), absent:[], absSaved:true}; D.rtDay = {...c, text:"", head:""}; save(); renderRtDay(); rtdAdmin(); toast("Now showing the AHM's routine"); }
     else if (b.dataset.rd === "del") { if (confirm("Delete the AHM's routine for today?")) { await ref.delete(); toast("Deleted"); } }
     else if (b.dataset.rd === "mod") {
       const text = rtdText(RTD), head = "AHM daily routine (admin modified)";
@@ -3004,7 +3030,7 @@ setInterval(() => { try { renderRtDay(); } catch(e) {} }, 60000);
   g("rdAbsSave").onclick = () => { const ab = [...g("rdAbs").querySelectorAll("input:checked")].map(i => i.value).concat(g("rdOther").value.split(",").map(x => x.trim()).filter(Boolean));
     const c = rdCur() || {}; D.rtDay = {date: ld(), absent: ab, absSaved: true, text: c.text || "", head: c.head || ""}; save(); paint(); renderRtDay(); };
   g("rdSave").onclick = () => { const c = rdCur(); if (!c || !c.absSaved) return toast("Save absent staff first");
-    D.rtDay = {...c, text: g("rdText").value.trim(), head: g("rdHead").value.trim()}; save(); renderRtDay(); };
+    D.rtDay = {...c, text: g("rdText").value.trim(), head: g("rdHead").value.trim(), at: Date.now()}; save(); renderRtDay(); try { rtdAdmin(); } catch(e) {} };
   g("rdClear").onclick = () => { if (!confirm("Clear today's absentees and routine?")) return; D.rtDay = null; g("rdAbs").dataset.f = ""; save(); paint(); renderRtDay(); };
   const ed = g("editor"); let done = false;
   new MutationObserver(() => { if (!done && ed.style.display !== "none") { done = true;
