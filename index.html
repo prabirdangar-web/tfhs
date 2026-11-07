@@ -976,6 +976,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <div class="row"><label>Link (routine page)<input id="rtLink" placeholder="https://prabirdangar-web.github.io/provisional_routine/"></label><label>AHM WhatsApp no. (optional, kept on this device only)<input id="rtPhone" inputmode="tel" placeholder="10-digit mobile"></label></div>
       <label>Note for the list (optional)<input id="rtNote" placeholder="e.g. Class V–X · valid until final routine"></label>
       <p><button class="btn" id="rtAdd" type="button">Add routine (as Prepared)</button> <button class="btn alt" id="rtCancel" type="button" style="display:none">Cancel edit</button></p>
+      <div id="rtdBox"></div>
       <div id="rtList"></div>
     </fieldset>
     
@@ -2641,6 +2642,7 @@ function renderRoutines(){
       ${safeUrl(x.link)?`<div class="acts"><a class="btn sm" href="${safeUrl(x.link)}" target="_blank" rel="noopener">রুটিন দেখুন / View</a></div>`:""}</div>`).join("")
     : `<div class="empty">অস্থায়ী রুটিন শীঘ্রই প্রকাশিত হবে। / Provisional routine will be published soon.</div>`;
   const al = $("rtList"); if (!al) return;
+  try { rtdAdmin(); } catch(e) {}
   if ($("rtPhone") && document.activeElement !== $("rtPhone")) $("rtPhone").value = rtLs("tfhs_ahm_phone");
   if ($("rtLink") && !$("rtLink").value && !RT_EDIT) $("rtLink").value = PR_URL;
   al.innerHTML = rtAll().slice().reverse().map(x => { const s = PR_ST[x.status] || PR_ST.draft, st = x.status || "draft", L = safeUrl(x.link) || PR_URL, locked = st === "published" && !x.unlocked;
@@ -2651,6 +2653,7 @@ function renderRoutines(){
       ${st !== "published" ? `<button class="btn alt sm" data-rt="share" data-id="${esc(x.id)}">📤 Share to AHM</button><button class="btn alt sm" data-rt="copy" data-id="${esc(x.id)}">Copy message</button>` : ""}
       ${st === "draft" ? `<button class="btn alt sm" data-rt="shared" data-id="${esc(x.id)}">Mark shared</button>` : ""}
       ${st === "shared" ? `<button class="btn sm" data-rt="pub" data-id="${esc(x.id)}">✅ Publish (AHM approved)</button><button class="btn alt sm" data-rt="draft" data-id="${esc(x.id)}">↩ Back to Prepared</button>` : ""}
+      ${st === "published" ? `<button class="btn ${x.auto?"":"alt "}sm" data-rt="auto" data-id="${esc(x.id)}" title="When ON, the AHM's daily routine goes live on the site automatically every day, with no admin action, until this routine is unpublished">🔁 Daily auto-live: ${x.auto?"ON":"OFF"}</button>` : ""}
       ${locked ? `<button class="btn sm" data-rt="unlock" data-id="${esc(x.id)}">🔓 Unlock to modify / delete</button>` : ""}
       ${st === "published" && !locked ? `<button class="btn alt sm" data-rt="unpub" data-id="${esc(x.id)}">Unpublish</button><button class="btn alt sm" data-rt="lock" data-id="${esc(x.id)}">🔒 Lock again</button>` : ""}
       ${!locked ? `<button class="btn alt sm" data-rt="edit" data-id="${esc(x.id)}">Edit</button><button class="btn alt sm" data-rt="del" data-id="${esc(x.id)}">Delete</button>` : ""}</div></div>`; }).join("")
@@ -2672,10 +2675,11 @@ $("rtList").onclick = e => { const b = e.target.closest("[data-rt]"); if (!b) re
       if (x.status !== "shared") rtPatch(id, {status:"shared", sharedAt:Date.now()}); break; }
     case "copy": (navigator.clipboard ? navigator.clipboard.writeText(rtMsg(x)).then(() => toast("Message copied"), () => toast("Copy failed")) : toast("Copy not supported")); break;
     case "shared": rtPatch(id, {status:"shared", sharedAt:Date.now()}); break;
-    case "pub": if (confirm("Publish this routine on the public site? (Confirm that the AHM has approved it)")) rtPatch(id, {status:"published", pubAt:Date.now()}); break;
+    case "pub": if (confirm("Publish this routine on the public site? (Confirm that the AHM has approved it)")) { const au = confirm("Also let the AHM's DAILY routine go live automatically every day, without any admin action, until you Unpublish?\n\nOK = Auto-live ON   |   Cancel = approve each day yourself"); rtPatch(id, {status:"published", pubAt:Date.now(), auto:au}); } break;
+    case "auto": rtPatch(id, {auto:!x.auto}); toast(!x.auto ? "Daily auto-live ON" : "Daily auto-live OFF"); break;
     case "unlock": if (confirm("This routine is approved by the AHM and live. Unlock it to modify or delete?")) rtPatch(id, {unlocked:true}); break;
     case "lock": rtPatch(id, {unlocked:false}); break;
-    case "unpub": if (confirm("Remove from the public site?")) rtPatch(id, {status:"shared", pubAt:null, unlocked:false}); break;
+    case "unpub": if (confirm("Remove from the public site?")) rtPatch(id, {status:"shared", pubAt:null, unlocked:false, auto:false}); break;
     case "draft": rtPatch(id, {status:"draft", sharedAt:null}); break;
     case "edit": if (x.status === "published" && !x.unlocked) return toast("Locked – press Unlock first"); RT_EDIT = id; $("rtTitle").value = x.title||""; $("rtFrom").value = x.from||""; $("rtNote").value = x.note||""; $("rtLink").value = x.link||PR_URL;
       $("rtAdd").textContent = "Save changes"; $("rtCancel").style.display = ""; $("rtTitle").scrollIntoView({block:"center"}); $("rtTitle").focus(); break;
@@ -2686,17 +2690,70 @@ $("rtList").onclick = e => { const b = e.target.closest("[data-rt]"); if (!b) re
 const ld = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); };
 const rdCur = () => (D.rtDay && D.rtDay.date === ld()) ? D.rtDay : null;
 function rdLines(t){ return String(t||"").split("\n").map(l => l.trim()).filter(Boolean).map(l => { const i = l.indexOf("|"); return i < 0 ? {a:"", b:l} : {a:l.slice(0,i).trim(), b:l.slice(i+1).trim()}; }); }
+/* ---- AHM's daily routine (collection provRoutineDaily, one doc per date) ---- */
+let RTD = null, RTD_DATE = "", RTD_UNSUB = null;
+const rtAuto = () => rtAll().some(x => x.status === "published" && x.auto);
+const rtdLive = () => !!(RTD && (RTD.approved || rtAuto()));
+function rtdWatch(){
+  const d = ld(); if (RTD_DATE === d) return; RTD_DATE = d; if (RTD_UNSUB) RTD_UNSUB(); RTD = null;
+  try { RTD_UNSUB = db.collection("provRoutineDaily").doc(d).onSnapshot(s => { RTD = s.exists ? Object.assign({id:s.id}, s.data()) : null; try { renderRtDay(); rtdAdmin(); } catch(e) {} }, () => { RTD = null; }); } catch(e) {}
+}
+function rtdHtml(r){
+  const di = r.day != null ? +r.day : (new Date().getDay() + 6) % 7, cls = r.classes || [], n = di === 5 ? 4 : 8;
+  const pr = ttRows().filter(x => /পিরিয়ড/.test(x.t)), now = new Date(), nm = now.getHours()*60 + now.getMinutes(), mm = x => { const [h,k] = x.split(":").map(Number); return h*60+k; };
+  const sh = t => { const w = String(t).trim().split(/\s+/); return w.length < 2 ? w[0] : w[0] + " " + w[w.length-1][0] + "."; };
+  let h = `<div style="overflow-x:auto"><table class="t" style="min-width:640px"><tr><th>Period</th>${cls.map(c => `<th>${esc(c)}</th>`).join("")}</tr>`;
+  for (let p = 0; p < n; p++) { const tr = pr[p], on = tr && nm >= mm(tr.a) && nm < mm(tr.b);
+    h += `<tr style="${on?"background:var(--gold);color:#1b1400;font-weight:700":""}"><td>${p+1}${tr?`<br><span class="meta">${t12(tr.a)}–${t12(tr.b)}</span>`:""}</td>`;
+    cls.forEach(c => { const v = ((((r.data||{})[c]||{})[di])||{})[p] || {}; h += `<td style="text-align:center">${v.t ? esc(sh(v.t)) + (v.s ? `<br><span class="meta">${esc(v.s)}</span>` : "") : "—"}</td>`; });
+    h += "</tr>"; }
+  return h + "</table></div>";
+}
+function rtdText(r){
+  const di = r.day != null ? +r.day : (new Date().getDay() + 6) % 7, n = di === 5 ? 4 : 8, pr = ttRows().filter(x => /পিরিয়ড/.test(x.t)), out = [];
+  for (let p = 0; p < n; p++) { const parts = []; (r.classes||[]).forEach(c => { const v = ((((r.data||{})[c]||{})[di])||{})[p]; if (v && v.t) parts.push(c + " – " + (v.s ? v.s + " – " : "") + v.t); });
+    if (parts.length) out.push((pr[p] ? pr[p].a + "-" + pr[p].b : "P" + (p+1)) + " | " + parts.join("; ")); }
+  return out.join("\n");
+}
+function rtdAdmin(){
+  const b = $("rtdBox"); if (!b) return;
+  if (!RTD) { b.innerHTML = `<p class="meta">📅 ${esc(ld())}: AHM has not submitted today's daily routine yet.</p>`; return; }
+  const st = RTD.approved ? "✅ Approved by admin" : (rtAuto() ? "🔁 Auto-live (daily auto ON)" : "⏳ Waiting for your approval"), live = rtdLive();
+  b.innerHTML = `<div class="item"><div><b>📅 AHM daily routine — ${esc(ld())}</b><span class="meta">by ${esc(RTD.ahm||"AHM")} · filled ${RTD.filled}/${RTD.total} · clashes ${RTD.clashes} · absent ${(RTD.absent||[]).length} · ${st}${live?" · <b>LIVE on site</b>":""}</span></div>
+    <div class="acts">${RTD.approved ? `<button class="btn alt sm" data-rd="unappr">⏸ Withdraw approval</button>` : `<button class="btn sm" data-rd="appr">✅ Approve &amp; publish today</button>`}
+    <button class="btn alt sm" data-rd="mod">✏ Modify (load into Day-wise editor)</button><button class="btn alt sm" data-rd="del">🗑 Delete AHM routine</button></div></div>`;
+}
+document.addEventListener("click", async e => { const b = e.target.closest && e.target.closest("[data-rd]"); if (!b || !RTD) return;
+  const ref = db.collection("provRoutineDaily").doc(RTD.id);
+  try {
+    if (b.dataset.rd === "appr") { await ref.update({approved:true}); toast("Approved – live on site"); }
+    else if (b.dataset.rd === "unappr") { await ref.update({approved:false}); toast("Approval withdrawn"); }
+    else if (b.dataset.rd === "del") { if (confirm("Delete the AHM's routine for today?")) { await ref.delete(); toast("Deleted"); } }
+    else if (b.dataset.rd === "mod") {
+      const text = rtdText(RTD), head = "AHM daily routine (admin modified)";
+      D.rtDay = {date:ld(), absent:RTD.absent||[], absSaved:true, text, head}; save();
+      const rt = $("rdText"); if (rt) { rt.value = text; rt.disabled = false; $("rdHead").value = head; $("rdSave").disabled = false;
+        const s = new Set(RTD.absent||[]); $("rdAbs").querySelectorAll("input").forEach(i => i.checked = s.has(i.value)); }
+      toast("Loaded into Day-wise editor – edit the lines, then press Publish today's routine");
+      const f = $("rdSet"); if (f) f.scrollIntoView({block:"start"});
+    }
+  } catch(err) { toast("Failed: " + (err.code || err.message)); }
+});
+setInterval(() => { try { rtdWatch(); } catch(e) {} }, 60000);
 function renderRtDay(){
   const pane = $("p-routine"); if (!pane) return;
+  rtdWatch();
   let box = $("rtToday"); if (!box) { box = document.createElement("div"); box.id = "rtToday"; pane.insertBefore(box, pane.firstChild); }
   const now = new Date(), wd = now.getDay(), nm = now.getHours()*60 + now.getMinutes(), mmin = x => { const m = /^(\d{1,2}):(\d{2})$/.exec(x); return m ? +m[1]*60 + +m[2] : -1; };
   const dn = now.toLocaleDateString("en-GB", {weekday:"long", day:"2-digit", month:"short", year:"numeric"}), c = rdCur();
   let body;
   if (wd === 0) body = `<div class="empty">Sunday – no classes.</div>`;
+  else if ((!c || !rdLines(c.text).length) && rtdLive()) body = rtdHtml(RTD);
   else if (!c || !rdLines(c.text).length) body = `<div class="empty">আজকের রুটিন শীঘ্রই প্রকাশিত হবে। / Today's routine will be published soon.</div>`;
   else body = rdLines(c.text).map(r => { const m = /^(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})$/.exec(r.a), on = m && nm >= mmin(m[1]) && nm < mmin(m[2]);
     return `<div class="item" style="${on?"background:var(--gold);color:#1b1400;font-weight:700":""}"><div>${r.a?`<span class="meta" style="margin-right:8px;${on?"color:inherit":""}">${esc(r.a)}</span>`:""}${esc(r.b)}</div></div>`; }).join("");
-  const abs = (wd !== 0 && c && c.absent && c.absent.length) ? `<div class="box" style="margin:0 0 8px;border-left:4px solid #b3121b">🚫 <b>আজ অনুপস্থিত / Absent today:</b> ${c.absent.map(esc).join(", ")}</div>` : "";
+  const ac = (c && rdLines(c.text).length) ? c : (rtdLive() ? RTD : c);
+  const abs = (wd !== 0 && ac && ac.absent && ac.absent.length) ? `<div class="box" style="margin:0 0 8px;border-left:4px solid #b3121b">🚫 <b>আজ অনুপস্থিত / Absent today:</b> ${ac.absent.map(esc).join(", ")}</div>` : "";
   box.innerHTML = `<h3 style="margin:0 0 6px">📅 ${esc(dn)} ${c && c.head ? `<span class="meta">· ${esc(c.head)}</span>` : ""}</h3>${abs}<div class="list">${body}</div>`;
 }
 setInterval(() => { try { renderRtDay(); } catch(e) {} }, 60000);
