@@ -103,6 +103,20 @@ h2.sec:first-child{margin-top:0}
 @media(prefers-reduced-motion:reduce){.tag.new{animation:none}}
 .ptabs .cnt.hasnew{animation:newflash 1s steps(2,start) infinite;background:#b3121b;color:#fff}
 .empty{color:var(--mut);padding:8px 10px}
+.rg-bar{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin:0 0 8px}
+.rg-bar select{padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit;max-width:100%}
+.rg-bar .rg-m button{border:1px solid #0f766e;background:var(--card);color:#0f766e;border-radius:6px;padding:4px 10px;font:600 13px inherit;font-family:inherit;cursor:pointer}
+.rg-bar .rg-m button[aria-pressed=true]{background:#0f766e;color:#fff}
+.rg-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px}
+table.rg{width:100%;border-collapse:collapse;background:var(--card);font-size:13px;table-layout:fixed;min-width:560px}
+table.rg th,table.rg td{border:1px solid var(--line);padding:4px 5px;text-align:center;vertical-align:middle}
+table.rg th{background:#0f766e;color:#fff;font-size:12.5px}
+table.rg td.pn{background:color-mix(in srgb,#0f766e 10%,var(--card));font-weight:700;width:76px;white-space:nowrap;font-size:12px}
+table.rg td.pn small{display:block;font-weight:500;opacity:.8;font-size:10.5px}
+table.rg td.brk{background:repeating-linear-gradient(45deg,transparent 0 6px,color-mix(in srgb,var(--gold) 16%,transparent) 6px 12px);font-weight:700;font-size:12px}
+table.rg td.off{background:color-mix(in srgb,var(--line) 50%,var(--card))}
+table.rg td small.sb{display:block;font-size:10.5px;opacity:.8}
+table.rg td.now{outline:3px solid var(--gold);outline-offset:-3px;background:color-mix(in srgb,var(--gold) 28%,var(--card))}
 footer{text-align:center;background:var(--navy);color:#dbe4ff;font-size:12.5px;padding:12px 16px;margin-top:14px;border-top:3px solid var(--gold)}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 nav.menu{display:flex;gap:0;flex-wrap:wrap;justify-content:center;background:var(--mar);position:sticky;top:0;z-index:5;box-shadow:0 1px 3px rgba(0,0,0,.25)}
@@ -650,6 +664,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
         <button role="tab" data-p="gallery" aria-selected="false" style="--c:var(--c-gallery)">🖼️ <span>গ্যালারি</span><i class="cnt" id="cnt-gallery"></i></button>
         <button role="tab" data-p="staff" aria-selected="false" style="--c:var(--c-staff)">👥 <span>শিক্ষক-শিক্ষাকর্মী</span><i class="cnt" id="cnt-staff"></i></button>
         <button role="tab" data-p="mptest" aria-selected="false" style="--c:var(--c-mp)">📅 <span>MP টেস্ট প্রোগ্রাম</span><i class="cnt" id="cnt-mptest"></i></button>
+        <button role="tab" data-p="regular" aria-selected="false" style="--c:#0f766e">📚 <span>নিয়মিত রুটিন</span><i class="cnt" id="cnt-regular"></i></button>
         <button role="tab" data-p="routine" aria-selected="false" style="--c:var(--c-routine)">🗓️ <span>অস্থায়ী রুটিন</span><i class="cnt" id="cnt-routine"></i></button>
       </div>
 
@@ -677,6 +692,10 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 
       <section class="pane" id="p-mptest" role="tabpanel" style="--c:var(--c-mp)" hidden>
         <div id="mpBox"></div>
+      </section>
+
+      <section class="pane" id="p-regular" role="tabpanel" style="--c:#0f766e" hidden>
+        <div id="regBox"></div>
       </section>
 
       <section class="pane" id="p-routine" role="tabpanel" style="--c:var(--c-routine)" hidden>
@@ -969,6 +988,16 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <p><button class="btn" id="rdSave" type="button">Publish today's routine</button> <button class="btn alt" id="rdClear" type="button">Clear today</button></p>
     </fieldset>
 
+    <fieldset id="rgSet"><legend>📚 Regular (weekly) routine – publish once, everyone can view</legend>
+      <p class="meta" style="margin-top:0">Prepare it in the routine tool (<b>Regular weekly</b> mode) and <b>Submit</b>. Then pick it below (or load the downloaded file) and press <b>Publish</b>. It shows in the public <b>📚 নিয়মিত রুটিন</b> tab at any time. To change it: edit in the tool (Unlock &amp; Edit → Submit again), pick the new copy here and press <b>Update</b>.</p>
+      <p><button class="btn alt" id="rgLoad" type="button">⬇ Load submitted routines</button> <label style="display:inline-flex;gap:6px;align-items:center;margin:0">or file <input id="rgFile" type="file" accept=".json,application/json" style="width:auto"></label></p>
+      <div id="rgPick"></div>
+      <div class="row"><label>Title (shown to the public)<input id="rgTitle" placeholder="e.g. Regular Class Routine – Session 2027"></label><label>Note (optional)<input id="rgNote" placeholder="e.g. Effective from 1 January 2027"></label></div>
+      <p class="meta" id="rgPrev"></p>
+      <p><button class="btn" id="rgPub" type="button">✅ Publish / Update regular routine</button> <button class="btn alt" id="rgUnpub" type="button">Unpublish</button></p>
+      <div id="rgState" class="meta"></div>
+    </fieldset>
+
     <fieldset><legend>🗓️ Provisional Routine – Prepare → Share to AHM → Publish</legend>
       <p class="meta" style="margin-top:0">① Prepare the routine in the routine tool &nbsp;→&nbsp; ② Share the link with the AHM for checking &nbsp;→&nbsp; ③ Publish. Only <b>Published</b> routines appear on the public site (🗓️ tab), as a simple list.</p>
       <p><a class="btn" id="rtTool" href="https://prabirdangar-web.github.io/provisional_routine/" target="_blank" rel="noopener">🛠 Open Provisional Routine tool</a></p>
@@ -1129,6 +1158,7 @@ function render(){
   renderExtra();
   renderMp();
   renderRoutines();
+  try{ renderRegular(); }catch(e){}
   renderToday();
   renderCorners();
   renderMorning();
@@ -1153,7 +1183,7 @@ function paneCounts(){
   const nn = $("cnt-notices"); if (nn) nn.classList.toggle("hasnew", (D.notices||[]).some(n => isNew(n.date) || isFresh(n)));
   const rc = $("cnt-results"); if (rc) { const rem = !!(D.resRem && D.resRem.text); if (rem && !(D.results||[]).length) rc.textContent = "🔔"; rc.classList.toggle("hasnew", rem || (D.results||[]).some(r => isNew(r.date) || isFresh(r)));
   const tg = (id, on) => { const el = $("cnt-" + id); if (el) el.classList.toggle("hasnew", !!on); };
-  tg("routine", (D.routines||[]).some(x => x.status === "published" && isFresh(x))); tg("gallery", (D.gallery||[]).some(isFresh)); tg("staff", (D.staff||[]).some(isFresh)); tg("mptest", ((D.mpTest||{}).rows||[]).some(isFresh) || isFresh({upd:Date.parse((D.mpTest||{}).fetchedAt||"")||0})); }
+  tg("routine", (D.routines||[]).some(x => x.status === "published" && isFresh(x))); tg("regular", !!(D.regRoutine && isFresh({upd:D.regRoutine.upd}))); tg("gallery", (D.gallery||[]).some(isFresh)); tg("staff", (D.staff||[]).some(isFresh)); tg("mptest", ((D.mpTest||{}).rows||[]).some(isFresh) || isFresh({upd:Date.parse((D.mpTest||{}).fetchedAt||"")||0})); }
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
   filter = b.dataset.f;
@@ -2685,6 +2715,94 @@ $("rtList").onclick = e => { const b = e.target.closest("[data-rt]"); if (!b) re
       $("rtAdd").textContent = "Save changes"; $("rtCancel").style.display = ""; $("rtTitle").scrollIntoView({block:"center"}); $("rtTitle").focus(); break;
     case "del": if (x.status === "published" && !x.unlocked) return toast("Locked – press Unlock first"); if (confirm("Delete this routine?")) { D.routines = rtAll().filter(r => r.id !== id); save(); } break;
   } };
+
+/* ===== Regular (weekly) routine: published once, public view-only, admin can update ===== */
+const RG_DAYS = ["সোম / Mon","মঙ্গল / Tue","বুধ / Wed","বৃহ / Thu","শুক্র / Fri","শনি / Sat"], RG_BNO = ["১ম","২য়","৩য়","৪র্থ","৫ম","৬ষ্ঠ","৭ম","৮ম"];
+const RG_TIMES = [["10:50","11:30"],["11:30","12:10"],["12:10","12:50"],["12:50","13:30"],["14:10","14:45"],["14:45","15:20"],["15:20","15:55"],["15:55","16:30"]];
+const rgNP = d => d === 5 ? 4 : 8, rg12 = hm => { const [a,b] = hm.split(":"); return ((+a % 12) || 12) + ":" + b; };
+let RG_VIEW = {mode:"class", sel:""};
+const rgCell = (R, c, d, p) => { const v = (((R.g||{})[c]||[])[d]||[])[p] || ""; const i = v.indexOf("|"); return i < 0 ? {t:v, s:""} : {t:v.slice(0,i), s:v.slice(i+1)}; };
+const rgTeachers = R => { const m = new Set(); (R.classes||[]).forEach(c => { for (let d = 0; d < 6; d++) for (let p = 0; p < rgNP(d); p++) { const t = rgCell(R,c,d,p).t; if (t) m.add(t); } }); return [...m].sort((a,b) => a.localeCompare(b)); };
+function rgTable(R, mode, sel){
+  const nowD = (new Date().getDay() + 6) % 7, nm = new Date().getHours()*60 + new Date().getMinutes(), mm = x => +x.slice(0,x.indexOf(":"))*60 + +x.slice(x.indexOf(":")+1);
+  let h = `<table class="rg"><tr><th>পিরিয়ড</th>${RG_DAYS.map(d => `<th>${d}</th>`).join("")}</tr>`;
+  for (let p = 0; p < 8; p++) {
+    if (p === 4) h += `<tr><td class="pn">🍛</td><td class="brk" colspan="6">টিফিন / মিড-ডে মিল বিরতি · Tiffin / MDM break</td></tr>`;
+    h += `<tr><td class="pn">${RG_BNO[p]}<small>${rg12(RG_TIMES[p][0])}–${rg12(RG_TIMES[p][1])}</small></td>`;
+    for (let d = 0; d < 6; d++) {
+      if (p >= rgNP(d)) { h += `<td class="off"></td>`; continue; }
+      let a = "", b = "";
+      if (mode === "class") { const v = rgCell(R, sel, d, p); a = v.t; b = v.s; }
+      else { const hit = (R.classes||[]).map(c => ({c, v:rgCell(R,c,d,p)})).filter(x => x.v.t === sel); a = hit.map(x => x.c).join(", "); b = hit.map(x => x.v.s).filter(Boolean).join(", "); }
+      const on = d === nowD && nm >= mm(RG_TIMES[p][0]) && nm < mm(RG_TIMES[p][1]);
+      h += `<td class="${on ? "now" : ""}">${esc(a)}${b ? `<small class="sb">${esc(b)}</small>` : ""}</td>`;
+    }
+    h += "</tr>";
+  }
+  return h + "</table>";
+}
+function renderRegular(){
+  const box = $("regBox"); if (!box) return;
+  const R = D.regRoutine;
+  if (!R || !R.classes || !R.classes.length) { box.innerHTML = `<div class="empty">নিয়মিত রুটিন শীঘ্রই প্রকাশিত হবে। / Regular routine will be published soon.</div>`; return; }
+  const list = RG_VIEW.mode === "class" ? R.classes : rgTeachers(R);
+  if (!list.includes(RG_VIEW.sel)) RG_VIEW.sel = list[0] || "";
+  box.innerHTML = `<h3 style="margin:12px 0 4px">📚 ${esc(R.title || "নিয়মিত রুটিন / Regular routine")}</h3>
+    <p class="meta" style="margin:0 0 8px">${R.session ? "শিক্ষাবর্ষ / Session: " + esc(R.session) + " · " : ""}প্রকাশিত / Published: ${fmt(new Date(R.pubAt || Date.now()).toISOString().slice(0,10))}${R.upd && R.upd - (R.pubAt||0) > 864e5 ? " · হালনাগাদ / Updated: " + fmt(new Date(R.upd).toISOString().slice(0,10)) : ""}</p>
+    ${R.note ? `<div class="box" style="margin:0 0 8px">${esc(R.note)}</div>` : ""}
+    <div class="rg-bar"><span class="rg-m"><button type="button" data-m="class" aria-pressed="${RG_VIEW.mode === "class"}">🏫 শ্রেণি / Class-wise</button> <button type="button" data-m="teacher" aria-pressed="${RG_VIEW.mode === "teacher"}">👤 শিক্ষক / Teacher-wise</button></span>
+      <select id="rgSel" aria-label="Select">${list.map(x => `<option${x === RG_VIEW.sel ? " selected" : ""}>${esc(x)}</option>`).join("")}</select>
+      <button type="button" class="btn alt sm" id="rgPrint">🖨 প্রিন্ট / Print</button></div>
+    <div class="rg-wrap">${rgTable(R, RG_VIEW.mode, RG_VIEW.sel)}</div>`;
+  box.querySelectorAll(".rg-m button").forEach(b => b.onclick = () => { RG_VIEW = {mode:b.dataset.m, sel:""}; renderRegular(); });
+  $("rgSel").onchange = e => { RG_VIEW.sel = e.target.value; renderRegular(); };
+  $("rgPrint").onclick = () => { const w = window.open("", "_blank"); if (!w) return toast("Allow pop-ups to print");
+    w.document.write(`<!doctype html><meta charset="utf-8"><title>${esc(R.title||"Routine")}</title><style>body{font:14px system-ui,sans-serif;margin:14px}h2,h3{text-align:center;margin:2px 0}table{border-collapse:collapse;width:100%;table-layout:fixed;margin-top:10px}th,td{border:1px solid #888;padding:5px;text-align:center}th{background:#ddd}td.pn{width:80px;font-weight:700}td.pn small{display:block;font-weight:400;font-size:11px}td.brk{background:#f3f3f3;font-weight:700}td.off{background:#eee}small.sb{display:block;font-size:11px}@page{size:A4 landscape;margin:10mm}</style><h2>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ.মা.)</h2><h3>${esc(R.title||"Regular Class Routine")} — ${RG_VIEW.mode === "class" ? "Class " : "Teacher: "}${esc(RG_VIEW.sel)}</h3>${rgTable(R, RG_VIEW.mode, RG_VIEW.sel).replace(/ class="now"/g,"")}<script>onload=()=>print()<\/script>`);
+    w.document.close(); };
+}
+/* ---- admin side: pick a submitted weekly routine (or a downloaded file), publish / update / unpublish ---- */
+(function(){
+  const g = id => document.getElementById(id); if (!g("rgPub")) return;
+  let CAND = null;
+  function compact(src){
+    if (!src || !Array.isArray(src.classes) || !src.classes.length || !src.data || typeof src.data !== "object") throw new Error("This is not a routine file");
+    const gr = {}; let filled = 0;
+    src.classes.forEach(c => { gr[c] = []; for (let d = 0; d < 6; d++) { const row = []; for (let p = 0; p < rgNP(d); p++) { const v = (((src.data[c]||{})[d]||{})[p]) || {}; const t = String(v.t||"").trim(), sb = String(v.s||"").trim(); row.push(t ? (sb ? t + "|" + sb : t) : ""); if (t) filled++; } gr[c].push(row); } });
+    return {classes: src.classes.map(String), g: gr, session: String(src.session||""), ahm: String(src.ahm||""), filled};
+  }
+  function setCand(c, label){ CAND = c; g("rgPrev").textContent = c ? `Ready: ${c.classes.length} classes · ${c.filled} periods filled${label ? " · " + label : ""}` : ""; }
+  function paint(){
+    const R = D.regRoutine;
+    g("rgState").innerHTML = R ? `<b>Currently published:</b> ${esc(R.title||"")} · ${R.classes.length} classes · ${fmt(new Date(R.pubAt||Date.now()).toISOString().slice(0,10))}${R.upd ? " (updated " + fmt(new Date(R.upd).toISOString().slice(0,10)) + ")" : ""}` : "Nothing published yet.";
+    g("rgUnpub").disabled = !R; g("rgPub").textContent = R ? "✅ Update published regular routine" : "✅ Publish regular routine";
+    if (R && !g("rgTitle").dataset.f) { g("rgTitle").value = R.title || ""; g("rgNote").value = R.note || ""; g("rgTitle").dataset.f = 1; }
+  }
+  setInterval(paint, 1500);
+  g("rgLoad").onclick = async () => {
+    g("rgPick").innerHTML = '<span class="meta">Loading…</span>';
+    try {
+      const sn = await db.collection("provRoutine").get();
+      const rows = sn.docs.map(d => Object.assign({id:d.id}, d.data())).filter(x => x.mode !== "daily" && Array.isArray(x.classes)).sort((a,b) => ((b.ts && b.ts.seconds) || 0) - ((a.ts && a.ts.seconds) || 0));
+      if (!rows.length) { g("rgPick").innerHTML = '<span class="meta">No submitted weekly routine found. Submit one from the tool, or load the downloaded file.</span>'; return; }
+      g("rgPick").innerHTML = rows.map(x => `<div class="item"><div><b>${esc(x.ahm||"AHM")}</b> <span class="meta">· session ${esc(x.session||"")} · filled ${x.filled}/${x.total} · clashes ${x.clashes}${x.ts && x.ts.seconds ? " · " + fmt(new Date(x.ts.seconds*1000).toISOString().slice(0,10)) : ""}</span></div><div class="acts"><button class="btn alt sm" data-rg="${esc(x.id)}" type="button">Use this</button></div></div>`).join("");
+      g("rgPick").onclick = e => { const b = e.target.closest("[data-rg]"); if (!b) return; const x = rows.find(r => r.id === b.dataset.rg); try { setCand(compact(x), "submitted copy"); if (!g("rgTitle").value) g("rgTitle").value = "Regular Class Routine – Session " + (x.session||""); toast("Loaded – press Publish"); } catch(err) { toast(err.message); } };
+    } catch(err) { g("rgPick").innerHTML = '<span class="meta">Could not read submitted routines (' + esc(err.code||err.message) + '). Use the downloaded file instead.</span>'; }
+  };
+  g("rgFile").onchange = e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader();
+    r.onload = () => { try { const c = compact(JSON.parse(r.result)); setCand(c, "file"); if (!g("rgTitle").value) g("rgTitle").value = "Regular Class Routine – Session " + c.session; toast("File loaded – press Publish"); } catch(err) { setCand(null); toast("Not a valid routine file"); } };
+    r.readAsText(f); };
+  g("rgPub").onclick = () => {
+    const title = g("rgTitle").value.trim(), old = D.regRoutine;
+    if (!CAND && !old) return toast("Pick a submitted routine or load the file first");
+    if (!title) return toast("Title is required");
+    const base = CAND || old, now = Date.now();
+    const R = {title, note: g("rgNote").value.trim(), classes: base.classes, g: base.g, session: base.session || "", ahm: base.ahm || "", pubAt: (old && old.pubAt) || now, upd: now};
+    if (tooBig(JSON.stringify(R).length)) return toast("Storage full – delete old items first");
+    if (!confirm(old ? "Update the published regular routine? Everyone will see the new version at once." : "Publish the regular routine on the public site?")) return;
+    D.regRoutine = R; CAND = null; g("rgPrev").textContent = ""; g("rgFile").value = ""; save(); };
+  g("rgUnpub").onclick = () => { if (!D.regRoutine || !confirm("Remove the regular routine from the public site?")) return; D.regRoutine = null; g("rgTitle").value = g("rgNote").value = ""; delete g("rgTitle").dataset.f; save(); };
+  paint();
+})();
 
 /* ===== Today's routine (AHM): absentees first, then routine; auto-clears at midnight ===== */
 const ld = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); };
