@@ -1723,7 +1723,7 @@ function renderRes(){
   $("officeBox").innerHTML = cats.map(c => { const it = adm.filter(x => x.cat === c);
     return it.length ? `<h4>${esc(catLabel(c))}</h4>${it.map(x => `<a class="chip" href="${safeUrl(x.url)}" target="_blank" rel="noopener" title="${esc(x.desc||"")}">${esc(x.title)}</a>`).join("")}` : ""; }).join("")
     || `<p class="meta">No admin-only links.</p>`;
-  if (!adm.some(x => /provisional_routine/.test(x.url||""))) $("officeBox").insertAdjacentHTML("afterbegin", `<h4>🗓️ Routine</h4><a class="chip" href="${PR_URL}" target="_blank" rel="noopener" title="Prepare the provisional routine, share with AHM, then publish">Provisional Routine tool</a>`);
+  if (!adm.some(x => /provisional_routine|routine\.html/.test(x.url||""))) $("officeBox").insertAdjacentHTML("afterbegin", `<h4>🗓️ Routine</h4><a class="chip" href="${PR_URL}" target="_blank" rel="noopener" title="Prepare the provisional routine, share with AHM, then publish">Provisional Routine tool</a>`);
 }
 $("addX").onclick = () => { const t=$("xTitle").value.trim(), u=$("xUrl").value.trim();
   if(!t||!/^https?:\/\//i.test(u)) return toast("Title and a full https link are required");
@@ -2711,7 +2711,8 @@ addEventListener("keydown", e => { if (e.key === "Escape") $("lb").hidden = true
 
 
 /* ===== Provisional Routine: Prepare -> Share to AHM -> Publish (list shown on public site once Published) ===== */
-const PR_URL = "https://prabirdangar-web.github.io/provisional_routine/";
+/* the AHM routine tool now lives beside this page in the same site: routine.html */
+const PR_URL = new URL("routine.html", location.href).href;
 const PR_ST = {draft:["① Prepared","#586274"], shared:["② With AHM","#b45309"], published:["③ Published","#1d6b4a"]};
 let RT_EDIT = null;
 const rtAll = () => D.routines || [];
@@ -3566,7 +3567,8 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
     try{sessionStorage.setItem("admTab",k)}catch(e){} }
   G.forEach(function(g){ var b=document.createElement("button"); b.type="button"; b.title=g[2]; b.setAttribute("role","tab");
     b.innerHTML='<span class="ic">'+g[1]+'</span><span>'+g[2]+'</span>'; b.onclick=function(){show(g[0])}; nav.appendChild(b); });
-  var vs=document.createElement("button"); vs.type="button"; vs.title="View site"; vs.style.marginTop="auto"; vs.innerHTML='<span class="ic">🌐</span><span>View site</span>'; vs.onclick=function(){location.hash=""; scrollTo(0,0)}; nav.appendChild(vs);
+  var rt=document.createElement("button"); rt.type="button"; rt.title="Open the AHM routine tool"; rt.style.marginTop="auto"; rt.innerHTML='<span class="ic">🗓️</span><span>AHM Routine Tool</span>'; rt.onclick=function(){window.open(typeof PR_URL!=="undefined"?PR_URL:"routine.html","_blank","noopener")}; nav.appendChild(rt);
+  var vs=document.createElement("button"); vs.type="button"; vs.title="View site"; vs.innerHTML='<span class="ic">🌐</span><span>View site</span>'; vs.onclick=function(){location.hash=""; scrollTo(0,0)}; nav.appendChild(vs);
   ed.appendChild(nav); ed.appendChild(body);
   var top=document.createElement("div"); top.className="adm-top";
   while(panel.firstChild!==ed){ top.appendChild(panel.firstChild); } panel.insertBefore(top,ed);

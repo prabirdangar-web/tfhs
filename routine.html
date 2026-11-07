@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Provisional Class Routine – TFHS</title>
+<style>
+:root{--bg:#f6f3ec;--card:#fff;--ink:#1d1b16;--mar:#7a1020;--gold:#c8940a;--line:#d9d2c3;--bad:#c62828;--ok:#1b7f3b}
+@media(prefers-color-scheme:dark){:root{--bg:#15130f;--card:#1f1c16;--ink:#f1ece0;--line:#3a352a;--mar:#ff9aa8;--gold:#e8b53a;--bad:#ff8a80;--ok:#6fdc8c}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,"Noto Sans Bengali",sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+header{background:var(--mar);color:#fff;padding:12px 14px}
+header h1{margin:0;font-size:17px}
+header p{margin:2px 0 0;font-size:12.5px;opacity:.92}
+main{max-width:1180px;margin:0 auto;padding:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+label{font-size:12.5px;font-weight:600;display:flex;flex-direction:column;gap:2px}
+input,select,textarea,button{font:inherit;color:inherit}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;min-width:0}
+button{border:1px solid var(--mar);background:var(--mar);color:#fff;border-radius:9px;padding:7px 12px;font-weight:700;cursor:pointer}
+button.alt{background:transparent;color:var(--mar)}
+button.sm{padding:3px 8px;font-size:12px}
+button:disabled{opacity:.5}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{background:var(--card);color:var(--ink);border-color:var(--line);position:relative}
+.tabs button[aria-selected=true]{background:var(--mar);color:#fff;border-color:var(--mar)}
+.tabs button small{display:block;font-weight:500;font-size:10.5px;opacity:.8}
+.tabs button.done small{color:var(--ok)}
+.tabs button[aria-selected=true].done small{color:#c8f7d3}
+.tabs button.bad::after{content:"!";position:absolute;top:-6px;right:-5px;background:var(--bad);color:#fff;border-radius:50%;width:16px;height:16px;font-size:11px;line-height:16px}
+.wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--line)}
+table.g{border-collapse:collapse;width:100%;table-layout:fixed}
+table.g th,table.g td{border:1px solid var(--line);padding:4px;text-align:center;vertical-align:top}
+table.g th{background:color-mix(in srgb,var(--gold) 22%,var(--card));font-size:12.5px;position:sticky;top:0}
+table.g td.pn{background:color-mix(in srgb,var(--gold) 12%,var(--card));font-weight:700;font-size:12px;white-space:nowrap;position:sticky;left:0;min-width:84px}
+table.g td.pn small{display:block;font-weight:500;opacity:.8}
+table.g td.brk{background:repeating-linear-gradient(45deg,transparent 0 6px,color-mix(in srgb,var(--gold) 14%,transparent) 6px 12px);font-size:12px;font-weight:700}
+table.g td.off{background:color-mix(in srgb,var(--line) 50%,var(--card))}
+table.g select{width:100%;font-size:12.5px;padding:4px 2px}
+table.g input.sub{width:100%;font-size:11px;padding:2px 4px;margin-top:3px}
+td.clash select{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 16%,var(--bg))}
+td.clash::after{content:attr(data-w);display:block;color:var(--bad);font-size:10.5px;font-weight:700}
+table.g td.c{padding:0;height:46px}
+.cb{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;min-height:46px;border:0;border-radius:0;padding:2px 1px;background:transparent;color:var(--ink);font-weight:700;font-size:11px;line-height:1.15;overflow:hidden;word-break:break-word}
+.cb small{font-weight:500;font-size:8.5px;opacity:.85;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cb.e{opacity:.35;font-size:15px;font-weight:400}
+td.clash .cb{outline:2px solid var(--bad);outline-offset:-2px}
+td.clash .cb::after{content:"⚠";color:var(--bad);font-size:9px}
+:root{--tl:86%}
+@media(prefers-color-scheme:dark){:root{--tl:26%}}
+table.g th{font-size:11px;padding:3px 1px}
+table.g td.pn{min-width:0;width:46px;font-size:11px;padding:2px;left:0}
+table.g td.pn small{font-size:8.5px;white-space:normal}
+@media(max-width:700px){
+  main{padding:4px}.card{padding:6px}
+  table.g th{font-size:9.5px}
+  table.g td.pn{width:34px;font-size:10px}
+  table.g td.pn small{display:none}
+  .cb{font-size:9px}.cb small{font-size:7.5px}
+  table.g td.c{height:42px}
+}
+#pk{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:none;align-items:flex-end;justify-content:center}
+#pk.show{display:flex}
+#pk .sheet{background:var(--card);width:100%;max-width:560px;max-height:86vh;border-radius:16px 16px 0 0;padding:12px;display:flex;flex-direction:column;gap:8px}
+#pk .lst{overflow-y:auto;border:1px solid var(--line);border-radius:10px;flex:1;min-height:120px}
+#pk .lst button{display:flex;justify-content:space-between;width:100%;text-align:left;background:transparent;color:var(--ink);border:0;border-bottom:1px solid var(--line);border-radius:0;font-weight:500;padding:9px 10px}
+#pk .lst button.sel{background:color-mix(in srgb,var(--gold) 28%,var(--card));font-weight:700}
+#pk .lst button.busy{opacity:.55}
+#pk .lst small{opacity:.75}
+.msg{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#222;color:#fff;padding:9px 16px;border-radius:10px;display:none;z-index:9;max-width:90vw}
+.meta{font-size:12px;opacity:.8}
+.ld{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 12px;font-size:12.5px}
+.ld div{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding:2px 0}
+.ld b.hi{color:var(--bad)}
+.warn{color:var(--bad);font-weight:700}
+@media print{
+  header,.noprint,.tabs{display:none!important}
+  body{background:#fff;color:#000}
+  .card{border:none;padding:0}
+  .pg{page-break-after:always}
+  table.g{min-width:0}
+  @page{size:A4 landscape;margin:10mm}
+}
+.ck{flex-direction:row;align-items:center;gap:8px;font-weight:500;padding:6px 8px;border-bottom:1px dotted var(--line)}
+.ck input{width:18px;height:18px}
+#absList{max-height:240px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;margin:8px 0}
+.chip{display:inline-flex;gap:6px;align-items:center;background:color-mix(in srgb,var(--bad) 14%,var(--card));border:1px solid var(--bad);border-radius:99px;padding:2px 4px 2px 10px;font-size:12.5px;margin:2px}
+.chip button{background:transparent;color:var(--bad);border:0;padding:0 6px;font-size:14px}
+.lockb{border-color:var(--ok);color:var(--ok);font-weight:700}
+.pr{display:none}
+@media print{.pr{display:block}.scr{display:none!important}}
+.pr h2{margin:0 0 2px;font-size:16px;text-align:center}
+.pr h3{margin:0 0 6px;font-size:13px;text-align:center}
+.row button.mdon{background:var(--mar);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <h1>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ.মা.) — প্রভিশনাল ক্লাস রুটিন / Provisional Class Routine</h1>
+  <p>শ্রেণিভিত্তিক শিক্ষক বিন্যাস (Teacher Placement) — সহকারী প্রধান শিক্ষক (AHM) পূরণ করে জমা দেবেন / to be filled and submitted by the Assistant Head Master</p>
+</header>
+<main>
+  <div class="card noprint">
+    <div class="row">
+      <label>নাম / Name (AHM)<input id="ahm" placeholder="Name" autocomplete="name"></label>
+      <label>পদ / Designation<input id="des" value="Assistant Head Master"></label>
+      <label>শিক্ষাবর্ষ / Session<input id="ses" value="2027" size="6"></label>
+      <label style="flex:1;min-width:200px">মন্তব্য / Remarks<input id="rem" placeholder="optional"></label>
+    </div>
+    <p class="meta" style="margin:6px 0 0" id="srcNote">শিক্ষক তালিকা লোড হচ্ছে… / Loading teacher list…</p>
+  </div>
+
+  <div class="card lockb noprint" id="lockB" hidden>🔒 জমা/শেয়ার হয়ে গেছে — আর কেউ সম্পাদনা করতে পারবে না / Submitted & shared — locked, no one can edit now. (Print / Download still work.)</div>
+
+  <div class="card noprint" id="modeCard">
+    <div class="row">
+      <b>মোড / Mode:</b>
+      <button type="button" class="alt" id="mdDaily">📅 প্রভিশনাল দৈনিক (অনুপস্থিত শিক্ষক) / Provisional daily (absentees)</button>
+      <button type="button" class="alt" id="mdWeek">🗓 নিয়মিত সাপ্তাহিক / Regular weekly</button>
+    </div>
+    <p class="meta" id="mdNote" style="margin:6px 0 0"></p>
+  </div>
+
+  <div class="card noprint" id="admCard">
+    <div class="row">
+      <span class="meta" id="admWho">🔐 Admin: not signed in</span>
+      <button class="alt sm" id="admIn" type="button">Sign in (Google)</button>
+      <button class="alt sm" id="admOut" type="button" hidden>Sign out</button>
+      <span class="row" id="admTools" hidden>
+        <button class="sm" id="admUnlock" type="button">🔓 Unlock &amp; Edit</button>
+        <button class="alt sm" id="admLock" type="button">🔒 Lock</button>
+        <button class="alt sm" id="admDel" type="button">🗑 Delete</button>
+      </span>
+    </div>
+  </div>
+
+  <div class="card noprint" id="absCard">
+    <b>ধাপ ১ / Step 1 — অনুপস্থিত / ছুটিতে থাকা শিক্ষক (সর্বোচ্চ ১০ জন) / Absent or on-leave teachers (max 10)</b>
+    <div id="absEdit">
+      <p class="meta" style="margin:4px 0">এঁদের রুটিনে বসানো যাবে না / These teachers will not be available in the routine.</p>
+      <input id="absQ" placeholder="🔎 শিক্ষক খুঁজুন / Search teacher" autocomplete="off" style="width:100%">
+      <div id="absList"></div>
+    </div>
+    <div id="absChips"></div>
+    <div class="row" style="margin-top:6px">
+      <button id="absOk" type="button">✔ নিশ্চিত করে রুটিন শুরু করুন / Confirm &amp; start routine</button>
+      <button class="alt" id="absChg" type="button" hidden>✎ তালিকা বদলান / Change absent list</button>
+      <span class="meta" id="absCnt"></span>
+    </div>
+  </div>
+
+  <div id="rtWrap" hidden>
+  <div class="card noprint"><div class="tabs" id="tabs" role="tablist"></div></div>
+
+  <div class="card noprint scr">
+    <div class="row" style="justify-content:space-between;margin-bottom:6px">
+      <b id="clsTitle"></b>
+      <span class="row">
+        <button class="alt sm" id="cpAll" type="button" title="Copy this day to all other days">এই দিন → সব দিন / This day → all days</button>
+        <button class="alt sm" id="clrCls" type="button">🗑 এই দিন মুছুন / Clear this day</button>
+      </span>
+    </div>
+    <div class="wrap"><table class="g" id="grid"></table></div>
+    <p class="meta" id="clsSum"></p>
+  </div>
+
+  <div class="card noprint scr">
+    <details><summary><b>👥 শিক্ষকভিত্তিক সাপ্তাহিক পিরিয়ড / Teacher-wise weekly load</b></summary><div class="ld" id="load" style="margin-top:8px"></div></details>
+  </div>
+
+  <div class="card noprint scr">
+    <div class="row">
+      <button id="submit" type="button">📤 জমা দিন / Submit provisional routine</button>
+      <button class="alt" id="print" type="button">🖨 প্রিন্ট / Print</button>
+      <button class="alt" id="dl" type="button">⬇ ফাইল / Download file</button>
+      <button class="alt" id="wa" type="button">WhatsApp</button>
+      <span class="meta" id="saved"></span>
+    </div>
+    <p class="warn" id="warn" style="margin:6px 0 0"></p>
+  </div>
+  </div>
+  <div id="printArea" class="pr"></div>
+</main>
+<div id="pk" role="dialog" aria-modal="true"><div class="sheet">
+  <div class="row" style="justify-content:space-between"><b id="pkT"></b><button class="alt sm" id="pkX" type="button">✕</button></div>
+  <input id="pkQ" placeholder="🔎 শিক্ষক খুঁজুন / Search teacher" autocomplete="off">
+  <div class="lst" id="pkL"></div>
+  <input id="pkS" list="sj" placeholder="বিষয় / Subject (optional)">
+  <div class="row"><button id="pkOk" type="button">✔ ঠিক আছে / Done</button><button class="alt" id="pkClr" type="button">মুছুন / Clear</button></div>
+</div></div>
+<div class="msg" id="msg"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyCiqQFsnbSi6eCgUI_W3NTybzIkRmCI_54",authDomain:"tfhs-portal.firebaseapp.com",projectId:"tfhs-portal",storageBucket:"tfhs-portal.firebasestorage.app",messagingSenderId:"316041012204",appId:"1:316041012204:web:04ee8b19374c60f63716c9"};
+/* named app: keeps this tool's Google sign-in separate from every other tool on the same github.io address */
+const fbApp=firebase.initializeApp(firebaseConfig,"routineTool");
+const db=fbApp.firestore(),$=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const toast=t=>{const m=$("msg");m.textContent=t;m.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>m.style.display="none",3200)};
+/* V–X existing sections (Bengali medium) + Santali medium (-Santali) + XI and XII (Science and Arts as separate sections).
+   To rename / add a class, edit only this list. */
+const CLASSES=["V-A","VI-A","VI-B","VII-A","VII-B","VIII-A","VIII-B","IX-A","IX-B","X-A","V-Santali","VI-Santali","VII-Santali","VIII-Santali","IX-Santali","X-Santali","XI-Science","XI-Arts","XII-Science","XII-Arts"];
+const DAYS=["সোম / Mon","মঙ্গল / Tue","বুধ / Wed","বৃহ / Thu","শুক্র / Fri","শনি / Sat"];
+const DAYSEN=["Mon","Tue","Wed","Thu","Fri","Sat"];
+const NP=8,SAT_NP=4;
+const BNO=["১ম","২য়","৩য়","৪র্থ","৫ম","৬ষ্ঠ","৭ম","৮ম"];
+/* period times: default WB timetable; replaced by the school timetable if published */
+let TIMES=[["10:50","11:30"],["11:30","12:10"],["12:10","12:50"],["12:50","13:30"],["14:10","14:45"],["14:45","15:20"],["15:20","15:55"],["15:55","16:30"]];
+const t12=hm=>{const[a,b]=hm.split(":");const h=+a;return(h%12||12)+":"+b};
+/* teachers: embedded fallback, replaced by the live staff list */
+let TEACH=[["Prabir Kumar Dangar","Mathematics"],["Antara Ghorai","Sanskrit"],["Bela Mahata",""],["Bidhan Chandra Ghosh",""],["Diptiman Saha","Physical Education"],["Kabita Mandal",""],["Kanti Malla","Physical Education"],["Mahim Kumar Paine",""],["Malati Tudu","Santali"],["Mrinmayee Chakraborty",""],["Papiya Maji","English"],["Partha Mishra","English"],["Partha Kumar Patra","Pure Science"],["Sabyasachi Mandal","Physical Science / Pure Science"],["Sahadeb Baskey",""],["Sampa Pati","English"],["Sasanka Saren","Santali"],["Shephali Maji","Geography"],["Sujata Mahata",""],["Sumanta Mandal","Mathematics"],["Swapan Kumar Maji",""],["Swapna Mahanti","Physics"],["Tanmoy Chakraborty",""],["Tapas Kundu",""],["Rinku Bhuin","Bengali & History"],["Bharati Dey","Geography & History"],["Biswarup Dey","English & Bengali"],["Doli Mondal","Science & Mathematics"],["Ganesh Mandi","All Subjects"],["Bikash Baskey","All Subjects"],["Lakshmi Saren","All Subjects"]];
+const SUBJ=["Bengali","English","Mathematics","Physical Science","Life Science","History","Geography","Santali","Sanskrit","Computer","Physical Education","Work Education","Art","All Subjects"];
+const MODE=(()=>{try{return localStorage.getItem("tfhs_prov_mode")==="daily"?"daily":"week"}catch(e){return"week"}})();
+const KEY=MODE==="daily"?"tfhs_prov_daily_v1":"tfhs_prov_routine_v1";
+const ADMIN_EMAIL="prabir.dangar@gmail.com";
+let ADMIN=false;
+/* WHO MAY SUBMIT: put the Gmail address of the AHM (and anyone authorised to submit on the AHM's behalf) here.
+   While this list is empty nothing is enforced. Once filled, every submit needs Google sign-in with one of these emails (or the admin's). */
+const AHM_NAME="Swapan Kumar Maji";
+const AHM_EMAILS=["swapan69maji@gmail.com"];
+const ENFORCE=AHM_EMAILS.length>0, MAYSUB=u=>!!u&&(u.email===ADMIN_EMAIL||AHM_EMAILS.includes(u.email));
+const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const TODAY=ymd(new Date()),TODAY_IDX=(new Date().getDay()+6)%7; /* Mon=0 .. Sat=5, Sun=6 */
+const DR=()=>MODE==="daily"&&TODAY_IDX<6?[TODAY_IDX]:[0,1,2,3,4,5];
+let S={ahm:"",des:"Assistant Head Master",ses:"2027",rem:"",data:{}}; /* data[class][day][period]={t,s} */
+try{const q=JSON.parse(localStorage.getItem(KEY)||"null");if(q)S=Object.assign(S,q)}catch(e){}
+S.absent=Array.isArray(S.absent)?S.absent:[];S.step=S.step||"absent";S.locked=!!S.locked;if(!S.ahm)S.ahm=AHM_NAME;
+/* weekly (regular) routine is fixed for the academic year: no absentee step */
+if(MODE!=="daily"){S.absent=[];S.step="routine"}
+/* daily mode: a new day always starts clean (absentees + routine are prepared afresh each day) */
+if(MODE==="daily"&&S.date!==TODAY){S={ahm:S.ahm||"",des:S.des||"Assistant Head Master",ses:S.ses||"2027",rem:"",data:{},absent:[],step:"absent",locked:false,date:TODAY}}
+const isAbs=n=>S.absent.includes(n),avail=()=>TEACH.filter(t=>!isAbs(t[0])),MAXABS=10;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));$("saved").textContent="✔ ডিভাইসে সংরক্ষিত / saved on this device "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}catch(e){}};
+const cell=(c,d,p)=>((S.data[c]||{})[d]||{})[p]||{t:"",s:""};
+function setCell(c,d,p,v){S.data[c]=S.data[c]||{};S.data[c][d]=S.data[c][d]||{};S.data[c][d][p]=v}
+const np=d=>d===5?SAT_NP:NP;
+
+/* ---- load live staff list + timetable ---- */
+db.collection("tfhs").doc("website").get().then(s=>{
+  if(!s.exists)throw 0;const D=s.data();
+  const st=(D.staff||[]).filter(t=>t.unit!=="voc"?/teacher|head ?master/i.test(t.post||""):/teacher|instructor/i.test(t.post||""));
+  if(st.length){TEACH=st.map(t=>[t.name,t.subject||""]);$("srcNote").textContent="✔ শিক্ষক তালিকা: স্কুল পোর্টাল থেকে ("+TEACH.length+" জন) / Teacher list from the school portal ("+TEACH.length+")";}
+  else $("srcNote").textContent="শিক্ষক তালিকা: ডিফল্ট / Default teacher list";
+  if(D.timetable){const pr=String(D.timetable).split("\n").map(l=>/^\s*(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})\s*\|\s*(.*পিরিয়ড.*)$/.exec(l)).filter(Boolean);if(pr.length===8)TIMES=pr.map(m=>[m[1],m[2]])}
+}).catch(()=>{$("srcNote").textContent="শিক্ষক তালিকা: ডিফল্ট (অফলাইন) / Default teacher list (offline)"}).finally(()=>{drawAll()});
+
+/* ---- clash detection ---- */
+function clashes(){
+  const m={};CLASSES.forEach(c=>{for(let d=0;d<6;d++)for(let p=0;p<np(d);p++){const t=cell(c,d,p).t;if(t){const k=d+"|"+p+"|"+t;(m[k]=m[k]||[]).push(c)}}});
+  const out={};Object.keys(m).forEach(k=>{if(m[k].length>1)m[k].forEach(c=>{out[c+"|"+k]=m[k].filter(x=>x!==c).join(", ")})});return out;
+}
+function counts(c){let f=0,tot=0;for(const d of DR()){tot+=np(d);for(let p=0;p<np(d);p++)if(cell(c,d,p).t)f++}return{f,tot}}
+
+/* ---- UI ---- */
+let day=MODE==="daily"&&TODAY_IDX<6?TODAY_IDX:0;
+const short=n=>{const w=String(n).trim().split(/\s+/);return w.length<2?w[0]:w[0]+" "+w[w.length-1][0]+"."};
+const hue=n=>{let h=0;for(const ch of String(n))h=(h*31+ch.charCodeAt(0))%360;return h};
+let PK=null;
+function busyMap(c,p){const m={};CLASSES.forEach(x=>{if(x!==c){const t=cell(x,day,p).t;if(t)m[t]=x}});return m}
+function pkDraw(){
+  const q=$("pkQ").value.trim().toLowerCase(),bm=busyMap(PK.c,PK.p);
+  const L=avail().filter(t=>!q||(t[0]+" "+t[1]).toLowerCase().includes(q));
+  $("pkL").innerHTML=L.map(t=>`<button type="button" data-t="${esc(t[0])}" class="${t[0]===PK.t?"sel":""} ${bm[t[0]]?"busy":""}"><span>${esc(t[0])}${t[1]?` <small>(${esc(t[1])})</small>`:""}</span><small>${bm[t[0]]?"⚠ "+bm[t[0]]:""}</small></button>`).join("")||'<div class="meta" style="padding:10px">কোনো শিক্ষক নেই / none</div>';
+  $("pkL").querySelectorAll("button").forEach(b=>b.onclick=()=>{PK.t=b.dataset.t;const f=TEACH.find(x=>x[0]===PK.t);if(!PK.touched&&f&&f[1]&&!/all subjects|\/|&/i.test(f[1]))$("pkS").value=f[1];pkDraw()});
+}
+function openPk(c,p){if(S.locked)return toast("🔒 লক / Locked");const v=cell(c,day,p);PK={c,p,t:v.t,touched:!!v.s};$("pkT").textContent=c+" · "+DAYSEN[day]+" · P"+(p+1);$("pkQ").value="";$("pkS").value=v.s||"";$("pk").classList.add("show");pkDraw()}
+$("pkS").oninput=()=>{PK.touched=true};
+$("pkQ").oninput=pkDraw;
+const pkClose=()=>$("pk").classList.remove("show");
+$("pkX").onclick=pkClose;$("pk").onclick=e=>{if(e.target===$("pk"))pkClose()};
+$("pkOk").onclick=()=>{if(S.locked)return pkClose();setCell(PK.c,day,PK.p,{t:PK.t||"",s:PK.t?$("pkS").value.trim():""});save();pkClose();drawAll()};
+$("pkClr").onclick=()=>{if(S.locked)return pkClose();setCell(PK.c,day,PK.p,{t:"",s:""});save();pkClose();drawAll()};
+const dayCount=d=>{let f=0,t=0;CLASSES.forEach(c=>{t+=np(d);for(let p=0;p<np(d);p++)if(cell(c,d,p).t)f++});return{f,tot:t}};
+function drawTabs(){
+  const cl=clashes();
+  $("tabs").innerHTML=DAYS.map((nm,d)=>{if(MODE==="daily"&&d!==day)return"";const n=dayCount(d),bad=Object.keys(cl).some(k=>k.split("|")[1]==d);
+    return`<button type="button" role="tab" data-d="${d}" aria-selected="${d===day}" class="${n.f===n.tot?"done":""} ${bad?"bad":""}">${nm}<small>${n.f}/${n.tot}</small></button>`}).join("");
+  $("tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{day=+b.dataset.d;drawAll()});
+}
+function drawGrid(){
+  const cl=clashes();$("clsTitle").textContent="দিন / Day: "+DAYS[day]+" — সব শ্রেণি / all classes";
+  const opts=(sel)=>`<option value="">—</option>`+avail().map(t=>`<option value="${esc(t[0])}"${t[0]===sel?" selected":""}>${esc(t[0])}${t[1]?" ("+esc(t[1])+")":""}</option>`).join("")+(sel&&!TEACH.some(t=>t[0]===sel)?`<option selected>${esc(sel)}</option>`:"");
+  let h=`<tr><th>পিরিয়ড</th>${CLASSES.map(c=>`<th>${c}</th>`).join("")}</tr>`;
+  for(let p=0;p<np(day);p++){
+    if(p===4)h+=`<tr><td class="pn">🍛<small>১:৩০–২:১০</small></td><td class="brk" colspan="${CLASSES.length}">টিফিন / মিড-ডে মিল বিরতি · Tiffin / MDM break</td></tr>`;
+    h+=`<tr><td class="pn">${BNO[p]}<small>${t12(TIMES[p][0])}–${t12(TIMES[p][1])}</small></td>`;
+    CLASSES.forEach((c,ci)=>{
+      const v=cell(c,day,p),w=cl[c+"|"+day+"|"+p+"|"+v.t];
+      h+=`<td class="c ${w?"clash":""}" style="${v.t?`background:hsl(${hue(v.t)} 65% var(--tl))`:""}"><button type="button" class="cb ${v.t?"":"e"}" data-c="${c}" data-p="${p}" title="${esc(v.t||"")}${w?" ⚠ "+esc(w):""}">${v.t?esc(short(v.t))+(v.s?`<small>${esc(v.s)}</small>`:""):"+"}</button></td>`;
+    });
+    h+="</tr>";
+  }
+  $("grid").innerHTML=h;
+  $("grid").querySelectorAll(".cb").forEach(b=>b.onclick=()=>openPk(b.dataset.c,+b.dataset.p));
+  const n=dayCount(day);$("clsSum").textContent=`পূরণ / Filled: ${n.f} / ${n.tot}`;
+}
+function drawLoad(){
+  const m={};CLASSES.forEach(c=>{for(let d=0;d<6;d++)for(let p=0;p<np(d);p++){const t=cell(c,d,p).t;if(t)m[t]=(m[t]||0)+1}});
+  const k=Object.keys(m).sort((a,b)=>m[b]-m[a]);
+  $("load").innerHTML=k.length?k.map(t=>`<div><span>${esc(t)}</span><b class="${m[t]>36?"hi":""}">${m[t]}</b></div>`).join(""):`<span class="meta">এখনও কোনো শিক্ষক বসানো হয়নি / Nothing placed yet.</span>`;
+}
+function drawWarn(){
+  const cl=clashes(),n=Object.keys(cl).length;let un=0;CLASSES.forEach(c=>{const x=counts(c);un+=x.tot-x.f});
+  $("warn").textContent=(n?`⚠ ${n} ক্ল্যাশ: একই শিক্ষক একই সময়ে একাধিক ক্লাসে / ${n} clash cell(s): same teacher in two classes at the same time. `:"")+(un?`ফাঁকা ঘর / Empty cells: ${un}`:"");
+}
+function drawAbsList(){
+  const q=$("absQ").value.trim().toLowerCase();
+  $("absList").innerHTML=TEACH.filter(t=>!q||(t[0]+" "+t[1]).toLowerCase().includes(q)).map(t=>`<label class="ck"><input type="checkbox" data-t="${esc(t[0])}"${isAbs(t[0])?" checked":""}><span>${esc(t[0])}${t[1]?` <small>(${esc(t[1])})</small>`:""}</span></label>`).join("");
+  $("absList").querySelectorAll("input").forEach(i=>i.onchange=()=>{
+    const n=i.dataset.t;
+    if(i.checked){if(S.absent.length>=MAXABS){i.checked=false;return toast("সর্বোচ্চ ১০ জন / Maximum 10 teachers")}S.absent.push(n)}
+    else S.absent=S.absent.filter(x=>x!==n);
+    save();drawAbsInfo()});
+}
+function drawAbsInfo(){
+  const ed=S.step==="absent"&&!S.locked;
+  $("absCnt").textContent=ed?`নির্বাচিত / Selected: ${S.absent.length} / ${MAXABS}`:"";
+  $("absChips").innerHTML=S.absent.length?`<div class="meta" style="margin-top:6px">অনুপস্থিত / Absent (${S.absent.length}):</div>`+S.absent.map(n=>`<span class="chip">${esc(n)}${ed?`<button type="button" data-t="${esc(n)}" aria-label="remove">✕</button>`:""}</span>`).join(""):(ed?"":'<span class="meta">কেউ নেই / None</span>');
+  $("absChips").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.absent=S.absent.filter(x=>x!==b.dataset.t);save();drawAbsInfo();drawAbsList()});
+}
+function applyState(){
+  const ed=S.step==="absent"&&!S.locked;
+  $("absEdit").hidden=!ed;$("absOk").hidden=!ed;$("absChg").hidden=ed||S.locked;
+  $("rtWrap").hidden=S.step!=="routine";$("lockB").hidden=!S.locked;
+  ["ahm","des","ses","rem","cpAll","clrCls","submit"].forEach(k=>$(k).disabled=S.locked);
+  $("cpAll").hidden=MODE==="daily";
+}
+$("absQ").oninput=drawAbsList;
+$("absOk").onclick=()=>{
+  let hit=0;CLASSES.forEach(c=>{for(let d=0;d<6;d++)for(let p=0;p<np(d);p++)if(isAbs(cell(c,d,p).t))hit++});
+  if(!S.absent.length&&!confirm("কোনো অনুপস্থিত শিক্ষক বাছা হয়নি। এগিয়ে যাবেন? / No absent teacher selected. Continue?"))return;
+  if(hit&&!confirm(hit+" ঘরে অনুপস্থিত শিক্ষক বসানো আছে, সেগুলো মুছে যাবে। / "+hit+" cell(s) have absent teachers; they will be cleared. Continue?"))return;
+  CLASSES.forEach(c=>{for(let d=0;d<6;d++)for(let p=0;p<np(d);p++)if(isAbs(cell(c,d,p).t))setCell(c,d,p,{t:"",s:""})});
+  S.step="routine";save();drawAll();window.scrollTo(0,0)};
+$("absChg").onclick=()=>{if(S.locked)return;S.step="absent";save();drawAll()};
+const lockNow=()=>{S.locked=true;S.lockedAt=new Date().toISOString();save();drawAll()};
+function drawAll(){drawAdmin();drawAbsList();drawAbsInfo();applyState();drawTabs();drawGrid();drawLoad();drawWarn();drawMode()}
+["ahm","des","ses","rem"].forEach(k=>{$(k).value=S[k]||"";$(k).oninput=()=>{S[k]=$(k).value;save()}});
+const dl=document.createElement("datalist");dl.id="sj";dl.innerHTML=SUBJ.map(x=>`<option value="${x}">`).join("");document.body.appendChild(dl);
+
+$("cpAll").onclick=()=>{if(S.locked)return;if(!confirm("Copy "+DAYSEN[day]+" to all other days? (replaces them)"))return;for(let d=0;d<6;d++){if(d===day)continue;CLASSES.forEach(c=>{for(let p=0;p<np(d);p++){const o=cell(c,day,p);setCell(c,d,p,{t:o.t,s:o.s})}})}save();drawAll();toast("সব দিনে কপি হয়েছে / Copied to all days")};
+$("clrCls").onclick=()=>{if(!S.locked&&confirm("Clear all classes for "+DAYSEN[day]+"?")){CLASSES.forEach(c=>{S.data[c]=S.data[c]||{};S.data[c][day]={}});save();drawAll()}};
+
+/* ---- output ---- */
+function dataOut(){if(MODE!=="daily")return S.data;const o={};CLASSES.forEach(c=>{o[c]={[TODAY_IDX]:(S.data[c]||{})[TODAY_IDX]||{}}});return o}
+function payload(){return{by:(auth.currentUser&&auth.currentUser.email)||"",absent:S.absent.slice(),ahm:S.ahm.trim(),designation:S.des.trim(),session:S.ses.trim(),remark:S.rem.trim(),classes:CLASSES,data:dataOut(),clashes:Object.keys(clashes()).length,filled:CLASSES.reduce((a,c)=>a+counts(c).f,0),total:CLASSES.reduce((a,c)=>a+counts(c).tot,0)}}
+$("submit").onclick=async()=>{
+  if(S.locked)return;
+  if(ENFORCE){
+    if(!auth.currentUser){try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){return toast("সাইন-ইন হয়নি / Sign-in failed ("+(e.code||"error")+")")}return toast("✔ সাইন-ইন হয়েছে — আবার জমা দিন / Signed in — press Submit again")}
+    if(!MAYSUB(auth.currentUser))return toast("❌ এই ইমেল জমা দিতে অনুমোদিত নয় / Not authorised to submit: "+auth.currentUser.email);
+  }
+  const p=payload();if(!p.ahm)return toast("নাম লিখুন / Enter your name first"),$("ahm").focus();
+  if(!p.filled)return toast("কিছুই পূরণ করা হয়নি / Nothing filled yet");
+  let m="Submit provisional routine? জমা দিলে আর সম্পাদনা করা যাবে না। / After submitting, NO ONE can edit.\n\nAbsent teachers: "+p.absent.length+"\nFilled: "+p.filled+" / "+p.total+"\nClashes: "+p.clashes;if(p.clashes||p.filled<p.total)m+="\n\n(You can still submit; the Head Master will see the same warnings.)";
+  if(!confirm(MODE==="daily"?"আজকের রুটিন জমা/আপডেট করবেন? / Submit today's routine?\n\nAbsent: "+p.absent.length+"\nFilled: "+p.filled+" / "+p.total+"\nClashes: "+p.clashes:m))return;
+  $("submit").disabled=true;
+  try{const TS=firebase.firestore.FieldValue.serverTimestamp();
+    if(MODE==="daily"){await db.collection("provRoutineDaily").doc(TODAY).set(Object.assign({},p,{mode:"daily",date:TODAY,day:TODAY_IDX,ts:TS}),{merge:true});S.docId=TODAY;save();drawAll();toast("✔ আজকের রুটিন জমা হয়েছে / Today's routine submitted")}
+    else if(S.docId&&(ADMIN||S.reopened)){try{await db.collection("provRoutine").doc(S.docId).set(Object.assign({},p,{status:"submitted",ts:TS}))}catch(e2){if(!e2||e2.code!=="permission-denied")throw e2;const r2=await db.collection("provRoutine").add(Object.assign({},p,{status:"submitted",ts:TS}));S.docId=r2.id}S.reopened=false;toast("✔ আপডেট হয়েছে / Updated — locked");lockNow()}
+    else{const r=await db.collection("provRoutine").add(Object.assign({},p,{status:"submitted",ts:TS}));S.docId=r.id;toast("✔ জমা হয়েছে, এখন লক / Submitted — now locked");lockNow()}}
+  catch(e){console.error(e);toast("জমা যায়নি ("+(e.code||"error")+") — ফাইল ডাউনলোড করে পাঠান / Could not submit — download the file and send it");}
+  $("submit").disabled=S.locked;
+};
+function fileText(){return JSON.stringify(Object.assign({type:"tfhs-provisional-routine"},payload()))}
+$("dl").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([fileText()],{type:"application/json"}));a.download="TFHS_Provisional_Routine_"+(S.ses||"")+".json";a.click()};
+$("wa").onclick=()=>{if(!S.locked&&MODE!=="daily"){if(!confirm("শেয়ার করলে রুটিন লক হয়ে যাবে, আর কেউ সম্পাদনা করতে পারবে না। / Sharing will lock the routine; no one can edit afterwards. Continue?"))return;lockNow()}const p=payload();const t="তালডাংরা ফুলমতি উচ্চ বিদ্যালয় — "+(MODE==="daily"?"আজকের দৈনিক রুটিন ("+TODAY.split("-").reverse().join("/")+")":"প্রভিশনাল রুটিন (শিক্ষক বিন্যাস)")+"\nপূরণ: "+p.filled+"/"+p.total+" · ক্ল্যাশ: "+p.clashes+"\n— "+(p.ahm||"AHM");window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank")};
+function printHtml(){
+  let h="";
+  CLASSES.forEach(c=>{
+    h+=`<div class="pg"><h2>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ.মা.)</h2><h3>Provisional Class Routine ${esc(S.ses)} — Class ${c}</h3><table class="g"><tr><th>Period</th>${DAYSEN.map(d=>`<th>${d}</th>`).join("")}</tr>`;
+    for(let p=0;p<NP;p++){
+      if(p===4)h+=`<tr><td class="pn">—</td><td class="brk" colspan="6">Tiffin / MDM break</td></tr>`;
+      h+=`<tr><td class="pn">${p+1}<small>${t12(TIMES[p][0])}–${t12(TIMES[p][1])}</small></td>`;
+      for(let d=0;d<6;d++){if(p>=np(d)){h+=`<td class="off"></td>`;continue}const v=cell(c,d,p);h+=`<td>${esc(v.t)}${v.s?`<br><small>${esc(v.s)}</small>`:""}</td>`}
+      h+="</tr>";
+    }
+    h+=`</table><p class="meta">Placed by: ${esc(S.ahm)} (${esc(S.des)}) · Head Master: ____________________${S.absent.length?`<br>Absent / on leave: ${esc(S.absent.join(", "))}`:""}</p></div>`;
+  });
+  return h;
+}
+$("print").onclick=()=>{$("printArea").innerHTML=printHtml();window.print()};
+/* ---- mode switch ---- */
+const setMode=m=>{try{localStorage.setItem("tfhs_prov_mode",m)}catch(e){}location.reload()};
+$("mdDaily").onclick=()=>{if(MODE!=="daily")setMode("daily")};
+$("mdWeek").onclick=()=>{if(MODE==="daily")setMode("week")};
+function drawMode(){
+  $("mdDaily").classList.toggle("mdon",MODE==="daily");$("mdWeek").classList.toggle("mdon",MODE!=="daily");
+  const sun=MODE==="daily"&&TODAY_IDX>5;
+  $("mdNote").textContent=MODE==="daily"
+    ?(sun?"রবিবার — ক্লাস নেই / Sunday – no classes":"আজ / Today: "+DAYSEN[TODAY_IDX]+" "+TODAY.split("-").reverse().join("/")+" — "+(S.docId?"✔ জমা হয়েছে / submitted (আবার জমা দিলে আপডেট হবে / re-submit to update)":"এখনও জমা হয়নি / not submitted yet")+" · প্রতিদিন নতুন করে শুরু হয় / starts fresh every day")
+    :"নিয়মিত সাপ্তাহিক রুটিন (সারা বছরের জন্য স্থির, অনুপস্থিতি নেই) — জমা দিলে লক হয় / regular weekly routine (fixed for the year, no absentees) — locks on submit";
+  $("absCard").style.display=MODE==="daily"?"":"none";
+  if(MODE==="daily"){$("submit").textContent=S.docId?"🔄 আজকের রুটিন আপডেট করুন / Update today's routine":"📤 আজকের রুটিন জমা দিন / Submit today's routine";$("submit").disabled=S.locked||sun;$("absOk").disabled=sun}
+}
+/* ---- admin: Google sign-in, unlock / lock / delete ---- */
+const auth=fbApp.auth();
+auth.onAuthStateChanged(u=>{ADMIN=!!(u&&u.email===ADMIN_EMAIL);
+  $("admWho").textContent=u?(ADMIN?"🔐 Admin: "+u.email:"Not authorised: "+u.email):"🔐 Admin: not signed in";
+  $("admIn").hidden=!!u;$("admOut").hidden=!u;drawAdmin()});
+$("admIn").onclick=()=>auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e=>toast(e.code));
+$("admOut").onclick=()=>auth.signOut();
+function drawAdmin(){$("admTools").hidden=!ADMIN;$("admUnlock").hidden=!S.locked;$("admLock").hidden=S.locked;$("admDel").hidden=!(S.docId||Object.keys(S.data||{}).length||S.absent.length)}
+$("admUnlock").onclick=()=>{if(!ADMIN)return;S.locked=false;S.lockedAt=null;save();drawAll();toast("🔓 Unlocked — edit, then Submit again")};
+$("admLock").onclick=()=>{if(ADMIN)lockNow()};
+$("admDel").onclick=async()=>{
+  if(!ADMIN)return;
+  if(!confirm("Delete this routine (data on this device and the submitted record)? This cannot be undone."))return;
+  try{
+    if(MODE==="daily")await db.collection("provRoutineDaily").doc(TODAY).delete();
+    else if(S.docId)await db.collection("provRoutine").doc(S.docId).delete();
+  }catch(e){return toast("Delete failed ("+(e.code||"error")+")")}
+  S={ahm:S.ahm,des:S.des,ses:S.ses,rem:"",data:{},absent:[],step:MODE==="daily"?"absent":"routine",locked:false,date:TODAY};
+  save();drawAll();toast("🗑 Deleted")};
+/* ---- remote unlock: when the Head Master presses Unlock on the portal (tfhs/website.regReopen), this device unlocks once so the AHM can edit and re-submit ---- */
+async function checkReopen(){
+  if(MODE==="daily"||!S.locked)return;
+  try{const s=await db.collection("tfhs").doc("website").get();if(!s.exists)return;
+    const k=s.data().regReopen;
+    if(k&&k!==S.seenReopen){S.seenReopen=k;S.locked=false;S.lockedAt=null;S.reopened=true;save();drawAll();toast("🔓 প্রধান শিক্ষক আনলক করেছেন — সম্পাদনা করে আবার জমা দিন / Unlocked by the Head Master — edit and submit again")}
+  }catch(e){}
+}
+(async function syncToday(){
+  if(MODE!=="daily"||Object.keys(S.data||{}).length)return;
+  try{const s=await db.collection("provRoutineDaily").doc(TODAY).get();if(!s.exists)return;const d=s.data();
+    if(d.data&&Object.keys(d.data).length){S.data=d.data;S.absent=d.absent||[];S.ahm=S.ahm||d.ahm||"";S.docId=TODAY;S.step="routine";save();drawAll();toast("ℹ আজকের জমা দেওয়া রুটিন লোড হয়েছে / Today's submitted routine loaded")}
+  }catch(e){}
+})();
+checkReopen();document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkReopen()});
+drawAll();save();
+</script>
+</body>
+</html>
