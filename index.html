@@ -254,6 +254,9 @@ table.tt tr.now td{background:var(--gold);color:#1b1400;font-weight:700}
 #panel{display:none}
 #panel fieldset{border:1px solid var(--line);border-radius:8px;background:var(--card);margin:0 0 14px;padding:12px 14px}
 #panel legend{font-weight:700;padding:0 6px}
+#panel h3.agrp{margin:20px 0 6px;font-size:15px;border-bottom:2px solid var(--mar);padding-bottom:3px}
+#panel details.rtd{margin:8px 0;border:1px dashed var(--line);border-radius:6px;padding:4px 10px}
+#panel details.rtd>summary{cursor:pointer;padding:3px 0}
 #panel label{display:block;font-size:13px;color:var(--mut);margin-top:8px}
 #panel input,#panel select,#panel textarea{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
 #panel .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -968,21 +971,20 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <div id="sList"></div>
     </fieldset>
 
-    <fieldset><legend>Daily routine</legend>
-      <div class="row"><label>Item<input id="tLabel" placeholder="Morning assembly"></label><label>Time<input id="tTime" placeholder="10:30 AM"></label></div>
-      <p><button class="btn" id="addT">Add routine row</button></p>
-      <div id="tList"></div>
+    <h3 class="agrp">🗓 Routines — two types only</h3>
+
+    <fieldset class="rtype" id="rgSet" style="border-left:5px solid #0f766e"><legend>📚 ১. স্থায়ী রুটিন / Permanent routine <small class="meta">(publish once)</small></legend>
+      <p class="meta" style="margin-top:0">Steps: <b>①</b> In the routine tool choose <b>Regular weekly</b> → Submit &nbsp;<b>②</b> Load it here &nbsp;<b>③</b> Publish. Visitors see it all year in <b>📚 স্থায়ী রুটিন</b>. It stays 🔒 locked; to change, <b>Unlock → load new copy → Update</b>. Nothing goes live without you.</p>
+      <p><button class="btn alt" id="rgLoad" type="button">⬇ Load submitted routines</button> <label style="display:inline-flex;gap:6px;align-items:center;margin:0">or file <input id="rgFile" type="file" accept=".json,application/json" style="width:auto"></label></p>
+      <div id="rgPick"></div>
+      <div class="row"><label>Title (shown to the public)<input id="rgTitle" placeholder="e.g. Permanent Class Routine – Session 2027"></label><label>Note (optional)<input id="rgNote" placeholder="e.g. Effective from 1 January 2027"></label></div>
+      <p class="meta" id="rgPrev"></p>
+      <p><button class="btn" id="rgPub" type="button">✅ Publish / Update</button> <button class="btn alt" id="rgUnpub" type="button">Unpublish</button> <button class="btn" id="rgUnlock" type="button">🔓 Unlock</button> <button class="btn alt" id="rgLock" type="button">🔒 Lock again</button></p>
+      <div id="rgState" class="meta"></div>
     </fieldset>
 
-    <fieldset><legend>Holiday</legend>
-      <div class="row"><label>From date<input id="hDate" type="date"></label><label>To date (blank = one day)<input id="hTo" type="date"></label></div>
-      <label>Holiday name<input id="hName"></label>
-      <label><input type="checkbox" id="hObs" style="width:auto"> Observation day only (school open)</label>
-      <p><button class="btn" id="addH">Add holiday</button> <button class="btn alt" id="impH">Import 2026 holiday list</button></p>
-      <div id="hList"></div>
-    </fieldset>
-
-    <fieldset id="rdSet"><legend>📅 Day-wise: Today's routine by AHM (auto-clears at midnight)</legend>
+    <fieldset class="rtype" style="border-left:5px solid var(--c-routine,#b36b00)"><legend>🗓️ ২. অস্থায়ী রুটিন / Provisional routine</legend>
+      <details class="rtd" open id="rdSet"><summary><b>① Today's routine</b> <span class="meta">(changes every day · clears at midnight)</span></summary>
       <p class="meta" style="margin-top:0"><b id="rdDate"></b> — only today is active; yesterday's routine is removed automatically at 12 midnight. No sharing needed.</p>
       <h4 style="margin:6px 0 2px">① Absent staff today <span id="rdAbsOk" class="meta"></span></h4>
       <div id="rdAbs" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:2px 10px"></div>
@@ -993,28 +995,38 @@ table.tt,table.t{table-layout:auto;max-width:100%}
       <label>Heading (optional)<input id="rdHead" placeholder="e.g. Adjustment routine"></label>
       <label>Routine lines<textarea id="rdText" rows="9" placeholder="10:40-11:20 | VI – Bengali – A. Das"></textarea></label>
       <p><button class="btn" id="rdSave" type="button">Publish today's routine</button> <button class="btn alt" id="rdClear" type="button">Clear today</button></p>
-    </fieldset>
-
-    <fieldset id="rgSet"><legend>📚 Regular (weekly) routine – publish once, everyone can view</legend>
-      <p class="meta" style="margin-top:0">Prepare it in the routine tool (<b>Regular weekly</b> mode) and <b>Submit</b>. Then pick it below (or load the downloaded file) and press <b>Publish</b>. It shows in the public <b>📚 নিয়মিত রুটিন</b> tab at any time. To change it: edit in the tool (Unlock &amp; Edit → Submit again), pick the new copy here and press <b>Update</b>.</p>
-      <p><button class="btn alt" id="rgLoad" type="button">⬇ Load submitted routines</button> <label style="display:inline-flex;gap:6px;align-items:center;margin:0">or file <input id="rgFile" type="file" accept=".json,application/json" style="width:auto"></label></p>
-      <div id="rgPick"></div>
-      <div class="row"><label>Title (shown to the public)<input id="rgTitle" placeholder="e.g. Regular Class Routine – Session 2027"></label><label>Note (optional)<input id="rgNote" placeholder="e.g. Effective from 1 January 2027"></label></div>
-      <p class="meta" id="rgPrev"></p>
-      <p><button class="btn" id="rgPub" type="button">✅ Publish / Update regular routine</button> <button class="btn alt" id="rgUnpub" type="button">Unpublish</button> <button class="btn" id="rgUnlock" type="button">🔓 Unlock to update / unpublish</button> <button class="btn alt" id="rgLock" type="button">🔒 Lock again</button></p>
-      <div id="rgState" class="meta"></div>
-    </fieldset>
-
-    <fieldset><legend>🗓️ Provisional Routine – Prepare → Share to AHM → Publish</legend>
-      <p class="meta" style="margin-top:0">① Prepare the routine in the routine tool &nbsp;→&nbsp; ② Share the link with the AHM for checking &nbsp;→&nbsp; ③ Publish. Only <b>Published</b> routines appear on the public site (🗓️ tab), as a simple list.</p>
-      <p><a class="btn" id="rtTool" href="https://prabirdangar-web.github.io/provisional_routine/" target="_blank" rel="noopener">🛠 Open Provisional Routine tool</a></p>
-      <div class="row"><label>Routine title<input id="rtTitle" placeholder="e.g. Provisional Class Routine – Session 2027"></label><label>Effective from<input id="rtFrom" type="date"></label></div>
-      <div class="row"><label>Link (routine page)<input id="rtLink" placeholder="https://prabirdangar-web.github.io/provisional_routine/"></label><label>AHM WhatsApp no. (optional, kept on this device only)<input id="rtPhone" inputmode="tel" placeholder="10-digit mobile"></label></div>
-      <label>Note for the list (optional)<input id="rtNote" placeholder="e.g. Class V–X · valid until final routine"></label>
+      </details>
+      <details class="rtd" open><summary><b>② Provisional routine list</b> <span class="meta">(prepare → share to AHM → publish)</span></summary>
+      <p class="meta">Prepare it in the routine tool, add it here, share with the AHM, then Publish. Only <b>Published</b> ones show in the public 🗓️ অস্থায়ী রুটিন tab.</p>
+      <p><a class="btn" id="rtTool" href="https://prabirdangar-web.github.io/provisional_routine/" target="_blank" rel="noopener">🛠 Open routine tool</a></p>
+      <label>Routine title<input id="rtTitle" placeholder="e.g. Provisional Class Routine – Session 2027"></label>
+      <details class="rtd"><summary class="meta">More options (effective date, link, AHM phone, note)</summary>
+        <div class="row"><label>Effective from<input id="rtFrom" type="date"></label><label>Link (routine page)<input id="rtLink" placeholder="https://prabirdangar-web.github.io/provisional_routine/"></label></div>
+        <div class="row"><label>AHM WhatsApp no. (kept on this device only)<input id="rtPhone" inputmode="tel" placeholder="10-digit mobile"></label><label>Note for the list<input id="rtNote" placeholder="e.g. Class V–X · valid until final routine"></label></div>
+      </details>
       <p><button class="btn" id="rtAdd" type="button">Add routine (as Prepared)</button> <button class="btn alt" id="rtCancel" type="button" style="display:none">Cancel edit</button></p>
       <div id="rtdBox"></div>
       <div id="rtList"></div>
+      </details>
     </fieldset>
+
+    <h3 class="agrp">🏖 Holidays — separate</h3>
+    <fieldset><legend>🏖 Holiday list</legend>
+      <div class="row"><label>From date<input id="hDate" type="date"></label><label>To date (blank = one day)<input id="hTo" type="date"></label></div>
+      <label>Holiday name<input id="hName"></label>
+      <label><input type="checkbox" id="hObs" style="width:auto"> Observation day only (school open)</label>
+      <p><button class="btn" id="addH">Add holiday</button> <button class="btn alt" id="impH">Import 2026 holiday list</button></p>
+      <div id="hList"></div>
+    </fieldset>
+
+
+    <h3 class="agrp">🕘 School day schedule</h3>
+    <fieldset><legend>Daily schedule rows (assembly, bell times) – shown in Routine &amp; Holidays</legend>
+      <div class="row"><label>Item<input id="tLabel" placeholder="Morning assembly"></label><label>Time<input id="tTime" placeholder="10:30 AM"></label></div>
+      <p><button class="btn" id="addT">Add routine row</button></p>
+      <div id="tList"></div>
+    </fieldset>
+
     
 
     <fieldset><legend>🗂 Office desk – admin-only links (salary · PF · pension · I-Tax)</legend>
@@ -2890,7 +2902,7 @@ document.addEventListener("click", async e => { const b = e.target.closest && e.
       const rt = $("rdText"); if (rt) { rt.value = text; rt.disabled = false; $("rdHead").value = head; $("rdSave").disabled = false;
         const s = new Set(RTD.absent||[]); $("rdAbs").querySelectorAll("input").forEach(i => i.checked = s.has(i.value)); }
       toast("Loaded into Day-wise editor – edit the lines, then press Publish today's routine");
-      const f = $("rdSet"); if (f) f.scrollIntoView({block:"start"});
+      const f = $("rdSet"); if (f) { f.open = true; f.scrollIntoView({block:"start"}); }
     }
   } catch(err) { toast("Failed: " + (err.code || err.message)); }
 });
