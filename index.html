@@ -2807,7 +2807,8 @@ function renderRegular(){
   function compact(src){
     if (!src || !Array.isArray(src.classes) || !src.classes.length || !src.data || typeof src.data !== "object") throw new Error("This is not a routine file");
     const gr = {}; let filled = 0;
-    src.classes.forEach(c => { gr[c] = []; for (let d = 0; d < 6; d++) { const row = []; for (let p = 0; p < rgNP(d); p++) { const v = (((src.data[c]||{})[d]||{})[p]) || {}; const t = String(v.t||"").trim(), sb = String(v.s||"").trim(); row.push(t ? (sb ? t + "|" + sb : t) : ""); if (t) filled++; } gr[c].push(row); } });
+    /* Firestore does not allow an array directly inside an array, so each class is a map {0..5: [periods]} */
+    src.classes.forEach(c => { gr[c] = {}; for (let d = 0; d < 6; d++) { const row = []; for (let p = 0; p < rgNP(d); p++) { const v = (((src.data[c]||{})[d]||{})[p]) || {}; const t = String(v.t||"").trim(), sb = String(v.s||"").trim(); row.push(t ? (sb ? t + "|" + sb : t) : ""); if (t) filled++; } gr[c][d] = row; } });
     return {classes: src.classes.map(String), g: gr, session: String(src.session||""), ahm: String(src.ahm||""), filled};
   }
   function setCand(c, label){ CAND = c; g("rgPrev").textContent = c ? `Ready: ${c.classes.length} classes · ${c.filled} periods filled${label ? " · " + label : ""}` : ""; }
