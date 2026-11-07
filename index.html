@@ -2719,6 +2719,7 @@ $("rtList").onclick = e => { const b = e.target.closest("[data-rt]"); if (!b) re
 /* ===== Regular (weekly) routine: published once, public view-only, admin can update ===== */
 const RG_DAYS = ["সোম / Mon","মঙ্গল / Tue","বুধ / Wed","বৃহ / Thu","শুক্র / Fri","শনি / Sat"], RG_BNO = ["১ম","২য়","৩য়","৪র্থ","৫ম","৬ষ্ঠ","৭ম","৮ম"];
 const RG_TIMES = [["10:50","11:30"],["11:30","12:10"],["12:10","12:50"],["12:50","13:30"],["14:10","14:45"],["14:45","15:20"],["15:20","15:55"],["15:55","16:30"]];
+const RG_DEF = ["V-A","VI-A","VI-B","VII-A","VII-B","VIII-A","VIII-B","IX-A","IX-B","X-A","V-Santali","VI-Santali","VII-Santali","VIII-Santali","IX-Santali","X-Santali","XI-Science","XI-Arts","XII-Science","XII-Arts"];
 const rgNP = d => d === 5 ? 4 : 8, rg12 = hm => { const [a,b] = hm.split(":"); return ((+a % 12) || 12) + ":" + b; };
 let RG_VIEW = {mode:"class", sel:""};
 const rgCell = (R, c, d, p) => { const v = (((R.g||{})[c]||[])[d]||[])[p] || ""; const i = v.indexOf("|"); return i < 0 ? {t:v, s:""} : {t:v.slice(0,i), s:v.slice(i+1)}; };
@@ -2743,14 +2744,15 @@ function rgTable(R, mode, sel){
 }
 function renderRegular(){
   const box = $("regBox"); if (!box) return;
-  const R = D.regRoutine;
-  if (!R || !R.classes || !R.classes.length) { box.innerHTML = `<div class="empty">স্থায়ী রুটিন শীঘ্রই প্রকাশিত হবে। / Permanent routine will be published soon.</div>`; return; }
+  const blank = !(D.regRoutine && D.regRoutine.classes && D.regRoutine.classes.length);
+  const R = blank ? {classes: RG_DEF, g: {}} : D.regRoutine;
+  if (blank) RG_VIEW.mode = "class";
   const list = RG_VIEW.mode === "class" ? R.classes : rgTeachers(R);
   if (!list.includes(RG_VIEW.sel)) RG_VIEW.sel = list[0] || "";
   box.innerHTML = `<h3 style="margin:12px 0 4px">📚 ${esc(R.title || "স্থায়ী রুটিন / Permanent routine")}</h3>
-    <p class="meta" style="margin:0 0 8px">${R.session ? "শিক্ষাবর্ষ / Session: " + esc(R.session) + " · " : ""}প্রকাশিত / Published: ${fmt(new Date(R.pubAt || Date.now()).toISOString().slice(0,10))}${R.upd && R.upd - (R.pubAt||0) > 864e5 ? " · হালনাগাদ / Updated: " + fmt(new Date(R.upd).toISOString().slice(0,10)) : ""}</p>
+    ${blank ? "" : `<p class="meta" style="margin:0 0 8px">${R.session ? "শিক্ষাবর্ষ / Session: " + esc(R.session) + " · " : ""}প্রকাশিত / Published: ${fmt(new Date(R.pubAt || Date.now()).toISOString().slice(0,10))}${R.upd && R.upd - (R.pubAt||0) > 864e5 ? " · হালনাগাদ / Updated: " + fmt(new Date(R.upd).toISOString().slice(0,10)) : ""}</p>`}
     ${R.note ? `<div class="box" style="margin:0 0 8px">${esc(R.note)}</div>` : ""}
-    <div class="rg-bar"><span class="rg-m"><button type="button" data-m="class" aria-pressed="${RG_VIEW.mode === "class"}">🏫 শ্রেণি / Class-wise</button> <button type="button" data-m="teacher" aria-pressed="${RG_VIEW.mode === "teacher"}">👤 শিক্ষক / Teacher-wise</button></span>
+    <div class="rg-bar"><span class="rg-m"><button type="button" data-m="class" aria-pressed="${RG_VIEW.mode === "class"}">🏫 শ্রেণি / Class-wise</button> ${blank ? "" : `<button type="button" data-m="teacher" aria-pressed="${RG_VIEW.mode === "teacher"}">👤 শিক্ষক / Teacher-wise</button>`}</span>
       <select id="rgSel" aria-label="Select">${list.map(x => `<option${x === RG_VIEW.sel ? " selected" : ""}>${esc(x)}</option>`).join("")}</select>
       <button type="button" class="btn alt sm" id="rgPrint">🖨 প্রিন্ট / Print</button></div>
     <div class="rg-wrap">${rgTable(R, RG_VIEW.mode, RG_VIEW.sel)}</div>`;
@@ -2867,8 +2869,6 @@ setInterval(() => { try { rtdWatch(); } catch(e) {} }, 60000);
 function renderRtDay(){
   const pane = $("p-routine"); if (!pane) return;
   rtdWatch();
-  /* the public provisional tab shows only the provisional routine list; the daily block is no longer shown there */
-  { const old = $("rtToday"); if (old) old.remove(); return; }
   let box = $("rtToday"); if (!box) { box = document.createElement("div"); box.id = "rtToday"; pane.insertBefore(box, pane.firstChild); }
   const now = new Date(), wd = now.getDay(), nm = now.getHours()*60 + now.getMinutes(), mmin = x => { const m = /^(\d{1,2}):(\d{2})$/.exec(x); return m ? +m[1]*60 + +m[2] : -1; };
   const dn = now.toLocaleDateString("en-GB", {weekday:"long", day:"2-digit", month:"short", year:"numeric"}), c = rdCur();
