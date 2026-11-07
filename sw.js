@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tfhs-cache-v2';   // bumped: forces every device to drop the old cache and get the new index.html
+const CACHE_NAME = 'tfhs-cache-v3';   // bumped: forces every device to drop the old cache (v2 could hold a wrong index.html)
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -44,17 +44,21 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 2) The page itself (index.html): NETWORK FIRST, so a new upload shows up at once;
-  //    the cached copy is used only when the user is offline.
+  // 2) Pages: NETWORK FIRST, so a new upload shows up at once; the cached copy is used only when offline.
+  //    FIXED: only the portal itself (site root / index.html) is stored as './index.html'.
+  //    Any other page (e.g. routine.html) is stored under its OWN address, so it can never replace the portal's copy.
   if (req.mode === 'navigate') {
+    const root = new URL('./', self.registration.scope).pathname;
+    const isPortal = path === root || path === root + 'index.html';
+    const key = isPortal ? './index.html' : req;
     event.respondWith(
       fetch(req).then((networkResponse) => {
         if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           const copy = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', copy));
+          caches.open(CACHE_NAME).then((cache) => cache.put(key, copy));
         }
         return networkResponse;
-      }).catch(() => caches.match('./index.html'))
+      }).catch(() => caches.match(key).then((r) => r || caches.match('./index.html')))
     );
     return;
   }
