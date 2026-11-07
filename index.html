@@ -651,7 +651,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
   <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a><a href="#notices-top">বিজ্ঞপ্তি</a><a href="#gallery">গ্যালারি</a><a href="#staff">শিক্ষকবৃন্দ</a>
-  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine">রুটিন ও ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="#" id="fbLink" title="মতামত ও পরামর্শ / Feedback &amp; Suggestion" aria-label="মতামত ও পরামর্শ / Feedback">✉️ মতামত</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
+  <a href="#mptest">MP টেস্ট প্রোগ্রাম</a><a href="#routine-types">রুটিন</a><a href="#holidays">ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="#" id="fbLink" title="মতামত ও পরামর্শ / Feedback &amp; Suggestion" aria-label="মতামত ও পরামর্শ / Feedback">✉️ মতামত</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
 <a href="#" id="flashBar" class="flbar" hidden></a>
 
@@ -784,8 +784,9 @@ table.tt,table.t{table-layout:auto;max-width:100%}
         <button class="btn" id="natAll" type="button">▶ ক্রমানুসারে বাজান / Play both in order</button>
       </div>
 
-      <h2 class="sec" id="routine" style="--c:var(--c-routine)">রুটিন ও ছুটি / Routine &amp; Holidays</h2>
+      <h2 class="sec" id="schedule" style="--c:var(--c-routine)">দৈনিক সময়সূচি / Daily schedule</h2>
       <table class="t" id="routineTbl"></table>
+      <h2 class="sec" id="holidays" data-opt="hol" style="--c:var(--c-routine)">ছুটি / Holidays</h2>
       <div data-opt="hol"><h3>আসন্ন ছুটি / Upcoming holidays</h3>
       <div class="list" id="holidayBox" style="--c:var(--c-routine)"></div>
       <details class="box" style="padding:0"><summary>সারা বছরের তালিকা / Full list</summary><table class="t" id="holAll"></table></details></div>
@@ -1021,7 +1022,7 @@ table.tt,table.t{table-layout:auto;max-width:100%}
     </fieldset>
 
 
-    <fieldset><legend>Daily schedule rows (assembly, bell times) – shown in Routine &amp; Holidays</legend>
+    <fieldset><legend>Daily schedule rows (assembly, bell times) – shown under Daily schedule</legend>
       <div class="row"><label>Item<input id="tLabel" placeholder="Morning assembly"></label><label>Time<input id="tTime" placeholder="10:30 AM"></label></div>
       <p><button class="btn" id="addT">Add routine row</button></p>
       <div id="tList"></div>
@@ -1193,7 +1194,10 @@ function showPane(name, scroll){
   if (scroll) $("ptabs").scrollIntoView({block:"start", behavior:"smooth"});
 }
 document.querySelectorAll("#ptabs button").forEach(b => b.onclick = () => showPane(b.dataset.p));
-const MENU_PANE = {"#notices-top":"notices", "#gallery":"gallery", "#staff":"staff", "#mptest":"mptest"};
+const MENU_PANE = {"#notices-top":"notices", "#gallery":"gallery", "#staff":"staff", "#mptest":"mptest", "#routine-types":"regular"};
+/* ছুটি menu: only the holiday section (as earlier); রুটিন menu: opens the two routine types (স্থায়ী / অস্থায়ী tabs) */
+document.querySelectorAll('nav.menu a[href="#holidays"]').forEach(a => a.addEventListener("click", e => { e.preventDefault();
+  if (!viewOn("hol")) setView("hol", true); else { const el = $("holidays"); if (el) el.scrollIntoView({block:"start", behavior:"smooth"}); } }));
 document.querySelectorAll("nav.menu a").forEach(a => { const n = MENU_PANE[a.getAttribute("href")];
   if (n) a.onclick = e => { e.preventDefault(); showPane(n, true); }; });
 function paneCounts(){
