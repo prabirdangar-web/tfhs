@@ -116,6 +116,13 @@ table.rg td.pn small{display:block;font-weight:500;opacity:.8;font-size:10.5px}
 table.rg td.brk{background:repeating-linear-gradient(45deg,transparent 0 6px,color-mix(in srgb,var(--gold) 16%,transparent) 6px 12px);font-weight:700;font-size:12px}
 table.rg td.off{background:color-mix(in srgb,var(--line) 50%,var(--card))}
 table.rg td small.sb{display:block;font-size:10.5px;opacity:.8}
+table.rgd{min-width:1500px;table-layout:fixed}
+table.rgd th{font-size:11px;padding:3px 1px;position:sticky;top:0}
+table.rgd td{font-size:11px;line-height:1.15;padding:3px 2px;overflow:hidden;word-break:break-word}
+table.rgd td.pn{position:sticky;left:0;z-index:1;width:70px}
+table.rgd td.em{color:var(--mut);opacity:.45}
+table.rgd tr.nowr td{outline:2px solid var(--gold);outline-offset:-2px}
+:root{--tl:86%}@media(prefers-color-scheme:dark){:root{--tl:26%}}
 table.rg td.now{outline:3px solid var(--gold);outline-offset:-3px;background:color-mix(in srgb,var(--gold) 28%,var(--card))}
 footer{text-align:center;background:var(--navy);color:#dbe4ff;font-size:12.5px;padding:12px 16px;margin-top:14px;border-top:3px solid var(--gold)}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
@@ -2721,7 +2728,7 @@ const RG_DAYS = ["সোম / Mon","মঙ্গল / Tue","বুধ / Wed","�
 const RG_TIMES = [["10:50","11:30"],["11:30","12:10"],["12:10","12:50"],["12:50","13:30"],["14:10","14:45"],["14:45","15:20"],["15:20","15:55"],["15:55","16:30"]];
 const RG_DEF = ["V-A","VI-A","VI-B","VII-A","VII-B","VIII-A","VIII-B","IX-A","IX-B","X-A","V-Santali","VI-Santali","VII-Santali","VIII-Santali","IX-Santali","X-Santali","XI-Science","XI-Arts","XII-Science","XII-Arts"];
 const rgNP = d => d === 5 ? 4 : 8, rg12 = hm => { const [a,b] = hm.split(":"); return ((+a % 12) || 12) + ":" + b; };
-let RG_VIEW = {mode:"class", sel:""};
+let RG_VIEW = {mode:"day", sel:""};
 const rgCell = (R, c, d, p) => { const v = (((R.g||{})[c]||[])[d]||[])[p] || ""; const i = v.indexOf("|"); return i < 0 ? {t:v, s:""} : {t:v.slice(0,i), s:v.slice(i+1)}; };
 const rgTeachers = R => { const m = new Set(); (R.classes||[]).forEach(c => { for (let d = 0; d < 6; d++) for (let p = 0; p < rgNP(d); p++) { const t = rgCell(R,c,d,p).t; if (t) m.add(t); } }); return [...m].sort((a,b) => a.localeCompare(b)); };
 function rgTable(R, mode, sel){
@@ -2742,24 +2749,46 @@ function rgTable(R, mode, sel){
   }
   return h + "</table>";
 }
+const rgShort = n => { const w = String(n).trim().split(/\s+/); return w.length < 2 ? w[0] : w[0] + " " + w[w.length-1][0] + "."; };
+const rgHue = n => { let h = 0; for (const ch of String(n)) h = (h*31 + ch.charCodeAt(0)) % 360; return h; };
+function rgDayTable(R, d){
+  const nowD = (new Date().getDay() + 6) % 7, nm = new Date().getHours()*60 + new Date().getMinutes(), mm = x => +x.slice(0,x.indexOf(":"))*60 + +x.slice(x.indexOf(":")+1);
+  let h = `<table class="rg rgd"><tr><th>পিরিয়ড</th>${R.classes.map(c => `<th>${esc(c)}</th>`).join("")}</tr>`;
+  for (let p = 0; p < rgNP(d); p++) {
+    if (p === 4) h += `<tr><td class="pn">🍛<small>১:৩০–২:১০</small></td><td class="brk" colspan="${R.classes.length}">টিফিন / মিড-ডে মিল বিরতি · Tiffin / MDM break</td></tr>`;
+    const on = d === nowD && nm >= mm(RG_TIMES[p][0]) && nm < mm(RG_TIMES[p][1]);
+    h += `<tr class="${on ? "nowr" : ""}"><td class="pn">${RG_BNO[p]}<small>${rg12(RG_TIMES[p][0])}–${rg12(RG_TIMES[p][1])}</small></td>`;
+    R.classes.forEach(c => { const v = rgCell(R, c, d, p);
+      h += v.t ? `<td style="background:hsl(${rgHue(v.t)} 65% var(--tl))" title="${esc(v.t)}"><b>${esc(rgShort(v.t))}</b>${v.s ? `<small class="sb">${esc(v.s)}</small>` : ""}</td>` : `<td class="em">—</td>`; });
+    h += "</tr>";
+  }
+  return h + "</table>";
+}
 function renderRegular(){
   const box = $("regBox"); if (!box) return;
   const blank = !(D.regRoutine && D.regRoutine.classes && D.regRoutine.classes.length);
   const R = blank ? {classes: RG_DEF, g: {}} : D.regRoutine;
-  if (blank) RG_VIEW.mode = "class";
-  const list = RG_VIEW.mode === "class" ? R.classes : rgTeachers(R);
-  if (!list.includes(RG_VIEW.sel)) RG_VIEW.sel = list[0] || "";
+  if (blank && RG_VIEW.mode === "teacher") RG_VIEW = {mode:"day", sel:""};
+  const md = RG_VIEW.mode;
+  if (md === "day") { if (!(RG_VIEW.sel >= 0 && RG_VIEW.sel <= 5) || RG_VIEW.sel === "") RG_VIEW.sel = Math.min((new Date().getDay() + 6) % 7, 5); }
+  const list = md === "class" ? R.classes : (md === "teacher" ? rgTeachers(R) : []);
+  if (md !== "day" && !list.includes(RG_VIEW.sel)) RG_VIEW.sel = list[0] || "";
+  const ctrl = md === "day"
+    ? `<span class="rg-m" id="rgDays">${RG_DAYS.map((n, i) => `<button type="button" data-d="${i}" aria-pressed="${RG_VIEW.sel === i}">${n}</button>`).join(" ")}</span>`
+    : `<select id="rgSel" aria-label="Select">${list.map(x => `<option${x === RG_VIEW.sel ? " selected" : ""}>${esc(x)}</option>`).join("")}</select>`;
+  const tbl = md === "day" ? rgDayTable(R, RG_VIEW.sel) : rgTable(R, md, RG_VIEW.sel);
   box.innerHTML = `<h3 style="margin:12px 0 4px">📚 ${esc(R.title || "স্থায়ী রুটিন / Permanent routine")}</h3>
     ${blank ? "" : `<p class="meta" style="margin:0 0 8px">${R.session ? "শিক্ষাবর্ষ / Session: " + esc(R.session) + " · " : ""}প্রকাশিত / Published: ${fmt(new Date(R.pubAt || Date.now()).toISOString().slice(0,10))}${R.upd && R.upd - (R.pubAt||0) > 864e5 ? " · হালনাগাদ / Updated: " + fmt(new Date(R.upd).toISOString().slice(0,10)) : ""}</p>`}
     ${R.note ? `<div class="box" style="margin:0 0 8px">${esc(R.note)}</div>` : ""}
-    <div class="rg-bar"><span class="rg-m"><button type="button" data-m="class" aria-pressed="${RG_VIEW.mode === "class"}">🏫 শ্রেণি / Class-wise</button> ${blank ? "" : `<button type="button" data-m="teacher" aria-pressed="${RG_VIEW.mode === "teacher"}">👤 শিক্ষক / Teacher-wise</button>`}</span>
-      <select id="rgSel" aria-label="Select">${list.map(x => `<option${x === RG_VIEW.sel ? " selected" : ""}>${esc(x)}</option>`).join("")}</select>
-      <button type="button" class="btn alt sm" id="rgPrint">🖨 প্রিন্ট / Print</button></div>
-    <div class="rg-wrap">${rgTable(R, RG_VIEW.mode, RG_VIEW.sel)}</div>`;
-  box.querySelectorAll(".rg-m button").forEach(b => b.onclick = () => { RG_VIEW = {mode:b.dataset.m, sel:""}; renderRegular(); });
-  $("rgSel").onchange = e => { RG_VIEW.sel = e.target.value; renderRegular(); };
+    <div class="rg-bar"><span class="rg-m" id="rgModes"><button type="button" data-m="day" aria-pressed="${md === "day"}">📅 দিনভিত্তিক / Day-wise</button> <button type="button" data-m="class" aria-pressed="${md === "class"}">🏫 শ্রেণি / Class-wise</button>${blank ? "" : ` <button type="button" data-m="teacher" aria-pressed="${md === "teacher"}">👤 শিক্ষক / Teacher-wise</button>`}</span>
+      ${ctrl}<button type="button" class="btn alt sm" id="rgPrint">🖨 প্রিন্ট / Print</button></div>
+    <div class="rg-wrap">${tbl}</div>`;
+  $("rgModes").querySelectorAll("button").forEach(b => b.onclick = () => { RG_VIEW = {mode:b.dataset.m, sel:""}; renderRegular(); });
+  if ($("rgDays")) $("rgDays").querySelectorAll("button").forEach(b => b.onclick = () => { RG_VIEW.sel = +b.dataset.d; renderRegular(); });
+  if ($("rgSel")) $("rgSel").onchange = e => { RG_VIEW.sel = e.target.value; renderRegular(); };
   $("rgPrint").onclick = () => { const w = window.open("", "_blank"); if (!w) return toast("Allow pop-ups to print");
-    w.document.write(`<!doctype html><meta charset="utf-8"><title>${esc(R.title||"Routine")}</title><style>body{font:14px system-ui,sans-serif;margin:14px}h2,h3{text-align:center;margin:2px 0}table{border-collapse:collapse;width:100%;table-layout:fixed;margin-top:10px}th,td{border:1px solid #888;padding:5px;text-align:center}th{background:#ddd}td.pn{width:80px;font-weight:700}td.pn small{display:block;font-weight:400;font-size:11px}td.brk{background:#f3f3f3;font-weight:700}td.off{background:#eee}small.sb{display:block;font-size:11px}@page{size:A4 landscape;margin:10mm}</style><h2>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ.মা.)</h2><h3>${esc(R.title||"Regular Class Routine")} — ${RG_VIEW.mode === "class" ? "Class " : "Teacher: "}${esc(RG_VIEW.sel)}</h3>${rgTable(R, RG_VIEW.mode, RG_VIEW.sel).replace(/ class="now"/g,"")}<script>onload=()=>print()<\/script>`);
+    const what = md === "day" ? "Day: " + RG_DAYS[RG_VIEW.sel] : (md === "class" ? "Class " : "Teacher: ") + RG_VIEW.sel;
+    w.document.write(`<!doctype html><meta charset="utf-8"><title>${esc(R.title||"Routine")}</title><style>body{font:14px system-ui,sans-serif;margin:14px}h2,h3{text-align:center;margin:2px 0}table{border-collapse:collapse;width:100%;table-layout:fixed;margin-top:10px}th,td{border:1px solid #888;padding:4px;text-align:center}th{background:#ddd}td.pn{width:80px;font-weight:700}td.pn small{display:block;font-weight:400;font-size:11px}td.brk{background:#f3f3f3;font-weight:700}td.off{background:#eee}td.em{color:#aaa}small.sb{display:block;font-size:10px}table.rgd{font-size:10px}@page{size:A4 landscape;margin:8mm}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style><h2>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ.মা.)</h2><h3>${esc(R.title||"Regular Class Routine")} — ${esc(what)}</h3>${tbl.replace(/ class="now"/g,"").replace(/ class="nowr"/g,"").replace(/var\(--tl\)/g,"85%")}<script>onload=()=>print()<\/script>`);
     w.document.close(); };
 }
 /* ---- admin side: pick a submitted weekly routine (or a downloaded file), publish / update / unpublish ---- */
