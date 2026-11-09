@@ -3156,9 +3156,7 @@ setInterval(() => { try { renderRtDay(); } catch(e) {} }, 60000);
       }
     });
     rows.sort((a,b)=>a[0].localeCompare(b[0]));
-    const exr=Object.keys(X).filter(k=>k.slice(0,7)===pre.slice(0,7)).sort();
-    const exHtml=exr.length?`<b style="font-size:12.5px;color:#b3261e;display:block;margin-top:8px">📝 Class X Test Exam এই মাসে / This month</b>`+exr.map(k=>`<div><span>${E(X[k].map(n=>n.replace("Class X Test Exam: ","")).join(", "))}</span><span>${E(fmtShort(k))}</span></div>`).join(""):"";
-    $("calMonthList").innerHTML=exHtml+(rows.length?`<b style="font-size:12.5px;color:var(--mar)">এই মাসের ছুটি / Holidays this month</b>`+rows.map(r=>`<div><span>${E(r[1])}</span><span>${E(r[2])}</span></div>`).join(""):(exr.length?"":`<span class="meta">এই মাসে কোনো ছুটি তালিকাভুক্ত নেই।</span>`));
+    $("calMonthList").innerHTML=rows.length?`<b style="font-size:12.5px;color:var(--mar)">এই মাসের ছুটি / Holidays this month</b>`+rows.map(r=>`<div><span>${E(r[1])}</span><span>${E(r[2])}</span></div>`).join(""):`<span class="meta">এই মাসে কোনো ছুটি তালিকাভুক্ত নেই।</span>`;
   }
   const fmtShort=s=>parse(s).toLocaleDateString("en-GB",{day:"2-digit",month:"short",timeZone:"UTC"});
   $("calPrev").onclick=()=>{vm--;if(vm<0){vm=11;vy--}renderCal()};
