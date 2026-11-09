@@ -675,6 +675,20 @@ header .hd-t h1{margin:0;font:800 clamp(22px,5.4vw,42px)/1.25 "Noto Serif Bengal
 header .hd-en{margin:4px 0 0;font:700 clamp(14px,3.5vw,24px)/1.3 system-ui,"Segoe UI",Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#ffd777}
 header .hd-t p{margin:8px auto 0;display:inline-block;font-size:clamp(12px,2.8vw,14.5px);opacity:1;color:#e6edff;border-top:1px solid rgba(255,255,255,.35);padding-top:6px}
 @media(max-width:520px){header .hd-in{flex-direction:column;gap:8px}}
+/* ===== header: designed + auto-fit (one line each, shrinks to the screen width) ===== */
+header{background:radial-gradient(ellipse at 20% 0%,rgba(255,215,119,.16),transparent 55%),linear-gradient(180deg,#0a2a6e 0%,#123c94 100%)}
+header .hd-t{max-width:100%}
+header .hd-t .fit{white-space:nowrap;width:max-content;max-width:none;margin-left:auto;margin-right:auto}
+header .hd-t h1{font:800 clamp(22px,5.4vw,42px)/1.25 "Noto Serif Bengali",serif;letter-spacing:0}
+header .hd-en{margin:2px auto 0;font:800 clamp(14px,3.5vw,24px)/1.3 system-ui,"Segoe UI",Arial,sans-serif;letter-spacing:.08em;background:linear-gradient(180deg,#fff0b8,#f4be34);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+header .hd-rule{display:flex;align-items:center;justify-content:center;gap:8px;margin:7px auto 6px;width:min(100%,420px)}
+header .hd-rule i{flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#f4be34)}
+header .hd-rule i:last-child{background:linear-gradient(270deg,transparent,#f4be34)}
+header .hd-rule b{color:#f4be34;font-size:13px;line-height:1}
+header .hd-t p.hd-sub{margin:0 auto;display:block;border-top:0;padding-top:0;font-size:clamp(12px,2.8vw,14.5px);color:#e6edff}
+header .hd-sub .est{display:inline-block;background:rgba(244,190,52,.16);border:1px solid #f4be34;color:#ffe29a;font-weight:700;border-radius:99px;padding:1px 11px;margin-right:8px}
+header .hd-sub .adr{display:inline-block;vertical-align:middle}
+@media(max-width:520px){header{padding:12px 10px 11px}header .hd-in{flex-direction:column;gap:7px}header .hd-logo{width:62px}header .hd-rule{margin:5px auto 5px}}
 nav.menu{position:static;background:var(--card);box-shadow:none;border-bottom:1px solid var(--line);justify-content:center;padding:2px 6px}
 nav.menu a{color:var(--mar);font-size:13px;font-weight:700;padding:8px 12px;border-right:0;border-radius:0}
 nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color:var(--ink)}
@@ -707,9 +721,10 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
   <div class="hd-in">
     <img class="hd-logo" src="icons/icon-192.png" alt="" onerror="this.style.display='none'">
     <div class="hd-t">
-      <h1>তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)</h1>
-      <div class="hd-en">Taldangra Fulmati High School (H.S.)</div>
-      <p>স্থাপিত / Estd. 1956 &nbsp;·&nbsp; Taldangra, Khatra, Bankura, West Bengal</p>
+      <h1 class="fit">তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)</h1>
+      <div class="hd-en fit">Taldangra Fulmati High School (H.S.)</div>
+      <div class="hd-rule" aria-hidden="true"><i></i><b>★</b><i></i></div>
+      <p class="hd-sub fit"><span class="est">স্থাপিত / Estd. 1956</span><span class="adr">Taldangra, Khatra, Bankura, West Bengal</span></p>
     </div>
   </div>
 </header>
@@ -3674,6 +3689,30 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
       if (!b) return; if (b.dataset.s === "l") cp(URL0); else if (b.dataset.s === "t") cp(TXT + "\n" + URL0);
       else if (b.dataset.s === "n") navigator.share({title: document.title, text: TXT, url: URL0}).catch(() => {}); };
   };
+})();
+</script>
+<script>
+/* header auto-fit: every title line stays on ONE line and scales down to the available width */
+(function(){
+  function fit(){
+    var hd=document.querySelector("header .hd-in"); if(!hd) return;
+    var logo=hd.querySelector(".hd-logo"), col=getComputedStyle(hd).flexDirection==="column";
+    var gap=parseFloat(getComputedStyle(hd).columnGap||getComputedStyle(hd).gap)||16;
+    var avail=hd.clientWidth-(col||!logo||logo.style.display==="none"?0:logo.offsetWidth+gap)-4;
+    if(avail<120) return;
+    hd.querySelectorAll(".hd-t .fit").forEach(function(el){
+      el.style.fontSize="";
+      for(var i=0;i<6;i++){
+        var w=el.offsetWidth; if(!w||w<=avail) break;
+        var fs=parseFloat(getComputedStyle(el).fontSize);
+        if(fs<=8) break;
+        el.style.fontSize=Math.max(8,fs*avail/w*0.985)+"px";
+      }
+    });
+  }
+  window.addEventListener("load",fit); window.addEventListener("resize",fit); window.addEventListener("orientationchange",function(){setTimeout(fit,200)});
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit);
+  document.addEventListener("DOMContentLoaded",fit); setTimeout(fit,600);
 })();
 </script>
 </body>
