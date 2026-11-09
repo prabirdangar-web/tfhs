@@ -736,7 +736,7 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
   <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a>
-  <a href="#holidays">ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="shareLink" title="Facebook / WhatsApp-এ শেয়ার">📤 শেয়ার</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="https://github.com/prabirdangar-web/tfhs/releases/download/v1/TFHS-App.apk" id="apkLink" rel="noopener">🤖 Android APK</a><a href="#" id="fbLink" title="মতামত ও পরামর্শ / Feedback &amp; Suggestion" aria-label="মতামত ও পরামর্শ / Feedback">✉️ মতামত</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
+  <a href="#holidays">ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="shareLink" title="Facebook / WhatsApp-এ শেয়ার">📤 শেয়ার</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="https://drive.google.com/uc?export=download&id=16HMhCNRtPA4dH0f_s0yiUyAy6nXCjT7h" id="apkLink" rel="noopener">🤖 Android APK</a><a href="#" id="fbLink" title="মতামত ও পরামর্শ / Feedback &amp; Suggestion" aria-label="মতামত ও পরামর্শ / Feedback">✉️ মতামত</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
 <a href="#" id="flashBar" class="flbar" hidden></a>
 
@@ -1534,7 +1534,7 @@ function instHelp(){
   o.style.cssText = "position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:12px";
   const t = isIOS ? "Safari-তে নিচের শেয়ার ⬆️ চাপুন → “Add to Home Screen” → “Add”"
     : (inApp ? "ডানদিকের ⋮ মেনু → “Chrome-এ খুলুন”, তারপর আবার ইনস্টল চাপুন"
-    : "Chrome-এর ⋮ মেনু → “Install app” বা “Add to Home screen” → “Install”");
+    : "<b>Chrome-এর উপরে ডানদিকের ⋮ (তিন ডট) চাপুন</b><br>→ <b>“Install app”</b> চাপুন<br>→ <b>“Install”</b> চাপুন<br><small style=\"opacity:.8\">“Install app” না দেখালে “Add to Home screen” চাপুন। কাজ না হলে মেনুর 🤖 Android APK ব্যবহার করুন।</small>");
   o.innerHTML = `<div style="background:#fff;color:#14213d;max-width:380px;width:100%;border-radius:14px;border-top:5px solid #f4be34;padding:16px;text-align:center;font-size:15px;line-height:1.55;font-family:inherit"><b style="font-size:16px">📲 TFHS অ্যাপ ইনস্টল</b><p style="margin:10px 0 14px">${t}</p><button type="button" style="background:#0c2a6b;color:#fff;border:0;border-radius:8px;padding:8px 26px;font:700 14px inherit;font-family:inherit;cursor:pointer">ঠিক আছে</button></div>`;
   document.body.appendChild(o);
   o.querySelector("button").onclick = () => o.remove();
