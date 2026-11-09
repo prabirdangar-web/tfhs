@@ -736,7 +736,7 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
   <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a>
-  <a href="#holidays">ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="shareLink" title="Facebook / WhatsApp-এ শেয়ার">📤 শেয়ার</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="#" id="fbLink" title="মতামত ও পরামর্শ / Feedback &amp; Suggestion" aria-label="মতামত ও পরামর্শ / Feedback">✉️ মতামত</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
+  <a href="#holidays">ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="shareLink" title="Facebook / WhatsApp-এ শেয়ার">📤 শেয়ার</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="TFHS-App.apk" id="apkLink" download>🤖 Android APK</a><a href="#" id="fbLink" title="মতামত ও পরামর্শ / Feedback &amp; Suggestion" aria-label="মতামত ও পরামর্শ / Feedback">✉️ মতামত</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
 <a href="#" id="flashBar" class="flbar" hidden></a>
 
@@ -1554,7 +1554,11 @@ function showInstallBar(force){
   document.body.appendChild(bar); }
 addEventListener("beforeinstallprompt", e => { e.preventDefault(); DEFERRED = e; setTimeout(() => showInstallBar(false), 2500); });
 if (isStandalone()) $("installLink").style.display = "none";
-addEventListener("appinstalled", () => { $("installLink").style.display = "none"; const b = document.getElementById("instBar"); if (b) b.remove(); });
+/* APK link: hide inside installed app, on iPhone/iPad and on desktop */
+(function(){ var a = document.getElementById("apkLink"); if (!a) return;
+  var isAndroid = /Android/i.test(navigator.userAgent);
+  if (isStandalone() || !isAndroid) a.style.display = "none"; })();
+addEventListener("appinstalled", () => { $("installLink").style.display = "none"; var _a = document.getElementById("apkLink"); if (_a) _a.style.display = "none"; const b = document.getElementById("instBar"); if (b) b.remove(); });
 /* fallback: browsers that never fire beforeinstallprompt (iPhone Safari, in-app browsers, already-dismissed Chrome) still get the alert */
 setTimeout(() => { if (!DEFERRED) showInstallBar(false); }, 6000);
 $("installLink").onclick = async e => { e.preventDefault(); if (!DEFERRED && !isStandalone() && location.protocol !== "file:") { const b = document.getElementById("instBar"); if (b) b.remove(); try { localStorage.removeItem(INST_KEY); } catch(x) {} } doInstall(); };
