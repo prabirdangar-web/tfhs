@@ -383,6 +383,28 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 .cd.sun.hol,.cd.sun.obs{color:#4a1200}
 @media(prefers-color-scheme:dark){.cal-dow span:first-child,.cd.sun{color:#ff9d90}.cd.sun.hol{color:#ffe29a}.cd.sun.obs{color:#ffd0c8}}
 
+/* ===== calendar colours: holiday deep red · event green · today gentle flash · other days deep golden ===== */
+.cal-grid .cd{background:linear-gradient(135deg,#d9a000,#b98200);color:#1b1200;border-color:#946600;font-weight:700}
+.cal-grid .cd.hol,.cal-grid .cd.sun{background:linear-gradient(135deg,#b3121b,#8a0b13);color:#fff;border-color:#6d0810;font-weight:800}
+.cal-grid .cd.ev,.cal-grid .cd.exm{background:linear-gradient(135deg,#1f9d4a,#157a37);color:#fff;border-color:#0f5c29;font-weight:800}
+.cal-grid .cd.ev.hol,.cal-grid .cd.ev.sun{background:linear-gradient(135deg,#b3121b 0%,#8a0b13 50%,#1f9d4a 50%,#157a37 100%);border-color:#6d0810}
+.cal-grid .cd.obs{background:linear-gradient(135deg,#d9a000,#b98200);color:#1b1200;border:1.5px dashed #0c2a6b}
+.cal-grid .cd.sun.hol,.cal-grid .cd.sun.obs{color:#fff}
+.cal-grid .cd.obs.sun{color:#fff}
+.cal-grid .cd.ev::after{display:none}
+.cal-grid .cd.sel{box-shadow:0 0 0 2.5px #fff inset,0 0 0 1px rgba(0,0,0,.35) inset}
+.cal-grid .cd.today{outline:2.5px solid var(--navy);outline-offset:-1px;font-weight:800;animation:calFlash 1.8s ease-in-out infinite}
+@keyframes calFlash{0%,100%{filter:brightness(1);outline-color:var(--navy)}50%{filter:brightness(1.3) saturate(1.1);outline-color:#fff}}
+@media(prefers-reduced-motion:reduce){.cal-grid .cd.today{animation:none}}
+@media(prefers-color-scheme:dark){
+  .cal-grid .cd{background:linear-gradient(135deg,#c99600,#a87500);color:#140d00;border-color:#7a5600}
+  .cal-grid .cd.hol,.cal-grid .cd.sun{background:linear-gradient(135deg,#a50f18,#7a0a11);color:#fff;border-color:#ff8a7a}
+  .cal-grid .cd.ev,.cal-grid .cd.exm{background:linear-gradient(135deg,#1c8f43,#13702f);color:#fff;border-color:#6fe39a}
+  .cal-grid .cd.ev.hol,.cal-grid .cd.ev.sun{background:linear-gradient(135deg,#a50f18 0%,#7a0a11 50%,#1c8f43 50%,#13702f 100%)}
+  .cal-grid .cd.today{outline-color:#fff}
+  @keyframes calFlash{0%,100%{filter:brightness(1);outline-color:#fff}50%{filter:brightness(1.35);outline-color:#ffd54a}}
+}
+
 /* ===== calculator polish: matching font/colours, mobile columns, key spot ===== */
 .thead button{font-weight:700;font-size:15px;font-family:inherit}
 .tbtabs button{font-weight:600;font-size:12.5px;font-family:inherit}
@@ -779,7 +801,7 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
       <div class="cal-body">
         <div class="cal-dow"><span>রবি</span><span>সোম</span><span>মঙ্গল</span><span>বুধ</span><span>বৃহঃ</span><span>শুক্র</span><span>শনি</span></div>
         <div class="cal-grid" id="calGrid"></div>
-        <div class="cal-leg"><span><i style="background:#ffc857"></i>ছুটি / Holiday</span><span><i style="background:color-mix(in srgb,var(--c-routine) 30%,var(--card))"></i>Observation day</span><span><i style="background:var(--c-staff)"></i>ইভেন্ট</span><span><i style="outline:2px solid var(--mar);background:var(--card)"></i>আজ</span></div>
+        <div class="cal-leg"><span><i style="background:#9e0f18"></i>ছুটি / Holiday (রবিবার সহ)</span><span><i style="background:#1f9d4a"></i>ইভেন্ট / Event</span><span><i style="background:#c99100;outline:2px solid var(--navy);outline-offset:-1px"></i>আজ (জ্বলজ্বল) / Today</span><span><i style="background:#c99100"></i>অন্যান্য দিন / Other days</span><span><i style="background:#c99100;border:1.5px dashed #0c2a6b"></i>Observation day</span></div>
         <div class="cal-info" id="calInfo"></div>
         <div class="cal-mlist" id="calMonthList"></div>
       </div>
