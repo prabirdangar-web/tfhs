@@ -1521,7 +1521,39 @@ const instHidden = () => { try { const t = +localStorage.getItem(INST_KEY) || 0;
 const instHide = () => { try { localStorage.setItem(INST_KEY, String(Date.now())); } catch(x) {} const b = document.getElementById("instBar"); if (b) b.remove(); };
 async function doInstall(){
   if (DEFERRED) { try { DEFERRED.prompt(); const r = await DEFERRED.userChoice; if (r && r.outcome === "accepted") instHide(); } catch(x) {} DEFERRED = null; return; }
-  FQUEUE = []; FLASH_LANG = "bn"; openFlash(INSTALL); }
+  instHelp(); }
+/* install help + self-check: shown when the browser has not offered the one-tap install prompt */
+async function instHelp(){
+  let o = document.getElementById("instHelp"); if (o) o.remove();
+  o = document.createElement("div"); o.id = "instHelp";
+  o.style.cssText = "position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:12px";
+  o.innerHTML = `<div style="background:#fff;color:#14213d;max-width:440px;width:100%;max-height:90vh;overflow:auto;border-radius:14px;border-top:5px solid #f4be34;padding:14px 16px;font:14px/1.5 inherit;font-family:inherit"><b style="font-size:16px">📲 অ্যাপ ইনস্টল</b><div id="instSteps" style="margin:8px 0"></div><div id="instChk" style="margin:8px 0;font-size:12.5px">⏳ পরীক্ষা চলছে…</div><div style="text-align:right"><button type="button" id="instOk" style="background:#0c2a6b;color:#fff;border:0;border-radius:8px;padding:7px 18px;font:700 13px inherit;font-family:inherit;cursor:pointer">ঠিক আছে</button></div></div>`;
+  document.body.appendChild(o);
+  o.querySelector("#instOk").onclick = () => o.remove();
+  o.addEventListener("click", e => { if (e.target === o) o.remove(); });
+  const steps = isIOS
+    ? "<b>আইফোন (Safari):</b><br>১) নিচের শেয়ার ⬆️ বোতাম চাপুন<br>২) “Add to Home Screen” চাপুন<br>৩) “Add” চাপুন<br><small>(Chrome/WhatsApp-এর ভেতরে নয়, Safari-তেই করতে হবে)</small>"
+    : (inApp ? "<b>এটি WhatsApp/Facebook-এর ভেতরের ব্রাউজার — এখানে ইনস্টল হয় না।</b><br>১) ডানদিকের ⋮ মেনু চাপুন<br>২) “Open in Chrome” / “Chrome-এ খুলুন” চাপুন<br>৩) Chrome-এ খুলে আবার “ইনস্টল” চাপুন"
+    : "<b>অ্যান্ড্রয়েড (Chrome):</b><br>১) Chrome-এর উপরের ডানদিকে ⋮ মেনু চাপুন<br>২) “Install app” বা “Add to Home screen” চাপুন<br>৩) “Install” চাপুন<br><small>শুধু “Add shortcut” দেখালে নিচের পরীক্ষার ✖ চিহ্নিত অংশ ঠিক করতে হবে।</small>");
+  o.querySelector("#instSteps").innerHTML = steps;
+  const rows = [], ok = (t, good, why) => rows.push((good ? "✅ " : "❌ ") + t + (good ? "" : (why ? " — <i>" + why + "</i>" : "")));
+  try {
+    ok("https নিরাপদ সংযোগ", location.protocol === "https:" || location.hostname === "localhost", "সাইট https-এ খুলতে হবে");
+    ok("Service Worker (sw.js) লোড", "serviceWorker" in navigator && !!(await navigator.serviceWorker.getRegistration()), "sw.js নিবন্ধিত হয়নি — ফাইলটি সাইটের মূল ফোল্ডারে আছে কিনা দেখুন, তারপর পেজ রিফ্রেশ করুন");
+    const ml = document.querySelector('link[rel="manifest"]'); let man = null;
+    try { const r = await fetch(ml.href, {cache: "no-store"}); if (r.ok) man = await r.json(); } catch(x) {}
+    ok("manifest.json", !!man, "manifest.json পাওয়া যাচ্ছে না");
+    if (man) {
+      const base = ml.href, icons = man.icons || [];
+      const chk = async sz => { const ic = icons.find(i => (i.sizes || "").indexOf(sz) > -1); if (!ic) return false; try { return (await fetch(new URL(ic.src, base), {cache: "no-store"})).ok; } catch(x) { return false; } };
+      ok("আইকন 192×192", await chk("192"), "icons/icon-192.png আপলোড/নাম ঠিক নেই");
+      ok("আইকন 512×512", await chk("512"), "icons/icon-512.png আপলোড/নাম ঠিক নেই");
+      ok("start_url ও display", !!man.start_url && man.display === "standalone", "manifest-এ start_url / display:standalone দিন");
+    }
+    ok("আগে থেকে ইনস্টল নয়", !isStandalone(), "অ্যাপ ইতিমধ্যে ইনস্টল করা আছে");
+  } catch(x) { rows.push("⚠️ পরীক্ষা সম্পূর্ণ হয়নি"); }
+  const c = o.querySelector("#instChk"); if (c) c.innerHTML = "<b>স্বয়ংক্রিয় পরীক্ষা:</b><br>" + rows.join("<br>") + (rows.some(r => r.startsWith("❌")) ? "<br><small>❌ ঠিক না হলে Chrome নিজে থেকে ইনস্টল-বোতাম দেবে না।</small>" : "<br><small>সব ✅ হলে পেজ একবার রিফ্রেশ করে আবার চেষ্টা করুন; Chrome কখনও কখনও কিছুক্ষণ পরে ইনস্টল-বোতাম দেয়।</small>");
+}
 function showInstallBar(force){
   if (isStandalone() || location.protocol === "file:" || document.getElementById("instBar")) return;
   if (!force && instHidden()) return;
@@ -1531,7 +1563,7 @@ function showInstallBar(force){
   const how = isIOS ? "Safari-তে নিচের শেয়ার ⬆️ চেপে “Add to Home Screen” দিন" : (inApp ? "এই ব্রাউজারে ইনস্টল হবে না — Chrome-এ খুলুন, তারপর ⋮ → Install app" : "এক ট্যাপে ফোনের হোম স্ক্রিনে TFHS অ্যাপ যোগ করুন");
   const bar = document.createElement("div"); bar.id = "instBar"; bar.setAttribute("role", "dialog");
   bar.innerHTML = `<img src="icons/icon-192.png" alt=""><div class="it"><b>📲 TFHS অ্যাপ ইনস্টল করুন</b><small>${how}</small></div><button class="go" type="button">${isIOS || inApp ? "কীভাবে?" : "ইনস্টল"}</button><button class="x" type="button" aria-label="বন্ধ">✕</button>`;
-  bar.querySelector(".go").onclick = () => { if (isIOS || inApp) { FQUEUE = []; FLASH_LANG = "bn"; openFlash(INSTALL); } else { doInstall(); } };
+  bar.querySelector(".go").onclick = () => { if (isIOS || inApp) instHelp(); else doInstall(); };
   bar.querySelector(".x").onclick = instHide;
   document.body.appendChild(bar); }
 addEventListener("beforeinstallprompt", e => { e.preventDefault(); DEFERRED = e; setTimeout(() => showInstallBar(false), 2500); });
