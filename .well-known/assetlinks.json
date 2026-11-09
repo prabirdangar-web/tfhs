@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.web.tfhs_portal.twa",
+        "sha256_cert_fingerprints": ["FA:8E:F4:27:50:D8:54:B2:70:AC:24:91:E0:09:7F:D6:5E:68:C2:9B:5B:73:C9:E5:0E:FC:EF:49:73:3A:14:F1"]
+      }
+    }]
