@@ -688,6 +688,10 @@ header .hd-rule b{color:#f4be34;font-size:13px;line-height:1}
 header .hd-t p.hd-sub{margin:0 auto;display:block;border-top:0;padding-top:0;font-size:clamp(12px,2.8vw,14.5px);color:#e6edff}
 header .hd-sub .est{display:inline-block;background:rgba(244,190,52,.16);border:1px solid #f4be34;color:#ffe29a;font-weight:700;border-radius:99px;padding:1px 11px;margin-right:8px}
 header .hd-sub .adr{display:inline-block;vertical-align:middle}
+header .hd-estd{display:block;margin:7px auto 0;text-align:center}
+header .hd-sub .est,header .hd-estd .est{margin-right:0}
+header .hd-estd .est{display:inline-block;background:rgba(244,190,52,.16);border:1px solid #f4be34;color:#ffe29a;font-weight:700;border-radius:99px;font-size:clamp(12px,2.8vw,15px);padding:2px 14px}
+header .hd-rule{margin:7px auto 5px}
 @media(max-width:520px){header{padding:12px 10px 11px}header .hd-in{flex-direction:column;gap:7px}header .hd-logo{width:62px}header .hd-rule{margin:5px auto 5px}}
 nav.menu{position:static;background:var(--card);box-shadow:none;border-bottom:1px solid var(--line);justify-content:center;padding:2px 6px}
 nav.menu a{color:var(--mar);font-size:13px;font-weight:700;padding:8px 12px;border-right:0;border-radius:0}
@@ -723,8 +727,9 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
     <div class="hd-t">
       <h1 class="fit">তালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উ:মা:)</h1>
       <div class="hd-en fit">Taldangra Fulmati High School (H.S.)</div>
+      <div class="hd-estd fit"><span class="est">স্থাপিত / Estd. 1956</span></div>
       <div class="hd-rule" aria-hidden="true"><i></i><b>★</b><i></i></div>
-      <p class="hd-sub fit"><span class="est">স্থাপিত / Estd. 1956</span><span class="adr">Taldangra, Khatra, Bankura, West Bengal</span></p>
+      <p class="hd-sub fit"><span class="adr">Taldangra, Khatra, Bankura, West Bengal</span></p>
     </div>
   </div>
 </header>
@@ -1527,7 +1532,7 @@ async function instHelp(){
   let o = document.getElementById("instHelp"); if (o) o.remove();
   o = document.createElement("div"); o.id = "instHelp";
   o.style.cssText = "position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:12px";
-  o.innerHTML = `<div style="background:#fff;color:#14213d;max-width:440px;width:100%;max-height:90vh;overflow:auto;border-radius:14px;border-top:5px solid #f4be34;padding:14px 16px;font:14px/1.5 inherit;font-family:inherit"><b style="font-size:16px">📲 অ্যাপ ইনস্টল</b><div id="instSteps" style="margin:8px 0"></div><div id="instChk" style="margin:8px 0;font-size:12.5px">⏳ পরীক্ষা চলছে…</div><div style="text-align:right"><button type="button" id="instOk" style="background:#0c2a6b;color:#fff;border:0;border-radius:8px;padding:7px 18px;font:700 13px inherit;font-family:inherit;cursor:pointer">ঠিক আছে</button></div></div>`;
+  o.innerHTML = `<div style="background:#fff;color:#14213d;max-width:440px;width:100%;max-height:90vh;overflow:auto;border-radius:14px;border-top:5px solid #f4be34;padding:14px 16px;font-size:14px;line-height:1.5;font-family:inherit"><b style="font-size:16px">📲 অ্যাপ ইনস্টল</b><div id="instSteps" style="margin:8px 0"></div><div id="instChk" style="margin:8px 0;font-size:12.5px">⏳ পরীক্ষা চলছে…</div><div style="text-align:right"><button type="button" id="instOk" style="background:#0c2a6b;color:#fff;border:0;border-radius:8px;padding:7px 18px;font:700 13px inherit;font-family:inherit;cursor:pointer">ঠিক আছে</button></div></div>`;
   document.body.appendChild(o);
   o.querySelector("#instOk").onclick = () => o.remove();
   o.addEventListener("click", e => { if (e.target === o) o.remove(); });
