@@ -1,19 +1,19 @@
-const CACHE_NAME = 'tfhs-cache-v3';   // bumped: forces every device to drop the old cache (v2 could hold a wrong index.html)
+const CACHE_NAME = 'tfhs-cache-v4';   // bumped: forces every device to drop the old cache (v2 could hold a wrong index.html)
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/apple-touch-icon.png',
-  './icons/maskable-512.png',
+  './tfhs-192.png',
+  './tfhs-512.png',
+  './apple-touch-icon.png',
+  './tfhs-maskable-512.png',
   './images/staff/photos.json'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+      return Promise.all(ASSETS_TO_CACHE.map((u) => cache.add(u).catch(() => {})));
     }).then(() => self.skipWaiting())
   );
 });
