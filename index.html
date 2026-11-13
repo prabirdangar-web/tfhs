@@ -775,6 +775,7 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
 .emod input{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
 .emod .emod-b{margin:14px 0 0;text-align:right}
 @media(prefers-color-scheme:dark){#panel,#admBody{background:#0f151d}#panel fieldset,#panel legend,#admNav{background:var(--card)}#panel .item{background:var(--bg);border-color:var(--line)}.dcard{background:var(--card)}#panel label{color:var(--mut)}}
+.ttx h3{margin:0;padding:5px 10px;font-size:13px;background:color-mix(in srgb,var(--c-routine) 14%,var(--card));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -869,7 +870,8 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
           <select id="bellLang" aria-label="Alert language"><option value="bn">বাংলা</option><option value="en">English</option><option value="both">বাংলা + English</option></select>
           <label><input type="checkbox" id="bellSpeak" checked> 🗣️ মুখে বলুন / Speak</label>
           <button type="button" class="btn alt sm" id="bellTest">🔔 Test</button><small class="meta" style="flex-basis:100%">📲 অ্যাপ ইনস্টল থাকলে ব্রাউজারের “Notifications → Allow” দিন; ক্লাসের আগে বাংলায় মেসেজ আসবে।</small></span></div>
-          <table class="tt" id="ttBox"></table></section>
+          <table class="tt" id="ttBox"></table>
+          <div id="ttExtra" class="ttx" hidden><h3>📌 অন্যান্য সময় / Other timings</h3><table class="tt" id="routineTbl"></table></div></section>
         <section class="cc duty" data-opt="duty" style="--c:var(--c-mp)" aria-label="MDM তদারকি রোস্টার"><h2>🍱 MDM তদারকি রোস্টার (সপ্তাহের দিন অনুযায়ী)</h2><div id="dutyBox"></div></section>
       </div>
     
@@ -928,8 +930,6 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
         <button class="btn" id="natAll" type="button">▶ ক্রমানুসারে বাজান / Play both in order</button>
       </div>
 
-      <h2 class="sec" id="schedule" style="--c:var(--c-routine)">দৈনিক সময়সূচি / Daily schedule</h2>
-      <table class="t" id="routineTbl"></table>
       <h2 class="sec" id="holidays" data-opt="hol" style="--c:var(--c-routine)">ছুটি / Holidays</h2>
       <div data-opt="hol"><h3>আসন্ন ছুটি / Upcoming holidays</h3>
       <div class="list" id="holidayBox" style="--c:var(--c-routine)"></div>
@@ -1165,7 +1165,7 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
     </fieldset>
 
 
-    <fieldset><legend>Daily schedule rows (assembly, bell times) – shown under Daily schedule</legend>
+    <fieldset><legend>Daily schedule rows (assembly, bell times) – shown inside the school timetable card as “Other timings”</legend>
       <div class="row"><label>Item<input id="tLabel" placeholder="Morning assembly"></label><label>Time<input id="tTime" placeholder="10:30 AM"></label></div>
       <p><button class="btn" id="addT">Add routine row</button></p>
       <div id="tList"></div>
@@ -1990,7 +1990,8 @@ function renderExtra(){
       + STYPES.filter(s => s[0] && s[0] !== "voc").map(([k, lab]) => { const g = stf.filter(t => t.unit !== "voc" && t.stype === k); return g.length ? `<h3 class="sub">${esc(lab)}</h3><div class="staff v">${g.map(card).join("")}</div>` : ""; }).join("")
       + (voc.length ? `<h3 class="sub vh">ভোকেশনাল ইউনিট / Vocational Unit (WBSCTVE&amp;SD)</h3>` + vl("VIII+","VIII+ Level") + vl("X+2","X+2 Level") + vl("Para","Para Teachers") + vl("Support","Support Staff") : "")
     : `<div class="empty">তালিকা শীঘ্রই। / List coming soon.</div>`;
-  $("routineTbl").innerHTML = (D.routine||[]).map(r => `<tr><td>${esc(r.label)}</td><td>${esc(r.time)}</td></tr>`).join("");
+  $("routineTbl").innerHTML = (D.routine||[]).map(r => `<tr><td>${esc(r.time)}</td><td>${esc(r.label)}</td></tr>`).join("");
+  $("ttExtra").hidden = !(D.routine||[]).length;
   const all = (D.holidays||[]).slice().sort((a,b) => a.date.localeCompare(b.date)), t0 = today();
   const range = h => fmt(h.date) + (h.to && h.to !== h.date ? " – " + fmt(h.to) : "");
   const hs = all.filter(h => (h.to || h.date) >= t0);
