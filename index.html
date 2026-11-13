@@ -867,6 +867,8 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
           <div class="bellbar" id="bellBar"><label class="bellsw"><input type="checkbox" id="bellOn"> 🔔 ক্লাস শুরুর অ্যালার্ম / Class start alert</label>
           <span class="bellopt"><select id="bellLead" aria-label="Alert before"><option value="1">১ মিনিট আগে / 1 min before</option><option value="2">২ মিনিট আগে / 2 min before</option><option value="3">৩ মিনিট আগে / 3 min before</option><option value="5">৫ মিনিট আগে / 5 min before</option></select>
           <label><input type="checkbox" id="bellStart" checked> শুরুর সময়েও ঘণ্টা / also at start</label>
+          <label><input type="checkbox" id="bellEnd" checked> ক্লাস শেষেও ঘণ্টা / also at end of class</label>
+          <label><input type="checkbox" id="bellNo" checked> 🔔 পিরিয়ড নম্বর অনুযায়ী ঘণ্টা (১ম = ১ বার…) / bell strokes = period no.</label>
           <select id="bellLang" aria-label="Alert language"><option value="bn">বাংলা</option><option value="en">English</option><option value="both">বাংলা + English</option></select>
           <label><input type="checkbox" id="bellSpeak" checked> 🗣️ মুখে বলুন / Speak</label>
           <button type="button" class="btn alt sm" id="bellTest">🔔 Test</button><small class="meta" style="flex-basis:100%">📲 অ্যাপ ইনস্টল থাকলে ব্রাউজারের “Notifications → Allow” দিন; ক্লাসের আগে বাংলায় মেসেজ আসবে।</small></span></div>
@@ -3616,7 +3618,7 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
 <script>
 (function(){
   var KEY="tfhs_bell",$=function(i){return document.getElementById(i)};
-  var P={on:false,lead:2,start:true,speak:true,lang:"bn"};
+  var P={on:false,lead:2,start:true,end:true,no:true,speak:true,lang:"bn"};
   try{var q=JSON.parse(localStorage.getItem(KEY)||"{}");for(var k in q)P[k]=q[k]}catch(e){}
   function sv(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
   var BN=function(x){return String(x).replace(/\d/g,function(d){return "০১২৩৪৫৬৭৮৯"[d]})};
@@ -3633,37 +3635,59 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
     return t;
   }
   /* message sets */
-  function M(l,type,r){
+  function M(l,type,r,nx){
     if(l==="en"){var nm=enName(r.t),tm=T12e(r.a);
       if(type==="pre")return{title:"🔔 Class starting soon!",body:nm+" starts in "+P.lead+" minute"+(P.lead>1?"s":"")+" ("+tm+"). Please go to your class.",say:"Attention please. "+nm+" starts in "+P.lead+" minute"+(P.lead>1?"s":"")+". Everyone, please go to class.",ban:"🔔 "+nm+" starts in "+P.lead+" min ("+tm+")"};
+      if(type==="end"){var nn=nx?enName(nx.t):"";return{title:"🔔 Class over",body:nm+" is over ("+T12e(r.b)+")."+(nx?" Next: "+nn+" ("+T12e(nx.a)+").":" That was the last class of the day."),say:nm+" is over."+(nx?" Next is "+nn+".":" The school day is over."),ban:"🔔 "+nm+" over ("+T12e(r.b)+")"+(nx?" → "+nn:"")}}
       if(type==="go")return{title:"🔔 Class has started",body:nm+" has started now ("+tm+").",say:nm+" has started now.",ban:"🔔 "+nm+" has started ("+tm+")"};
       if(type==="on")return{title:"🔔 Taldangra Fulmati High School",body:"Class bell alerts are ON. You will be notified before every class.",say:"Class bell alert is on.",ban:"🔔 Class alert ON — keep this page open"};
       return{title:"🔔 Test bell",body:"Class start alert is working.",say:"This is a test bell. Your class starts in two minutes.",ban:"🔔 Test bell"};
     }
     if(type==="pre")return{title:"🔔 ক্লাস শুরু হচ্ছে!",body:r.t+" — আর "+BN(P.lead)+" মিনিট পরে ("+T12(r.a)+")। দ্রুত ক্লাসে যান।",say:"মনোযোগ দিন। "+r.t+" শুরু হতে আর "+BN(P.lead)+" মিনিট বাকি। সবাই ক্লাসে যান।",ban:"🔔 "+r.t+" শুরু হতে "+BN(P.lead)+" মিনিট বাকি ("+T12(r.a)+")"};
+    if(type==="end")return{title:"🔔 ক্লাস শেষ",body:r.t+" শেষ হলো ("+T12(r.b)+")।"+(nx?" এরপর: "+nx.t+" ("+T12(nx.a)+")।":" আজকের শেষ ক্লাস — ছুটির ঘণ্টা।"),say:r.t+" শেষ হলো।"+(nx?" এরপর "+nx.t+"।":" আজকের ক্লাস শেষ।"),ban:"🔔 "+r.t+" শেষ ("+T12(r.b)+")"+(nx?" → "+nx.t:"")};
     if(type==="go")return{title:"🔔 ক্লাস শুরু হয়েছে",body:r.t+" এখন শুরু ("+T12(r.a)+")।",say:r.t+" এখন শুরু হলো।",ban:"🔔 "+r.t+" শুরু হলো ("+T12(r.a)+")"};
     if(type==="on")return{title:"🔔 তালডাংরা ফুলমতি উচ্চ বিদ্যালয়",body:"ক্লাসের ঘণ্টার বিজ্ঞপ্তি চালু হয়েছে। প্রতিটি ক্লাস শুরুর আগে জানানো হবে।",say:"ঘণ্টা সংকেত চালু হয়েছে।",ban:"🔔 ক্লাস অ্যালার্ম চালু — পেজ খোলা রাখুন"};
     return{title:"🔔 টেস্ট ঘণ্টা",body:"ক্লাস শুরুর বিজ্ঞপ্তি ঠিকভাবে কাজ করছে।",say:"এটি একটি পরীক্ষামূলক ঘণ্টা। ক্লাস শুরু হতে আর দুই মিনিট বাকি।",ban:"🔔 টেস্ট ঘণ্টা"};
   }
   var TEST={t:"১ম পিরিয়ড",a:"10:50"};
-  function msgs(type,r){
-    if(P.lang==="both"){var b=M("bn",type,r),e=M("en",type,r);return[{l:"bn",m:b},{l:"en",m:e}]}
-    return[{l:P.lang==="en"?"en":"bn",m:M(P.lang==="en"?"en":"bn",type,r)}];
+  function msgs(type,r,nx){
+    if(P.lang==="both"){var b=M("bn",type,r,nx),e=M("en",type,r,nx);return[{l:"bn",m:b},{l:"en",m:e}]}
+    return[{l:P.lang==="en"?"en":"bn",m:M(P.lang==="en"?"en":"bn",type,r,nx)}];
   }
   var AC=null;
   function ctx(){try{if(!AC){var C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}if(AC&&AC.state==="suspended")AC.resume()}catch(e){}return AC}
-  function ring(times){
-    var c=ctx();if(!c)return;times=times||3;
-    for(var n=0;n<times;n++){
-      var t0=c.currentTime+n*1.1;
-      [[880,.5,1.6],[1320,.3,1.1],[1760,.18,.8],[2349,.1,.5]].forEach(function(p){
-        var o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=p[0];
-        g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(p[1],t0+.01);g.gain.exponentialRampToValueAtTime(.001,t0+p[2]);
-        o.connect(g);g.connect(c.destination);o.start(t0);o.stop(t0+p[2]+.05);
-      });
-    }
-    try{if(navigator.vibrate)navigator.vibrate([300,150,300,150,300])}catch(e){}
+  /* Old telephone ring: loud two-tone clapper "brrr-brrr" (double burst), then optional school-bell strokes = period number */
+  function phoneBurst(c,t0,len,dest){
+    var mix=c.createGain();mix.gain.value=.5;                                   /* clapper rattle: 25 Hz on/off */
+    var lfo=c.createOscillator(),lg=c.createGain();lfo.type="square";lfo.frequency.value=25;lg.gain.value=.5;lfo.connect(lg);lg.connect(mix.gain);
+    var env=c.createGain();env.gain.setValueAtTime(0,t0);env.gain.linearRampToValueAtTime(1,t0+.01);env.gain.setValueAtTime(1,t0+len-.03);env.gain.linearRampToValueAtTime(0,t0+len);
+    [1000,1400].forEach(function(f){var o=c.createOscillator(),g=c.createGain();o.type="square";o.frequency.value=f;g.gain.value=.5;o.connect(g);g.connect(mix);o.start(t0);o.stop(t0+len+.05)});
+    mix.connect(env);env.connect(dest||c.destination);lfo.start(t0);lfo.stop(t0+len+.05);
   }
+  function bellStrike(c,t0,dest){
+    [[784,.55,1.3],[1568,.3,1.0],[2093,.18,.7],[3136,.1,.4]].forEach(function(p){
+      var o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=p[0];
+      g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(p[1],t0+.005);g.gain.exponentialRampToValueAtTime(.001,t0+p[2]);
+      o.connect(g);g.connect(dest||c.destination);o.start(t0);o.stop(t0+p[2]+.05);
+    });
+  }
+  /* returns total seconds used (so the spoken message can wait) */
+  function ring(times,strokes){
+    var c=ctx();if(!c)return 0;times=times||2;strokes=strokes||0;
+    /* loud output chain: boost + limiter so it stays loud without distorting the speaker */
+    var master=c.createGain();master.gain.value=1.8;
+    var lim=c.createDynamicsCompressor();lim.threshold.value=-14;lim.knee.value=8;lim.ratio.value=14;lim.attack.value=.002;lim.release.value=.15;
+    master.connect(lim);lim.connect(c.destination);
+    var t0=c.currentTime+.05,end=0;
+    for(var n=0;n<times;n++){
+      var s=t0+n*2.7;phoneBurst(c,s,.75,master);phoneBurst(c,s+.95,.75,master);end=s+1.7+.3;   /* old phone: brrrring-brrrring, pause */
+    }
+    if(strokes>0){var bs=end+.2;for(var k=0;k<strokes;k++)bellStrike(c,bs+k*.9,master);end=bs+(strokes-1)*.9+1.0}
+    try{if(navigator.vibrate)navigator.vibrate([400,150,400,150,400,150,400])}catch(e){}
+    return end-c.currentTime;
+  }
+  /* period number from a name like "৩য় পিরিয়ড" / "3rd Period" (0 if not a numbered period) */
+  function pno(r){if(!r)return 0;var m=/^\s*([০-৯0-9]+)\S*\s*(পিরিয়ড|period)/i.exec(r.t||"");return m?+EN(m[1]):0}
   function notify(title,body,when,lang){
     try{
       if(!("Notification" in window)||Notification.permission!=="granted")return;
@@ -3686,7 +3710,7 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
     }catch(e){}
   }
   /* spoken announcement; picks a voice matching each language */
-  function speak(list){
+  function speak(list,wait){
     try{
       if(!P.speak||!("speechSynthesis" in window))return;
       var vs=speechSynthesis.getVoices()||[];
@@ -3696,35 +3720,46 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
           var v=x.l==="en"?(vs.filter(function(v){return /^en-IN/i.test(v.lang)})[0]||vs.filter(function(v){return /^en/i.test(v.lang)})[0])
                           :(vs.filter(function(v){return /^bn/i.test(v.lang)})[0]||vs.filter(function(v){return /^hi/i.test(v.lang)})[0]);
           u.lang=v?v.lang:(x.l==="en"?"en-IN":"bn-IN");if(v)u.voice=v;u.rate=.9;u.volume=1;speechSynthesis.speak(u);
-        })}catch(e){}},2600);
+        })}catch(e){}},wait||2600);
     }catch(e){}
   }
   try{if("speechSynthesis" in window)speechSynthesis.getVoices()}catch(e){}
   var bt=null;
   function banner(list){var b=$("bellBanner");b.textContent=list.map(function(x){return x.m.ban}).join("  |  ");b.classList.add("show");clearTimeout(bt);bt=setTimeout(function(){b.classList.remove("show")},12000)}
   $("bellBanner").onclick=function(){this.classList.remove("show")};
-  function fire(type,r,times,key){var L=msgs(type,r);ring(times);speak(L);banner(L);L.forEach(function(x){notify(x.m.title,x.m.body,key,x.l)})}
-  function ui(){var bb=$("bellBar");if(!bb)return;bb.classList.toggle("on",!!P.on);$("bellOn").checked=!!P.on;$("bellLead").value=String(P.lead);$("bellStart").checked=!!P.start;$("bellSpeak").checked=P.speak!==false;$("bellLang").value=P.lang||"bn"}
+  function fire(type,r,times,key,nx,strokes){var L=msgs(type,r,nx);var d=ring(times,P.no?(strokes||0):0);speak(L,Math.min(14000,Math.ceil(d*1000)+300));banner(L);L.forEach(function(x){notify(x.m.title,x.m.body,key,x.l)})}
+  function ui(){var bb=$("bellBar");if(!bb)return;bb.classList.toggle("on",!!P.on);$("bellOn").checked=!!P.on;$("bellLead").value=String(P.lead);$("bellStart").checked=!!P.start;if($("bellEnd"))$("bellEnd").checked=P.end!==false;if($("bellNo"))$("bellNo").checked=P.no!==false;$("bellSpeak").checked=P.speak!==false;$("bellLang").value=P.lang||"bn"}
   $("bellOn").onchange=function(){P.on=this.checked;sv();ui();if(P.on){askPerm();schedule();var L=msgs("on",TEST);ring(1);banner(L);speak(L)}};
   $("bellLead").onchange=function(){P.lead=+this.value;sv();schedule()};
   $("bellLang").onchange=function(){P.lang=this.value;sv();schedule();var L=msgs("on",TEST);banner(L);speak(L)};
   $("bellSpeak").onchange=function(){P.speak=this.checked;sv();if(P.speak)speak(msgs("on",TEST))};
   $("bellStart").onchange=function(){P.start=this.checked;sv()};
-  $("bellTest").onclick=function(){askPerm();fire("test",TEST,2,Date.now())};
+  if($("bellEnd"))$("bellEnd").onchange=function(){P.end=this.checked;sv()};
+  if($("bellNo"))$("bellNo").onchange=function(){P.no=this.checked;sv()};
+  $("bellTest").onclick=function(){askPerm();fire("test",TEST,2,Date.now(),null,3)};
   var done={};
-  function rows(){
+  function allRows(){
     var r=[];try{r=r.concat(ttRows())}catch(e){}
     try{if(D.morning&&D.morning.active&&typeof parseTT==="function")r=r.concat(parseTT(D.morning.text||DEF_MN))}catch(e){}
-    return r.filter(function(x){return !/টিফিন|বিরতি|মিড/.test(x.t)});
+    return r;
   }
+  function rows(){return allRows().filter(function(x){return !/টিফিন|বিরতি|মিড/.test(x.t)})}
+  var MM=function(hm){var a=String(hm).split(":");return (+a[0])*60+(+a[1])};
   function tick(){
     if(!P.on)return;var n=new Date();if(n.getDay()===0)return;
-    var nm=n.getHours()*60+n.getMinutes(),day=n.toDateString();
-    rows().forEach(function(r){
-      var hm=r.a.split(":"),st=(+hm[0])*60+(+hm[1]);
-      var k1=day+"|"+r.a+"|"+r.t+"|pre",k2=day+"|"+r.a+"|"+r.t+"|go";
-      if(nm===st-P.lead&&!done[k1]){done[k1]=1;fire("pre",r,3,k1)}
-      if(P.start&&nm===st&&!done[k2]){done[k2]=1;fire("go",r,2,k2)}
+    var nm=n.getHours()*60+n.getMinutes(),day=n.toDateString(),R=rows(),AR=allRows();
+    R.forEach(function(r){
+      var st=MM(r.a),en=MM(r.b);
+      var k1=day+"|"+r.a+"|"+r.t+"|pre",k2=day+"|"+r.a+"|"+r.t+"|go",k3=day+"|"+r.b+"|"+r.t+"|end";
+      if(nm===st-P.lead&&!done[k1]){done[k1]=1;fire("pre",r,2,k1,null,pno(r))}
+      /* when another class ends exactly now, the "end" alert (which names the next class) replaces this start alert */
+      var merged=P.end&&R.some(function(o){return MM(o.b)===st});
+      if(P.start&&nm===st&&!merged&&!done[k2]){done[k2]=1;fire("go",r,2,k2,null,pno(r))}
+      if(P.end&&nm===en&&!done[k3]){done[k3]=1;
+        var nx=AR.filter(function(o){return MM(o.a)>=en}).sort(function(x,y){return MM(x.a)-MM(y.a)})[0]||null;
+        if(nx&&MM(nx.a)-en>10)nx=null;
+        fire("end",r,3,k3,nx,pno(nx)||pno(r));
+      }
     });
   }
   ui();schedule();setInterval(tick,5000);
