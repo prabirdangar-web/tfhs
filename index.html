@@ -727,6 +727,55 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
 #shareBox .sg a,#shareBox .sg button{display:block;text-align:center;text-decoration:none;border:0;border-radius:6px;padding:11px;font:700 14.5px inherit;font-family:inherit;color:#fff;cursor:pointer}
 #shareBox .fb{background:#1877f2}#shareBox .wa{background:#1d9c55}#shareBox .cp{background:var(--navy)}#shareBox .xx{background:var(--bg);color:var(--ink)!important;border:1px solid var(--line)!important}
 </style>
+<style>
+/* ===== tabs: every tab visible (wraps instead of hiding behind a sideways scroll) ===== */
+.ptabs{flex-wrap:wrap!important;overflow:visible!important;position:relative!important;gap:4px!important;padding:6px 6px 0!important}
+.ptabs button{flex:1 1 auto!important;min-width:0!important;justify-content:center;padding:9px 12px!important;font-size:14.5px!important}
+@media(max-width:520px){.ptabs button{flex:1 1 44%!important;font-size:13.5px!important;padding:8px 8px!important}}
+.viewall{text-align:center;padding:8px;background:var(--card);border-top:1px solid var(--line)}
+/* ===== admin: professional look ===== */
+#panel{background:#f3f5fa}
+#panel .adm-top{background:linear-gradient(135deg,#0c2a6b,#1c4db3);padding:10px 18px;box-shadow:0 2px 8px rgba(0,0,0,.25);border-bottom:3px solid var(--gold)}
+#panel .adm-top h2{font-size:18px;letter-spacing:.3px}
+@media(min-width:701px){
+ #admNav{flex:0 0 190px;padding:12px 10px;gap:3px;background:#fff;box-shadow:2px 0 10px rgba(12,42,107,.08)}
+ #admNav button{flex-direction:row;justify-content:flex-start;gap:11px;padding:10px 12px;font:600 13.5px/1.2 inherit;font-family:inherit;border-radius:8px;text-align:left}
+ #admNav button .ic{font-size:18px;width:24px;text-align:center}
+ #admNav button:hover{background:#eef2fb}
+ #admNav button[aria-selected=true]{background:linear-gradient(135deg,var(--mar),#2a5bd0);box-shadow:0 3px 8px rgba(18,56,138,.35)}
+}
+#admBody{background:#f3f5fa;padding:16px 20px 48px}
+#admBody .adm-h{font-size:20px;margin:0 auto 14px;padding-bottom:8px;border-bottom:2px solid var(--gold)}
+#panel fieldset{border:0!important;border-top:4px solid var(--mar)!important;border-radius:10px;box-shadow:0 2px 12px rgba(12,42,107,.10);padding:16px 18px 14px!important;background:#fff}
+#panel legend{font-size:15px;color:var(--navy);padding:0 8px;background:#fff;border-radius:6px}
+#panel label{font-weight:600;color:#3b4660}
+#panel input,#panel select,#panel textarea{border:1px solid #c5cee0;border-radius:8px;transition:border-color .15s,box-shadow .15s}
+#panel input:focus,#panel select:focus,#panel textarea:focus{outline:0;border-color:var(--mar);box-shadow:0 0 0 3px rgba(18,56,138,.15)}
+#panel .item{border:1px solid #e1e6f0;border-radius:8px;background:#fafbfe;margin:0 0 6px}
+#panel .item:hover{background:#f0f4ff}
+#panel .item .btn{margin-left:4px;white-space:nowrap}
+.adm-cnt{font-size:12px;color:var(--mut);margin:8px 0 6px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.adm-more{display:block;margin:8px auto 0}
+.adm-dash .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.dcard{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;border:1px solid var(--line);border-left:5px solid var(--mar);border-radius:10px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 1px 6px rgba(12,42,107,.08);color:var(--ink)}
+.dcard:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(12,42,107,.18)}
+.dcard .di{font-size:20px}.dcard b{font-size:26px;line-height:1.1;color:var(--navy)}.dcard span{font-size:12.5px;color:var(--mut)}
+.dnew{font-style:normal;background:#b3121b;color:#fff;border-radius:9px;padding:0 6px;font-size:10.5px;font-weight:700}
+.dh{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
+.dchips{display:flex;flex-wrap:wrap;gap:8px}
+.dchip{padding:4px 12px;border-radius:16px;font-size:12.5px;font-weight:700;border:1px solid var(--line)}
+.dchip.on{background:#e4f6ec;color:#14603b;border-color:#9fd6b6}.dchip.off{background:#f1f3f7;color:#6b7589}
+.dact{display:flex;flex-wrap:wrap;gap:8px}
+.drow{display:flex;justify-content:space-between;gap:10px;padding:7px 10px;border-bottom:1px dashed var(--line);font-size:13.5px}.drow span{color:var(--mut);white-space:nowrap}
+/* edit pop-up */
+.emod-wrap{position:fixed;inset:0;z-index:5000;background:rgba(5,15,45,.6);display:flex;align-items:center;justify-content:center;padding:12px}
+.emod{background:var(--card);color:var(--ink);width:min(440px,100%);border-top:5px solid var(--gold);border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.45);padding:16px}
+.emod h3{margin:0 0 6px;font-size:17px;color:var(--mar)}
+.emod label{display:block;font-size:13px;font-weight:600;color:var(--mut);margin-top:10px}
+.emod input{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.emod .emod-b{margin:14px 0 0;text-align:right}
+@media(prefers-color-scheme:dark){#panel,#admBody{background:#0f151d}#panel fieldset,#panel legend,#admNav{background:var(--card)}#panel .item{background:var(--bg);border-color:var(--line)}.dcard{background:var(--card)}#panel label{color:var(--mut)}}
+</style>
 </head>
 <body>
 <div class="strip"></div>
@@ -937,13 +986,10 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
     </fieldset>
 
     <fieldset><legend>Pop-up notice (opens in front when the site is visited)</legend>
-      <label><input type="checkbox" id="fOn" style="width:auto"> Show pop-up on the site</label>
-      <div class="row"><label>Title (Bengali)<input id="fiTitle"></label><label>Title (English, optional)<input id="fiTitleEn"></label></div>
-      <div class="row"><label>Date (text, as it should appear)<input id="fiDate" placeholder="১৩ নভেম্বর, ২০২৬ / 13 November, 2026"></label><label>Place (optional)<input id="fiPlace" placeholder="বিদ্যালয় প্রাঙ্গণ / School Premises"></label></div>
-      <label>Show until (optional – pop-up stops automatically after this date)<input id="fiUntil" type="date"></label>
-      <label>Full notice text (Bengali)<textarea id="fiBody" rows="9"></textarea></label>
-      <label>Full notice text (English, optional – adds an English button)<textarea id="fiBodyEn" rows="7"></textarea></label>
-      <p><button class="btn" id="saveFlash">Save pop-up</button> <button class="btn alt" id="prevFlash" type="button">Preview</button> <button class="btn alt" id="loadFlash" type="button">Load Vijaya/Diwali reopening notice</button> <button class="btn alt" id="loadGuide" type="button">Load portal user guide (2 months)</button> <button class="btn alt" id="offFlash" type="button">Turn off</button></p>
+      <label class="chk"><input type="checkbox" id="fOn" style="width:auto"> Show pop-up on the site <span class="meta">(untick = the pop-up never opens)</span></label>
+      <label>Heading<input id="fiTitle" placeholder="Type in Bengali or English – shown exactly as typed"></label>
+      <label>Notice text<textarea id="fiBody" rows="9" placeholder="Type in one language only – shown exactly as typed"></textarea></label>
+      <p><button class="btn" id="saveFlash" type="button">Save pop-up</button> <button class="btn alt" id="prevFlash" type="button">Preview</button> <button class="btn alt" id="offFlash" type="button">Turn off</button></p>
     </fieldset>
 
     <fieldset><legend>📲 WhatsApp share (student · teacher · guardian groups)</legend>
@@ -1055,15 +1101,17 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
     </fieldset>
 
     <fieldset><legend>Teacher / staff</legend>
-      <div class="row"><label>Staff type<select id="sType"><option value="">Regular school staff</option><option value="voc">Vocational unit (WBSCTVE&amp;SD)</option></select></label><label>Name<input id="sName"></label></div>
+      <div class="row"><label>Staff type<select id="sType"><option value="">Regular school staff</option><option value="part">Part-time teacher / Part-timer</option><option value="contract">Contractual teacher / staff</option><option value="para">Para teacher</option><option value="guest">Guest teacher</option><option value="nonteach">Non-teaching staff (Group C / D)</option><option value="guard">Night guard / Support staff</option><option value="other">Other</option><option value="voc">Vocational unit (WBSCTVE&amp;SD)</option></select></label><label>Name<input id="sName"></label></div>
       <div id="vocFields" style="display:none">
         <div class="row"><label>Course level<select id="sLevel"><option value="VIII+">VIII+ Level</option><option value="X+2">X+2 Level</option><option value="Para">Para Teacher</option><option value="Support">Support Staff</option></select></label><label>Engagement status<select id="sEng"><option>Contractual</option><option>Part-time</option><option>Temporary</option><option>Regular</option></select></label></div>
         <div class="row"><label>Designation<select id="sDesig"><option>Contractual Instructor</option><option>Contractual Teacher</option><option>Part Time Teacher</option><option>Para Teacher</option><option>Temporary Night-Guard</option><option value="other">Other (type below)</option></select></label><label>Date of joining (optional)<input id="sJoin" type="date"></label></div>
         <p class="meta" style="margin:6px 0 0">Aadhaar, PAN, bank and other personal details are NOT stored here – this page is public.</p>
       </div>
-      <div class="row"><label id="sPostL">Post<input id="sPost" placeholder="Assistant Teacher"></label><label><span id="sSubT">Subject</span><input id="sSub" list="tradeList" placeholder="Mathematics"></label></div>
+      <div class="row"><label id="sPostL">Post<input id="sPost" list="postList" placeholder="Assistant Teacher"></label><label><span id="sSubT">Subject</span><input id="sSub" list="tradeList" placeholder="Mathematics"></label></div>
       <datalist id="tradeList"><option value="Agriculture Machineries"><option value="Auto Electrician"><option value="Domestic Appliances"><option value="Computer"><option value="Practice (Electrician)"><option value="Communicative English"><option value="Mathematics"><option value="Bengali"><option value="Management of Co-operative"></datalist>
       <div class="row"><label>Photo path (optional)<input id="sPhoto" list="photoList" placeholder="blank = auto, or pick / type a path"><datalist id="photoList"></datalist></label><label>Photo from computer (optional)<input type="file" id="sFile" accept="image/*"></label></div>
+      <datalist id="postList"><option value="Head Master"><option value="Assistant Head Master"><option value="Assistant Teacher"><option value="Assistant Teacher (Part-time)"><option value="Para Teacher"><option value="Guest Teacher"><option value="Librarian"><option value="Clerk"><option value="Group D Staff"><option value="Night Guard"><option value="Cook / MDM Staff"></datalist>
+      <div class="row"><label>Mobile no. (optional)<input id="sMob" type="tel" inputmode="tel" maxlength="16" placeholder="10-digit mobile – leave blank if none"></label><label style="display:flex;gap:6px;align-items:center;margin-top:26px"><input type="checkbox" id="sShowMob" style="width:auto"> Show this number on the public staff list</label></div>
       <p><button class="btn" id="addS">Add staff</button> <button class="btn alt" id="cancelS" style="display:none">Cancel edit</button></p>
       <p><button class="btn alt" id="syncS">Sync names from Salary Portal</button> <button class="btn alt" id="updR">Update regular staff (29)</button> <button class="btn alt" id="impV">Import vocational staff (17)</button> <span id="syncOut" class="meta"></span></p>
       <div id="photoRep" class="meta"></div>
@@ -1258,13 +1306,16 @@ function render(){
   }
   const ns = (D.notices || []).filter(n => filter === "all" || n.for === filter || n.for === "general")
     .sort((x,y) => (y.date||"").localeCompare(x.date||""));
-  $("notices").innerHTML = ns.length ? ns.map(n => `<div class="item"><div>
+  const NLIM = 8, nAll = !!window.__nAll; const nsAll = ns; const nsShow = nAll ? ns : ns.slice(0, NLIM);
+  $("notices").innerHTML = ns.length ? nsShow.map(n => `<div class="item"><div>
       <b>${esc(n.title)}</b>
       <span class="meta">${isNew(n.date)||isFresh(n)?'<span class="tag new">NEW</span>':""}<span class="tag">${forLabel[n.for]||"General"}</span>${fmt(n.date)}</span>
       ${n.body?`<details class="nb"><summary>📄 বিস্তারিত / Details</summary><div class="nbody">${esc(n.body)}</div></details>`:""}
       ${imgUrl(n.poster)&&isData(n.poster)?`<img class="zoom poster-s" loading="lazy" src="${imgUrl(n.poster)}" alt="Notice poster">`:""}</div>
       ${(n.pdf||safeUrl(n.link))?`<div class="acts">${pdfBtn(n.pdf)}${safeUrl(n.link)?`<a class="btn sm" href="${safeUrl(n.link)}" target="_blank" rel="noopener">Open</a>`:""}</div>`:""}</div>`).join("")
     : `<div class="empty">কোনো বিজ্ঞপ্তি নেই। / No notices yet.</div>`;
+  if (nsAll.length > NLIM) { $("notices").insertAdjacentHTML("beforeend", `<div class="viewall"><button type="button" class="btn alt" id="nMore">${nAll ? "▴ কম দেখুন / Show less" : "▾ সব দেখুন / View all (" + nsAll.length + ")"}</button></div>`);
+    $("nMore").onclick = () => { window.__nAll = !window.__nAll; render(); }; }
   const rs = [...(D.results || [])].sort((x,y) => (y.date||"").localeCompare(x.date||""));
   $("results").innerHTML = remHtml(D.resRem) + (rs.length ? rs.map(r => `<div class="item"><div><b>${esc(r.title)}</b>
       <span class="meta">${isNew(r.date)||isFresh(r)?'<span class="tag new">NEW</span>':""}${fmt(r.date)}</span></div>
@@ -1388,13 +1439,35 @@ function photoPicker(t){
     <button type="button" class="btn sm addph" data-up="${esc(t.id)}">&#128247; Add photo (missing)</button>
     <label>Photo (manual)<select data-ph="${esc(t.id)}">${opts.join("")}</select></label></div>`;
 }
+const ADM_ALL = {}, ADM_LIM = 5;
+const EDITABLE = ["holidays","staff","links","resources","notices","results","gallery","routine","events"];
+/* small pop-up editor used for every "Edit" button that has no form of its own */
+function editModal(title, fields, obj, done){
+  const w = document.createElement("div"); w.className = "emod-wrap";
+  w.innerHTML = `<div class="emod" role="dialog" aria-modal="true"><h3>✏️ ${esc(title)}</h3>${fields.map(f => `<label>${esc(f.l)}<input data-f="${f.k}" type="${f.t||"text"}" value="${esc(obj[f.k]||"")}"></label>`).join("")}<p class="emod-b"><button type="button" class="btn" data-s="ok">Save changes</button> <button type="button" class="btn alt" data-s="x">Cancel</button></p></div>`;
+  document.body.appendChild(w);
+  const close = () => { w.remove(); document.removeEventListener("keydown", esc2); }, esc2 = e => { if (e.key === "Escape") close(); };
+  document.addEventListener("keydown", esc2);
+  const first = w.querySelector("input"); if (first) first.focus();
+  w.onclick = e => { if (e.target === w) return close(); const b = e.target.closest("[data-s]"); if (!b) return;
+    if (b.dataset.s === "x") return close();
+    const v = {}; w.querySelectorAll("[data-f]").forEach(i => v[i.dataset.f] = i.value.trim());
+    const bad = fields.find(f => f.req && !v[f.k]); if (bad) return toast(bad.l + " is required");
+    close(); done(v); };
+}
 function renderAdminLists(){
   for (const [k, id] of Object.entries(LISTS)){
-    $(id).innerHTML = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||(isData(x.url)?"Uploaded photo":x.url))}</b>
-      <span class="meta">${esc((x.unit==="voc"?"VOC "+(x.level||"")+" · "+(x.eng||"")+" · ":"")+(x.post||x.time||(x.cat?catLabel(x.cat)+(x.vis==="admin"?" · admin only":""):"")))} ${fmt(x.date)}${x.pdf?" · 📄 PDF":""}</span></div>
+    const rows = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||(isData(x.url)?"Uploaded photo":x.url))}</b>
+      <span class="meta">${esc((x.unit==="voc"?"VOC "+(x.level||"")+" · "+(x.eng||"")+" · ":(x.stype?stypeLabel(x.stype)+" · ":""))+(x.post||x.time||(x.cat?catLabel(x.cat)+(x.vis==="admin"?" · admin only":""):"")))} ${fmt(x.date)}${x.pdf?" · 📄 PDF":""}${k==="staff"&&x.mobile?" · 📞 "+esc(x.mobile)+(x.showMob?" (public)":" (private)"):""}</span></div>
       ${k==="staff"?photoPicker(x):""}
-      ${["holidays","staff","links","resources","notices","results"].includes(k)?`<button class="btn alt sm" data-edit="${x.id}" data-ek="${k}">Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">Delete</button></div>`).join("");
+      ${EDITABLE.includes(k)?`<button class="btn alt sm" data-edit="${x.id}" data-ek="${k}">✏️ Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">🗑 Delete</button></div>`);
+    const lim = ADM_ALL[k] ? rows.length : ADM_LIM;
+    let h = rows.slice(0, lim).join("");
+    if (rows.length > ADM_LIM) h += `<button type="button" class="btn sm adm-more" data-more="${k}">${ADM_ALL[k] ? "▴ Show less" : "▾ View all (" + rows.length + ")"}</button>`;
+    if (rows.length) h = `<div class="adm-cnt">${rows.length} item${rows.length > 1 ? "s" : ""} · showing ${Math.min(lim, rows.length)}</div>` + h;
+    $(id).innerHTML = h;
   }
+  document.querySelectorAll("#panel [data-more]").forEach(b => b.onclick = () => { ADM_ALL[b.dataset.more] = !ADM_ALL[b.dataset.more]; renderAdminLists(); });
   document.querySelectorAll("#panel [data-id]").forEach(b => b.onclick = () => {
     if (!confirm("Delete this item?")) return;
     D[b.dataset.k] = eff(b.dataset.k).filter(x => x.id !== b.dataset.id); save();
@@ -1408,13 +1481,14 @@ function renderAdminLists(){
     t.photo = v; save();
   });
   document.querySelectorAll("#panel [data-edit]").forEach(b => b.onclick = () => {
-    if (["links","resources","notices","results"].includes(b.dataset.ek)) { startEdit(b.dataset.ek, b.dataset.edit); return; }
-    if (b.dataset.ek === "staff") { const t = (D.staff||[]).find(x => x.id === b.dataset.edit); if (t) loadStaff(t); return; }
-    const h = (D.holidays||[]).find(x => x.id === b.dataset.edit); if (!h) return;
-    const n = prompt("Holiday name", h.name); if (n === null) return;
-    const f = prompt("From date (YYYY-MM-DD)", h.date); if (f === null) return;
-    const t = prompt("To date (YYYY-MM-DD, blank if one day)", h.to || ""); if (t === null) return;
-    Object.assign(h, {name:n.trim()||h.name, date:f.trim()||h.date, to:t.trim()}); save();
+    const k = b.dataset.ek, id = b.dataset.edit, stamp = (o, v) => { Object.assign(o, v); o.upd = Date.now(); save(); };
+    if (["links","resources","notices","results"].includes(k)) { startEdit(k, id); return; }
+    const o = (D[k]||[]).find(x => x.id === id); if (!o) return;
+    if (k === "staff") return loadStaff(o);
+    if (k === "holidays") return editModal("Edit holiday", [{k:"name",l:"Holiday name",req:1},{k:"date",l:"From date",t:"date",req:1},{k:"to",l:"To date (blank = one day)",t:"date"}], o, v => stamp(o, v));
+    if (k === "gallery") return editModal("Edit photo", [{k:"caption",l:"Caption"}].concat(isData(o.url) ? [] : [{k:"url",l:"Image path / link",req:1}]), o, v => stamp(o, v));
+    if (k === "routine") return editModal("Edit schedule row", [{k:"label",l:"Item",req:1},{k:"time",l:"Time"}], o, v => stamp(o, v));
+    if (k === "events") return editModal("Edit event", [{k:"date",l:"Event date",t:"date",req:1},{k:"title",l:"Event (Bengali text)",req:1}], o, v => stamp(o, v));
   });
 }
 const SAMPLE_NOTICE = {"title": "বিদ্যালয় পুনরায় খোলার বিজ্ঞপ্তি ও সাধারণ নির্দেশাবলী", "body": "এতদ্বারা বিদ্যালয়ের সকল ছাত্র-ছাত্রী, শিক্ষক-শিক্ষিকা, গ্রন্থাগারিক, শিক্ষাকর্মী ও অভিভাবকদের জানানো যাচ্ছে যে, আগামী ১লা জুন, ২০২৬ থেকে একাদশ শ্রেণি ব্যতীত অন্য সমস্ত শ্রেণির পঠন-পাঠন ও সাধারণ কার্যক্রম যথারীতি শুরু হচ্ছে।\n\n• বিদ্যালয় শুরুর সময়: সকাল ১০:৩০ মিনিট (নির্ধারিত সময়সূচি অনুযায়ী)\n\n• একাদশ শ্রেণির জন্য বিশেষ বিজ্ঞপ্তি: একাদশ শ্রেণির ভর্তি প্রক্রিয়া সম্পন্ন হওয়ার অর্থাৎ ৪-৫ দিনের মধ্যে তাদের ক্লাস শুরুর তারিখ এই পোর্টালে পৃথকভাবে জানিয়ে দেওয়া হবে। সকলকে নিয়মিত পোর্টাল নজর রাখার অনুরোধ করা হচ্ছে।\n\n🔹 গুরুত্বপূর্ণ নির্দেশাবলী (General Guidelines)\n\nবিদ্যালয়ের শৃঙ্খলা ও পঠন-পাঠনের সুষ্ঠু পরিবেশ বজায় রাখতে নিম্নলিখিত নিয়মাবলী কঠোরভাবে মেনে চলতে হবে:\n\n⏱️ ১. প্রার্থনা সভা ও সময়ানুবর্তিতা\n\n• সমস্ত শিক্ষক-শিক্ষিকা, গ্রন্থাগারিক ,শিক্ষাকর্মী ও ছাত্র-ছাত্রীদের যথাসময়ে বিদ্যালয়ে উপস্থিত হয়ে প্রার্থনা সভায় অংশগ্রহণ করা বাধ্যতামূলক।\n\n• সকল ছাত্র-ছাত্রীকে বিদ্যালয়ের নির্ধারিত পোশাক (Uniform) পরিধান করে উপস্থিত থাকতে হবে।\n\n🎶 ২. \"বন্দে মাতরম্\" সঙ্গীত পরিবেশন\n\n• পশ্চিমবঙ্গ সরকারের নির্দেশিকা অনুযায়ী, প্রতিদিন প্রার্থনা সভায় যৌথভাবে “বন্দে মাতরম্” গান পরিবেশন করা হবে।\n\n• প্রার্থনা ও সঙ্গীত পরিবেশন শেষ হওয়ার অব্যবহিত পরেই শ্রেণিকক্ষে নিয়মিত পঠন-পাঠন শুরু হবে।\n\n📚 ৩. পঠন-পাঠন ও উপস্থিতি\n\n• ১লা জুন, ২০২৬ থেকে প্রতিটি শ্রেণির ক্লাস [একাদশ শ্রেণি ব্যতীত] পুরোদমে চালু হয়ে যাবে।\n\n• শিক্ষার্থীদের পড়াশোনার ধারাবাহিকতা বজায় রাখার জন্য প্রতিদিন নিয়মিত উপস্থিতি অত্যন্ত জরুরি।\n\n🍱 ৪. মিড-ডে মিল (Mid-Day Meal)\n\n• পঞ্চম থেকে অষ্টম শ্রেণির ছাত্র-ছাত্রীদের জন্য সরকারি নিয়মানুযায়ী Mid-Day Meal কার্যক্রম ১লা জুন থেকেই যথারীতি চালু থাকবে।\n\n⚠️ বিশেষ সতর্কবার্তা\n\nবিদ্যালয়ের প্রতিটি ছাত্র-ছাত্রীকে প্রাতিষ্ঠানিক শৃঙ্খলা, ভদ্রতা ও সময়ানুবর্তিতা বজায় রেখে নির্দিষ্ট সময়ের পূর্বে বিদ্যালয়ে উপস্থিত হওয়ার জন্য বিশেষভাবে নির্দেশ দেওয়া হচ্ছে। এতে কোনো প্রকার শিথিলতা গ্রহণযোগ্য নয়।\n\nআদেশানুসারে,\n\nপ্রধান শিক্ষক\n\nতালডাংরা ফুলমতি উচ্চ বিদ্যালয় (উচ্চ মাধ্যমিক)\n\nবাঁকুড়া"};
@@ -1493,7 +1567,7 @@ function flashInit(){
   if (openByHash()) return;
   if (!EKTA_DONE && ektaActive()) { EKTA_DONE = true; if (!flashSeenOf("ektaSeen", EKTA.id)) showQ(EKTA); }
   if (!FLASH_DONE && flashActive()) { FLASH_DONE = true; if (!flashSeenOf("flashSeen", D.flash.id)) showQ(D.flash); }
-  if (!GUIDE_DONE && guideActive()) { GUIDE_DONE = true; if (!flashSeenOf("guideSeen", GUIDE.id)) setTimeout(() => showQ(GUIDE), 1500); }
+  /* the portal-guide popup no longer opens by itself: only the admin pop-up (when ticked) opens on visit */
 }
 
 /* ---------- unread blinking + WhatsApp share ---------- */
@@ -1597,20 +1671,13 @@ addEventListener("hashchange", () => { NOTICE_DONE = false; openByHash(); });
 let FF_ID = null;
 function fillFlash(force){
   const f = D.flash || {}; if (!force && FF_ID === (f.id || "none")) return; FF_ID = f.id || "none";
-  $("fOn").checked = !!f.on; $("fiTitle").value = f.title || ""; $("fiTitleEn").value = f.titleEn || ""; $("fiDate").value = f.date || "";
-  $("fiPlace").value = f.place || ""; $("fiUntil").value = f.until || ""; $("fiBody").value = f.body || ""; $("fiBodyEn").value = f.bodyEn || "";
+  $("fOn").checked = !!f.on; $("fiTitle").value = f.title || ""; $("fiBody").value = f.body || "";
 }
-const flashFromForm = () => ({ id:uid(), on:$("fOn").checked, title:$("fiTitle").value.trim(), titleEn:$("fiTitleEn").value.trim(), date:$("fiDate").value.trim(),
-  place:$("fiPlace").value.trim(), until:$("fiUntil").value, body:$("fiBody").value.trim(), bodyEn:$("fiBodyEn").value.trim() });
-$("saveFlash").onclick = () => { const f = flashFromForm(); if (!f.title || !f.body) return toast("Title and Bengali text are required");
-  if (tooBig(f.body.length + f.bodyEn.length + 500)) return toast("Storage full - delete old gallery photos first");
+const flashFromForm = () => ({ id:uid(), on:$("fOn").checked, title:$("fiTitle").value.trim(), body:$("fiBody").value.trim() });
+$("saveFlash").onclick = () => { const f = flashFromForm(); if (!f.title || !f.body) return toast("Heading and notice text are required");
+  if (tooBig(f.body.length + 500)) return toast("Storage full - delete old gallery photos first");
   D.flash = f; FF_ID = f.id; save(); };
-$("prevFlash").onclick = () => { const keep = D.flash; D.flash = flashFromForm(); if (!D.flash.title) { D.flash = keep; return toast("Enter a title first"); } FLASH_LANG = "bn"; FQUEUE = []; openFlash(D.flash); D.flash = keep; };
-$("loadFlash").onclick = () => { const x = SAMPLE_FLASH; $("fOn").checked = true; $("fiTitle").value = x.title; $("fiTitleEn").value = x.titleEn; $("fiDate").value = x.date;
-  $("fiPlace").value = x.place; $("fiBody").value = x.body; $("fiBodyEn").value = x.bodyEn; $("fiUntil").value = "";
-  toast("Loaded - check the text, then click Save pop-up"); $("fiTitle").scrollIntoView({block:"center"}); };
-$("loadGuide").onclick = () => { const x = GUIDE; $("fOn").checked = true; $("fiTitle").value = x.title; $("fiTitleEn").value = x.titleEn; $("fiDate").value = x.date;
-  $("fiPlace").value = x.place; $("fiBody").value = x.body; $("fiBodyEn").value = x.bodyEn; $("fiUntil").value = x.until; toast("Loaded - click Save pop-up"); $("fiTitle").scrollIntoView({block:"center"}); };
+$("prevFlash").onclick = () => { const keep = D.flash; D.flash = flashFromForm(); if (!D.flash.title) { D.flash = keep; return toast("Enter a heading first"); } FLASH_LANG = "bn"; FQUEUE = []; openFlash(D.flash); D.flash = keep; };
 $("offFlash").onclick = () => { if (!D.flash) return toast("No pop-up saved"); D.flash = {...D.flash, on:false, id:uid()}; fillFlash(true); save(); };
 const addTo = (k, obj) => { D[k] = eff(k).slice(); D[k].push({id:uid(), ...obj}); save(); };
 function shrink(file, maxDim, maxBytes){
@@ -1637,6 +1704,8 @@ $("addG").onclick = async () => {
   if (tooBig(u.length + 200)) return toast("Storage full - delete old gallery photos or use the images/ folder");
   addTo("gallery",{url:u, caption:$("gCap").value.trim()});
   $("gUrl").value=$("gCap").value=$("gFile").value=""; };
+const STYPES = [["","Regular school staff"],["part","Part-time teachers / Part-timers"],["contract","Contractual teachers / staff"],["para","Para teachers"],["guest","Guest teachers"],["nonteach","Non-teaching staff (Group C / D)"],["guard","Night guard / Support staff"],["other","Other staff"],["voc","Vocational unit"]];
+const stypeLabel = k => (STYPES.find(x => x[0] === k) || [0,""])[1];
 const DESIGS = ["Contractual Instructor","Contractual Teacher","Part Time Teacher","Para Teacher","Temporary Night-Guard"];
 let EDIT_ID = null;
 function syncType(){
@@ -1647,13 +1716,13 @@ function syncType(){
 }
 $("sType").onchange = $("sDesig").onchange = syncType; syncType();
 function resetStaffForm(){
-  EDIT_ID = null; ["sName","sPost","sSub","sPhoto","sFile","sJoin"].forEach(i => $(i).value = "");
+  EDIT_ID = null; ["sName","sPost","sSub","sPhoto","sFile","sJoin","sMob"].forEach(i => $(i).value = ""); $("sShowMob").checked = false;
   $("addS").textContent = "Add staff"; $("cancelS").style.display = "none"; syncType();
 }
 $("cancelS").onclick = resetStaffForm;
 function loadStaff(t){
   EDIT_ID = t.id; const v = t.unit === "voc";
-  $("sType").value = v ? "voc" : ""; $("sName").value = t.name || ""; $("sSub").value = t.subject || "";
+  $("sType").value = v ? "voc" : (t.stype || ""); $("sMob").value = t.mobile || ""; $("sShowMob").checked = !!t.showMob; $("sName").value = t.name || ""; $("sSub").value = t.subject || "";
   $("sLevel").value = t.level || "VIII+"; $("sEng").value = t.eng || "Contractual"; $("sJoin").value = t.join || "";
   if (v && DESIGS.includes(t.post)) { $("sDesig").value = t.post; $("sPost").value = ""; }
   else { $("sDesig").value = v ? "other" : DESIGS[0]; $("sPost").value = t.post || ""; }
@@ -1668,7 +1737,9 @@ $("addS").onclick = async () => { const n=$("sName").value.trim(); if(!n) return
     if (tooBig(ph.length + 300)) return toast("Storage full - use the images/staff folder instead"); }
   else if (!ph && old && isData(old.photo)) ph = old.photo;
   const post = v && $("sDesig").value !== "other" ? $("sDesig").value : $("sPost").value.trim();
-  const obj = {name:n, post, subject:$("sSub").value.trim(), photo:ph,
+  let mob = $("sMob").value.replace(/[\s\-]/g, ""); mob = mob.replace(/^(\+?91|0)(?=\d{10}$)/, "");
+  if (mob && !/^\d{10}$/.test(mob)) return toast("Mobile no. must be 10 digits (or leave it blank)");
+  const obj = {name:n, post, subject:$("sSub").value.trim(), photo:ph, stype: v ? "" : $("sType").value, mobile:mob, showMob: !!mob && $("sShowMob").checked,
     unit: v ? "voc" : "", level: v ? $("sLevel").value : "", eng: v ? $("sEng").value : "", join: v ? $("sJoin").value : ""};
   if (old) { Object.assign(old, obj); save(); }
   else addTo("staff", obj);
@@ -1911,11 +1982,12 @@ function renderExtra(){
     : `<div class="empty">শীঘ্রই ছবি যোগ করা হবে। / Photos coming soon.</div>`;
   const card = t => `<div class="item">
     ${imgUrl(photoOf(t))?`<img class="ph" loading="lazy" src="${imgUrl(photoOf(t))}" alt="" data-i="${esc((t.name||"?").trim().charAt(0))}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph',textContent:this.dataset.i}))">`:`<span class="ph">${esc((t.name||"?").trim().charAt(0))}</span>`}
-    <div><b>${isFresh(t)?NEWT:""}${esc(t.name)}</b><span class="meta">${esc(t.post)}${t.subject?" · "+esc(t.subject):""}</span>${t.unit==="voc"&&(t.eng||t.join)?`<span class="meta blk">${esc(t.eng||"")}${t.join?(t.eng?" · ":"")+"since "+esc(String(t.join).slice(0,4)):""}</span>`:""}</div></div>`;
-  const stf = D.staff||[], reg = stf.filter(t => t.unit !== "voc"), voc = stf.filter(t => t.unit === "voc");
+    <div><b>${isFresh(t)?NEWT:""}${esc(t.name)}</b><span class="meta">${esc(t.post)}${t.subject?" · "+esc(t.subject):""}</span>${t.showMob&&/^\d{10}$/.test(t.mobile||"")?`<span class="meta blk">📞 <a href="tel:${esc(t.mobile)}">${esc(t.mobile)}</a></span>`:""}${t.unit==="voc"&&(t.eng||t.join)?`<span class="meta blk">${esc(t.eng||"")}${t.join?(t.eng?" · ":"")+"since "+esc(String(t.join).slice(0,4)):""}</span>`:""}</div></div>`;
+  const stf = D.staff||[], reg = stf.filter(t => t.unit !== "voc" && !t.stype), voc = stf.filter(t => t.unit === "voc");
   const vl = (lv, lab) => { const g = voc.filter(t => (t.level||"VIII+") === lv); return g.length ? `<h3 class="sub">${lab}</h3><div class="staff v">${g.map(card).join("")}</div>` : ""; };
   $("staffBox").innerHTML = stf.length
     ? (reg.length ? `<div class="staff">${reg.map(card).join("")}</div>` : "")
+      + STYPES.filter(s => s[0] && s[0] !== "voc").map(([k, lab]) => { const g = stf.filter(t => t.unit !== "voc" && t.stype === k); return g.length ? `<h3 class="sub">${esc(lab)}</h3><div class="staff v">${g.map(card).join("")}</div>` : ""; }).join("")
       + (voc.length ? `<h3 class="sub vh">ভোকেশনাল ইউনিট / Vocational Unit (WBSCTVE&amp;SD)</h3>` + vl("VIII+","VIII+ Level") + vl("X+2","X+2 Level") + vl("Para","Para Teachers") + vl("Support","Support Staff") : "")
     : `<div class="empty">তালিকা শীঘ্রই। / List coming soon.</div>`;
   $("routineTbl").innerHTML = (D.routine||[]).map(r => `<tr><td>${esc(r.label)}</td><td>${esc(r.time)}</td></tr>`).join("");
@@ -2753,7 +2825,9 @@ ${safeUrl(m.pdf)?`<div class="acts">${pdfBtn(m.pdf, "Programme PDF")}</div>`:""}
     ${rows.length?`<table class="t mp"><tr><th>তারিখ / Date</th><th>বার / Day</th><th>সময় / Time</th><th>বিষয় / Subject</th></tr>${rows.map(r => `<tr><td>${fmt(r.date)}</td><td><span class="dfl">${esc(dayName(r.date))}</span><span class="dsh">${esc(dayName(r.date).slice(0,3))}</span></td><td>${esc((r.time||"").replace(/\s*([–-])\s*/g,"$1"))}</td><td>${isFresh(r)?NEWT:""}${esc(r.subject)}</td></tr>`).join("")}</table>`:""}`
     : `<div class="empty">প্রোগ্রাম শীঘ্রই প্রকাশিত হবে। / Programme will be published soon.</div>`;
   const al = $("mpList"); if (!al) return;
-  al.innerHTML = rows.map(r => `<div class="item"><div><b>${esc(r.subject)}</b><span class="meta">${fmt(r.date)} ${esc(dayName(r.date))} ${esc(r.time||"")}</span></div><button class="btn alt sm" data-mpdel="${esc(r.id)}">Delete</button></div>`).join("");
+  al.innerHTML = rows.map(r => `<div class="item"><div><b>${esc(r.subject)}</b><span class="meta">${fmt(r.date)} ${esc(dayName(r.date))} ${esc(r.time||"")}</span></div><button class="btn alt sm" data-mpedit="${esc(r.id)}">✏️ Edit</button><button class="btn alt sm" data-mpdel="${esc(r.id)}">🗑 Delete</button></div>`).join("");
+  al.querySelectorAll("[data-mpedit]").forEach(b => b.onclick = () => { const row = ((D.mpTest||{}).rows||[]).find(x => x.id === b.dataset.mpedit); if (!row) return;
+    editModal("Edit exam row", [{k:"subject",l:"Subject",req:1},{k:"date",l:"Date",t:"date",req:1},{k:"time",l:"Time"}], row, v => { Object.assign(row, v, {upd:Date.now()}); save(); }); });
   al.querySelectorAll("[data-mpdel]").forEach(b => b.onclick = () => { if (!confirm("Delete this exam row?")) return;
     D.mpTest = {...(D.mpTest||{}), rows:((D.mpTest||{}).rows||[]).filter(x => x.id !== b.dataset.mpdel)}; save(); });
 }
@@ -3663,6 +3737,7 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
 (function(){
   var panel=document.getElementById("panel"), ed=document.getElementById("editor"); if(!panel||!ed) return;
   var G=[
+   ["dash","📊","Dashboard",/^\u0000$/],
    ["home","🏠","Home",/ticker|^Admission|Hover notice|Pop-up|Result &|remarks/i],
    ["notice","📢","Notices",/Add notice|WhatsApp|MP \(SE\)|আজকের দিনে/i],
    ["result","🎓","Results",/Add result|Gallery/i],
@@ -3680,10 +3755,12 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
   var fs=[].slice.call(ed.children).filter(function(e){return e.tagName==="FIELDSET"});
   fs.forEach(function(f){var l=(f.querySelector("legend")||{}).textContent||"",k="home";
     for(var i=0;i<G.length;i++){ if(G[i][3].test(l.trim())){k=G[i][0];break;} } f.dataset.g=k; body.appendChild(f); });
+  var dash=document.createElement("fieldset"); dash.dataset.g="dash"; dash.className="adm-dash"; dash.innerHTML='<legend>Overview</legend><div id="admDashIn"></div>'; body.appendChild(dash);
+  var cur="dash";
   var title=document.createElement("h3"); title.className="adm-h"; body.insertBefore(title,body.firstChild);
   function show(k){ G.forEach(function(g,i){nav.children[i].setAttribute("aria-selected",g[0]===k);});
     [].forEach.call(body.querySelectorAll("fieldset"),function(f){f.classList.toggle("adm-hide",f.dataset.g!==k);});
-    var g=G.filter(function(x){return x[0]===k})[0]; title.textContent=g[1]+" "+g[2]; body.scrollTop=0;
+    var g=G.filter(function(x){return x[0]===k})[0]; title.textContent=g[1]+" "+g[2]; body.scrollTop=0; cur=k; if(k==="dash") drawDash();
     try{sessionStorage.setItem("admTab",k)}catch(e){} }
   G.forEach(function(g){ var b=document.createElement("button"); b.type="button"; b.title=g[2]; b.setAttribute("role","tab");
     b.innerHTML='<span class="ic">'+g[1]+'</span><span>'+g[2]+'</span>'; b.onclick=function(){show(g[0])}; nav.appendChild(b); });
@@ -3692,8 +3769,22 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
   ed.appendChild(nav); ed.appendChild(body);
   var top=document.createElement("div"); top.className="adm-top";
   while(panel.firstChild!==ed){ top.appendChild(panel.firstChild); } panel.insertBefore(top,ed);
-  var saved="home"; try{saved=sessionStorage.getItem("admTab")||"home"}catch(e){}
+  var saved="dash"; try{saved=sessionStorage.getItem("admTab")||"dash"}catch(e){}
   show(G.some(function(g){return g[0]===saved})?saved:"home");
+  function drawDash(){
+    var el=document.getElementById("admDashIn"); if(!el||typeof D==="undefined") return;
+    var A=function(x){return x||[]}, fr=function(x){return A(x).filter(isFresh).length};
+    var st=A(D.staff), a=D.admission||{}, f=D.flash||{}, mp=A((D.mpTest||{}).rows);
+    var cards=[["📢","Notices",A(D.notices).length,fr(D.notices),"notice"],["🎓","Results",A(D.results).length,fr(D.results),"result"],["🖼️","Photos",A(D.gallery).length,fr(D.gallery),"result"],["👥","Staff",st.length,fr(st),"staff"],["🏖","Holidays",A(D.holidays).length,0,"hol"],["📝","Exam rows",mp.length,0,"notice"]];
+    var chip=function(on,label){return '<span class="dchip '+(on?"on":"off")+'">'+(on?"● ":"○ ")+label+'</span>'};
+    var rec=A(D.notices).slice().sort(function(x,y){return (y.date||"").localeCompare(x.date||"")}).slice(0,4);
+    el.innerHTML='<div class="dgrid">'+cards.map(function(c){return '<button type="button" class="dcard" data-go="'+c[4]+'"><span class="di">'+c[0]+'</span><b>'+c[2]+'</b><span>'+c[1]+(c[3]?' <i class="dnew">'+c[3]+' new</i>':'')+'</span></button>'}).join("")+'</div>'
+     +'<h4 class="dh">Site status</h4><div class="dchips">'+chip(f.on&&f.title,"Pop-up notice")+chip(!!D.ticker,"Top ticker")+chip(a.open&&a.title,"Admission open")+chip(!!(D.resRem&&D.resRem.text),"Result remark")+chip(!!(D.regRoutine),"Permanent routine")+'</div>'
+     +'<h4 class="dh">Quick actions</h4><div class="dact"><button type="button" class="btn" data-go="home">Pop-up / Ticker</button><button type="button" class="btn" data-go="notice">Add notice</button><button type="button" class="btn" data-go="staff">Add staff</button><button type="button" class="btn" data-go="result">Add result / photo</button><button type="button" class="btn alt" data-go="hol">Holidays</button></div>'
+     +'<h4 class="dh">Latest notices</h4>'+(rec.length?rec.map(function(n){return '<div class="drow"><b>'+esc(n.title)+'</b><span>'+fmt(n.date)+'</span></div>'}).join(""):'<p class="meta">No notices yet.</p>');
+    [].forEach.call(el.querySelectorAll("[data-go]"),function(b){b.onclick=function(){show(b.dataset.go)}});
+  }
+  var _rnd=window.render; if(typeof _rnd==="function") window.render=function(){ var r=_rnd.apply(this,arguments); try{ if(cur==="dash") drawDash(); }catch(e){} return r; };
   function sync(){ panel.classList.toggle("adm-on",location.hash==="#admin"); ed.classList.toggle("adm-show",ed.style.display!=="none"); }
   new MutationObserver(sync).observe(ed,{attributes:true,attributeFilter:["style"]});
   addEventListener("hashchange",sync); sync();
