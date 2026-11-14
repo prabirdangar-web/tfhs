@@ -780,6 +780,12 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
 </head>
 <body>
 <div class="strip"></div>
+<script>
+/* calendar event types: [key, icon, label, default colour] - used by admin form and public calendar */
+window.CE_TYPES=[["exam","📝","পরীক্ষা / Exam","#6a1b9a"],["meeting","👥","সভা / Meeting","#00838f"],["program","🎉","অনুষ্ঠান / Programme","#e65100"],["sports","🏅","ক্রীড়া / Sports","#2e7d32"],["result","🎓","ফলাফল / Result","#1565c0"],["admission","🧾","ভর্তি / Admission","#ad1457"],["training","📚","প্রশিক্ষণ / Training","#4527a0"],["other","⭐","অন্যান্য / Other","#1f9d4a"]];
+window.ceTextOn=function(cols){cols=[].concat(cols);var r=0,g=0,b=0;cols.forEach(function(c){var m=/^#?([0-9a-f]{6})$/i.exec(c||"");var n=m?parseInt(m[1],16):0x1f9d4a;r+=(n>>16)&255;g+=(n>>8)&255;b+=n&255});r/=cols.length;g/=cols.length;b/=cols.length;return(0.299*r+0.587*g+0.114*b)>160?"#1b1200":"#fff"};
+window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]===k})[0]||window.CE_TYPES[7]};
+</script>
 <div class="topbar"><span>🏫 অফিশিয়াল পোর্টাল / Official School Portal</span><span>তালডাংরা · খাতড়া · বাঁকুড়া · পশ্চিমবঙ্গ</span></div>
 <header>
   <div class="hd-in">
@@ -1158,6 +1164,18 @@ nav.menu a:hover{background:color-mix(in srgb,var(--gold) 28%,var(--card));color
       </details>
     </fieldset>
 
+    <fieldset><legend>🗓 Calendar events (বিদ্যালয়ের ক্যালেন্ডার ইভেন্ট)</legend>
+      <p class="meta" style="margin:0">তারিখ (বা তারিখের সীমা) বেছে ইভেন্টের নাম লিখুন, ধরন ও রং ঠিক করুন — স্কুলের ক্যালেন্ডারে সেই তারিখ(গুলি) ওই রঙে দেখাবে। / Pick a date (or range), type the event, choose type &amp; colour — those dates show in that colour on the school calendar.</p>
+      <div class="row"><label>From date<input id="ceDate" type="date"></label><label>To date (blank = one day)<input id="ceTo" type="date"></label></div>
+      <label>Event title<input id="ceTitle" placeholder="যেমন: বার্ষিক ক্রীড়া প্রতিযোগিতা"></label>
+      <div class="row"><label>Type<select id="ceType"></select></label><label>Colour<input id="ceColor" type="color" value="#1f9d4a"></label></div>
+      <div class="ce-sw" id="ceSw" aria-label="Quick colours"></div>
+      <label>Note (optional – shown when the date is tapped)<input id="ceNote" placeholder="সময় / স্থান / বিস্তারিত"></label>
+      <div>Preview: <span class="ce-prev" id="cePrev">Event</span></div>
+      <p><button class="btn" id="ceAdd" type="button">Add event</button> <button class="btn alt" id="ceCancel" type="button" style="display:none">Cancel edit</button></p>
+      <div id="ceList"></div>
+    </fieldset>
+
     <fieldset><legend>🏖 Holiday list</legend>
       <div class="row"><label>From date<input id="hDate" type="date"></label><label>To date (blank = one day)<input id="hTo" type="date"></label></div>
       <label>Holiday name<input id="hName"></label>
@@ -1420,7 +1438,7 @@ $("addR").onclick = async () => {
   upsert("results", r, true);
   $("rTitle").value = $("rLink").value = ""; save();
 };
-const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList", events:"eList", resources:"xList"};
+const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList", events:"eList", calEvents:"ceList", resources:"xList"};
 let PH_ID = null;
 $("phFile").addEventListener("cancel", () => render());
 $("phFile").onchange = async () => {
@@ -1442,7 +1460,7 @@ function photoPicker(t){
     <label>Photo (manual)<select data-ph="${esc(t.id)}">${opts.join("")}</select></label></div>`;
 }
 const ADM_ALL = {}, ADM_LIM = 5;
-const EDITABLE = ["holidays","staff","links","resources","notices","results","gallery","routine","events"];
+const EDITABLE = ["holidays","staff","links","resources","notices","results","gallery","routine","events","calEvents"];
 /* small pop-up editor used for every "Edit" button that has no form of its own */
 function editModal(title, fields, obj, done){
   const w = document.createElement("div"); w.className = "emod-wrap";
@@ -1459,8 +1477,8 @@ function editModal(title, fields, obj, done){
 }
 function renderAdminLists(){
   for (const [k, id] of Object.entries(LISTS)){
-    const rows = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${esc(x.title||x.caption||x.name||x.label||(isData(x.url)?"Uploaded photo":x.url))}</b>
-      <span class="meta">${esc((x.unit==="voc"?"VOC "+(x.level||"")+" · "+(x.eng||"")+" · ":(x.stype?stypeLabel(x.stype)+" · ":""))+(x.post||x.time||(x.cat?catLabel(x.cat)+(x.vis==="admin"?" · admin only":""):"")))} ${fmt(x.date)}${x.pdf?" · 📄 PDF":""}${k==="staff"&&x.mobile?" · 📞 "+esc(x.mobile)+(x.showMob?" (public)":" (private)"):""}</span></div>
+    const rows = eff(k).slice().reverse().map(x => `<div class="item"><div><b>${k==="calEvents"?`<i class="cesw" style="background:${esc(x.color||"#1f9d4a")}"></i>`:""}${esc(x.title||x.caption||x.name||x.label||(isData(x.url)?"Uploaded photo":x.url))}</b>
+      <span class="meta">${esc((x.unit==="voc"?"VOC "+(x.level||"")+" · "+(x.eng||"")+" · ":(x.stype?stypeLabel(x.stype)+" · ":""))+(x.post||x.time||(x.cat?catLabel(x.cat)+(x.vis==="admin"?" · admin only":""):"")))} ${fmt(x.date)}${k==="calEvents"?(x.to&&x.to>x.date?" → "+fmt(x.to):"")+" · "+esc(window.ceType(x.type)[2]):""}${x.pdf?" · 📄 PDF":""}${k==="staff"&&x.mobile?" · 📞 "+esc(x.mobile)+(x.showMob?" (public)":" (private)"):""}</span></div>
       ${k==="staff"?photoPicker(x):""}
       ${EDITABLE.includes(k)?`<button class="btn alt sm" data-edit="${x.id}" data-ek="${k}">✏️ Edit</button>`:""}<button class="btn alt sm" data-k="${k}" data-id="${x.id}">🗑 Delete</button></div>`);
     const lim = ADM_ALL[k] ? rows.length : ADM_LIM;
@@ -1490,6 +1508,7 @@ function renderAdminLists(){
     if (k === "holidays") return editModal("Edit holiday", [{k:"name",l:"Holiday name",req:1},{k:"date",l:"From date",t:"date",req:1},{k:"to",l:"To date (blank = one day)",t:"date"}], o, v => stamp(o, v));
     if (k === "gallery") return editModal("Edit photo", [{k:"caption",l:"Caption"}].concat(isData(o.url) ? [] : [{k:"url",l:"Image path / link",req:1}]), o, v => stamp(o, v));
     if (k === "routine") return editModal("Edit schedule row", [{k:"label",l:"Item",req:1},{k:"time",l:"Time"}], o, v => stamp(o, v));
+    if (k === "calEvents") return window.loadCE(o);
     if (k === "events") return editModal("Edit event", [{k:"date",l:"Event date",t:"date",req:1},{k:"title",l:"Event (Bengali text)",req:1}], o, v => stamp(o, v));
   });
 }
@@ -2663,13 +2682,15 @@ function renderToday(){
   const ns = (D.notices||[]).filter(n => n.date === t);
   const hol = (D.holidays||[]).filter(h => !h.obs && h.date <= t && (h.to || h.date) >= t);
   const evs = eventsFor(md);
+  const ceT = (D.calEvents||[]).filter(e => e.date <= t && (e.to||e.date) >= t);
+  const cHtml = ceT.map(e => { const c = esc(e.color||"#1f9d4a"); return `<div style="margin:4px 0;padding:6px 9px;border-left:5px solid ${c};background:color-mix(in srgb,${c} 14%,var(--card));border-radius:0 6px 6px 0;font-weight:600">${window.ceType(e.type)[1]} ${esc(e.title)}${e.note?` <span class="meta">— ${esc(e.note)}</span>`:""}</div>`; }).join("");
   const nHtml = ns.length ? ns.map(n => `<div class="tn"><b>${esc(n.title)}</b> <a href="#notices-top" class="btn sm" data-goto="notices">বিস্তারিত / Details ↓</a></div>`).join("")
     : `<div class="none">আজ নতুন কোনো বিজ্ঞপ্তি নেই।</div>`;
   const hHtml = hol.map(h => `<div class="hol">🏖️ আজ ছুটি: ${esc(h.name)}</div>`).join("");
   const eHtml = evs.length ? evs.map(e => `<div class="ev"><span class="yr">${BN(e.year)}</span>${esc(e.text)}</div>`).join("")
     : `<div class="none">আজকের তারিখে কোনো উল্লেখযোগ্য ঘটনা তালিকাভুক্ত নেই।</div>`;
   box.innerHTML = `<div class="th"><b>📅 আজকের বিজ্ঞপ্তি ও আজকের দিনে</b><span>${esc(dateBn)}</span></div>
-    <div class="tc"><div class="tcol"><h3>📢 আজকের বিজ্ঞপ্তি</h3>${hHtml}${nHtml}</div>
+    <div class="tc"><div class="tcol"><h3>📢 আজকের বিজ্ঞপ্তি</h3>${hHtml}${cHtml}${nHtml}</div>
     <div class="tcol"><h3>📜 ইতিহাসে আজকের দিনে</h3>${eHtml}</div></div>`;
   box.querySelectorAll("[data-goto]").forEach(a => a.onclick = e => { e.preventDefault(); showPane(a.dataset.goto, true); });
 }
@@ -2677,6 +2698,30 @@ setInterval(renderToday, 60000);
 $("addE").onclick = () => { const d = $("eDate").value, x = $("eText").value.trim();
   if (!d || !x) return toast("তারিখ ও ঘটনা দুটিই দিন");
   addTo("events", {title:x, date:d}); $("eText").value = $("eDate").value = ""; };
+
+/* ---------- school calendar events (date / range + type + colour) ---------- */
+let CE_EDIT = null;
+$("ceType").innerHTML = window.CE_TYPES.map(t => `<option value="${t[0]}">${t[1]} ${t[2]}</option>`).join("");
+$("ceSw").innerHTML = ["#b3121b","#e65100","#f9a825","#2e7d32","#00838f","#1565c0","#4527a0","#ad1457","#455a64"].map(c => `<button type="button" data-c="${c}" style="background:${c}" aria-label="${c}"></button>`).join("");
+function cePreview(){ const c = $("ceColor").value, p = $("cePrev"), t = window.ceType($("ceType").value);
+  p.style.background = c; p.style.color = window.ceTextOn(c); p.textContent = t[1] + " " + ($("ceTitle").value.trim() || "Event"); }
+$("ceType").onchange = () => { $("ceColor").value = window.ceType($("ceType").value)[3]; cePreview(); };
+$("ceSw").onclick = e => { const b = e.target.closest("[data-c]"); if (b){ $("ceColor").value = b.dataset.c; cePreview(); } };
+$("ceColor").oninput = cePreview; $("ceTitle").oninput = cePreview;
+function ceReset(){ CE_EDIT = null; $("ceDate").value = $("ceTo").value = $("ceTitle").value = $("ceNote").value = ""; $("ceType").value = "other"; $("ceColor").value = window.ceType("other")[3];
+  $("ceAdd").textContent = "Add event"; $("ceCancel").style.display = "none"; cePreview(); }
+window.loadCE = o => { CE_EDIT = o.id; $("ceDate").value = o.date || ""; $("ceTo").value = o.to || ""; $("ceTitle").value = o.title || ""; $("ceNote").value = o.note || "";
+  $("ceType").value = o.type || "other"; $("ceColor").value = o.color || window.ceType(o.type)[3];
+  $("ceAdd").textContent = "Save changes"; $("ceCancel").style.display = ""; cePreview(); $("ceTitle").scrollIntoView({block:"center"}); $("ceTitle").focus(); };
+$("ceCancel").onclick = ceReset;
+$("ceAdd").onclick = () => { const d = $("ceDate").value, to = $("ceTo").value, x = $("ceTitle").value.trim();
+  if (!d || !x) return toast("Date and event title are required");
+  if (to && to < d) return toast("'To date' is before 'From date'");
+  const v = {date:d, to:(to && to > d) ? to : "", title:x, type:$("ceType").value, color:$("ceColor").value, note:$("ceNote").value.trim()};
+  if (CE_EDIT){ const o = (D.calEvents||[]).find(z => z.id === CE_EDIT); if (o){ Object.assign(o, v); o.upd = Date.now(); save(); } }
+  else addTo("calEvents", v);
+  ceReset(); };
+$("ceType").value = "other"; $("ceColor").value = window.ceType("other")[3]; cePreview();
 
 /* ---------- সময়সূচি ও MDM তদারকি রোস্টার ---------- */
 const DAYS_BN = ["সোমবার","মঙ্গলবার","বুধবার","বৃহস্পতিবার","শুক্রবার","শনিবার"];
@@ -3261,11 +3306,17 @@ setInterval(() => { try { renderRtDay(); } catch(e) {} }, 60000);
       if(!r.date)return;
       add(X,r.date,"Class X Test Exam: "+(r.subject||"")+(r.time?" ("+String(r.time).replace(/\s*([–-])\s*/g,"$1")+")":""));
     });
-    return{H,O,V,X};
+    const CE={};
+    (typeof D!=="undefined"&&D.calEvents||[]).forEach(e=>{
+      if(!e.date)return;
+      const end=e.to&&e.to>e.date?e.to:e.date;
+      for(let d=parse(e.date),z=parse(end),n=0;d<=z&&n<370;d=new Date(d.getTime()+864e5),n++){const k=toIso(d);(CE[k]=CE[k]||[]).push(e)}
+    });
+    return{H,O,V,X,CE};
   }
 
   function renderCal(){
-    const{H,O,V,X}=maps();
+    const{H,O,V,X,CE}=maps();
     $("calTitle").textContent=BNm[vm]+" "+BNd(vy);
     const first=new Date(vy,vm,1).getDay(),dim=new Date(vy,vm+1,0).getDate(),prevDim=new Date(vy,vm,0).getDate();
     let h="";const t=todayIso();
@@ -3280,14 +3331,21 @@ setInterval(() => { try { renderRtDay(); } catch(e) {} }, 60000);
       if(out)cls.push("out");if(dow===0)cls.push("sun");
       if(H[k])cls.push("hol");else if(O[k])cls.push("obs");
       if(V[k])cls.push("ev");if(X[k])cls.push("exm");if(k===t)cls.push("today");if(k===sel)cls.push("sel");
-      const tip=[].concat(H[k]||[],O[k]||[],V[k]||[],X[k]||[]).join(" · ");
-      h+=`<button type="button" class="${cls.join(" ")}" data-d="${k}"${tip?` title="${E(tip)}"`:""}>${d}</button>`;
+      let sty="";
+      if(CE[k]){
+        cls.push("ce");
+        const cols=((H[k]||dow===0)?["#b3121b"]:[]).concat(CE[k].map(e=>e.color||"#1f9d4a")).slice(0,3),n=cols.length;
+        const bg=n===1?cols[0]:"linear-gradient(135deg,"+cols.map((c,i)=>c+" "+(i*100/n)+"% "+((i+1)*100/n)+"%").join(",")+")";
+        sty=` style="--ecbg:${bg};--ect:${window.ceTextOn(cols)}"`;
+      }
+      const tip=[].concat(H[k]||[],O[k]||[],V[k]||[],X[k]||[],(CE[k]||[]).map(e=>e.title)).join(" · ");
+      h+=`<button type="button" class="${cls.join(" ")}" data-d="${k}"${sty}${tip?` title="${E(tip)}"`:""}>${d}</button>`;
       if(i===34&&first+dim<=35)break;
     }
     $("calGrid").innerHTML=h;
     $("calGrid").querySelectorAll(".cd").forEach(b=>b.onclick=()=>{sel=b.dataset.d;const p=parse(sel);if(p.getUTCMonth()!==vm||p.getUTCFullYear()!==vy){vm=p.getUTCMonth();vy=p.getUTCFullYear()}renderCal()});
     // selected day info
-    const items=[].concat((H[sel]||[]).map(n=>"🏖️ ছুটি: "+n),(O[sel]||[]).map(n=>"👁️ "+n+" (Observation – স্কুল খোলা)"),(V[sel]||[]).map(n=>"⭐ "+n),(X[sel]||[]).map(n=>"📝 "+n));
+    const items=[].concat((H[sel]||[]).map(n=>"🏖️ ছুটি: "+n),(O[sel]||[]).map(n=>"👁️ "+n+" (Observation – স্কুল খোলা)"),(V[sel]||[]).map(n=>"⭐ "+n),(X[sel]||[]).map(n=>"📝 "+n),(CE[sel]||[]).map(e=>window.ceType(e.type)[1]+" "+e.title+(e.to&&e.to>e.date?" ("+fmtShort(e.date)+" – "+fmtShort(e.to)+")":"")+(e.note?" — "+e.note:"")));
     const dow=parse(sel).getUTCDay();
     $("calInfo").innerHTML=`<b>${E(fmtD(sel))}</b>`+(items.length?items.map(E).join("<br>"):(dow===0?"রবিবার – সাপ্তাহিক ছুটি":"কার্যদিবস / Working day"));
     // month holiday list
@@ -3301,6 +3359,8 @@ setInterval(() => { try { renderRtDay(); } catch(e) {} }, 60000);
     });
     rows.sort((a,b)=>a[0].localeCompare(b[0]));
     $("calMonthList").innerHTML=rows.length?`<b style="font-size:12.5px;color:var(--mar)">এই মাসের ছুটি / Holidays this month</b>`+rows.map(r=>`<div><span>${E(r[1])}</span><span>${E(r[2])}</span></div>`).join(""):`<span class="meta">এই মাসে কোনো ছুটি তালিকাভুক্ত নেই।</span>`;
+    const mEnd=pre+"31",mStart=pre+"01",evs=(typeof D!=="undefined"&&D.calEvents||[]).filter(e=>e.date&&e.date<=mEnd&&(e.to&&e.to>e.date?e.to:e.date)>=mStart).sort((a,b)=>a.date.localeCompare(b.date));
+    if(evs.length)$("calMonthList").innerHTML+=`<b style="font-size:12.5px;color:var(--mar);display:block;margin-top:8px">এই মাসের ইভেন্ট / Events this month</b>`+evs.map(e=>`<div class="cev"><span><i style="color:${E(e.color||"#1f9d4a")}">●</i>${E(window.ceType(e.type)[1]+" "+e.title)}</span><span>${E(e.to&&e.to>e.date?fmtShort(e.date)+" – "+fmtShort(e.to):fmtShort(e.date))}</span></div>`).join("");
   }
   const fmtShort=s=>parse(s).toLocaleDateString("en-GB",{day:"2-digit",month:"short",timeZone:"UTC"});
   $("calPrev").onclick=()=>{vm--;if(vm<0){vm=11;vy--}renderCal()};
@@ -3613,6 +3673,27 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
 #bellBanner{position:fixed;left:50%;top:12px;transform:translate(-50%,-140%);z-index:99999;max-width:92vw;background:#b3261e;color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.35);transition:transform .35s;cursor:pointer;text-align:center}
 #bellBanner.show{transform:translate(-50%,0);animation:bellshake .6s 2}
 @keyframes bellshake{0%,100%{rotate:0deg}25%{rotate:-2deg}75%{rotate:2deg}}
+/* ===== v2: compact logo on phones (row layout, small badge) ===== */
+@media(max-width:520px){
+  header{padding:7px 10px 8px}
+  header .hd-in{flex-direction:row;align-items:center;justify-content:center;gap:8px}
+  header .hd-logo{width:40px;padding:2px;box-shadow:0 0 0 2px var(--gold),0 2px 6px rgba(0,0,0,.4)}
+  header .hd-rule{margin:3px auto}
+  header .hd-estd{margin-top:3px}
+}
+@media(max-width:360px){header .hd-logo{width:34px}}
+/* ===== v2: school calendar events - colour chosen by admin per event ===== */
+.cal-grid .cd.ce{background:var(--ecbg);color:var(--ect);border-color:rgba(0,0,0,.35);font-weight:800}
+.cal-grid .cd.ce.out{opacity:.55}
+.cal-mlist .cev{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px dashed var(--line)}
+.cal-mlist .cev i{font-style:normal;font-size:13px;margin-right:4px}
+.cal-mlist .cev span:last-child{color:var(--mut);white-space:nowrap}
+.cesw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1px solid rgba(0,0,0,.35)}
+.ce-sw{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+.ce-sw button{width:26px;height:26px;border-radius:6px;border:2px solid #fff;box-shadow:0 0 0 1px #8a97b5;cursor:pointer;padding:0}
+#ceType{width:100%;padding:8px;border:1px solid var(--line);border-radius:6px;font:inherit;background:var(--card);color:var(--ink)}
+#ceColor{width:100%;height:38px;padding:2px;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+.ce-prev{display:inline-block;margin:2px 0 8px;padding:6px 14px;border-radius:8px;font-weight:700;font-size:13px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
 </style>
 <div id="bellBanner" role="alert" aria-live="assertive"></div>
 <script>
@@ -3780,7 +3861,7 @@ document.addEventListener('fbdone',function(){setTimeout(close,3000)})})();
    ["staff","👥","Staff",/Teacher|MDM/i],
    ["perm","📚","Permanent",/Permanent routine/i],
    ["prov","🗓️","Provisional",/Provisional routine/i],
-   ["hol","🏖","Holiday",/Holiday list/i],
+   ["hol","🏖","Holiday & Events",/Holiday list|Calendar event/i],
    ["sched","🕘","Timetable",/Time table|Morning shift|Daily schedule|সময়সূচি/i],
    ["views","👁","Views",/Optional views/i],
    ["links","🔗","Links",/Office desk|Useful links|Quick links/i],
