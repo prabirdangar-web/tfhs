@@ -211,11 +211,11 @@ table.t td:last-child{text-align:right;font-weight:600;white-space:nowrap}
 .tile:hover{background:color-mix(in srgb,var(--gold) 16%,var(--card))}
 details summary{cursor:pointer;font-weight:600;color:var(--mar);padding:4px 10px;font-size:13px}
 .contact{padding:8px 10px;font-size:13.5px}
-.hero{position:relative;height:clamp(110px,21vw,250px);overflow:hidden;background:var(--navy);border:1px solid var(--line);margin:0 0 10px}
+.hero{position:relative;height:clamp(120px,25vw,340px);overflow:hidden;background:var(--navy);border:1px solid var(--line);border-bottom:4px solid var(--gold);border-radius:12px;box-shadow:0 4px 14px rgba(12,42,107,.18);margin:0 0 10px}
 .hero:not(.on){display:none}
-.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 72%;opacity:0;transition:opacity .9s}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0;transition:opacity .9s}
 .hero img.show{opacity:1}
-.hero .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 12px 5px;color:#fff;font-weight:600;font-size:13px;background:linear-gradient(0deg,rgba(6,20,60,.85),transparent)}
+.hero .cap{position:absolute;left:0;right:0;bottom:0;padding:34px 16px 10px;color:#fff;font-weight:700;font-size:15px;letter-spacing:.2px;text-shadow:0 1px 3px rgba(0,0,0,.6);background:linear-gradient(0deg,rgba(6,20,60,.88),rgba(6,20,60,.35) 60%,transparent)}
 .hero .dots{position:absolute;right:10px;bottom:7px;display:flex;gap:5px}
 .hero .dots button{width:9px;height:9px;border-radius:50%;border:1px solid #fff;background:transparent;padding:0;cursor:pointer}
 .hero .dots button[aria-current=true]{background:var(--gold);border-color:var(--gold)}
@@ -815,8 +815,8 @@ window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]=
 
 <main class="wrap" id="site">
   <section class="hero" id="hero" data-opt="hero" aria-label="School photos">
-    <img src="school-gate.jpg" alt="তালডাংরা ফুলমতি উচ্চ বিদ্যালয়ের প্রবেশদ্বার / School main gate" data-cap="প্রবেশদ্বার / School Gate">
-    <img src="school-campus.jpg" alt="বিদ্যালয় প্রাঙ্গণ ও ভবন / School campus and building" data-cap="বিদ্যালয় প্রাঙ্গণ / School Campus">
+    <img src="school-gate-wide.jpg" alt="তালডাংরা ফুলমতি উচ্চ বিদ্যালয়ের প্রবেশদ্বার / School main gate" data-cap="প্রবেশদ্বার / School Gate">
+    <img src="school-campus-wide.jpg" alt="বিদ্যালয় প্রাঙ্গণ ও ভবন / School campus and building" data-cap="বিদ্যালয় প্রাঙ্গণ / School Campus">
     <div class="cap" id="heroCap"></div><div class="dots" id="heroDots"></div>
   </section>
   <div class="adm" id="admBox"></div>
