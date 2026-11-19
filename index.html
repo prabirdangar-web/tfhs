@@ -972,6 +972,18 @@ window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]=
     <button class="btn alt sm" id="logout" style="display:none">Sign out</button>
     <a class="btn alt sm" href="#">View site</a></p>
   <div id="editor" style="display:none">
+    <fieldset style="border:2px solid #1f9d4a"><legend>⚡ আজকের বিজ্ঞপ্তি – দ্রুত যোগ করুন</legend>
+      <label>বিজ্ঞপ্তি লিখুন <span class="meta">(প্রথম লাইন = শিরোনাম, নিচের লাইনগুলো = বিস্তারিত – ঐচ্ছিক)</span>
+        <textarea id="qnText" rows="3" placeholder="যেমন: আগামীকাল বিদ্যালয় বন্ধ থাকবে"></textarea></label>
+      <div class="row">
+        <label>কবে থেকে<select id="qnFrom"><option value="0">আজ</option><option value="1">আগামীকাল</option><option value="2">পরশু</option></select></label>
+        <label>কতদিন দেখাবে<select id="qnDur"><option value="1">শুধু ওই একদিন</option><option value="2">২ দিন</option><option value="3">৩ দিন</option><option value="7">৭ দিন</option></select></label>
+        <label>কাদের জন্য<select id="qnFor"><option value="general">সকলের</option><option value="staff">শিক্ষক-কর্মী</option><option value="student">ছাত্রছাত্রী</option></select></label>
+      </div>
+      <p><button class="btn" id="qnAdd" type="button">✅ এখনই প্রকাশ করুন</button> <span class="meta">PDF / ছবি লাগলে নিচের “Add notice” ব্যবহার করুন।</span></p>
+      <div id="qnList"></div>
+    </fieldset>
+
     <fieldset><legend>Top ticker (one-line alert)</legend>
       <input id="tk" placeholder="e.g. School closed on 31 October">
       <p><button class="btn" id="tkSave" type="button">Save / Update ticker</button> <button class="btn alt" id="tkDel" type="button">Delete ticker</button></p>
@@ -1360,6 +1372,7 @@ function render(){
   renderMorning();
   applyViews();
   renderAdminLists();
+  qnList();
   paneCounts();
   flashInit();
   if ($("editor").style.display !== "none") { fillFlash(); syncRem(); }
@@ -1397,7 +1410,7 @@ ref.onSnapshot(s => { if (s.exists) D = Object.assign(D, s.data()); render(); },
 /* ---------- Admin ---------- */
 const save = async () => { try { await ref.set(D); toast("Published"); } catch(e){ toast("Save failed: " + e.code); } };
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,5);
-const today = () => new Date().toISOString().slice(0,10);
+const today = () => new Date(Date.now() - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0,10);
 
 function route(){
   const adm = location.hash === "#admin";
@@ -1440,6 +1453,28 @@ $("addN").onclick = async () => {
   if (pdf !== undefined) n.pdf = pdf;
   upsert("notices", n, true);
   $("nTitle").value = $("nLink").value = $("nBody").value = $("nPoster").value = ""; save();
+};
+/* ---- quick "today's notice" box ---- */
+const qIso = d => new Date(d.getTime() - d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const qPlus = n => { const d = new Date(); d.setDate(d.getDate()+n); return qIso(d); };
+function qnList(){
+  const box = $("qnList"); if (!box) return; const t = qIso(new Date());
+  const ns = (D.notices||[]).filter(n => (n.date||"") <= t && (n.to||n.date||"") >= t);
+  box.innerHTML = ns.length ? '<p class="meta" style="margin:8px 0 4px"><b>এখন সাইটে দেখাচ্ছে:</b></p>' + ns.map(n =>
+    `<div style="display:flex;gap:8px;align-items:center;justify-content:space-between;border-top:1px solid #8883;padding:4px 0"><span>${esc(n.title)}${n.to&&n.to>n.date?` <span class="meta">(${esc(n.date)} → ${esc(n.to)})</span>`:""}</span><button class="btn alt sm" type="button" data-qdel="${esc(n.id)}">✖ সরান</button></div>`).join("")
+    : '<p class="meta" style="margin:8px 0 0">আজ কোনো বিজ্ঞপ্তি প্রকাশিত নেই।</p>';
+  box.querySelectorAll("[data-qdel]").forEach(b => b.onclick = () => {
+    if (!confirm("এই বিজ্ঞপ্তিটি মুছে ফেলবেন?")) return;
+    D.notices = (D.notices||[]).filter(x => x.id !== b.dataset.qdel); save(); });
+}
+$("qnAdd").onclick = () => {
+  const lines = $("qnText").value.trim().split(/\r?\n/); const title = (lines.shift()||"").trim();
+  if (!title) return toast("বিজ্ঞপ্তি লিখুন");
+  const body = lines.join("\n").trim(); const from = +$("qnFrom").value, dur = +$("qnDur").value;
+  const n = { id:uid(), title, body, link:"", for:$("qnFor").value, date:qPlus(from), upd:Date.now() };
+  if (dur > 1) n.to = qPlus(from + dur - 1);
+  D.notices = (D.notices||[]).slice(); D.notices.push(n);
+  $("qnText").value = ""; $("qnFrom").value = "0"; $("qnDur").value = "1"; save(); qnList();
 };
 $("addR").onclick = async () => {
   const t = $("rTitle").value.trim(); if (!t) return toast("Title is required");
@@ -2689,7 +2724,7 @@ function renderToday(){
   const box = $("todayBox"); if (!box) return;
   const t = localToday(), md = t.slice(5);
   const dateBn = new Date(t + "T00:00:00").toLocaleDateString("bn-IN", {weekday:"long", day:"numeric", month:"long", year:"numeric"});
-  const ns = (D.notices||[]).filter(n => n.date === t);
+  const ns = (D.notices||[]).filter(n => n.date <= t && (n.to || n.date) >= t);
   const hol = (D.holidays||[]).filter(h => !h.obs && h.date <= t && (h.to || h.date) >= t);
   const evs = eventsFor(md);
   const ceT = (D.calEvents||[]).filter(e => e.date <= t && (e.to||e.date) >= t);
