@@ -984,6 +984,22 @@ window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]=
       <div id="qnList"></div>
     </fieldset>
 
+    <fieldset style="border:2px solid #c2410c"><legend>📥 এক ধাপে: বিজ্ঞপ্তি + PDF + লিংক + ক্যালেন্ডার / One-step publish</legend>
+      <p class="meta" style="margin:0">PDF সংযুক্ত করুন → শিরোনাম লিখুন → <b>একটি বোতামে</b> বিজ্ঞপ্তি, লিংক ও ক্যালেন্ডার ইভেন্ট একসাথে প্রকাশ হবে। / Attach PDF, fill title, one click publishes the notice, links and calendar event together.</p>
+      <div class="row"><label>⚡ Ready-made (council PDF)<select id="osPreset"><option value="">— নিজে লিখব / type myself —</option><option value="c283">WBCHSE L/Secy/283/2026 – Sem-III Result (27 Nov 2026)</option><option value="c282">WBCHSE L/Secy/282/2026 – Sem-IV &amp; Sem-III Suppl. Enrolment (2–23 Dec 2026)</option></select></label><span style="align-self:end"><button class="btn alt sm" id="osFill" type="button">Fill form</button></span></div>
+      <label>Title / শিরোনাম<input id="osTitle" placeholder="Notice heading"></label>
+      <div class="row"><label>For<select id="osFor"><option value="general">General</option><option value="staff">Staff</option><option value="student">Students</option></select></label><label>Notice date<input id="osDate" type="date"></label></div>
+      <label>Details (optional)<textarea id="osBody" rows="5"></textarea></label>
+      <label>📄 PDF file (max 10 MB)<input type="file" id="osPdf" accept="application/pdf,.pdf"></label>
+      <label>🔗 Links – এক লাইনে একটি: <code>Title | https://...</code> (প্রথম লিংকটি বিজ্ঞপ্তির বোতামে বসবে)<textarea id="osLinks" rows="4" placeholder="Result portal | https://result.wb.gov.in"></textarea></label>
+      <label class="chk"><input type="checkbox" id="osLkDir" style="width:auto" checked> লিংকগুলো “Useful links → WBCHSE” তালিকাতেও রাখুন</label>
+      <label class="chk"><input type="checkbox" id="osCal" style="width:auto" checked> 🗓 ক্যালেন্ডারে ইভেন্ট যোগ করুন</label>
+      <div class="row"><label>From date<input id="osCFrom" type="date"></label><label>To date (blank = one day)<input id="osCTo" type="date"></label></div>
+      <div class="row"><label>Event type<select id="osCType"></select></label><label>Event note (time / place)<input id="osCNote"></label></div>
+      <label class="chk"><input type="checkbox" id="osTick" style="width:auto"> উপরের ticker-এও দেখান</label>
+      <p><button class="btn" id="osGo" type="button">✅ সব একসাথে প্রকাশ করুন / Publish all</button> <button class="btn alt" id="osClear" type="button">Clear</button></p>
+    </fieldset>
+
     <fieldset><legend>Top ticker (one-line alert)</legend>
       <input id="tk" placeholder="e.g. School closed on 31 October">
       <p><button class="btn" id="tkSave" type="button">Save / Update ticker</button> <button class="btn alt" id="tkDel" type="button">Delete ticker</button></p>
@@ -1453,6 +1469,49 @@ $("addN").onclick = async () => {
   if (pdf !== undefined) n.pdf = pdf;
   upsert("notices", n, true);
   $("nTitle").value = $("nLink").value = $("nBody").value = $("nPoster").value = ""; save();
+};
+
+/* ===== One-step publish: notice + PDF + links + calendar event (+ticker) in a single save ===== */
+const OS_PRESETS = {
+  c283: { title:"H.S. Semester-III Examination 2027 – ফলাফল ২৭ নভেম্বর ২০২৬ / Result on 27 Nov 2026 (WBCHSE No. L/Secy/283/2026)", for:"general", date:"2026-11-19",
+    body:"WBCHSE Notification No. L/Secy/283/2026 dated 19/11/2026.\nSemester-III H.S. Examination 2027 result will be published at a Press Conference at Vidyasagar Bhavan, Saltlake, Kolkata on 27 November 2026 at 2:30 pm.\nStudents can view and download the result from 3:00 pm the same day using Roll No. and Registration No. at the websites / apps listed below.\nInstitutions can download the Class XII Semester III result with synopsis from the Council portal (login required). Heads of Institutions to hand over the result to students with seal and signature.\n\nSemester-III H.S. পরীক্ষা ২০২৭-এর ফলাফল ২৭ নভেম্বর ২০২৬ বিকেল ২:৩০টায় সাংবাদিক সম্মেলনে প্রকাশিত হবে; ছাত্রছাত্রীরা ওইদিন বিকেল ৩:০০টা থেকে রোল ও রেজিস্ট্রেশন নম্বর দিয়ে দেখতে পারবে।",
+    links:"WBCHSE Result portal | https://result.wb.gov.in\nWBCHSE Results App (Google Play) | https://play.google.com/store/apps/details?id=wbchse.results.shiksha\nTV9 Bangla | https://www.tv9bangla.com\niResult | https://iresult.in\nCouncil portal – Institution login | https://wbchseapp.wb.gov.in/portal/sec_users/login",
+    cal:{from:"2026-11-27", to:"", type:"result", note:"সাংবাদিক সম্মেলন দুপুর ২:৩০ · অনলাইনে ফলাফল বিকেল ৩:০০ থেকে / Press conference 2:30 pm, online result from 3:00 pm"} },
+  c282: { title:"Semester-IV / Semester-III Supplementary Enrolment 2027 – অনলাইন ২ থেকে ২৩ ডিসেম্বর ২০২৬ (WBCHSE No. L/Secy/282/2026)", for:"staff", date:"2026-11-19",
+    body:"WBCHSE Notification No. L/Secy/282/2026 dated 19/11/2026.\nOnline submission of enrolment form for Semester-IV and Semester-III Supplementary Examination, 2027: from 02/12/2026 to 23/12/2026.\nHeads of Institutions to log in to the Council portal and submit enrolment forms of their students with existing fees and formalities.\nOnline enrolment of Regular / CC / Special candidates for H.S. Examination 2027 under Old Syllabus also continues in the same period (see notification No. L/PR/326/2026 dated 21/08/2026).",
+    links:"Council portal – Institution login | https://wbchseapp.wb.gov.in/portal/sec_users/login",
+    cal:{from:"2026-12-02", to:"2026-12-23", type:"admission", note:"Sem-IV / Sem-III Suppl. enrolment – WBCHSE portal / এনরোলমেন্ট ফর্ম জমা"} }
+};
+$("osCType").innerHTML = window.CE_TYPES.map(t => `<option value="${t[0]}">${t[1]} ${t[2]}</option>`).join("");
+$("osCType").value = "other"; $("osDate").value = today();
+function osClear(){ ["osTitle","osBody","osLinks","osCFrom","osCTo","osCNote","osPdf"].forEach(i => $(i).value = ""); $("osDate").value = today(); $("osTick").checked = false; $("osCal").checked = true; $("osCType").value = "other"; $("osPreset").value = ""; }
+$("osClear").onclick = osClear;
+$("osFill").onclick = () => { const p = OS_PRESETS[$("osPreset").value]; if (!p) return toast("Choose a ready-made notice first");
+  $("osTitle").value = p.title; $("osFor").value = p.for; $("osDate").value = p.date; $("osBody").value = p.body; $("osLinks").value = p.links;
+  $("osCal").checked = true; $("osCFrom").value = p.cal.from; $("osCTo").value = p.cal.to; $("osCType").value = p.cal.type; $("osCNote").value = p.cal.note;
+  toast("Filled – now attach the PDF and press Publish all"); };
+$("osGo").onclick = async () => {
+  const title = $("osTitle").value.trim(); if (!title) return toast("Title is required");
+  const body = $("osBody").value.trim(); if (body.length > 6000) return toast("Details too long (max 6000 characters)");
+  const links = []; for (const ln of $("osLinks").value.split(/\r?\n/)) { const s = ln.trim(); if (!s) continue;
+    const i = s.lastIndexOf("|"); const t = (i > 0 ? s.slice(0, i) : "").trim(), u = (i >= 0 ? s.slice(i + 1) : s).trim();
+    if (!/^https?:\/\//i.test(u)) return toast("Link must start with https:// → " + s.slice(0, 40)); links.push({title: t || u.replace(/^https?:\/\/(www\.)?/i, "").split("/")[0], url:u}); }
+  const cal = $("osCal").checked, cf = $("osCFrom").value, ct = $("osCTo").value;
+  if (cal && !cf) return toast("Calendar: pick the From date (or untick the calendar box)");
+  if (cal && ct && ct < cf) return toast("Calendar: 'To date' is before 'From date'");
+  if ((D.notices || []).some(n => n.title === title) && !confirm("Same title already exists. Publish again?")) return;
+  let pdf; try { pdf = await pdfFrom("osPdf", null); } catch(e) { return toast(e.message || "PDF upload failed"); }
+  if (tooBig(body.length + 3000)) return toast("Storage full - delete old items first");
+  const now = Date.now();
+  const n = { id:uid(), title, link:(links[0] ? links[0].url : ""), body, for:$("osFor").value, date:$("osDate").value || today(), upd:now };
+  if (pdf) n.pdf = pdf;
+  D.notices = (D.notices || []).slice(); D.notices.push(n);
+  if (cal) { D.calEvents = (D.calEvents || []).slice(); const ty = $("osCType").value;
+    D.calEvents.push({ id:uid(), date:cf, to:(ct && ct > cf) ? ct : "", title:title.split(/\s[–(]/)[0].slice(0, 90), type:ty, color:window.ceType(ty)[3], note:$("osCNote").value.trim(), upd:now }); }
+  if (links.length && $("osLkDir").checked) { D.resources = eff("resources").slice();
+    links.forEach(l => { if (!D.resources.some(r => r.url === l.url)) D.resources.push({ id:uid(), title:l.title, url:l.url, desc:"", cat:"wbchse", vis:"public", upd:now }); }); }
+  if ($("osTick").checked) D.ticker = title.split(/\s[–(]/)[0].slice(0, 120);
+  osClear(); save();
 };
 /* ---- quick "today's notice" box ---- */
 const qIso = d => new Date(d.getTime() - d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
