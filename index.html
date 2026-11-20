@@ -1000,8 +1000,8 @@ window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]=
       <p><button class="btn" id="osGo" type="button">✅ সব একসাথে প্রকাশ করুন / Publish all</button> <button class="btn alt" id="osClear" type="button">Clear</button></p>
     </fieldset>
 
-    <fieldset><legend>Top ticker (one-line alert)</legend>
-      <input id="tk" placeholder="e.g. School closed on 31 October">
+    <fieldset><legend>Top ticker – এক লাইনে একটি বার্তা; একাধিক লাইন দিলে পর্যায়ক্রমে একটার পর একটা দেখাবে / one message per line, several rotate</legend>
+      <textarea id="tk" rows="3" placeholder="e.g. School closed on 31 October&#10;Second message on the next line"></textarea>
       <p><button class="btn" id="tkSave" type="button">Save / Update ticker</button> <button class="btn alt" id="tkDel" type="button">Delete ticker</button></p>
       <p class="meta" id="tkNow" style="margin:0"></p>
     </fieldset>
@@ -1347,10 +1347,22 @@ $("saveAdmRem").onclick = () => saveRem("admRem", "admPre", "admTx", "admDt");
 $("clrRes").onclick = () => { D.resRem = null; save(); };
 $("clrAdmRem").onclick = () => { D.admRem = null; save(); };
 
+/* ---------- Top ticker: one message per line; several lines rotate every few seconds ---------- */
+const tkItems = () => String(D.ticker || "").split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+let TK_SIG = "", TK_I = 0, TK_T = null, TK_HOLD = false;
+function tickerSet(){
+  const el = $("ticker"), it = tkItems(), sig = it.join("\n");
+  if (sig === TK_SIG) return; TK_SIG = sig; TK_I = 0; clearInterval(TK_T);
+  el.textContent = it[0] || ""; el.title = "";
+  if (it.length > 1){
+    el.onmouseenter = () => TK_HOLD = true; el.onmouseleave = () => TK_HOLD = false;
+    TK_T = setInterval(() => { if (TK_HOLD || document.hidden) return; TK_I = (TK_I + 1) % it.length; el.textContent = it[TK_I]; }, 4500);
+  }
+}
 /* ---------- Public view ---------- */
 function render(){
-  $("ticker").textContent = D.ticker || "";
-  if ($("tkNow")) $("tkNow").textContent = D.ticker ? "Showing now on the site: " + D.ticker : "No ticker is showing now.";
+  tickerSet();
+  if ($("tkNow")) { const n = tkItems().length; $("tkNow").textContent = n ? "Showing now on the site (" + n + (n > 1 ? " messages, rotating" : " message") + "): " + tkItems().join("  |  ") : "No ticker is showing now."; }
   const a = D.admission || {};
   const box = $("admBox");
   if (a.open && a.title){
@@ -1448,8 +1460,8 @@ auth.onAuthStateChanged(u => {
     $("aOpen").checked = !!a.open; $("aTitle").value = a.title||""; $("aLink").value = a.link||"";
     $("aLast").value = a.last||""; $("aNote").value = a.note||""; }
 });
-$("tk").onchange = () => { D.ticker = $("tk").value.trim(); save(); };
-$("tkSave").onclick = () => { D.ticker = $("tk").value.trim(); if (!D.ticker) return toast("Type the ticker text first, or use Delete ticker"); save(); };
+$("tk").onchange = () => { D.ticker = $("tk").value.split(/\r?\n/).map(x => x.trim()).filter(Boolean).join("\n"); save(); };
+$("tkSave").onclick = () => { D.ticker = $("tk").value.split(/\r?\n/).map(x => x.trim()).filter(Boolean).join("\n"); if (!D.ticker) return toast("Type the ticker text first, or use Delete ticker"); save(); };
 $("tkDel").onclick = () => { if (!D.ticker && !$("tk").value.trim()) return toast("No ticker to delete"); if (!confirm("Delete the top ticker?")) return; D.ticker = ""; $("tk").value = ""; save(); };
 $("saveAdm").onclick = async () => { let pdf = (D.admission||{}).pdf || "";
   try { const pu = await pdfFrom("aPdf", "aPdfRm"); if (pu !== undefined) pdf = pu; } catch(e) { return toast(e.message || "PDF upload failed"); }
@@ -1510,7 +1522,7 @@ $("osGo").onclick = async () => {
     D.calEvents.push({ id:uid(), date:cf, to:(ct && ct > cf) ? ct : "", title:title.split(/\s[–(]/)[0].slice(0, 90), type:ty, color:window.ceType(ty)[3], note:$("osCNote").value.trim(), upd:now }); }
   if (links.length && $("osLkDir").checked) { D.resources = eff("resources").slice();
     links.forEach(l => { if (!D.resources.some(r => r.url === l.url)) D.resources.push({ id:uid(), title:l.title, url:l.url, desc:"", cat:"wbchse", vis:"public", upd:now }); }); }
-  if ($("osTick").checked) D.ticker = title.split(/\s[–(]/)[0].slice(0, 120);
+  if ($("osTick").checked) { const t1 = title.split(/\s[–(]/)[0].slice(0, 120), cur = tkItems(); if (!cur.includes(t1)) cur.push(t1); D.ticker = cur.join("\n"); }
   osClear(); save();
 };
 /* ---- quick "today's notice" box ---- */
