@@ -494,6 +494,8 @@ table.t.mp th{background:var(--c-mp);color:#fff;padding:4px 10px;text-align:left
 .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center;flex:none}
 .btn.pdf{background:#0f766e}
 .btn.pdf:hover{filter:brightness(1.1)}
+.fm-cats{display:flex;flex-wrap:wrap;gap:6px;padding:8px 8px 4px}
+.fm-cats .btn[aria-pressed=true]{background:#0f766e;color:#fff}
 /* blinking remark (result / admission not ready) */
 .rem{display:flex;gap:9px;align-items:flex-start;margin:0;padding:8px 12px;border:1px solid #e0a100;border-left:5px solid #d97706;background:#fff4d1;color:#4a3300;font-weight:600;font-size:13.5px;animation:remblink 1.2s steps(2,start) infinite}
 .rem .rd{display:block;font-weight:700;font-size:12.5px;margin-top:2px}
@@ -813,7 +815,7 @@ window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]=
 </header>
 <div class="ticker" id="ticker"></div>
 <nav class="menu" aria-label="Sections">
-  <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a>
+  <a href="#links">দ্রুত লিংক</a><a href="#useful">দরকারি লিংক</a><a href="#forms">📝 ফর্ম</a>
   <a href="#holidays">ছুটি</a><a href="#" id="ektaLink" style="display:none">🇮🇳 একতা প্যারেড</a><a href="#" id="shareLink" title="Facebook / WhatsApp-এ শেয়ার">📤 শেয়ার</a><a href="#" id="installLink">📲 অ্যাপ ইনস্টল</a><a href="https://drive.google.com/uc?export=download&id=16HMhCNRtPA4dH0f_s0yiUyAy6nXCjT7h" id="apkLink" rel="noopener">🤖 Android APK</a><a href="#" id="fbLink" title="মতামত ও পরামর্শ / Feedback &amp; Suggestion" aria-label="মতামত ও পরামর্শ / Feedback">✉️ মতামত</a><a href="#" id="guideLink" style="display:none">📘 ব্যবহার নির্দেশিকা</a><a href="#" id="flashLink" style="display:none">📢 বিশেষ বিজ্ঞপ্তি</a>
 </nav>
 <a href="#" id="flashBar" class="flbar" hidden></a>
@@ -837,6 +839,7 @@ window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]=
       <div class="ptabs" id="ptabs" role="tablist" aria-label="Sections">
         <button role="tab" data-p="notices" aria-selected="true" style="--c:var(--c-notice)">📢 <span>বিজ্ঞপ্তি</span><i class="cnt" id="cnt-notices"></i></button>
         <button role="tab" data-p="results" aria-selected="false" style="--c:var(--c-result)">🏆 <span>ফলাফল</span><i class="cnt" id="cnt-results"></i></button>
+        <button role="tab" data-p="forms" aria-selected="false" style="--c:#0f766e">📝 <span>ফর্ম / Forms</span><i class="cnt" id="cnt-forms"></i></button>
         <button role="tab" data-p="gallery" aria-selected="false" style="--c:var(--c-gallery)">🖼️ <span>গ্যালারি</span><i class="cnt" id="cnt-gallery"></i></button>
         <button role="tab" data-p="staff" aria-selected="false" style="--c:var(--c-staff)">👥 <span>শিক্ষক-শিক্ষাকর্মী</span><i class="cnt" id="cnt-staff"></i></button>
         <button role="tab" data-p="mptest" aria-selected="false" style="--c:var(--c-mp)">📅 <span>MP টেস্ট প্রোগ্রাম</span><i class="cnt" id="cnt-mptest"></i></button>
@@ -856,6 +859,11 @@ window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]=
 
       <section class="pane" id="p-results" role="tabpanel" style="--c:var(--c-result)" hidden>
         <div class="list" id="results" style="--c:var(--c-result)"></div>
+      </section>
+
+      <section class="pane" id="p-forms" role="tabpanel" style="--c:#0f766e" hidden>
+        <div class="fm-cats" id="formsCats"></div>
+        <div class="list" id="formsList" style="--c:#0f766e"></div>
       </section>
 
       <section class="pane" id="p-gallery" role="tabpanel" style="--c:var(--c-gallery)" hidden>
@@ -1140,6 +1148,16 @@ window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]=
       <div id="rList"></div>
     </fieldset>
 
+    <fieldset><legend>📝 Forms / Downloads (students &amp; staff)</legend>
+      <label>Form title<input id="fmTitle" placeholder="Transfer Certificate (TC) Application Form"></label>
+      <div class="row"><label>Category<select id="fmCat"></select></label><label>Date<input id="fmDate" type="date"></label></div>
+      <label>File name inside the <code>forms/</code> folder (e.g. <code>TC-form.pdf</code>)<input id="fmFile" placeholder="TC-form.pdf"></label>
+      <label>OR a link (Drive / website)<input id="fmLink" placeholder="https://..."></label>
+      <label>OR upload a PDF from computer<input type="file" id="fmPdf" accept="application/pdf,.pdf"></label><label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="fmPdfRm" style="width:auto"> Remove existing uploaded PDF</label>
+      <p><button class="btn" id="addFm">Publish form</button></p>
+      <div id="fmList"></div>
+    </fieldset>
+
     <fieldset><legend>Gallery photo</legend>
       <label>Image path or link (best: upload to the repo's <code>images/</code> folder, then enter <code>images/sports-day.jpg</code>)<input id="gUrl"></label>
       <label>OR choose a photo directly from your computer<input type="file" id="gFile" accept="image/*"></label>
@@ -1394,6 +1412,7 @@ function render(){
       ${(r.pdf||safeUrl(r.link))?`<div class="acts">${pdfBtn(r.pdf)}${safeUrl(r.link)?`<a class="btn sm" href="${safeUrl(r.link)}" target="_blank" rel="noopener">View</a>`:""}</div>`:""}</div>`).join("")
     : (remHtml(D.resRem) ? "" : `<div class="empty">কোনো ফলাফল প্রকাশিত হয়নি। / No results published yet.</div>`));
   renderExtra();
+  try{ renderForms(); }catch(e){ console.error(e); }
   renderMp();
   renderRoutines();
   try{ renderRegular(); }catch(e){}
@@ -1407,25 +1426,63 @@ function render(){
   flashInit();
   if ($("editor").style.display !== "none") { fillFlash(); syncRem(); }
 }
+/* ---------- Forms / Downloads ---------- */
+const FORM_CATS = [["pay","বেতন নির্ধারণ / Pay Fixation (ROPA)"],["pf","PF · GPF · Pension"],["service","নিয়োগ ও চাকরি / Appointment & Service"],["bill","বিল ও ট্রেজারি / Bills & Treasury"],["student","ছাত্রছাত্রী ও পরীক্ষা / Students & Exam"],["staff","শিক্ষক-শিক্ষাকর্মী / Staff"],["admission","ভর্তি / Admission"],["cert","সার্টিফিকেট / Certificate"],["other","অন্যান্য / Other"]];
+let FM_FILE = [];   /* optional forms/forms.json: [{"title":"..","file":"x.pdf","cat":"student"}] */
+fetch("forms/forms.json", {cache:"no-cache"}).then(r => r.ok ? r.json() : []).then(a => { FM_FILE = Array.isArray(a) ? a.filter(x => x && x.title && x.file) : []; try{ renderForms(); paneCounts(); }catch(e){} }).catch(() => {});
+function formUrl(f){
+  const u = String(f.pdf || f.link || (f.file ? "forms/" + String(f.file).replace(/^\/+/, "").replace(/^forms\//i, "") : "")).trim();
+  if (!u) return "";
+  if (/^https?:\/\//i.test(u)) return esc(u);
+  if (/^forms\//i.test(u) && !/\.\./.test(u)) return esc(encodeURI(u));
+  return "";
+}
+function formsAll(){
+  const seen = new Set(), out = [];
+  [...(D.forms || []), ...FM_FILE.map(x => ({...x, id:"file_" + x.file}))].forEach(f => { const u = formUrl(f); if (!u || seen.has(u)) return; seen.add(u); out.push(f); });
+  return out;
+}
+function renderForms(){
+  const box = $("formsList"), cb = $("formsCats"); if (!box) return;
+  const all = formsAll(), cur = window.__fCat || "all";
+  const used = FORM_CATS.filter(c => all.some(f => (f.cat || "other") === c[0]));
+  cb.innerHTML = all.length ? [["all","সব / All"], ...used].map(c => `<button type="button" class="btn sm ${cur===c[0]?"":"alt"}" aria-pressed="${cur===c[0]}" data-fc="${c[0]}">${esc(c[1])}</button>`).join("") : "";
+  cb.querySelectorAll("[data-fc]").forEach(b => b.onclick = () => { window.__fCat = b.dataset.fc; renderForms(); });
+  const rows = all.filter(f => cur === "all" || (f.cat || "other") === cur).sort((a,b) => (a.title||"").localeCompare(b.title||""));
+  const lab = k => (FORM_CATS.find(c => c[0] === (k||"other")) || FORM_CATS[FORM_CATS.length-1])[1];
+  box.innerHTML = rows.length ? rows.map(f => { const u = formUrl(f), ext = ((u.split("?")[0].match(/\.([a-z0-9]+)$/i)||[])[1]||(f.pdf?"pdf":"")).toLowerCase(), canView = !ext || ["pdf","jpg","jpeg","png","gif","webp"].includes(ext), local = !/^https?:/i.test(u);
+    return `<div class="item"><div><b>${esc(f.title)}</b><span class="meta">${isFresh(f)||isNew(f.date)?'<span class="tag new">NEW</span>':""}<span class="tag">${esc(lab(f.cat))}</span>${ext?`<span class="tag">${esc(ext.toUpperCase())}</span>`:""}${f.date?fmt(f.date):""}</span></div>
+      <div class="acts">${canView?`<a class="btn sm pdf" href="${u}" target="_blank" rel="noopener">👁 দেখুন / View</a>`:""}${local||!canView?`<a class="btn sm" href="${u}" download>⬇ ডাউনলোড / Download</a>`:""}</div></div>`; }).join("")
+    : `<div class="empty">কোনো ফর্ম নেই। / No forms available yet.</div>`;
+}
+$("fmCat").innerHTML = FORM_CATS.map(c => `<option value="${c[0]}">${esc(c[1])}</option>`).join("");
+$("addFm").onclick = async () => {
+  const t = $("fmTitle").value.trim(); if (!t) return toast("Title is required");
+  let pdf; try { pdf = await pdfFrom("fmPdf", "fmPdfRm"); } catch(e) { return toast(e.message || "PDF upload failed"); }
+  const file = $("fmFile").value.trim().replace(/^\/+/, "").replace(/^forms\//i, ""), link = $("fmLink").value.trim();
+  if (!file && !link && !pdf && !(EDITS.forms && (D.forms||[]).some(x => x.id === EDITS.forms && x.pdf))) return toast("Give a file name, a link, or upload a PDF");
+  const o = { title:t, cat:$("fmCat").value, file, link, date:$("fmDate").value || today() }; if (pdf !== undefined) o.pdf = pdf;
+  upsert("forms", o, true); ["fmTitle","fmFile","fmLink"].forEach(i => $(i).value = ""); save();
+};
 function showPane(name, scroll){
   document.querySelectorAll("#ptabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.p === name));
   document.querySelectorAll(".pane").forEach(p => p.hidden = p.id !== "p-" + name);
   if (scroll) $("ptabs").scrollIntoView({block:"start", behavior:"smooth"});
 }
 document.querySelectorAll("#ptabs button").forEach(b => b.onclick = () => showPane(b.dataset.p));
-const MENU_PANE = {"#notices-top":"notices", "#gallery":"gallery", "#staff":"staff", "#mptest":"mptest", "#routine-types":"regular"};
+const MENU_PANE = {"#forms":"forms", "#notices-top":"notices", "#gallery":"gallery", "#staff":"staff", "#mptest":"mptest", "#routine-types":"regular"};
 /* ছুটি menu: only the holiday section (as earlier); রুটিন menu: opens the two routine types (স্থায়ী / অস্থায়ী tabs) */
 document.querySelectorAll('nav.menu a[href="#holidays"]').forEach(a => a.addEventListener("click", e => { e.preventDefault();
   if (!viewOn("hol")) setView("hol", true); else { const el = $("holidays"); if (el) el.scrollIntoView({block:"start", behavior:"smooth"}); } }));
 document.querySelectorAll("nav.menu a").forEach(a => { const n = MENU_PANE[a.getAttribute("href")];
   if (n) a.onclick = e => { e.preventDefault(); showPane(n, true); }; });
 function paneCounts(){
-  const c = {routine:(D.routines||[]).filter(x => x.status === "published").length, notices:(D.notices||[]).length, results:(D.results||[]).length, gallery:(D.gallery||[]).length, staff:(D.staff||[]).length, mptest:((D.mpTest||{}).rows||[]).length || ((D.mpTest||{}).poster ? 1 : 0)};
+  const c = {routine:(D.routines||[]).filter(x => x.status === "published").length, notices:(D.notices||[]).length, results:(D.results||[]).length, forms:formsAll().length, gallery:(D.gallery||[]).length, staff:(D.staff||[]).length, mptest:((D.mpTest||{}).rows||[]).length || ((D.mpTest||{}).poster ? 1 : 0)};
   for (const k in c) { const el = $("cnt-" + k); if (el) el.textContent = c[k] || ""; }
   const nn = $("cnt-notices"); if (nn) nn.classList.toggle("hasnew", (D.notices||[]).some(n => isNew(n.date) || isFresh(n)));
   const rc = $("cnt-results"); if (rc) { const rem = !!(D.resRem && D.resRem.text); if (rem && !(D.results||[]).length) rc.textContent = "🔔"; rc.classList.toggle("hasnew", rem || (D.results||[]).some(r => isNew(r.date) || isFresh(r)));
   const tg = (id, on) => { const el = $("cnt-" + id); if (el) el.classList.toggle("hasnew", !!on); };
-  tg("routine", (D.routines||[]).some(x => x.status === "published" && isFresh(x))); tg("regular", !!(D.regRoutine && isFresh({upd:D.regRoutine.upd}))); tg("gallery", (D.gallery||[]).some(isFresh)); tg("staff", (D.staff||[]).some(isFresh)); tg("mptest", ((D.mpTest||{}).rows||[]).some(isFresh) || isFresh({upd:Date.parse((D.mpTest||{}).fetchedAt||"")||0})); }
+  tg("forms", formsAll().some(isFresh)); tg("routine", (D.routines||[]).some(x => x.status === "published" && isFresh(x))); tg("regular", !!(D.regRoutine && isFresh({upd:D.regRoutine.upd}))); tg("gallery", (D.gallery||[]).some(isFresh)); tg("staff", (D.staff||[]).some(isFresh)); tg("mptest", ((D.mpTest||{}).rows||[]).some(isFresh) || isFresh({upd:Date.parse((D.mpTest||{}).fetchedAt||"")||0})); }
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
   filter = b.dataset.f;
@@ -1556,7 +1613,7 @@ $("addR").onclick = async () => {
   upsert("results", r, true);
   $("rTitle").value = $("rLink").value = ""; save();
 };
-const LISTS = {links:"lList", notices:"nList", results:"rList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList", events:"eList", calEvents:"ceList", resources:"xList"};
+const LISTS = {links:"lList", notices:"nList", results:"rList", forms:"fmList", gallery:"gList", staff:"sList", routine:"tList", holidays:"hList", events:"eList", calEvents:"ceList", resources:"xList"};
 let PH_ID = null;
 $("phFile").addEventListener("cancel", () => render());
 $("phFile").onchange = async () => {
@@ -1578,7 +1635,7 @@ function photoPicker(t){
     <label>Photo (manual)<select data-ph="${esc(t.id)}">${opts.join("")}</select></label></div>`;
 }
 const ADM_ALL = {}, ADM_LIM = 5;
-const EDITABLE = ["holidays","staff","links","resources","notices","results","gallery","routine","events","calEvents"];
+const EDITABLE = ["holidays","staff","links","resources","notices","results","forms","gallery","routine","events","calEvents"];
 /* small pop-up editor used for every "Edit" button that has no form of its own */
 function editModal(title, fields, obj, done){
   const w = document.createElement("div"); w.className = "emod-wrap";
@@ -1620,7 +1677,7 @@ function renderAdminLists(){
   });
   document.querySelectorAll("#panel [data-edit]").forEach(b => b.onclick = () => {
     const k = b.dataset.ek, id = b.dataset.edit, stamp = (o, v) => { Object.assign(o, v); o.upd = Date.now(); save(); };
-    if (["links","resources","notices","results"].includes(k)) { startEdit(k, id); return; }
+    if (["links","resources","notices","results","forms"].includes(k)) { startEdit(k, id); return; }
     const o = (D[k]||[]).find(x => x.id === id); if (!o) return;
     if (k === "staff") return loadStaff(o);
     if (k === "holidays") return editModal("Edit holiday", [{k:"name",l:"Holiday name",req:1},{k:"date",l:"From date",t:"date",req:1},{k:"to",l:"To date (blank = one day)",t:"date"}], o, v => stamp(o, v));
@@ -2041,10 +2098,10 @@ $("addX").onclick = () => { const t=$("xTitle").value.trim(), u=$("xUrl").value.
 $("resetX").onclick = () => { if(!confirm("Replace the whole list with the standard list? Links you added will be removed.")) return;
   D.resources = DEFAULT_RES.map(x => ({...x})); save(); };
 /* ---------- Edit published items (links, notices, results) ---------- */
-const EDITS = {}, EBTN = {notices:["addN","Publish notice"], results:["addR","Publish result"], links:["addL","Add link"], resources:["addX","Add link"]};
+const EDITS = {}, EBTN = {notices:["addN","Publish notice"], results:["addR","Publish result"], forms:["addFm","Publish form"], links:["addL","Add link"], resources:["addX","Add link"]};
 function editUi(k, on){ const [id, txt] = EBTN[k]; $(id).textContent = on ? "Save changes" : txt;
   let c = $("cx_" + k); if (!c) { $(id).insertAdjacentHTML("afterend", ` <button class="btn alt" type="button" id="cx_${k}" style="display:none">Cancel edit</button>`); c = $("cx_" + k);
-    c.onclick = () => { EDITS[k] = null; editUi(k, false); ({notices:["nTitle","nLink","nBody"], results:["rTitle","rLink"], links:["lTitle","lUrl","lIcon","lDesc"], resources:["xTitle","xUrl","xDesc","xCustom"]})[k].forEach(i => $(i).value = ""); }; }
+    c.onclick = () => { EDITS[k] = null; editUi(k, false); ({notices:["nTitle","nLink","nBody"], results:["rTitle","rLink"], forms:["fmTitle","fmFile","fmLink"], links:["lTitle","lUrl","lIcon","lDesc"], resources:["xTitle","xUrl","xDesc","xCustom"]})[k].forEach(i => $(i).value = ""); }; }
   c.style.display = on ? "" : "none"; }
 function upsert(k, obj, nosave){ delete obj.id; obj.upd = Date.now(); D[k] = eff(k).slice(); const id = EDITS[k], o = id && D[k].find(x => x.id === id);
   if (o) Object.assign(o, obj); else D[k].push({id:uid(), ...obj});
@@ -2056,6 +2113,7 @@ function startEdit(k, id){ const o = eff(k).find(x => x.id === id); if (!o) retu
   else if (k === "links") { $("lTitle").value = o.title||""; $("lUrl").value = o.url||""; $("lGroup").value = o.group||"general"; $("lIcon").value = o.icon||""; $("lDesc").value = o.desc||""; first = $("lTitle"); }
   else if (k === "notices") { $("nTitle").value = o.title||""; $("nLink").value = o.link||""; $("nBody").value = o.body||""; $("nFor").value = o.for||"general"; $("nDate").value = o.date||today();
     $("nPoster").value = ""; document.querySelector("#panel details.more").open = true; first = $("nTitle"); }
+  else if (k === "forms") { $("fmTitle").value = o.title||""; $("fmCat").value = o.cat||"other"; $("fmFile").value = o.file||""; $("fmLink").value = o.link||""; $("fmDate").value = o.date||today(); first = $("fmTitle"); }
   else { $("rTitle").value = o.title||""; $("rLink").value = o.link||""; $("rDate").value = o.date||today(); first = $("rTitle"); }
   editUi(k, true); toast("Editing - change it, then click Save changes"); first.scrollIntoView({block:"center"}); first.focus(); }
 const GROUPS = [["student","ছাত্রছাত্রীদের জন্য / For Students"],["staff","শিক্ষক-শিক্ষাকর্মীদের জন্য / For Staff"],["general","সবার জন্য / For Everyone"]];
