@@ -1450,9 +1450,9 @@ function renderForms(){
   cb.querySelectorAll("[data-fc]").forEach(b => b.onclick = () => { window.__fCat = b.dataset.fc; renderForms(); });
   const rows = all.filter(f => cur === "all" || (f.cat || "other") === cur).sort((a,b) => (a.title||"").localeCompare(b.title||""));
   const lab = k => (FORM_CATS.find(c => c[0] === (k||"other")) || FORM_CATS[FORM_CATS.length-1])[1];
-  box.innerHTML = rows.length ? rows.map(f => { const u = formUrl(f), ext = ((u.split("?")[0].match(/\.([a-z0-9]+)$/i)||[])[1]||(f.pdf?"pdf":"")).toLowerCase(), canView = !ext || ["pdf","jpg","jpeg","png","gif","webp"].includes(ext), local = !/^https?:/i.test(u);
+  box.innerHTML = rows.length ? rows.map(f => { const u = formUrl(f), ext = ((u.split("?")[0].match(/\.([a-z0-9]+)$/i)||[])[1]||(f.pdf?"pdf":"")).toLowerCase(), office = ["doc","docx","xls","xlsx"].includes(ext), local = !/^https?:/i.test(u), gv = (office || (ext === "pdf" && navigator.pdfViewerEnabled === false)) ? "https://docs.google.com/viewer?url=" + encodeURIComponent(new URL(u.replace(/&amp;/g,"&"), location.href).href) : "", canView = !!gv || !office && (!ext || ["pdf","jpg","jpeg","png","gif","webp"].includes(ext)), vu = gv || u;
     return `<div class="item"><div><b>${esc(f.title)}</b><span class="meta">${isFresh(f)||isNew(f.date)?'<span class="tag new">NEW</span>':""}<span class="tag">${esc(lab(f.cat))}</span>${ext?`<span class="tag">${esc(ext.toUpperCase())}</span>`:""}${f.date?fmt(f.date):""}</span></div>
-      <div class="acts">${canView?`<a class="btn sm pdf" href="${u}" target="_blank" rel="noopener">👁 দেখুন / View</a>`:""}${local||!canView?`<a class="btn sm" href="${u}" download>⬇ ডাউনলোড / Download</a>`:""}</div></div>`; }).join("")
+      <div class="acts">${canView?`<a class="btn sm pdf" href="${vu}" target="_blank" rel="noopener">👁 দেখুন / View</a>`:""}${local||!canView?`<a class="btn sm" href="${u}" download>⬇ ডাউনলোড / Download</a>`:""}</div></div>`; }).join("")
     : `<div class="empty">কোনো ফর্ম নেই। / No forms available yet.</div>`;
 }
 $("fmCat").innerHTML = FORM_CATS.map(c => `<option value="${c[0]}">${esc(c[1])}</option>`).join("");
