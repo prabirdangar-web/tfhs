@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tfhs-cache-v6';   // bumped: forces every device to drop the old cache (v2 could hold a wrong index.html)
+const CACHE_NAME = 'tfhs-cache-v7';   // bumped: forces every device to drop the old cache (v2 could hold a wrong index.html)
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
