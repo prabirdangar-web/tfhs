@@ -1,2 +1,6 @@
-[{"title": "FIXATION FORMS","file": "18-YRS_ROPA-09.pdf","cat": "FIXATION"},{"title": "FIXATION FORMS","file": "18-YRS_ROPA-19.pdf","cat": "FIXATION"},
-  {"title": "GPF forms","file": "pf-forms.pdf","cat": "PF"},{"title": "GPF forms","file":"PF_Nomanation_form.pdf","cat": "PF"}]
+[
+ {"title":"18 Years Fixation Form (ROPA-09)","file":"18-YRS_ROPA-09.pdf","cat":"pay"},
+ {"title":"18 Years Fixation Form (ROPA-19)","file":"18-YRS_ROPA-19.pdf","cat":"pay"},
+ {"title":"GPF Forms","file":"pf-forms.pdf","cat":"pf"},
+ {"title":"PF Nomination Form","file":"PF_Nomanation_form.pdf","cat":"pf"}
+]
