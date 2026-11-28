@@ -62,6 +62,24 @@ table.tot td:first-child{width:50%;font-weight:700}
 }
 @media print{#fee{display:none!important}}
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* standalone page: the fee loader calls window.parent.getXiiFee(); at top level parent === window */
+(function(){
+  var cfg={apiKey:"AIzaSyCiqQFsnbSi6eCgUI_W3NTybzIkRmCI_54",authDomain:"tfhs-portal.firebaseapp.com",projectId:"tfhs-portal",storageBucket:"tfhs-portal.firebasestorage.app",messagingSenderId:"316041012204",appId:"1:316041012204:web:04ee8b19374c60f63716c9"};
+  var _xf=null,_xft=0;
+  try{ firebase.initializeApp(cfg); }catch(e){}
+  window.getXiiFee=async function(){
+    try{
+      if(_xf&&Date.now()-_xft<60000) return _xf;
+      var snap=await firebase.firestore().collection("tfhs").doc("xii_fee").get();
+      if(snap.exists){ _xf=snap.data(); _xft=Date.now(); return _xf; }
+    }catch(e){ console.warn("xii_fee read failed:",e&&(e.code||e.message)); }
+    return null;
+  };
+})();
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -150,22 +168,20 @@ function typeCell(t){const c=document.createElement('td');
   if(t.startsWith('Compulsory ')){c.append('Compulsory',document.createElement('br'),t.slice(11));}
   else if(t==='Optional Elective'){c.append('Optional',document.createElement('br'),'Elective');}
   else c.textContent=t; return c;}
-const FEE_URL='https://firestore.googleapis.com/v1/projects/tfhs-portal/databases/(default)/documents/tfhs/xii_fee?key=AIzaSyCiqQFsnbSi6eCgUI_W3NTybzIkRmCI_54';
-const sv=f=>f&&(f.stringValue!=null?f.stringValue:(f.integerValue!=null?String(f.integerValue):''));
+const sv=f=>f&&(f.stringValue!=null?f.stringValue:'');
 async function loadFee(roll,reg){
   const box=$('fee'); box.classList.add('hide');
   try{
-    const k=digits(roll)+'|'+digits(reg), enc=new TextEncoder();
-    const resp=await fetch(FEE_URL,{cache:'no-store'}); if(!resp.ok) return;
-    const j=await resp.json(), f=j.fields||{}, cfg=((f.cfg||{}).mapValue||{}).fields||{}, dm=((f.data||{}).mapValue||{}).fields||{};
+    const F=(window.parent&&window.parent.getXiiFee)?await window.parent.getXiiFee():null; if(!F||!F.data) return;
+    const k=digits(roll)+'|'+digits(reg), enc=new TextEncoder(), cfg=F.cfg||{};
     const id=hex(await crypto.subtle.digest('SHA-256',enc.encode('fee:'+k)));
-    const e=dm[id]; if(!e||!e.stringValue) return;
-    const pr=e.stringValue.split('.'); if(pr.length!==3) return;
+    const ev=F.data[id]; if(!ev) return;
+    const pr=String(ev).split('.'); if(pr.length!==3) return;
     const base=await crypto.subtle.importKey('raw',enc.encode(k),'PBKDF2',false,['deriveKey']);
     const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(pr[0]),iterations:ITER,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
     const o=JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(pr[1])},key,b64(pr[2]))));
     $('f-date').textContent=o.fd||'To be informed by the school';
-    const last=sv(cfg.toTxt); $('f-last').textContent=last; $('f-lastr').style.display=last?'':'none';
+    const last=cfg.toTxt||''; $('f-last').textContent=last; $('f-lastr').style.display=last?'':'none';
     $('f-brk').textContent=o.f||''; $('f-tot').textContent='Rs. '+o.t;
     $('f-sup').textContent=o.p||''; $('f-supr').style.display=o.p?'':'none';
     box.classList.remove('hide');
