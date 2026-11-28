@@ -4361,7 +4361,7 @@ const sv=f=>f&&(f.stringValue!=null?f.stringValue:'');
 async function loadFee(roll,reg){
   const box=$('fee'); box.classList.add('hide');
   try{
-    const F=(window.parent&&window.parent.getXiiFee)?window.parent.getXiiFee():null; if(!F||!F.data) return;
+    const F=(window.parent&&window.parent.getXiiFee)?await window.parent.getXiiFee():null; if(!F||!F.data) return;
     const k=digits(roll)+'|'+digits(reg), enc=new TextEncoder(), cfg=F.cfg||{};
     const id=hex(await crypto.subtle.digest('SHA-256',enc.encode('fee:'+k)));
     const ev=F.data[id]; if(!ev) return;
@@ -4406,7 +4406,16 @@ $('back').addEventListener('click',()=>{$('out').classList.add('hide');$('form')
 </html>
 </script>
 <script>
-function getXiiFee(){ return (typeof D!=="undefined" && D.xiiFee) ? D.xiiFee : null; }
+var _xf=null,_xft=0;
+async function getXiiFee(){
+  /* fee is published by the certificate tool to Firestore tfhs/xii_fee (encrypted per student) */
+  try{
+    if(_xf && Date.now()-_xft<60000) return _xf;
+    var snap=await db.collection(DOC_PATH[0]).doc("xii_fee").get();
+    if(snap.exists){ _xf=snap.data(); _xft=Date.now(); return _xf; }
+  }catch(e){ console.warn("xii_fee read failed:",e&&(e.code||e.message)); }
+  return (typeof D!=="undefined" && D.xiiFee) ? D.xiiFee : null;
+}
 function s3rOpen(){ var f=document.getElementById("s3rFrame"); if(!f.dataset.on){ f.srcdoc=document.getElementById("s3rTpl").textContent.replace(/<\\\/script>/g,"<\/script>"); f.dataset.on="1"; } document.getElementById("s3r").classList.add("on"); document.body.style.overflow="hidden"; if(location.hash!=="#result") history.replaceState(null,"","#result"); }
 function s3rClose(){ document.getElementById("s3r").classList.remove("on"); document.body.style.overflow=""; if(location.hash==="#result") history.replaceState(null,"",location.pathname+location.search); }
 function s3rBtn(){ var pane=document.getElementById("p-results"); if(!pane||document.getElementById("s3rOpen")) return; var b=document.createElement("button"); b.id="s3rOpen"; b.type="button"; b.textContent="🎓 Semester-III H.S. Result (Know Your Result) — আপনার ফলাফল দেখুন"; b.onclick=s3rOpen; b.style.display="block"; pane.insertBefore(b,pane.firstChild); }
