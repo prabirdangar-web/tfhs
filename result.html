@@ -85,6 +85,29 @@ table.sub td.p{font-weight:700}
 }
 @media (max-width:720px){.cards.both{grid-template-columns:1fr}}
 @media print{#res h2,#fee h2{-webkit-print-color-adjust:exact;print-color-adjust:exact}.cards.both{grid-template-columns:1.25fr 1fr}}
+
+/* ---------- deep & bold colours ---------- */
+#res{border:2px solid #0b3d91;background:#eef4ff;box-shadow:0 4px 14px rgba(11,61,145,.28)}
+#fee{border:2px solid #c2410c;background:#fff4e8;box-shadow:0 4px 14px rgba(194,65,12,.30)}
+#res h2{background:linear-gradient(90deg,#0a2f73,#1565c0);font-size:1.05rem;font-weight:800;letter-spacing:.2px;padding:11px 14px}
+#fee h2{background:linear-gradient(90deg,#9a3412,#ea580c);font-size:1.05rem;font-weight:800;letter-spacing:.2px;padding:11px 14px}
+#res table.kv td:first-child{background:#cfe0fb;color:#0a2f73;font-weight:700}
+#res table.kv td:last-child{font-weight:700;color:#0b1f44}
+#res table.sub th{background:#0b3d91;color:#fff;font-weight:800}
+#res table.sub td{font-weight:600}
+#res table.sub td:last-child{font-weight:800}
+#fee table.kv td:first-child{background:#fed7aa;color:#7c2d12;font-weight:700}
+#fee table.kv td:last-child{font-weight:800;color:#431407}
+#fee #f-tot{color:#b91c1c;font-size:1.25rem;font-weight:900}
+.notice{background:#fde68a;border:2px solid #b45309;color:#431407;font-weight:600}
+@media (prefers-color-scheme:dark){
+ #res{background:#10244a;border-color:#4d8fe6} #fee{background:#3a1d0a;border-color:#fb923c}
+ #res table.kv td:first-child{background:#1d3f7a;color:#dbe9ff} #res table.kv td:last-child{color:#fff}
+ #res table.sub th{background:#1e56b0}
+ #fee table.kv td:first-child{background:#7c2d12;color:#ffe4cc} #fee table.kv td:last-child{color:#fff}
+ #fee #f-tot{color:#ffb4a8} .notice{background:#5a3a07;color:#fff3d1;border-color:#f59e0b}
+}
+@media print{#res,#fee{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -164,10 +187,10 @@ table.sub td.p{font-weight:700}
     <tr id="f-supr"><td>Supplementary papers (Sem-III)</td><td id="f-sup"></td></tr>
    </table>
    <div class="foot" id="f-msg" style="display:none"></div>
-   <div class="foot" id="f-pay">Please pay the fee at the school office on your form fill-up date. Collect your Statement of Marks from the school during this form fill-up.</div>
+   <div class="foot" id="f-pay">The fee is to be deposited at the school office on the form fill-up date. The Statement of Marks will be given at the school during this form fill-up.</div>
   </div>
  </div>
- <div class="notice"><b>Important:</b> This is an information view only and is <b>not a marksheet</b>. The valid Statement of Marks must be downloaded from the official WBCHSE portal (wbchse.wb.gov.in) using Roll No. and Registration No., <b>or collected from the school during Semester-IV form fill-up</b>.</div>
+ <div class="notice"><b>Important:</b> This is an information view only and is <b>not a marksheet</b>. The valid Statement of Marks must be <b>collected from the school during Semester-IV form fill-up</b>.</div>
 </div>
 </div>
 
