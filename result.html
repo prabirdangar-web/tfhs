@@ -173,6 +173,7 @@ table.sub td.p{font-weight:700}
    <table class="kv" style="margin-top:12px">
     <tr><td>Marks Obtained</td><td><b id="o-tot"></b> out of <b id="o-max"></b></td></tr>
     <tr><td>Overall Percentage</td><td><b id="o-pct"></b></td></tr>
+    <tr id="o-rkr" style="display:none"><td>School Rank</td><td><b id="o-rk"></b></td></tr>
     <tr><td>Supplementary in</td><td id="o-sup">&nbsp;</td></tr>
    </table>
    <div class="foot">Marks in Optional Elective are not included in “Marks Obtained” and “Total Marks” for Semester-III; they will be considered in the final H.S. result after Semester-IV.</div>
@@ -273,6 +274,7 @@ async function loadFee(roll,reg){
     const last=cfg.toTxt||''; $('f-last').textContent=last; $('f-lastr').style.display=last?'':'none';
     $('f-brk').textContent=o.f||''; $('f-tot').textContent='Rs. '+o.t;
     $('f-sup').textContent=o.p||''; $('f-supr').style.display=o.p?'':'none';
+    if(o.k){ $('o-rk').textContent=o.k; $('o-rkr').style.display=''; }
   }catch(_){ setEmpty('Fee details could not be read. Please contact the school office.'); }
 }
 function render(r){
@@ -286,7 +288,7 @@ function render(r){
     tb.append(tr);
   });
   $('o-tot').textContent=r.t; $('o-max').textContent=r.m; $('o-pct').textContent=r.p;
-  $('o-sup').textContent=r.u||'\u00a0';
+  $('o-sup').textContent=r.u||'\u00a0'; $('o-rkr').style.display='none'; $('o-rk').textContent='';
   $('form').classList.add('hide'); $('out').classList.remove('hide');
   window.scrollTo(0,0);
 }
