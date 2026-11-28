@@ -839,7 +839,6 @@ window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]=
       <div class="ptabs" id="ptabs" role="tablist" aria-label="Sections">
         <button role="tab" data-p="notices" aria-selected="true" style="--c:var(--c-notice)">📢 <span>বিজ্ঞপ্তি</span><i class="cnt" id="cnt-notices"></i></button>
         <button role="tab" data-p="results" aria-selected="false" style="--c:var(--c-result)">🏆 <span>ফলাফল</span><i class="cnt" id="cnt-results"></i></button>
-        <button role="tab" data-p="sem3" aria-selected="false" style="--c:#1F3A5F">🎓 <span>Sem-III ফলাফল ও ফি</span></button>
         <button role="tab" data-p="forms" aria-selected="false" style="--c:#0f766e">📝 <span>ফর্ম / Forms</span><i class="cnt" id="cnt-forms"></i></button>
         <button role="tab" data-p="gallery" aria-selected="false" style="--c:var(--c-gallery)">🖼️ <span>গ্যালারি</span><i class="cnt" id="cnt-gallery"></i></button>
         <button role="tab" data-p="staff" aria-selected="false" style="--c:var(--c-staff)">👥 <span>শিক্ষক-শিক্ষাকর্মী</span><i class="cnt" id="cnt-staff"></i></button>
@@ -860,15 +859,6 @@ window.ceType=function(k){return window.CE_TYPES.filter(function(t){return t[0]=
 
       <section class="pane" id="p-results" role="tabpanel" style="--c:var(--c-result)" hidden>
         <div class="list" id="results" style="--c:var(--c-result)"></div>
-      </section>
-
-      <section class="pane" id="p-sem3" role="tabpanel" style="--c:#1F3A5F" hidden>
-        <div style="padding:10px 12px;font-size:14px;line-height:1.5;border-bottom:1px solid var(--line)">
-          <b>Class XII Semester-III H.S. Examination 2027 — Know Your Result</b><br>
-          রোল ও রেজিস্ট্রেশন নম্বর দিয়ে ফলাফল দেখুন। ফলাফলের নিচে <b>Semester-IV Form Fill-up (ফি ও তারিখ)</b> স্বয়ংক্রিয়ভাবে দেখাবে।
-          <br><span style="color:#586274">Enter Roll No. and Registration No. — the Sem-IV form fill-up date and fee appear below the result.</span>
-        </div>
-        <iframe id="s3TabFrame" title="Semester-III Result and Fee" style="width:100%;height:85vh;min-height:520px;border:0;background:#eef1f5;display:block"></iframe>
       </section>
 
       <section class="pane" id="p-forms" role="tabpanel" style="--c:#0f766e" hidden>
@@ -4533,16 +4523,11 @@ window.addEventListener("hashchange",function(){ if(location.hash==="#result") s
 document.addEventListener("DOMContentLoaded",function(){ try{ s3rBtn(); }catch(e){} if(location.hash==="#result") s3rOpen(); });
 </script>
 <script>
+/* old #sem3 links now open the same Know Your Result window as the ফলাফল tab button */
 (function(){
-  function load(){ var f=document.getElementById("s3TabFrame"); if(!f||f.dataset.on) return;
-    var t=document.getElementById("s3rTpl"); if(!t) return;
-    f.srcdoc=t.textContent.replace(/<\\\/script>/g,"<\/script>"); f.dataset.on="1"; }
-  function open3(){ if(typeof showPane==="function") showPane("sem3"); load(); }
-  document.addEventListener("DOMContentLoaded",function(){
-    var b=document.querySelector('#ptabs button[data-p="sem3"]'); if(b) b.addEventListener("click",load);
-    if(location.hash==="#sem3") open3();
-  });
-  window.addEventListener("hashchange",function(){ if(location.hash==="#sem3") open3(); });
+  function go(){ if(location.hash==="#sem3" && typeof s3rOpen==="function") s3rOpen(); }
+  document.addEventListener("DOMContentLoaded",go);
+  window.addEventListener("hashchange",go);
 })();
 </script>
 </body>
