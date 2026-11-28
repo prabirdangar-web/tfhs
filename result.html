@@ -97,15 +97,15 @@ table.sub td.p{font-weight:700}
   try{ firebase.initializeApp(cfg); }catch(e){}
   var dbg=/[?&]dbg=1/.test(location.search);
   var authP=null;
-  try{ authP=firebase.auth().signInAnonymously().catch(function(e){ console.warn("anon auth:",e&&e.code); }); }catch(e){}
+  try{ authP=firebase.auth().signInAnonymously().catch(function(e){ console.warn("anon auth:",e&&e.code); window.__authErr=e&&e.code; }); }catch(e){}
   window.getXiiFee=async function(){
     try{
       if(_xf&&Date.now()-_xft<60000) return _xf;
       if(authP) await authP;
       var snap=await firebase.firestore().collection("tfhs").doc("xii_fee").get();
       if(snap.exists){ _xf=snap.data(); _xft=Date.now(); return _xf; }
-      if(dbg) alert("Fee document tfhs/xii_fee NOT FOUND - publish fee from the certificate tool first.");
-    }catch(e){ console.warn("xii_fee read failed:",e&&(e.code||e.message)); if(dbg) alert("Fee read failed: "+(e&&(e.code||e.message))); }
+      window.__feeErr="document tfhs/xii_fee not found"; if(dbg) alert("Fee document tfhs/xii_fee NOT FOUND - publish fee from the certificate tool first.");
+    }catch(e){ window.__feeErr="SDK: "+(e&&(e.code||e.message)); console.warn("xii_fee read failed:",e&&(e.code||e.message)); if(dbg) alert("Fee read failed: "+(e&&(e.code||e.message))); }
     return null;
   };
 })();
@@ -214,13 +214,14 @@ async function getFeeDoc(){
   /* 2) REST fallback (works even if SDK / anonymous sign-in fails, when rules allow public read) */
   try{
     const r=await fetch('https://firestore.googleapis.com/v1/projects/tfhs-portal/databases/(default)/documents/tfhs/xii_fee?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok){ window.__feeErr=(window.__feeErr||'')+' | REST '+r.status; }
     if(r.ok){
       const j=await r.json(), f=j.fields||{}, o={};
       for(const k in f) o[k]=fsVal(f[k]);
       if(typeof o.data==='string'){try{o.data=JSON.parse(o.data);}catch(_){}}
       if(o.data) return o;
     }
-  }catch(_){}
+  }catch(e){ window.__feeErr=(window.__feeErr||'')+' | REST '+(e&&e.message); }
   return null;
 }
 async function loadFee(roll,reg){
@@ -236,7 +237,7 @@ async function loadFee(roll,reg){
   $('f-date').textContent='Loading\u2026';
   try{
     const F=await getFeeDoc();
-    if(!F){ setEmpty('Fee details could not be loaded right now. Please check your internet connection and try again, or contact the school office.'); return; }
+    if(!F){ setEmpty('Fee details could not be loaded right now. Please check your internet connection and try again, or contact the school office.'); const d=document.createElement('div'); d.style.cssText='font-size:.7rem;color:var(--mute);margin-top:4px;word-break:break-word'; d.textContent='Technical reason: '+((window.__authErr?'auth '+window.__authErr+' | ':'')+(window.__feeErr||'unknown')); msg.append(d); return; }
     const k=digits(roll)+'|'+digits(reg), enc=new TextEncoder(), cfg=F.cfg||{};
     const id=hex(await crypto.subtle.digest('SHA-256',enc.encode('fee:'+k)));
     const ev=F.data[id];
