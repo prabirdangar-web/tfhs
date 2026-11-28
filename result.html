@@ -86,7 +86,6 @@ table.sub td.p{font-weight:700}
  <p class="sub2">Know Your Result – Semester-III H.S. Examination, 2027</p>
 </header>
 
-<div class="notice" id="topnote"><b>Information view only.</b> The valid marksheet must be downloaded from the official WBCHSE portal.</div>
 
 <div class="card" id="form">
  <label for="roll">Roll No. (e.g. 225514-1157)</label>
@@ -132,10 +131,11 @@ table.sub td.p{font-weight:700}
     <tr><td>Total fee</td><td><b id="f-tot"></b></td></tr>
     <tr id="f-supr"><td>Supplementary papers (Sem-III)</td><td id="f-sup"></td></tr>
    </table>
-   <div class="foot">Please pay the fee at the school office on your form fill-up date.</div>
+   <div class="foot" id="f-msg" style="display:none"></div>
+   <div class="foot" id="f-pay">Please pay the fee at the school office on your form fill-up date. Collect your Statement of Marks from the school during this form fill-up.</div>
   </div>
  </div>
- <div class="notice"><b>Important:</b> This is an information view only and is <b>not a marksheet</b>. The valid Statement of Marks must be downloaded from the official WBCHSE portal (wbchse.wb.gov.in) using Roll No. and Registration No.</div>
+ <div class="notice"><b>Important:</b> This is an information view only and is <b>not a marksheet</b>. The valid Statement of Marks must be downloaded from the official WBCHSE portal (wbchse.wb.gov.in) using Roll No. and Registration No., <b>or collected from the school during Semester-IV form fill-up</b>.</div>
 </div>
 </div>
 
@@ -162,14 +162,54 @@ function typeCell(t){const c=document.createElement('td');
   else if(t==='Optional Elective'){c.append('Optional',document.createElement('br'),'Elective');}
   else c.textContent=t; return c;}
 const sv=f=>f&&(f.stringValue!=null?f.stringValue:'');
-async function loadFee(roll,reg){
-  const box=$('fee'); box.classList.add('hide'); $('cards').classList.remove('both');
+function fsVal(v){
+  if(!v) return null;
+  if('stringValue' in v) return v.stringValue;
+  if('integerValue' in v) return Number(v.integerValue);
+  if('doubleValue' in v) return v.doubleValue;
+  if('booleanValue' in v) return v.booleanValue;
+  if('nullValue' in v) return null;
+  if('mapValue' in v){const o={},f=v.mapValue.fields||{};for(const k in f)o[k]=fsVal(f[k]);return o;}
+  if('arrayValue' in v) return (v.arrayValue.values||[]).map(fsVal);
+  return null;
+}
+async function getFeeDoc(){
+  /* 1) Firestore SDK */
   try{
-    const F=(window.parent&&window.parent.getXiiFee)?await window.parent.getXiiFee():null; if(!F||!F.data) return;
+    const F=(window.parent&&window.parent.getXiiFee)?await window.parent.getXiiFee():null;
+    if(F){ if(typeof F.data==='string'){try{F.data=JSON.parse(F.data);}catch(_){}} if(F.data) return F; }
+  }catch(_){}
+  /* 2) REST fallback (works even if SDK / anonymous sign-in fails, when rules allow public read) */
+  try{
+    const r=await fetch('https://firestore.googleapis.com/v1/projects/tfhs-portal/databases/(default)/documents/tfhs/xii_fee?t='+Date.now(),{cache:'no-store'});
+    if(r.ok){
+      const j=await r.json(), f=j.fields||{}, o={};
+      for(const k in f) o[k]=fsVal(f[k]);
+      if(typeof o.data==='string'){try{o.data=JSON.parse(o.data);}catch(_){}}
+      if(o.data) return o;
+    }
+  }catch(_){}
+  return null;
+}
+async function loadFee(roll,reg){
+  const box=$('fee'), msg=$('f-msg');
+  /* the fee card is always shown after a result; it says clearly if details are missing */
+  box.classList.remove('hide'); $('cards').classList.add('both');
+  const setEmpty=(t)=>{
+    ['f-date','f-last','f-brk','f-tot','f-sup'].forEach(i=>$(i).textContent='\u2014');
+    $('f-lastr').style.display='none'; $('f-supr').style.display='none';
+    msg.textContent=t; msg.style.display='';
+  };
+  msg.style.display='none';
+  $('f-date').textContent='Loading\u2026';
+  try{
+    const F=await getFeeDoc();
+    if(!F){ setEmpty('Fee details could not be loaded right now. Please check your internet connection and try again, or contact the school office.'); return; }
     const k=digits(roll)+'|'+digits(reg), enc=new TextEncoder(), cfg=F.cfg||{};
     const id=hex(await crypto.subtle.digest('SHA-256',enc.encode('fee:'+k)));
-    const ev=F.data[id]; if(!ev) return;
-    const pr=String(ev).split('.'); if(pr.length!==3) return;
+    const ev=F.data[id];
+    if(!ev){ setEmpty('Semester-IV form fill-up fee details are not available for this candidate yet. Please contact the school office.'); return; }
+    const pr=String(ev).split('.'); if(pr.length!==3){ setEmpty('Fee details are not available for this candidate. Please contact the school office.'); return; }
     const base=await crypto.subtle.importKey('raw',enc.encode(k),'PBKDF2',false,['deriveKey']);
     const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(pr[0]),iterations:ITER,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
     const o=JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(pr[1])},key,b64(pr[2]))));
@@ -177,8 +217,7 @@ async function loadFee(roll,reg){
     const last=cfg.toTxt||''; $('f-last').textContent=last; $('f-lastr').style.display=last?'':'none';
     $('f-brk').textContent=o.f||''; $('f-tot').textContent='Rs. '+o.t;
     $('f-sup').textContent=o.p||''; $('f-supr').style.display=o.p?'':'none';
-    box.classList.remove('hide'); $('cards').classList.add('both');
-  }catch(_){}
+  }catch(_){ setEmpty('Fee details could not be read. Please contact the school office.'); }
 }
 function render(r){
   $('o-name').textContent=r.n; $('o-roll').textContent=r.r; $('o-reg').textContent=r.g;
@@ -192,7 +231,7 @@ function render(r){
   });
   $('o-tot').textContent=r.t; $('o-max').textContent=r.m; $('o-pct').textContent=r.p;
   $('o-sup').textContent=r.u||'\u00a0';
-  $('topnote').classList.add('hide'); $('form').classList.add('hide'); $('out').classList.remove('hide');
+  $('form').classList.add('hide'); $('out').classList.remove('hide');
   window.scrollTo(0,0);
 }
 let busy=false;
@@ -206,7 +245,7 @@ $('go').addEventListener('click',async()=>{
   busy=false; $('go').textContent='View Result';
 });
 ['roll','reg'].forEach(i=>$(i).addEventListener('keydown',e=>{if(e.key==='Enter')$('go').click();}));
-$('back').addEventListener('click',()=>{$('cards').classList.remove('both');$('out').classList.add('hide');$('topnote').classList.remove('hide');$('form').classList.remove('hide');$('roll').value='';$('reg').value='';});
+$('back').addEventListener('click',()=>{$('cards').classList.remove('both');$('out').classList.add('hide');$('form').classList.remove('hide');$('roll').value='';$('reg').value='';});
 </script>
 </body>
 </html>
