@@ -1491,7 +1491,7 @@ document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
 });
 
 /* ---------- Live data (public read, no login needed) ---------- */
-ref.onSnapshot(s => { if (s.exists) { D = Object.assign(D, s.data()); if (!('xiiFee' in s.data())) delete D.xiiFee; } render(); try{ s3rBtn(); }catch(e){} },
+ref.onSnapshot(s => { if (s.exists) { D = Object.assign(D, s.data()); if (!('xiiFee' in s.data())) delete D.xiiFee; } render(); },
   e => { console.error(e); toast("Could not load data"); });
 
 /* ---------- Admin ---------- */
@@ -4335,7 +4335,9 @@ table.sub td.p{font-weight:700}
 <div class="wrap">
 <header>
  <h1>TALDANGRA FULMATI HIGH SCHOOL (H.S.)</h1>
- <p class="sub2">Know Your Result – Semester-III H.S. Examination, 2027</p>
+ <p class="sub2">Semester-III H.S. Examination 2027 – Know Your Result (Only for our School)</p>
+ <p class="sub2" style="font-weight:700;margin-top:3px">সেমিস্টার-III উচ্চমাধ্যমিক পরীক্ষা ২০২৭ – আপনার ফলাফল জানুন (শুধুমাত্র আমাদের বিদ্যালয়ের জন্য)</p>
+ <p class="sub2" style="margin-top:3px">View the fee and date for Semester-IV form fill-up &nbsp;|&nbsp; সেমিস্টার-IV ফর্ম ফিলআপের ফি ও তারিখও এখানে দেখুন</p>
 </header>
 
 
@@ -4516,11 +4518,10 @@ async function getXiiFee(){
 }
 function s3rOpen(){ var f=document.getElementById("s3rFrame"); if(!f.dataset.on){ f.srcdoc=document.getElementById("s3rTpl").textContent.replace(/<\\\/script>/g,"<\/script>"); f.dataset.on="1"; } document.getElementById("s3r").classList.add("on"); document.body.style.overflow="hidden"; if(location.hash!=="#result") history.replaceState(null,"","#result"); }
 function s3rClose(){ document.getElementById("s3r").classList.remove("on"); document.body.style.overflow=""; if(location.hash==="#result") history.replaceState(null,"",location.pathname+location.search); }
-function s3rBtn(){ var pane=document.getElementById("p-results"); if(!pane||document.getElementById("s3rOpen")) return; var b=document.createElement("button"); b.id="s3rOpen"; b.type="button"; b.textContent="🎓 Semester-III H.S. Result (Know Your Result) — আপনার ফলাফল দেখুন"; b.onclick=s3rOpen; b.style.display="block"; pane.insertBefore(b,pane.firstChild); }
 document.getElementById("s3rClose").onclick=s3rClose;
 document.addEventListener("keydown",function(e){ if(e.key==="Escape") s3rClose(); });
 window.addEventListener("hashchange",function(){ if(location.hash==="#result") s3rOpen(); });
-document.addEventListener("DOMContentLoaded",function(){ try{ s3rBtn(); }catch(e){} if(location.hash==="#result") s3rOpen(); });
+document.addEventListener("DOMContentLoaded",function(){ if(location.hash==="#result") s3rOpen(); });
 </script>
 <script>
 /* old #sem3 links now open the same Know Your Result window as the ফলাফল tab button */
