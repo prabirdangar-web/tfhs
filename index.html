@@ -1717,20 +1717,25 @@ function openFlash(nf){
   $("flash").hidden = false; document.body.style.overflow = "hidden"; $("fOk").focus();
 }
 let FT_TOK = 0, FT_SKIP = null;
+function linkify(text){
+  const safe = String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  return safe.replace(/(https?:\/\/[A-Za-z0-9\-._~:\/?#\[\]@!$&'()*+,;=%]+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#1d4ed8;text-decoration:underline;font-weight:700;word-break:break-all">$1</a>');
+}
 function typeFlash(text, pal){
   const box = $("fText"), tok = ++FT_TOK; box.textContent = "";
   const seg = window.Intl && Intl.Segmenter ? new Intl.Segmenter("bn", {granularity:"grapheme"}) : null;
   const split = t => seg ? Array.from(seg.segment(t), x => x.segment) : Array.from(t);
   const paras = text.split(/\n+/).map(t => t.trim()).filter(Boolean).map((t, i) => {
     const el = document.createElement("div"); el.className = "fp"; el.style.setProperty("--pc", pal[(i + 1) % pal.length]); box.appendChild(el); return {el, t, g: split(t)}; });
-  const finish = () => { paras.forEach(x => { x.el.textContent = x.t; x.el.classList.remove("cur"); }); FT_SKIP = null; };
+  const finish = () => { paras.forEach(x => { x.el.innerHTML = linkify(x.t); x.el.classList.remove("cur"); }); FT_SKIP = null; };
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return finish();
   FT_SKIP = () => { FT_TOK++; finish(); };
   const tot = paras.reduce((n, x) => n + x.g.length, 0), STEP = tot > 900 ? 5 : tot > 500 ? 3 : 2;
   let pi = 0, ci = 0;
   (function tick(){
     if (tok !== FT_TOK) return;
-    if (pi >= paras.length) { FT_SKIP = null; return; }
+    if (pi >= paras.length) { finish(); return; }
     const x = paras[pi]; x.el.classList.add("cur");
     ci = Math.min(x.g.length, ci + STEP); x.el.textContent = x.g.slice(0, ci).join("");
     const sc = $("fText").parentNode; sc.scrollTop = sc.scrollHeight;
