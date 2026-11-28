@@ -63,6 +63,7 @@ table.tot td:first-child{width:50%;font-weight:700}
 @media print{#fee{display:none!important}}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 /* standalone page: the fee loader calls window.parent.getXiiFee(); at top level parent === window */
@@ -70,12 +71,17 @@ table.tot td:first-child{width:50%;font-weight:700}
   var cfg={apiKey:"AIzaSyCiqQFsnbSi6eCgUI_W3NTybzIkRmCI_54",authDomain:"tfhs-portal.firebaseapp.com",projectId:"tfhs-portal",storageBucket:"tfhs-portal.firebasestorage.app",messagingSenderId:"316041012204",appId:"1:316041012204:web:04ee8b19374c60f63716c9"};
   var _xf=null,_xft=0;
   try{ firebase.initializeApp(cfg); }catch(e){}
+  var dbg=/[?&]dbg=1/.test(location.search);
+  var authP=null;
+  try{ authP=firebase.auth().signInAnonymously().catch(function(e){ console.warn("anon auth:",e&&e.code); }); }catch(e){}
   window.getXiiFee=async function(){
     try{
       if(_xf&&Date.now()-_xft<60000) return _xf;
+      if(authP) await authP;
       var snap=await firebase.firestore().collection("tfhs").doc("xii_fee").get();
       if(snap.exists){ _xf=snap.data(); _xft=Date.now(); return _xf; }
-    }catch(e){ console.warn("xii_fee read failed:",e&&(e.code||e.message)); }
+      if(dbg) alert("Fee document tfhs/xii_fee NOT FOUND - publish fee from the certificate tool first.");
+    }catch(e){ console.warn("xii_fee read failed:",e&&(e.code||e.message)); if(dbg) alert("Fee read failed: "+(e&&(e.code||e.message))); }
     return null;
   };
 })();
