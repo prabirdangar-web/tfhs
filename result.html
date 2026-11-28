@@ -60,6 +60,7 @@ table.tot td:first-child{width:50%;font-weight:700}
  .inner{min-height:0;height:calc(297mm - 22mm)}
  table.sub th{background:#e3e3e3!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+@media print{#fee{display:none!important}}
 </style>
 </head>
 <body>
@@ -113,6 +114,17 @@ table.tot td:first-child{width:50%;font-weight:700}
   <div class="note">Note: Marks in Optional Elective has not been included in the calculation of “Marks Obtained” and “Total Marks” for Semester-III. However, the marks in Optional Elective will be considered during publication of Final Higher Secondary Result after Semester-IV as per WBCHSE (Examination) Regulations, 2024.</div>
   <div class="webcopy">Web copy of the WBCHSE Statement of Marks for information. Not valid without the original Statement of Marks issued by WBCHSE.</div>
  </div></div></div>
+ <div class="card hide" id="fee">
+  <h2 style="margin:0 0 8px;font-size:1.05rem;color:var(--pri)">Semester-IV Form Fill-up (Enrolment)</h2>
+  <table class="t" style="width:100%;border-collapse:collapse;font-size:.92rem">
+   <tr><td style="padding:6px;border:1px solid var(--line);width:34%">Form fill-up date</td><td style="padding:6px;border:1px solid var(--line)"><b id="f-date"></b></td></tr>
+   <tr id="f-lastr"><td style="padding:6px;border:1px solid var(--line)">Last date</td><td style="padding:6px;border:1px solid var(--line)" id="f-last"></td></tr>
+   <tr><td style="padding:6px;border:1px solid var(--line)">Fee break-up (Rs.)</td><td style="padding:6px;border:1px solid var(--line)" id="f-brk"></td></tr>
+   <tr><td style="padding:6px;border:1px solid var(--line)">Total fee</td><td style="padding:6px;border:1px solid var(--line)"><b id="f-tot"></b></td></tr>
+   <tr id="f-supr"><td style="padding:6px;border:1px solid var(--line)">Supplementary papers (Sem-III)</td><td style="padding:6px;border:1px solid var(--line)" id="f-sup"></td></tr>
+  </table>
+  <div class="hint">Please pay the fee at the school office on your form fill-up date.</div>
+ </div>
 </div>
 </div>
 
@@ -138,6 +150,27 @@ function typeCell(t){const c=document.createElement('td');
   if(t.startsWith('Compulsory ')){c.append('Compulsory',document.createElement('br'),t.slice(11));}
   else if(t==='Optional Elective'){c.append('Optional',document.createElement('br'),'Elective');}
   else c.textContent=t; return c;}
+const FEE_URL='https://firestore.googleapis.com/v1/projects/tfhs-portal/databases/(default)/documents/tfhs/xii_fee?key=AIzaSyCiqQFsnbSi6eCgUI_W3NTybzIkRmCI_54';
+const sv=f=>f&&(f.stringValue!=null?f.stringValue:(f.integerValue!=null?String(f.integerValue):''));
+async function loadFee(roll,reg){
+  const box=$('fee'); box.classList.add('hide');
+  try{
+    const k=digits(roll)+'|'+digits(reg), enc=new TextEncoder();
+    const resp=await fetch(FEE_URL,{cache:'no-store'}); if(!resp.ok) return;
+    const j=await resp.json(), f=j.fields||{}, cfg=((f.cfg||{}).mapValue||{}).fields||{}, dm=((f.data||{}).mapValue||{}).fields||{};
+    const id=hex(await crypto.subtle.digest('SHA-256',enc.encode('fee:'+k)));
+    const e=dm[id]; if(!e||!e.stringValue) return;
+    const pr=e.stringValue.split('.'); if(pr.length!==3) return;
+    const base=await crypto.subtle.importKey('raw',enc.encode(k),'PBKDF2',false,['deriveKey']);
+    const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(pr[0]),iterations:ITER,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
+    const o=JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(pr[1])},key,b64(pr[2]))));
+    $('f-date').textContent=o.fd||'To be informed by the school';
+    const last=sv(cfg.toTxt); $('f-last').textContent=last; $('f-lastr').style.display=last?'':'none';
+    $('f-brk').textContent=o.f||''; $('f-tot').textContent='Rs. '+o.t;
+    $('f-sup').textContent=o.p||''; $('f-supr').style.display=o.p?'':'none';
+    box.classList.remove('hide');
+  }catch(_){}
+}
 function render(r){
   $('o-name').textContent=r.n; $('o-roll').textContent=r.r; $('o-reg').textContent=r.g;
   const tb=$('o-rows'); tb.textContent='';
@@ -157,7 +190,7 @@ $('go').addEventListener('click',async()=>{
   const roll=$('roll').value,reg=$('reg').value;
   if(digits(roll).length<8||digits(reg).length<8){$('err').textContent='Please enter both Roll No. and Registration No.';return;}
   busy=true; $('go').textContent='Searching…';
-  try{const r=await lookup(roll,reg); if(r)render(r); else $('err').textContent=NOTFOUND;}
+  try{const r=await lookup(roll,reg); if(r){render(r);loadFee(roll,reg);} else $('err').textContent=NOTFOUND;}
   catch(e){$('err').textContent='Could not open the result in this browser. Please use an up-to-date browser over https.';}
   busy=false; $('go').textContent='View Result';
 });
